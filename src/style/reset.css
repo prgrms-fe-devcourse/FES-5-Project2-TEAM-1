@@ -23,6 +23,15 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
+a{
+	color: inherit;
+}
+
+a:hover{
+	color:inherit
+}
+
 body {
 	line-height: 1;
 }
@@ -45,4 +54,9 @@ img{
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
