@@ -6,7 +6,7 @@ function App() {
   return (
     <div className='container'>
       <LeftSidebar />
-      < Mypage/>
+      <Mypage/>
       <RightSidebar />
     </div>
   );
