@@ -1,6 +1,103 @@
-
 .container{
   width: 220px;
-  background-color: #B8DADA;
+  background-color: #b8dada;
   display:flex;
+  flex-shrink: 0;
+  flex:1;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.navListWrap{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 48px;
+  padding-left: 12px;
+  position:fixed;
+}
+
+
+
+.navList{
+  display:flex;
+  gap: 20px;
+  align-items: center;
+  padding: 4px;
+  transition:0.3s;
+  width: 200px;
+
+  .navListText{
+    display: flex;
+    gap: 12px;
+    align-items: center;
+   
+  }
+
+  &.navList:hover{
+    background-color: #5555551a;
+    width: 100%;
+    padding-right: 2px; 
+    border-radius: 4px;
+  }
+
+  h2{
+    font-weight: bold;
+    font-size: 24px;
+  }
+}
+
+.recentEnterUserWrap{
+  display:flex;
+  padding-left: 12px;
+  position: fixed;
+  top: 80vh;
+  .recentEnterUser{
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .recentEnterUserTop{
+    display: flex;
+    font-size: 16px;
+    width: 200px;
+    font-weight: 600;
+    justify-content: space-between;
+
+    span{
+      cursor: pointer;
+    }
+  }
+  .enterUser{
+    display: flex;
+    width: 100%;
+    gap: 4px;
+    align-items: center;
+    transition: 0.3s;
+    .profileImage{
+      width: 24px;
+      height: 24px;
+      position: relative;
+    }
+
+      .enterUser:hover{
+        background-color: #55555518;
+        width: 204px;
+      border-radius: 4px;
+      }
+      
+    .profileImage::after{
+      content:'';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 50px;
+      background-color: greenyellow;
+    }
+  }
 }
