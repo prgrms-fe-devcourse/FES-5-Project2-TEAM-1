@@ -1,8 +1,9 @@
 .container{
   width: 220px;
-
   background-color: #b8dada;
   display:flex;
+  flex-shrink: 0;
+  flex:1;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -70,6 +71,7 @@
   }
   .enterUser{
     display: flex;
+    width: 100%;
     gap: 4px;
     align-items: center;
     transition: 0.3s;
@@ -84,6 +86,7 @@
         width: 204px;
       border-radius: 4px;
       }
+      
     .profileImage::after{
       content:'';
       position: absolute;
