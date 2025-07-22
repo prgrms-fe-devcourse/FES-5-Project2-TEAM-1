@@ -64,7 +64,5 @@
     
   span{
     display: inline-flex;
-    position: relative;
-    top: 50%;
   }
 }
