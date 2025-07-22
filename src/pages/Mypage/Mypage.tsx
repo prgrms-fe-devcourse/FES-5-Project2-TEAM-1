@@ -6,7 +6,7 @@ import S from './MypageTop.module.css';
 
 
 
-function MypageTop() {
+function Mypage() {
   return (
     <div className={S.container}>
         <div className={S.wrapper}>
@@ -20,4 +20,4 @@ function MypageTop() {
   )
 }
 
-export default MypageTop
+export default Mypage
