@@ -1,0 +1,13 @@
+/* rightsidebar */
+.container{
+  width: 220px;
+  background-color: #FFC0CB;
+  height: 100vh;
+  display:flex;
+  justify-content: flex-end;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 100;
+}
