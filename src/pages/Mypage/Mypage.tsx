@@ -1,8 +1,10 @@
-import MypageDetail from './MypageDetail';
+
 import MypageInterest from './MypageInterest';
 import MypageProfile from './MypageProfile';
 import MypageSocial from './MypageSocial';
 import S from './MypageTop.module.css';
+import MypageName from './MypageName';
+import MypageDetails from './MypageDetails';
 
 
 
@@ -12,7 +14,8 @@ function Mypage() {
         <div className={S.wrapper}>
             <h1 className={S.mypage}>마이 페이지</h1>
             <MypageProfile />
-            <MypageDetail />
+            <MypageName />
+            <MypageDetails />
             <MypageInterest />
             <MypageSocial />
         </div>
