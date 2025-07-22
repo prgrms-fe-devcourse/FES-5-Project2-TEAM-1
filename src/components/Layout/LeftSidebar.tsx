@@ -1,6 +1,8 @@
 import S from './LeftSidebar.module.css'
 import 너굴 from '../../../public/images/너굴.png'
 function LeftSidebar() {
+
+  
   return (
     <div className={S.container}>
       <nav>

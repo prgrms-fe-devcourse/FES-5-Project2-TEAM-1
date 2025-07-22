@@ -24,19 +24,20 @@
   align-items: center;
   padding: 4px;
   transition:0.3s;
+  width: 200px;
 
   .navListText{
     display: flex;
     gap: 12px;
     align-items: center;
-    padding: 4px;
+   
   }
 
   &.navList:hover{
     background-color: #5555551a;
-    width: 190px;
+    width: 100%;
     padding-right: 2px; 
-      border-radius: 4px;
+    border-radius: 4px;
   }
 
   h2{
