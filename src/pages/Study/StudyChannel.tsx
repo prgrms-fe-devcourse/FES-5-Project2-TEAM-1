@@ -1,4 +1,4 @@
-import Card from './Card';
+import Card from '../../components/Layout/Card';
 import S from './studychannel.module.css'
 
 function StudyChannel() {
