@@ -44,7 +44,7 @@
   }
 }
 .boardEdit {
-  width: 50%;
+  width: 672px;
   /* height: 943px; */
 }
 .boardPreview {
@@ -144,12 +144,12 @@
   flex-direction: column;
   gap: 12px;
   img {
-    width: 150px;
+    width: 145px;
     height: 150px;
     background-color: rgba(100, 100, 100, 10);
   }
   button {
-    width: 150px;
+    width: 145px;
     height: 40px;
     font-size: 16px;
     font-weight: bold;
@@ -161,7 +161,7 @@
 }
 .boardOptionSub {
   display: flex;
-  gap: 44px;
+  gap: 40px;
   margin-bottom: 28px;
   .hashTag {
     border: 0.3px solid #555555;
