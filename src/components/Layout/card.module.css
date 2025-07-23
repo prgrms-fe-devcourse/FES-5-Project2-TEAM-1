@@ -1,0 +1,68 @@
+.container{
+  width: 400px;
+  height: 191px;
+  border-radius: 16px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 12px 16px;
+}
+
+.cardTop{
+  display: flex;
+  justify-content: space-between;
+
+  .cardTopLeft{
+    display:flex;
+    gap: 4px;
+
+    .freebadge{
+      width: 66px;
+      height: 20px;
+      border-radius: 4px;
+      background-color: rgba(166, 179, 125, 0.2);
+      border:1px solid #a6b37d;
+      text-align: center;
+      color:#a6b37d;
+      font-size: 12px;
+      line-height: 15px;
+    }
+  }
+
+     .cardTopRight{
+      display:flex;
+      gap: 12px;
+
+      button{
+        background-color: transparent;
+      }
+    }
+}
+
+.titleBox{
+  display:flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 6px;
+
+  h4{
+    font-size: 24px;
+    font-weight: 600;
+    color:#222;
+  }
+
+  p{
+    font-size: 24px;
+    color:rgba(85, 85, 85, 0.7)
+  }
+}
+
+.tagBox{
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+    color:rgba(85, 85, 85, 0.7);
+    
+  span{
+    display: inline-flex;
+  }
+}

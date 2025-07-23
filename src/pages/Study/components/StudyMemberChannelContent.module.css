@@ -1,0 +1,115 @@
+.layout{
+  margin: 0 105px;
+}
+
+.content{
+  margin-top: 40px;
+}
+.infoTitleWrap{
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 42px;
+
+  img{
+    width: 120px;
+    height: 120px;
+  }
+
+
+  
+.infoTitleText{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  h2{
+    font-size: 36px;
+    font-weight: 600;
+  }
+
+  .infoTitle{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .infoList{
+    display: flex;
+    gap: 4px;
+
+    li{
+      background-color: rgba(85, 85, 85, 0.5);
+      color:#fff;
+      width: 72px;
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 200;
+    }
+  }
+
+
+  .dDayCounter{
+display: flex;
+align-items: center;
+gap: 4px;
+font-size: 36px;
+font-weight: 600;
+
+
+  span{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    color:#fff;
+    width: 40px;
+    height: 40px;
+    background-color: #b99470;
+    font-size: 36px;
+    font-weight: 600;
+  }
+}
+
+}
+
+}
+
+.card{
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .cardHeader{
+    display: flex;
+    justify-content: space-between;
+
+    p{
+      font-size: 24px;
+    }
+
+    button{
+      font-size: 16px;
+      background-color: rgba(85, 85, 85, 0.5);
+      border-radius: 4px;
+      padding: 5px;
+      color:#fff;
+    }
+  }
+}
+
+.members{
+margin-top: 32px;
+font-size: 24px;
+
+.memberList{
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+}
+}

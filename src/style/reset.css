@@ -17,6 +17,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	color:#222;
 }
 *{
   margin: 0;
@@ -28,6 +29,23 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
+a{
+	color: inherit;
+	text-decoration: none;
+}
+
+a:hover{
+	color:inherit
+}
+
+button{
+	outline: none;
+	border: 0;
+	background-color: transparent;
+	cursor: pointer;
+}
+
 body {
 	line-height: 1;
 }
@@ -50,4 +68,9 @@ img{
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }

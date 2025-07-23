@@ -1,0 +1,58 @@
+.container{
+  margin-left: 20px;
+}
+
+
+.writerBox{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+
+    input[type="text"]{
+    border: 0;
+    border-bottom:1px solid rgba(85, 85, 85, 0.3);
+    outline: none;
+    width: 85%;
+
+    &:focus{
+    border-bottom:1px solid rgba(85, 85, 85, 0.7);
+    }
+    
+    &::placeholder{
+      padding-top: 4px;
+      }
+    
+  }
+
+    .commentBtn{
+      border-radius: 4px;
+      color:#fff;
+      display: flex;
+      justify-content: center;
+      align-items:center;
+      padding: 10px 15px;
+      height: 18px;
+      background-color: #b99470
+    }
+
+  .profile{
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  img{
+    width: 36px;
+    height: 36px;
+  }
+}
+}
+
+
+.recomments{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+}
