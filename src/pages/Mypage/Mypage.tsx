@@ -21,10 +21,18 @@ function Mypage() {
             <MypageInterest />
             <MypageSocial />
             
-            <MypagePeerReview/>
-            <MypageChannel/>
-            <MypageScrap/>
-            <MypagePost/>
+            <div className={sBottom.peerReview}>
+              <MypagePeerReview/>
+            </div>
+            <div className={sBottom.channel}>
+              <MypageChannel/>
+            </div>
+            <div className={sBottom.scrap}>
+              <MypageScrap/>
+            </div>
+            <div className={sBottom.post}>
+              <MypagePost/>
+            </div>
         </div>
     </div>
   )
