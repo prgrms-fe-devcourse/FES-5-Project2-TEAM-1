@@ -1,0 +1,61 @@
+.container{
+  width: 1440px;
+  height: 300px;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 32px;
+   margin-top: 120px;
+   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.contentWrap{
+ display: flex;
+ gap: 20px;
+ 
+
+ img{
+  width: 270px;
+  height: 224px;
+ }
+}
+
+.textInfo{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+
+  .infoList{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 16px;
+  }
+
+  .dDay{
+    display:flex;
+    align-items: center;
+    gap: 8px;
+
+    span{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      background-color: #b99470;
+      color:#fff;
+    }
+
+   
+  }
+   button{
+      width: 110px;
+      height: 40px;
+      border-radius: 12px;
+      background-color: #a6b37d;
+      color:#fff;
+    }
+}
