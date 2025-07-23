@@ -1,54 +1,105 @@
 import S from './card.module.css'
+import type { Tables } from "../../supabase/database.types";
+import { useEffect, useState } from 'react';
+import supabase from '../../supabase/supabase';
 
-function Card() {
+
+type Props = Tables<"board">;
+
+function Card(card: Props) {
+  const {address,contents,due_date,title,likes,board_id,join_cls,member,profile_id} = card
+
+    const [cardLike, setCardLike] = useState(likes);
+    const [isPressed, setIsPressed] = useState(false);
+    const [isScrap, setIsScrap] = useState(false);
+  
+    useEffect(() => {
+    const storedLike = JSON.parse(localStorage.getItem(`like-${board_id}`) ?? "false")    
+    setIsPressed(storedLike)
+    }, [board_id]);
+  
+   
+  const handleScrap = async () => {
+    
+    const nextScrapState = !isScrap
+
+    if (nextScrapState) {
+     localStorage.setItem("isScrap", JSON.stringify(nextScrapState));
+    } else {
+      localStorage.setItem("isScrap", JSON.stringify(nextScrapState));
+    }
+    
+   
+    
+    const { data, error } = await supabase
+      .from("scrap")
+      .select("*").eq('profile_id',profile_id).eq('board_id',board_id).single()
+    
+      if (data?.scrap_id) {
+        await supabase.from('scrap').delete().eq('scrap_id',data.scrap_id)  
+      } else {
+        await supabase.from('scrap').insert([{
+          scrap_id: `scrap${Date.now()}`,
+          profile_id,
+          board_id,
+        }])
+      }
+    
+    
+    if (error) {
+      console.error("데이터를 제대로 불러오지 못하였습니다");
+      setIsScrap(!isScrap)
+    }
+  }
+      
+  const handleLike = async () => {
+    const pressState = isPressed ? cardLike - 1 : cardLike + 1;
+    const nextState = !isPressed;
+    setCardLike(pressState);
+    setIsPressed(!isPressed)
+    localStorage.setItem(`like-${board_id}`,JSON.stringify(nextState))
+  
+      const { error } = await supabase.from('board').update({ likes: pressState}).eq('board_id', board_id)
+      
+      if (error) {
+        console.error('좋아요 업데이트 실패', error.message)
+        setCardLike(isPressed ? cardLike - 1 : cardLike + 1)
+        setIsPressed(!isPressed)
+         localStorage.setItem(`like-${board_id}`, JSON.stringify(nextState));
+      }
+    }
+
+
   return (
     <div className={S.container}>
       <div className={S.cardTop}>
         <div className={S.cardTopLeft}>
-          <div className={S.freebadge}>자유가입</div>
-          <div>모집기간 D-08</div>
+          <div className={join_cls == '0' ? S.freebadge : S.acceptbadge}>{
+            join_cls == '0' ? '자유가입' : '승인가입'
+          }</div>
+          <div>모집기간 D-{due_date}</div>
         </div>
         <div className={S.cardTopRight}>
-          <button className={S.likeBtn}>
-            <svg
-              width="18"
-              height="17"
-              viewBox="0 0 18 17"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <mask id="path-1-inside-1_464_3057" fill="white">
-                <path d="M1.99234 1.58108C3.87656 -0.527097 6.93127 -0.526955 8.81558 1.58108L8.98745 1.77444L9.32144 1.43557C11.3137 -0.592105 14.3818 -0.44788 16.175 1.75784C17.9679 3.96356 17.8068 7.39525 15.8146 9.42287L11.839 13.4678L8.81558 16.8516L1.99234 9.21682C0.108023 7.10843 0.108023 3.68947 1.99234 1.58108Z" />
-              </mask>
-              <path
-                d="M1.99234 1.58108L1.76866 1.38116L1.76865 1.38117L1.99234 1.58108ZM8.81558 1.58108L9.0398 1.38177L9.03925 1.38115L8.81558 1.58108ZM8.98745 1.77444L8.76323 1.97375L8.97615 2.21328L9.20112 1.98502L8.98745 1.77444ZM9.32144 1.43557L9.5351 1.64616L9.53543 1.64582L9.32144 1.43557ZM16.175 1.75784L16.4077 1.5686L16.4077 1.5686L16.175 1.75784ZM15.8146 9.42287L16.0286 9.63317L16.0286 9.63313L15.8146 9.42287ZM11.839 13.4678L11.6251 13.2575L11.6201 13.2626L11.6153 13.2679L11.839 13.4678ZM8.81558 16.8516L8.59189 17.0515L8.8156 17.3018L9.03929 17.0515L8.81558 16.8516ZM1.99234 9.21682L2.21602 9.01691L2.21602 9.01691L1.99234 9.21682ZM1.99234 1.58108L2.21602 1.781C3.98096 -0.193723 6.82686 -0.193612 8.59191 1.78101L8.81558 1.58108L9.03925 1.38115C7.03569 -0.860297 3.77216 -0.860472 1.76866 1.38116L1.99234 1.58108ZM8.81558 1.58108L8.59136 1.78039L8.76323 1.97375L8.98745 1.77444L9.21168 1.57513L9.0398 1.38177L8.81558 1.58108ZM8.98745 1.77444L9.20112 1.98502L9.5351 1.64616L9.32144 1.43557L9.10777 1.22498L8.77379 1.56385L8.98745 1.77444ZM9.32144 1.43557L9.53543 1.64582C11.4023 -0.254233 14.2619 -0.1198 15.9422 1.94708L16.175 1.75784L16.4077 1.5686C14.5017 -0.77596 11.2251 -0.929978 9.10744 1.22532L9.32144 1.43557ZM16.175 1.75784L15.9422 1.94707C17.6388 4.03428 17.4857 7.29397 15.6006 9.21262L15.8146 9.42287L16.0286 9.63313C18.1279 7.49652 18.2971 3.89283 16.4077 1.5686L16.175 1.75784ZM15.8146 9.42287L15.6006 9.21258L11.6251 13.2575L11.839 13.4678L12.053 13.6781L16.0286 9.63317L15.8146 9.42287ZM11.839 13.4678L11.6153 13.2679L8.59187 16.6517L8.81558 16.8516L9.03929 17.0515L12.0627 13.6677L11.839 13.4678ZM8.81558 16.8516L9.03927 16.6517L2.21602 9.01691L1.99234 9.21682L1.76865 9.41673L8.59189 17.0515L8.81558 16.8516ZM1.99234 9.21682L2.21602 9.01691C0.433462 7.02237 0.433462 3.77553 2.21602 1.78099L1.99234 1.58108L1.76865 1.38117C-0.217415 3.60341 -0.217415 7.19449 1.76865 9.41673L1.99234 9.21682Z"
-                fill="#222222"
-                mask="url(#path-1-inside-1_464_3057)"
-              />
-            </svg>
+          <button className={S.scrapBtn} onClick={handleScrap}>
+            {isScrap ? (
+              <img src="/icons/scraplittleActive.png" alt="" />
+            ) : (
+              <img src="/icons/scraplittle.svg" alt="" />
+            )}
           </button>
-          <button className={S.scrapBtn}>
-            <svg
-              width="15"
-              height="18"
-              viewBox="0 0 15 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.4209 0.150391H12.4209C13.4381 0.150391 14.2705 0.982843 14.2705 2V17.7715L7.48047 14.8623L7.4209 14.8369L7.36133 14.8623L0.571289 17.7715L0.581055 2C0.581055 0.981862 1.40472 0.150391 2.4209 0.150391Z"
-                stroke="#222222"
-                stroke-width="0.3"
-              />
-            </svg>
+          <button className={S.likeBtn} onClick={handleLike}>
+            {isPressed ? (
+              <img src="/icons/likeActive.png" alt="" />
+            ) : (
+              <img src="/icons/like.svg" alt="" />
+            )}
+            {cardLike}
           </button>
         </div>
       </div>
       <div className={S.titleBox}>
-        <h4>Lorem Ipsum</h4>
-        <p>
-          Lorem Ipsum has been the <br /> industry's standard dummy text
-        </p>
+        <h4>{title}</h4>
+        <p>{contents}</p>
       </div>
       <div className={S.tagBox}>
         #태그 #태그 #태그{" "}
@@ -63,11 +114,11 @@ function Card() {
             <path
               d="M1.50935 2.55176C0.948598 2.55176 0.5 2.10316 0.5 1.5611C0.5 1.00036 0.948598 0.551758 1.50935 0.551758C2.0514 0.551758 2.5 1.00036 2.5 1.5611C2.5 2.10316 2.0514 2.55176 1.50935 2.55176Z"
               fill="#555555"
-              fill-opacity="0.7"
+              fillOpacity="0.7"
             />
           </svg>
         </span>{" "}
-        지역{" "}
+        {address}
         <span>
           <svg
             width="3"
@@ -79,7 +130,7 @@ function Card() {
             <path
               d="M1.50935 2.55176C0.948598 2.55176 0.5 2.10316 0.5 1.5611C0.5 1.00036 0.948598 0.551758 1.50935 0.551758C2.0514 0.551758 2.5 1.00036 2.5 1.5611C2.5 2.10316 2.0514 2.55176 1.50935 2.55176Z"
               fill="#555555"
-              fill-opacity="0.7"
+              fillOpacity="0.7"
             />
           </svg>
         </span>
@@ -96,16 +147,16 @@ function Card() {
               cy="4.18212"
               r="2.81395"
               fill="#555555"
-              fill-opacity="0.5"
+              fillOpacity="0.5"
             />
             <path
               d="M0.244141 9.74024C0.244141 8.63567 1.13957 7.74023 2.24414 7.74023H9.49995C10.6045 7.74023 11.4999 8.63566 11.4999 9.74023V13.3681H0.244141V9.74024Z"
               fill="#555555"
-              fill-opacity="0.5"
+              fillOpacity="0.5"
             />
           </svg>
         </span>
-        4
+        {member}
       </div>
     </div>
   );
