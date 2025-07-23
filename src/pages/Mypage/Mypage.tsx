@@ -1,20 +1,30 @@
+import MypageChannel from './MypageChannel';
 import MypageDetail from './MypageDetail';
 import MypageInterest from './MypageInterest';
+import MypagePeerReview from './MypagePeerReview';
+import MypagePost from './MypagePost';
 import MypageProfile from './MypageProfile';
+import MypageScrap from './MypageScrap';
 import MypageSocial from './MypageSocial';
-import S from './MypageTop.module.css';
+import sTop from './MypageTop.module.css';
+import sBottom from './MypageBottom.module.css';
 
 
 
 function Mypage() {
   return (
-    <div className={S.container}>
-        <div className={S.wrapper}>
-            <h1 className={S.mypage}>마이 페이지</h1>
+    <div className={sTop.container}>
+        <div className={sTop.wrapper}>
+            <h1 className={sTop.mypage}>마이 페이지</h1>
             <MypageProfile />
             <MypageDetail />
             <MypageInterest />
             <MypageSocial />
+            
+            <MypagePeerReview/>
+            <MypageChannel/>
+            <MypageScrap/>
+            <MypagePost/>
         </div>
     </div>
   )
