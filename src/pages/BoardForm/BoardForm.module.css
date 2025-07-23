@@ -148,7 +148,7 @@
     height: 150px;
     background-color: rgba(100, 100, 100, 10);
   }
-  button {
+  label {
     width: 145px;
     height: 40px;
     font-size: 16px;
@@ -157,6 +157,12 @@
     border-radius: 12px;
     background-color: #b99470;
     color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  input {
+    display: none;
   }
 }
 .boardOptionSub {

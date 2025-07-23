@@ -1,6 +1,16 @@
+import { useRef, useState } from "react";
 import S from "../BoardForm.module.css";
 
 function BoardOptions() {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const files = useRef<HTMLInputElement | null>(null);
+
+  const handelFileUpload = () => {
+    const file = files.current as HTMLInputElement;
+    if (!file.files) return;
+    const fileImageUrl = URL.createObjectURL(file.files[0]);
+    setImageUrl(fileImageUrl);
+  };
   return (
     <div className={S.boardOption}>
       <div className={S.boardOptionDetail}>
@@ -51,8 +61,14 @@ function BoardOptions() {
         </div>
       </div>
       <div className={S.boardOptionImage}>
-        <img src="" alt="" />
-        <button type="button">사진 첨부</button>
+        <img src={imageUrl ? imageUrl : ""} alt="" />
+        <label htmlFor="file-upload">사진 첨부</label>
+        <input
+          type="file"
+          id="file-upload"
+          ref={files}
+          onChange={handelFileUpload}
+        />
       </div>
     </div>
   );
