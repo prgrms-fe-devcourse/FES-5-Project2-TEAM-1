@@ -14,22 +14,19 @@ function Card(card: Props) {
     const [isScrap, setIsScrap] = useState(false);
   
     useEffect(() => {
-    const storedLike = JSON.parse(localStorage.getItem(`like-${board_id}`) ?? "false")    
-    setIsPressed(storedLike)
+      const storedLike = JSON.parse(localStorage.getItem(`like-${board_id}`) ?? "false")  
+      const storedScrap = JSON.parse(localStorage.getItem(`scrap-${board_id}`) ?? "false")  
+      setIsPressed(storedLike)
+      setIsScrap(storedScrap)
     }, [board_id]);
   
    
   const handleScrap = async () => {
     
     const nextScrapState = !isScrap
-
-    if (nextScrapState) {
-     localStorage.setItem("isScrap", JSON.stringify(nextScrapState));
-    } else {
-      localStorage.setItem("isScrap", JSON.stringify(nextScrapState));
-    }
-    
+    setIsScrap(nextScrapState)
    
+     localStorage.setItem(`scrap-${board_id}`, JSON.stringify(nextScrapState));
     
     const { data, error } = await supabase
       .from("scrap")
@@ -44,7 +41,6 @@ function Card(card: Props) {
           board_id,
         }])
       }
-    
     
     if (error) {
       console.error("데이터를 제대로 불러오지 못하였습니다");
@@ -81,7 +77,8 @@ function Card(card: Props) {
         </div>
         <div className={S.cardTopRight}>
           <button className={S.scrapBtn} onClick={handleScrap}>
-            {isScrap ? (
+            {
+              isScrap ? (
               <img src="/icons/scraplittleActive.png" alt="" />
             ) : (
               <img src="/icons/scraplittle.svg" alt="" />

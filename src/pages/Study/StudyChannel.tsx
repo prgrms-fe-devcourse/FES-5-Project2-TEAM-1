@@ -20,8 +20,8 @@ function StudyChannel() {
           setCardData(
             [...data].sort(
               (a, b) =>
-                parseInt(a.board_id.replace(/\D/g, "")) -
-                parseInt(b.board_id.replace(/\D/g, ""))
+                parseInt(b.board_id.replace(/\D/g, "")) -
+                parseInt(a.board_id.replace(/\D/g, ""))
             )
           );
           }
