@@ -1,7 +1,37 @@
+import { useEffect, useState } from 'react';
 import Card from '../../components/Layout/Card';
 import S from './studychannel.module.css'
+import supabase from '../../supabase/supabase';
+import type { Tables } from 'src/supabase/database.types';
+
+
+type Card = Tables<'board'>
 
 function StudyChannel() {
+ 
+  const [cardData, setCardData] = useState<Card[]>([])
+  
+    useEffect(() => {
+      const cardData = async () => {
+        const { data, error } = await supabase.from("board").select("*");
+        if (error) {
+            console.log(error.message)
+        } else {
+          setCardData(
+            [...data].sort(
+              (a, b) =>
+                parseInt(b.board_id.replace(/\D/g, "")) -
+                parseInt(a.board_id.replace(/\D/g, ""))
+            )
+          );
+          }
+      };
+      cardData()
+    }, []);
+  
+
+  
+  
   return (
     <main className={S.container}>
       <div className={S.channelHeader}>
@@ -27,11 +57,11 @@ function StudyChannel() {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <g clip-path="url(#clip0_276_3490)">
+              <g clipPath="url(#clip0_276_3490)">
                 <path
                   d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z"
                   fill="#555555"
-                  fill-opacity="0.7"
+                  fillOpacity="0.7"
                 />
               </g>
               <defs>
@@ -48,15 +78,13 @@ function StudyChannel() {
       </div>
       <section>
         <div className={S.cardGrid}>
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {...cardData &&
+            [...cardData].map((card: Card) => (
+              <Card
+                {...card}
+                key={card.board_id}
+              />
+            ))}
         </div>
       </section>
       <nav>
