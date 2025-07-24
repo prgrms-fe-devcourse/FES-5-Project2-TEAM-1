@@ -3,13 +3,16 @@ import Card from '../../components/Layout/Card';
 import S from './studychannel.module.css'
 import supabase from '../../supabase/supabase';
 import type { Tables } from 'src/supabase/database.types';
+// import { debounce } from '../../utils/debounce';
 
 
 type Card = Tables<'board'>
 
 function StudyChannel() {
  
+  const [search,setSearch] = useState('')
   const [cardData, setCardData] = useState<Card[]>([])
+  const [searchedCardData,setSearchedCardData] = useState<Card[]>([])
   const filterTab = ["최신순", "좋아요순", "모집마감순"]
   
 
@@ -33,6 +36,10 @@ function StudyChannel() {
     cardData()
   }, []);
   
+  useEffect(() => {
+    setSearchedCardData(cardData)
+  },[cardData])
+
   function handleFilter(e:React.MouseEvent) {
   
     if (filterRef.current == null) return
@@ -52,6 +59,13 @@ function StudyChannel() {
     }
   }
 
+  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (search === '') alert('검색어를 입력해 주세요')
+    const filtered = [...cardData].filter(card => card.title.toLowerCase().includes(search) || card.address.toLowerCase().includes(search) || card.contents.toLowerCase().includes(search))
+    setSearchedCardData(filtered)
+  }
+
   
   
   return (
@@ -64,13 +78,16 @@ function StudyChannel() {
             </button>
           ))}
         </div>
-        <form className={S.searchBox}>
+        <form className={S.searchBox} onSubmit={handleSearch}>
           <input
             type="text"
             placeholder="검색어를 입력하세요"
             className={S.studySearch}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
           />
-          <button type="button" className={S.searchBtn}>
+          <button type="submit" className={S.searchBtn}>
             <svg
               width="24"
               height="24"
@@ -99,8 +116,8 @@ function StudyChannel() {
       </div>
       <section>
         <div className={S.cardGrid}>
-          {...cardData &&
-            [...cardData].map((card: Card) => (
+          {...searchedCardData &&
+            [...searchedCardData].map((card: Card) => (
               <Card {...card} key={card.board_id} />
             ))}
         </div>
