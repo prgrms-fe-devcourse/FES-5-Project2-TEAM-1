@@ -1,10 +1,18 @@
+import { useBoard } from '@/components/context/BoardContext';
 import S from './Cruitmember.module.css'
+import { DdayCounter } from './utills/DdayCounter';
 
 function Cruitmember() {
+
+const { selectedBoard } = useBoard();
+if (!selectedBoard) throw new Error("데이터가 없습니다");
+const { address, images, member, due_date } = selectedBoard;
+const dDay = DdayCounter(due_date);
+
   return (
     <section className={S.container}>
       <div className={S.contentWrap}>
-        <img src="/images/map.png" alt="" />
+        <img src={images} alt="" />
         <ul className={S.textInfo}>
           <li className={S.infoList}>
             <span>
@@ -16,14 +24,14 @@ function Cruitmember() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.871 4.97031C13.055 4.10365 10.9448 4.10365 9.12882 4.97031C7.29475 5.84561 5.95945 7.51284 5.50334 9.49322C5.05809 11.4264 5.49463 13.4606 6.69588 15.0393L7.2921 15.823C7.58074 16.2023 7.90115 16.5564 8.24985 16.8814L11.0595 19.5001H4.7999C4.30285 19.5001 3.8999 19.903 3.8999 20.4001C3.8999 20.8971 4.30285 21.3001 4.7999 21.3001H19.1999C19.697 21.3001 20.0999 20.8971 20.0999 20.4001C20.0999 19.903 19.697 19.5001 19.1999 19.5001H12.9403L15.75 16.8814C16.0987 16.5564 16.4191 16.2023 16.7077 15.823L17.3039 15.0393C18.5052 13.4606 18.9417 11.4264 18.4965 9.49322C18.0404 7.51284 16.7051 5.84561 14.871 4.97031ZM10.7306 7.72171C11.5337 7.3399 12.4661 7.3399 13.2692 7.72171L13.2974 7.7351C14.0942 8.1139 14.6745 8.83573 14.8732 9.69532C15.0735 10.5617 14.8597 11.4776 14.3009 12.1693C13.7465 12.8556 12.9071 13.2599 12.0249 13.2599H11.9749C11.0927 13.2599 10.2534 12.8556 9.69895 12.1693C9.14013 11.4776 8.92628 10.5617 9.1266 9.69532C9.32534 8.83573 9.90563 8.1139 10.7024 7.7351L10.7306 7.72171Z"
                   fill="#222222"
                 />
               </svg>
             </span>
-            <p>경기도 고양시 포동포동 124번지</p>
+            <p>{address}</p>
           </li>
           <li className={S.infoList}>
             <span>
@@ -37,32 +45,32 @@ function Cruitmember() {
                 <path
                   d="M9.39834 7.08276C11.0282 6.40763 12.8596 6.40763 14.4895 7.08276C16.1194 7.75789 17.4144 9.05285 18.0895 10.6828C18.7646 12.3127 18.7646 14.144 18.0895 15.7739C17.4144 17.4038 16.1194 18.6988 14.4895 19.3739C12.8596 20.0491 11.0282 20.0491 9.39834 19.3739C7.76843 18.6988 6.47347 17.4038 5.79834 15.7739C5.12321 14.144 5.12321 12.3127 5.79834 10.6828C6.47347 9.05285 7.76843 7.7579 9.39834 7.08276Z"
                   stroke="#222222"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M4.74365 20.3747L7.21344 17.9048"
                   stroke="#222222"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M19.144 20.3747L16.6743 17.905"
                   stroke="#222222"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M18.8278 3.96383C17.877 3.57 16.8088 3.57 15.858 3.96383C15.4772 4.12156 15.1277 4.33729 14.8203 4.60035C14.5016 4.87306 14.6605 5.35819 15.0496 5.51491C15.0748 5.52507 15.1 5.53536 15.1252 5.54578C17.1625 6.38969 18.7812 8.00839 19.6252 10.0458C19.7232 10.2826 20.0234 10.366 20.1971 10.1775C20.5031 9.84524 20.7517 9.45901 20.9278 9.03368C21.3217 8.08289 21.3217 7.01461 20.9278 6.06383C20.534 5.11305 19.7786 4.35765 18.8278 3.96383Z"
                   stroke="#222222"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M9.13881 4.56746C9.46499 4.8392 9.30375 5.33145 8.90849 5.4864C8.85925 5.50571 8.81015 5.5255 8.76119 5.54578C6.7238 6.38969 5.1051 8.00839 4.26119 10.0458C4.17822 10.2461 3.92234 10.312 3.77694 10.1512C3.48194 9.82491 3.24181 9.44785 3.07027 9.03372C2.67645 8.08294 2.67645 7.01466 3.07027 6.06387C3.4641 5.11309 4.21949 4.3577 5.17027 3.96388C6.12105 3.57005 7.18934 3.57005 8.14012 3.96388C8.50491 4.11497 8.84093 4.3193 9.13881 4.56746Z"
                   stroke="#222222"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M12.5 10.6313C12.5 10.3552 12.2761 10.1313 12 10.1313C11.7239 10.1313 11.5 10.3552 11.5 10.6313L12.5 10.6313ZM12 10.6313L11.5 10.6313L11.5 13.3689L12 13.3689L12.5 13.3689L12.5 10.6313L12 10.6313Z"
@@ -74,7 +82,7 @@ function Cruitmember() {
                 />
               </svg>
             </span>
-            <p> ~8/1 12:00까지</p>
+            <p>{due_date}</p>
           </li>
           <li className={S.infoList}>
             <span>
@@ -103,10 +111,16 @@ function Cruitmember() {
                 />
               </svg>
             </span>
-            <p>10명</p>
+            <p>{member}명</p>
           </li>
           <li className={S.infoList}>
-            <p className={S.dDay}>모집마감까지 <span>1</span><span>7</span>일 <span>2</span><span>1</span>시간 <span>0</span><span>8</span>분 남았습니다</p>
+            <p className={S.dDay}>
+              모집마감까지 <span>{dDay[0]}</span>
+              <span>{dDay[1]}</span>일<span>{dDay[2]}</span>
+              <span>{dDay[3]}</span>시간
+              <span>{dDay[4]}</span>
+              <span>{dDay[5]}</span>분 남았습니다
+            </p>
             <button type="submit">가입신청하기</button>
           </li>
         </ul>

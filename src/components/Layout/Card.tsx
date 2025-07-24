@@ -1,7 +1,9 @@
 import S from './card.module.css'
-import type { Tables } from "../../supabase/database.types";
+import type { Tables } from "@/supabase/database.types";
 import { useEffect, useState } from 'react';
-import supabase from '../../supabase/supabase';
+import supabase from '@/supabase/supabase';
+import { useRouter } from '../../router/index';
+import { useBoard } from '../context/BoardContext';
 
 
 type Props = Tables<"board">;
@@ -12,16 +14,18 @@ function Card(card: Props) {
     const [cardLike, setCardLike] = useState(likes);
     const [isPressed, setIsPressed] = useState(false);
     const [isScrap, setIsScrap] = useState(false);
-  
+    const { setHistoryRoute } = useRouter();
+    const { setSelectedBoard } = useBoard()
+
     useEffect(() => {
       const storedLike = JSON.parse(localStorage.getItem(`like-${board_id}`) ?? "false")  
       const storedScrap = JSON.parse(localStorage.getItem(`scrap-${board_id}`) ?? "false")  
       setIsPressed(storedLike)
       setIsScrap(storedScrap)
     }, [board_id]);
-  
+
    
-  const handleScrap = async () => {
+    const handleScrap = async () => {
     
     const nextScrapState = !isScrap
     setIsScrap(nextScrapState)
@@ -45,11 +49,12 @@ function Card(card: Props) {
       console.error("데이터를 제대로 불러오지 못하였습니다");
       setIsScrap(!isScrap)
     }
-  }
+    }
       
-  const handleLike = async () => {
+    const handleLike = async () => {
     const pressState = isPressed ? cardLike - 1 : cardLike + 1;
     const nextState = !isPressed;
+   
     setCardLike(pressState);
     setIsPressed(!isPressed)
     localStorage.setItem(`like-${board_id}`,JSON.stringify(nextState))
@@ -64,12 +69,25 @@ function Card(card: Props) {
       }
     }
 
+    const handleRoute = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,card:Props) => {
+      e.preventDefault()
 
-  return (
-    <div className={S.container}>
-      <div className={S.cardTop}>
-        <div className={S.cardTopLeft}>
-          <div className={join_cls == '0' ? S.freebadge : S.acceptbadge}>{
+      if ((e.target as HTMLButtonElement).closest('button')) {
+        return
+      } else {
+        setSelectedBoard(card);
+        history.pushState(null, "", `JoinInfo/${card.board_id}`);
+        setHistoryRoute(`/JoinInfo/${card.board_id}`);
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      }
+     
+  }
+  
+    return (
+      <div className={S.container} onClick={(e)=>handleRoute(e,card)}>
+        <div className={S.cardTop}>
+          <div className={S.cardTopLeft}>
+           <div className={join_cls == '0' ? S.freebadge : S.acceptbadge}>{
             join_cls == '0' ? '자유가입' : '승인가입'
           }</div>
           <div>모집기간 D-{due_date}</div>
@@ -158,3 +176,4 @@ function Card(card: Props) {
   );
 }
 export default Card
+
