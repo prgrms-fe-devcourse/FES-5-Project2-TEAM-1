@@ -1,9 +1,10 @@
 
 import { useState } from "react"
 import BannerSection from "./BannerSection"
-import S from "./MainContent.module.css"
 import NewsSection from "./NewsSection"
-import StudyCardList from "./StudyCardList"
+import MainStudyCard from "./MainStudyCard"
+import S from "./MainContent.module.css"
+
 
 
 function MainContent() {
@@ -13,7 +14,7 @@ function MainContent() {
   return (
     <section className={S.mainContent}>
         <BannerSection search={search} setSearch={setSearch} />
-        <StudyCardList search={search} />
+        <MainStudyCard search={search} />
         <NewsSection />
     </section>
   )

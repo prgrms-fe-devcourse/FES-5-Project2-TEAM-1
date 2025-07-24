@@ -1,0 +1,53 @@
+.container {
+  padding: 40px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.nothing {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  animation: fadeIn 0.7s ease-in-out;
+  gap: 12px;
+
+  p{
+    color: #A6B37D; 
+    background-color: #F0F8E0; 
+    border: 2px solid #A6B37D; 
+    padding: 16px 24px;
+    border-radius: 32px;
+    font-weight: 600;
+    line-height: 1.6;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(166, 179, 125, 0.4); 
+    text-align: center;
+    font-size: 1.25rem;
+  }
+
+  img{
+    width: 100px;
+    margin-top: 20px;
+  }
+}
+
+
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
