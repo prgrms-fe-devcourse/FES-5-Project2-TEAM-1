@@ -86,15 +86,18 @@
   display: flex;
   align-items: center;
   gap: 40px;
-  div {
+  .calendar {
+    position: relative;
+  }
+  > div {
     display: flex;
     gap: 12px;
-    div {
+    /* div {
       width: 100px;
       height: 20px;
       border: 0.5px solid #222222;
       border-radius: 8px;
-    }
+    } */
     a {
       display: flex;
       align-items: center;
@@ -146,6 +149,7 @@
   img {
     width: 145px;
     height: 150px;
+    border: 0.5px solid #555555;
     background-color: rgba(100, 100, 100, 10);
   }
   label {
