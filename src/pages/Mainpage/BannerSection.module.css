@@ -19,7 +19,7 @@ img {
 
 .searchWrapper {
   position: relative;
-  top: -60px;
+  top:-50px;
   width: 1200px;
   max-width: 780px;
   display: flex;
