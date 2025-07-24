@@ -2,6 +2,15 @@
   width: 100%;
 }
 
+.swiper.peerReview>.swiper-wrapper{
+  left: -255px;
+}
+
+.swiper.channel>.swiper-wrapper{
+  left: -170px;
+}
+
+
 .swiper-slide.peerReview {
   position: relative;
   width: 173px !important;
