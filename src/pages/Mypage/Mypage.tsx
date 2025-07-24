@@ -60,27 +60,11 @@ function Mypage() {
   }
 
   const handleSave = async () => {
-    
-    if( !userData ) return;
-
-    const { error } = await supabase
-      .from('user_profile')
-      .update({
-        background_images: userData.profile[0].background_images,
-        profile_images: userData.profile[0].profile_images,
-        address: userData.profile[0].address,
-        age: userData.profile[0].age,
-        email: userData.profile[0].email,
-      })
-      .eq('profile_id', userData.profile[0].profile_id);
-
-
-
     setEditMode( false );
   }
 
   const handleDeleteUser = () => {
-
+    //
   }
 
   return (
@@ -93,15 +77,13 @@ function Mypage() {
             <MypageProfile 
               user={userData} 
               editMode={editMode}
-              onChange={(updatedProfile) => {
-                setUserData((prev) => prev ? { ...prev, profile: { ...prev.profile, ...updatedProfile},  } : prev)
-              }} 
+              setUserData={setUserData}
             />
             <MypageName user={userData} />
             <MypageDetails user={userData} />
             <MypageInterest user={userData} />
             <MypageSocial user={userData} />
-            { editMode && <button type="submit" onClick={handleSave}>저장</button>}
+            { editMode && <button type="submit" onClick={handleSave}>완료</button>}
         </div>
     </div>
   )

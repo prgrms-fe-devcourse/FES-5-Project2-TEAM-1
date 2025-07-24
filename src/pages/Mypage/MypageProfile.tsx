@@ -9,10 +9,11 @@ import { useState } from 'react';
 interface Props {
   user: User | null;
   editMode: boolean;
+  setUserData: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 
-  function MypageProfile({ user, editMode,  }:  Props) {
+  function MypageProfile({ user, editMode, setUserData }:  Props) {
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [prevImage, setPrevImage] = useState('');
@@ -22,7 +23,6 @@ interface Props {
     }
     
     const profileData = user.profile[0];
-    console.log( profileData );
 
     const handleEditBackground = () => {
       setShowDropdown(prev => !prev);
@@ -41,9 +41,20 @@ interface Props {
                 <button type='button' className={E.edit_mypageBgBtn} onClick={handleEditBackground}>
                   <img src='/icons/edit_pencil.svg' />
                 </button>
-                { showDropdown && <BackgroundEdit prevImage={prevImage} setPrevImage={setPrevImage} setShowDropdown={setShowDropdown} /> }
+                { showDropdown && 
+                  <BackgroundEdit 
+                    prevImage={prevImage} 
+                    setPrevImage={setPrevImage} 
+                    setShowDropdown={setShowDropdown}
+                    profileData={profileData}
+                    setUserData={setUserData}  
+                /> }
             </>)
-            : (<img src={profileData.background_images} className={S.mypageBgImg} />)
+            : (<img
+                  key={profileData.background_images} 
+                  src={profileData.background_images} 
+                  className={S.mypageBgImg}
+               />)
           }
         </div>
         <div className={S.mypageProfile}>
