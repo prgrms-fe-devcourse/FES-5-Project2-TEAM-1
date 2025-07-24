@@ -1,0 +1,38 @@
+import { useEffect, useState } from "react";
+import compareUserId from "../../utils/compareUserId"
+import type { Tables } from "src/supabase/database.types";
+
+/**
+ * - 마이페이지 포스트 확인
+    - board 테이블의 profile_id와 post테이블의 profile_id와 현재 접속한 유저 id가 같은걸 기준으로, 작성자가 본인인 경우의 글에대해서만 title과 contents 불러오기
+    - title은 모두 보이고
+    - contents는 truncate로 몇글자 이내만 보이게
+    - 리스트로 뿌리기
+ */
+
+
+type Posts = Tables<'post'>
+
+// 데이터 불러오는 조건 설정해주기(user_id 바뀔때마다?)
+
+function MypagePost() {
+  // const [currentUserId, setCurrentUserId] = useState<string|null>(null);
+  const [posts, setPosts] = useState<Posts[]|null>(null)
+
+  // setCurrentUserId('11e880fd-65ca-4778-b8e9-1888c1e65233);
+
+  // useEffect(() => {
+  //     const fetchPosts = async () => {
+  //       // if(!currentUserId) return;
+  //       const result = await compareUserId('11e880fd-65ca-4778-b8e9-1888c1e65233','post');
+  //       setPosts(result);
+  //     };
+  //     fetchPosts();
+  //   }, []);
+  //   console.log('포스트 불러오기',posts);
+    
+  return (
+    <div>MypagePost</div>
+  )
+}
+export default MypagePost

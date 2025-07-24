@@ -1,21 +1,26 @@
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  
-  
-}
-
-.container {
+.container{
+  width: 100vh;
   display: flex;
-  height: 100vh;
-  overflow: hidden; 
+  height: auto;
+  justify-content: space-between;
+  background-color: #f5f5f5; 
 }
 
-.mainWrapper {
-  flex: 1;
+.leftcontainer{
+  width: 220px;
+  background-color: #b8dada;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  background-color: #f5f5f5;
+  flex-shrink: 0;
+  min-height: 100vh;
+}
+
+.rightcontainer{
+  width: 220px;
+  background-color: #FFC0CB;
+  flex-shrink: 0;
+}
+.components{
+  flex-grow: 1;
+  min-width: 0;
 }
