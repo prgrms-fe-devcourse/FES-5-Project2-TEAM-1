@@ -21,7 +21,22 @@
       background-color: rgba(166, 179, 125, 0.2);
       border:1px solid #a6b37d;
       text-align: center;
+      font-weight: bold;
       color:#a6b37d;
+      font-size: 12px;
+      line-height: 15px;
+    }
+
+    
+    .acceptbadge{
+      width: 66px;
+      height: 20px;
+      border-radius: 4px;
+      background-color: rgba(185, 148, 112, 0.2);
+      border:1px solid #b99470;
+      text-align: center;
+      color:#b99470;
+      font-weight: bold;
       font-size: 12px;
       line-height: 15px;
     }
@@ -65,4 +80,21 @@
   span{
     display: inline-flex;
   }
+}
+
+.likeBtn{
+  display: flex;
+  align-content: center;
+  gap: 8px;
+  text-align: center;
+
+  img{
+    width: 20px;
+    height: 18px;
+  }
+}
+
+.scrapBtn{
+  width: 15px;
+  height: 18px;
 }
