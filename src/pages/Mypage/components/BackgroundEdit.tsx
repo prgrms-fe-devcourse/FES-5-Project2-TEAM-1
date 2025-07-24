@@ -10,7 +10,6 @@ interface Props {
 function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown }: Props) {
 
     const [file, setFile] = useState<File | null>(null);
-    const [isOpen, setIsOpen] = useState(true);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
@@ -40,11 +39,12 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown }: Props) {
     console.log( inputRef );
 
     const handleFileApply = () => {
-        
+        //누르면 저장되고 서버에 올라가기
+        //알람으로 저장됐음을 알려주기
     }
 
     const handleDeleteFile = () => {
-        // setPrevImage();
+        setPrevImage('/images/default_cover.png');
     }
 
     const handleClosePopup = () => {
@@ -52,21 +52,23 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown }: Props) {
     }
 
   return (
-    <div ref={popupRef} className={E.backgroundEditContainer}>
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px'}}>
-            <h1>Cover image</h1>
-            <button onClick={handleClosePopup}>X</button>
-        </div>
-        {
-            file 
-               ? (<img src={URL.createObjectURL(file)} />)
-                : (<img src={prevImage}/>)
-        }
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3rem', flex: '11'}}>
-            <button>Delete</button>
-            <input ref={inputRef} type='file' id='fileInput' style={{display: 'none'}} accept='image/*' onChange={handleFileChange} />
-            <button onClick={handleFileUpload}>Upload</button>
-            <button>Apply</button>
+    <div className={E.backgroundEditWrapper}>
+        <div ref={popupRef} className={E.backgroundEditContainer}>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px'}}>
+                <h1>Cover image</h1>
+                <button onClick={handleClosePopup}>X</button>
+            </div>
+            {
+                file 
+                ? (<img src={URL.createObjectURL(file)} />)
+                    : (<img src={prevImage}/>)
+            }
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3rem', flex: '11'}}>
+                <button onClick={handleDeleteFile}>Delete</button>
+                <input ref={inputRef} type='file' id='fileInput' style={{display: 'none'}} accept='image/*' onChange={handleFileChange} />
+                <button onClick={handleFileUpload}>Upload</button>
+                <button>Apply</button>
+            </div>
         </div>
     </div>
   )
