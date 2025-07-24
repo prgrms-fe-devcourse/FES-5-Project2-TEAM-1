@@ -3,14 +3,14 @@ import Card from '../../components/Layout/Card';
 import S from './studychannel.module.css'
 import supabase from '../../supabase/supabase';
 import type { Tables } from 'src/supabase/database.types';
-// import { debounce } from '../../utils/debounce';
+import { debounce } from '../../utils/debounce';
 
 
 type Card = Tables<'board'>
 
 function StudyChannel() {
  
-  const [search,setSearch] = useState('')
+
   const [cardData, setCardData] = useState<Card[]>([])
   const [searchedCardData,setSearchedCardData] = useState<Card[]>([])
   const filterTab = ["최신순", "좋아요순", "모집마감순"]
@@ -54,19 +54,24 @@ function StudyChannel() {
       const sorted = [...cardData].sort((a, b) => b.likes - a.likes)
       setCardData(sorted)
     } else if (e.currentTarget === filterRef.current[2]) {
-      const sorted = [...cardData].sort((a, b) => new Date(b.due_date).getTime() - new Date(a.due_date).getTime())
+      const sorted = [...cardData].sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime())
       setCardData(sorted)
     }
   }
 
-  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    if (search === '') alert('검색어를 입력해 주세요')
-    const filtered = [...cardData].filter(card => card.title.toLowerCase().includes(search) || card.address.toLowerCase().includes(search) || card.contents.toLowerCase().includes(search))
+  const debouncedSearch = debounce((value: string) => {
+    const lowerValue = value.toLowerCase()
+    const filtered = cardData.filter(
+      (card) =>
+        card.title.toLowerCase().includes(lowerValue) ||
+        card.contents.toLowerCase().includes(lowerValue) ||
+        card.address.toLowerCase().includes(lowerValue)
+    );
     setSearchedCardData(filtered)
-  }
+  },400 )
 
-  
+
+
   
   return (
     <main className={S.container}>
@@ -78,13 +83,13 @@ function StudyChannel() {
             </button>
           ))}
         </div>
-        <form className={S.searchBox} onSubmit={handleSearch}>
+        <form className={S.searchBox} >
           <input
             type="text"
             placeholder="검색어를 입력하세요"
             className={S.studySearch}
             onChange={(e) => {
-              setSearch(e.target.value);
+              debouncedSearch(e.target.value)
             }}
           />
           <button type="submit" className={S.searchBtn}>
