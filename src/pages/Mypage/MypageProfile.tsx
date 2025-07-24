@@ -15,6 +15,7 @@ interface Props {
   function MypageProfile({ user, editMode,  }:  Props) {
 
     const [showDropdown, setShowDropdown] = useState(false);
+    const [prevImage, setPrevImage] = useState('');
 
     if (!user || !user.profile ) {
       return <p>프로필 정보가 없습니다.</p>;
@@ -25,9 +26,10 @@ interface Props {
 
     const handleEditBackground = () => {
       setShowDropdown(prev => !prev);
+      setPrevImage(profileData.background_images);
     }
 
-    const prevImage = profileData.background_images;
+    
 
     return (
     <>
@@ -39,7 +41,7 @@ interface Props {
                 <button type='button' className={E.edit_mypageBgBtn} onClick={handleEditBackground}>
                   <img src='/icons/edit_pencil.svg' />
                 </button>
-                { showDropdown && <BackgroundEdit prevImage={prevImage} /> }
+                { showDropdown && <BackgroundEdit prevImage={prevImage} setPrevImage={setPrevImage} setShowDropdown={setShowDropdown} /> }
             </>)
             : (<img src={profileData.background_images} className={S.mypageBgImg} />)
           }
