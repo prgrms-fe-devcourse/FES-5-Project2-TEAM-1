@@ -3,10 +3,19 @@
 
   background-color: #b8dada;
   display:flex;
+  height: auto;
+  flex-shrink: 0;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 100vh;
 }
 
+.height{
+  height: 100vh;
+  position: fixed;
+  top: 0;
+ 
+}
 
 .navListWrap{
   display: flex;
@@ -15,7 +24,10 @@
   gap: 16px;
   margin-top: 48px;
   padding-left: 12px;
-  position:fixed;
+  position:sticky;
+  top: 0;
+  height: auto;
+  max-height: 100vh;
 }
 
 
@@ -51,8 +63,10 @@
 .recentEnterUserWrap{
   display:flex;
   padding-left: 12px;
-  position: fixed;
-  top: 80vh;
+  position:absolute;
+  top: 70vh;
+
+
   .recentEnterUser{
     display:flex;
     flex-direction: column;

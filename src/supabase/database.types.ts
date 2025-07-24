@@ -1,3 +1,4 @@
+
 export type Json =
   | string
   | number
@@ -288,30 +289,6 @@ export type Database = {
             referencedColumns: ["profile_id"]
           },
         ]
-      }
-      news_cards: {
-        Row: {
-          description: string
-          id: number
-          image: string
-          title: string
-          url: string
-        }
-        Insert: {
-          description: string
-          id?: never
-          image: string
-          title: string
-          url: string
-        }
-        Update: {
-          description?: string
-          id?: never
-          image?: string
-          title?: string
-          url?: string
-        }
-        Relationships: []
       }
       peer_review: {
         Row: {

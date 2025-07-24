@@ -1,12 +1,14 @@
 .container{
   width: 220px;
   background-color: #FFC0CB;
-  height: 100vh;
-
-
-  overflow-x: hidden;
-  
+  flex-shrink: 0;
   justify-content: space-between;
+}
+
+.height{
+  height: 100vh;
+  position: fixed;
+  top: 0;
 }
 
 .loginBox{
