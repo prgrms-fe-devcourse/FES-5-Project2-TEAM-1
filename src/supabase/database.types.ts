@@ -1,4 +1,3 @@
-
 export type Json =
   | string
   | number
@@ -290,11 +289,36 @@ export type Database = {
           },
         ]
       }
+      news_cards: {
+        Row: {
+          description: string
+          id: number
+          image: string
+          title: string
+          url: string
+        }
+        Insert: {
+          description: string
+          id?: never
+          image: string
+          title: string
+          url: string
+        }
+        Update: {
+          description?: string
+          id?: never
+          image?: string
+          title?: string
+          url?: string
+        }
+        Relationships: []
+      }
       peer_review: {
         Row: {
           create_at: string
           profile_id: string
           review_contents: string
+          review_contents_preview: string
           review_id: string
           review_score: number
           writer_id: string
@@ -303,14 +327,16 @@ export type Database = {
           create_at: string
           profile_id: string
           review_contents: string
+          review_contents_preview: string
           review_id: string
-          review_score?: number
+          review_score: number
           writer_id: string
         }
         Update: {
           create_at?: string
           profile_id?: string
           review_contents?: string
+          review_contents_preview?: string
           review_id?: string
           review_score?: number
           writer_id?: string

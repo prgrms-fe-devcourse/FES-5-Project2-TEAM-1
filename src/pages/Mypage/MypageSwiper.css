@@ -1,0 +1,18 @@
+.swiper {
+  width: 100%;
+}
+
+.swiper-slide {
+  position: relative;
+  width: 173px !important;
+  height: 170px !important;
+  transition: 1s;
+  gap:22px !important;
+  user-select: none;
+}
+
+.swiper-slide-active{
+  width: 348px !important;
+  height: 170px !important;
+  transition: 1s ease-in-out;
+}
