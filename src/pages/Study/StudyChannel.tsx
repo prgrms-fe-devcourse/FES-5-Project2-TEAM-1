@@ -3,6 +3,7 @@ import Card from '@/components/Layout/Card';
 import S from './studychannel.module.css'
 import supabase from '@/supabase/supabase';
 import type { Tables } from 'src/supabase/database.types';
+import { debounce } from '@/utils/debounce';
 
 
 type Card = Tables<'board'>
