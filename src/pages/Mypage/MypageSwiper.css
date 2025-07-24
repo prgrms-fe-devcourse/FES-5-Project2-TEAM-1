@@ -2,7 +2,7 @@
   width: 100%;
 }
 
-.swiper-slide {
+.swiper-slide.peerReview {
   position: relative;
   width: 173px !important;
   height: 170px !important;
@@ -11,8 +11,14 @@
   user-select: none;
 }
 
-.swiper-slide-active{
+.swiper-slide-active.peerReview {
   width: 348px !important;
   height: 170px !important;
   transition: 1s ease-in-out;
+}
+
+.swiper-slide.channel {
+  position: relative;
+  width: 311px;
+  height: 233px;
 }

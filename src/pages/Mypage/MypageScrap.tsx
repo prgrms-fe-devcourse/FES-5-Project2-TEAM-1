@@ -10,15 +10,15 @@ type Scrap = Tables<'scrap'>
 function MypageScrap() {
   const [scraps, setScraps] = useState<Scrap[]|null>(null);
 
-  useEffect(()=>{
-    const fetchScraps = async() => {
-      const result = await compareUserId('test1','scrap');
-      setScraps(result);
-    }
-    fetchScraps();
-  },[])
+  // useEffect(()=>{
+  //   const fetchScraps = async() => {
+  //     const result = await compareUserId('11e880fd-65ca-4778-b8e9-1888c1e65233','scrap');
+  //     setScraps(result);
+  //   }
+  //   fetchScraps();
+  // },[])
 
-  console.log('스크랩 불러오기', scraps)
+  // console.log('스크랩 불러오기', scraps)
 
   return (
     <div>MypageScrap</div>

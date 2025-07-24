@@ -19,17 +19,17 @@ function MypagePost() {
   // const [currentUserId, setCurrentUserId] = useState<string|null>(null);
   const [posts, setPosts] = useState<Posts[]|null>(null)
 
-  // setCurrentUserId('test1');
+  // setCurrentUserId('11e880fd-65ca-4778-b8e9-1888c1e65233);
 
-  useEffect(() => {
-      const fetchPosts = async () => {
-        // if(!currentUserId) return;
-        const result = await compareUserId('test1','post');
-        setPosts(result);
-      };
-      fetchPosts();
-    }, []);
-    console.log('포스트 불러오기',posts);
+  // useEffect(() => {
+  //     const fetchPosts = async () => {
+  //       // if(!currentUserId) return;
+  //       const result = await compareUserId('11e880fd-65ca-4778-b8e9-1888c1e65233','post');
+  //       setPosts(result);
+  //     };
+  //     fetchPosts();
+  //   }, []);
+  //   console.log('포스트 불러오기',posts);
     
   return (
     <div>MypagePost</div>

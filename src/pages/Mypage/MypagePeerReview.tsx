@@ -5,7 +5,6 @@ import S from './MypagePeerReview.module.css'
 
 import { Swiper, SwiperSlide, type SwiperClass } from "swiper/react"
 import { Navigation } from "swiper/modules"
-
 import './MypageSwiper.css'
 import 'swiper/css'; 
 import 'swiper/css/pagination';
@@ -39,7 +38,7 @@ function MypagePeerReview() {
   useEffect(()=>{
     const fetchPeerReviews = async() => {
       // 현재 유저의 peer reviews 리스트 불러오기
-      const currentUserPeerReviews:PeerReview[]|null = await compareUserId('test1','peer_review');
+      const currentUserPeerReviews:PeerReview[]|null = await compareUserId('11e880fd-65ca-4778-b8e9-1888c1e65233','peer_review');
 
       // 불러온 peer reviews 들의 작성자 프로필 이미지 불러와서
       // 화면에 렌더링 시킬 데이터만 재구성해서 내보내기
@@ -54,8 +53,9 @@ function MypagePeerReview() {
 
     }
     fetchPeerReviews();
+    console.log('피어리뷰 패치 완료')
   },[])
-  console.log('리뷰 불러오기',peerReviews);
+
 
   // swiper 화면 크기에 따른 여백 조절
   const adjustMargin = () => {
@@ -99,7 +99,7 @@ function MypagePeerReview() {
           grabCursor
           initialSlide={0}
           centeredSlides = {true}
-          slidesPerView={4}
+          slidesPerView="auto"
           speed={900}
           slideToClickedSlide
           spaceBetween={40}
@@ -118,7 +118,7 @@ function MypagePeerReview() {
         >
           {
             peerReviews && peerReviews.map(({writer_id, writerProfileImage, review_contents, review_score, review_contents_preview},index)=>(
-              <SwiperSlide key={writer_id}>
+              <SwiperSlide key={writer_id} className="peerReview">
                 <div className={S.peerReviewCard}>
                   <img className={S.peerReviewWriterImg} src={writerProfileImage} alt="프로필" />
                   <div className={S.review_score}>{review_score}</div>
