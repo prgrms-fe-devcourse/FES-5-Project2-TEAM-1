@@ -1,21 +1,32 @@
+import type { User } from './Mypage'
 import S from './MypageTop.module.css'
 
 
-function MypageDetails() {
+interface Props {
+    user: User | null;
+}
+
+function MypageDetails({ user}: Props) {
+
+    const userData = user && user.profile[0];
+    if( !userData ) {
+        return <div className={S.mypageDetailsContainer}>Loading...</div>;
+    }
+
   return (
     <div className={S.mypageDetailsContainer}>
         <ul>
             <li>
                 <h3>주소</h3>
-                <p>서울시 강남구 테헤란로 123</p>
+                <p>{userData.address}</p>
             </li>
             <li>
                 <h3>성별</h3>
-                <p>여자</p>
+                <p>{userData.gender}</p>
             </li>
             <li>
                 <h3>나이</h3>
-                <p>900</p>
+                <p>{userData.age}</p>
             </li>
         </ul>
     </div>
