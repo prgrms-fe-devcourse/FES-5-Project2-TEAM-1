@@ -3,10 +3,11 @@ import S from './Cruitmember.module.css'
 import { DdayCounter } from './utills/DdayCounter';
 
 function Cruitmember() {
-  const { selectedBoard } = useBoard();
-  if (!selectedBoard) throw new Error("데이터가 없습니다");
-  const { address, images, member, due_date} = selectedBoard;
-  const dDay = DdayCounter(due_date);
+
+const { selectedBoard } = useBoard();
+if (!selectedBoard) throw new Error("데이터가 없습니다");
+const { address, images, member, due_date } = selectedBoard;
+const dDay = DdayCounter(due_date);
 
   return (
     <section className={S.container}>
