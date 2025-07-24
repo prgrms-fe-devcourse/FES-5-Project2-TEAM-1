@@ -3,10 +3,9 @@ import RightSidebar from './components/Layout/RightSidebar'
 import './App.css'
 import './style/reset.css'
 import LeftSidebar from './components/Layout/LeftSidebar';
-import Mypage from './pages/Mypage/Mypage';
-
-
-
+import StudyMemberChannel from './pages/Study/StudyMemberChannel';
+import StudyChannel from './pages/Study/StudyChannel';
+import Mypage from './pages/Mypage/Mypage.tsx';
 
 function App() {
   
@@ -23,5 +22,4 @@ function App() {
     </div>
   );
 }
-
 export default App

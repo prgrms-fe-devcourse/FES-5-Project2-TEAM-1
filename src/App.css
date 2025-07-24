@@ -1,4 +1,5 @@
 .container{
+  width: 100vh;
   display: flex;
   height: auto;
   justify-content: space-between;

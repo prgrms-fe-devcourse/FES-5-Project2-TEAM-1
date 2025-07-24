@@ -19,6 +19,11 @@ time, mark, audio, video {
 	vertical-align: baseline;
 	color:#222;
 }
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
