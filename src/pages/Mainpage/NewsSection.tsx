@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import S from "./NewsSection.module.css";
 import supabase from '../../supabase/supabase';
-import type { Database, Tables } from "src/supabase/database.types";
+import type { Tables } from "src/supabase/database.types";
 import gsap from 'gsap';
 
 type NewsCard = Tables<'news_cards'>;
@@ -83,7 +83,7 @@ useLayoutEffect(() => {
       </div>
       <hr />
       <div className={S.cardListWrapper}>
-        
+
         <button className={S.arrowLeft} onClick={handlePrev}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
