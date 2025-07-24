@@ -25,8 +25,7 @@ function Card(card: Props) {
     
     const nextScrapState = !isScrap
     setIsScrap(nextScrapState)
-   
-     localStorage.setItem(`scrap-${board_id}`, JSON.stringify(nextScrapState));
+    localStorage.setItem(`scrap-${board_id}`, JSON.stringify(nextScrapState));
     
     const { data, error } = await supabase
       .from("scrap")

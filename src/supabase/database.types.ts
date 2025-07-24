@@ -32,7 +32,7 @@ export type Database = {
         Insert: {
           address: string
           board_cls?: Database["public"]["Enums"]["board_cls"]
-          board_id: string
+          board_id?: string
           contents: string
           create_at?: string
           due_date?: string
@@ -40,7 +40,7 @@ export type Database = {
           join_cls?: Database["public"]["Enums"]["join_cls"]
           likes?: number
           member: string
-          profile_id: string
+          profile_id?: string
           title: string
         }
         Update: {
@@ -84,14 +84,14 @@ export type Database = {
         Insert: {
           address: string
           board_cls?: Database["public"]["Enums"]["board_cls"]
-          board_id: string
+          board_id?: string
           contents: string
           create_at?: string
-          due_date: string
+          due_date?: string
           images: string
           join_cls?: Database["public"]["Enums"]["join_cls"]
           member: string
-          profile_id: string
+          profile_id?: string
           title: string
         }
         Update: {
@@ -117,10 +117,10 @@ export type Database = {
           tag_id: string
         }
         Insert: {
-          board_id: string
+          board_id?: string
           color_code?: string | null
           hash_tag?: string | null
-          tag_id: string
+          tag_id?: string
         }
         Update: {
           board_id?: string
@@ -152,13 +152,13 @@ export type Database = {
         }
         Insert: {
           address: string
-          channel_id: string
+          channel_id?: string
           channel_images?: string | null
           contents: string
           create_at?: string
           due_date?: string
           oper_time?: string
-          profile_id: string
+          profile_id?: string
           title: string
         }
         Update: {
@@ -189,9 +189,9 @@ export type Database = {
           profile_id: string
         }
         Insert: {
-          channel_id: string
-          member_id: string
-          profile_id: string
+          channel_id?: string
+          member_id?: string
+          profile_id?: string
         }
         Update: {
           channel_id?: string
@@ -223,10 +223,10 @@ export type Database = {
           tag_id: string
         }
         Insert: {
-          channel_id: string
+          channel_id?: string
           color_code: string
           contents: string
-          tag_id: string
+          tag_id?: string
         }
         Update: {
           channel_id?: string
@@ -255,13 +255,13 @@ export type Database = {
           profile_id: string
         }
         Insert: {
-          board_id: string
-          comment_id: string
+          board_id?: string
+          comment_id?: string
           contents: string
           create_at?: string
           likes?: number
-          parent_id: string
-          profile_id: string
+          parent_id?: string
+          profile_id?: string
         }
         Update: {
           board_id?: string
@@ -279,13 +279,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "board"
             referencedColumns: ["board_id"]
-          },
-          {
-            foreignKeyName: "fk_user_profile_to_comment"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -324,13 +317,13 @@ export type Database = {
           writer_id: string
         }
         Insert: {
-          create_at: string
-          profile_id: string
+          create_at?: string
+          profile_id?: string
           review_contents: string
           review_contents_preview: string
-          review_id: string
-          review_score: number
-          writer_id: string
+          review_id?: string
+          review_score?: number
+          writer_id?: string
         }
         Update: {
           create_at?: string
@@ -365,9 +358,9 @@ export type Database = {
           profile_id: string
         }
         Insert: {
-          board_id: string
-          post_id: string
-          profile_id: string
+          board_id?: string
+          post_id?: string
+          profile_id?: string
         }
         Update: {
           board_id?: string
@@ -398,9 +391,9 @@ export type Database = {
           scrap_id: string
         }
         Insert: {
-          board_id: string
-          profile_id: string
-          scrap_id: string
+          board_id?: string
+          profile_id?: string
+          scrap_id?: string
         }
         Update: {
           board_id?: string
@@ -435,13 +428,13 @@ export type Database = {
           thread_id: string
         }
         Insert: {
-          channel_id: string
+          channel_id?: string
           contents: string
           create_at?: string
           likes?: number
-          parent_id: string
-          profile_id: string
-          thread_id: string
+          parent_id?: string
+          profile_id?: string
+          thread_id?: string
         }
         Update: {
           channel_id?: string
@@ -481,7 +474,7 @@ export type Database = {
         }
         Insert: {
           create_at?: string
-          id: string
+          id?: string
           name: string
           nickname: string
           recent_at?: string
@@ -507,8 +500,8 @@ export type Database = {
         }
         Insert: {
           interest: string
-          interest_id: string
-          profile_id: string
+          interest_id?: string
+          profile_id?: string
         }
         Update: {
           interest?: string
@@ -538,13 +531,13 @@ export type Database = {
         }
         Insert: {
           address: string
-          age: number
+          age?: number
           background_images: string
           email: string
           gender: string
-          profile_id: string
+          profile_id?: string
           profile_images: string
-          user_id: string
+          user_id?: string
         }
         Update: {
           address?: string
@@ -558,7 +551,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_user_base_to_user_profile"
+            foreignKeyName: "fk_user_to_user_profile"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_base"
@@ -575,10 +568,10 @@ export type Database = {
           social_link: string
         }
         Insert: {
-          create_at: string
-          profile_id: string
+          create_at?: string
+          profile_id?: string
           social: string
-          social_id: string
+          social_id?: string
           social_link: string
         }
         Update: {

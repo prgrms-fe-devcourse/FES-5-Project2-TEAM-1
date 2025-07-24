@@ -5,16 +5,20 @@ import './style/reset.css'
 import LeftSidebar from './components/Layout/LeftSidebar';
 import StudyMemberChannel from './pages/Study/StudyMemberChannel';
 import StudyChannel from './pages/Study/StudyChannel';
+import Mypage from './pages/Mypage/Mypage.tsx';
 
-import Mypage from './pages/Mypage/Mypage';
 function App() {
   
   return (
     <div className="container">
-      <LeftSidebar />
-      <Mypage/>
-      {/* <StudyMemberChannel/> */}
-      <RightSidebar />
+      <nav className='leftcontainer'>
+        <LeftSidebar />
+      </nav>
+      {/* 컴포넌트 들어오면 됩니다 */}
+      <Mypage />
+      <nav className='rightcontainer'>
+        <RightSidebar />
+      </nav>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Card from '../../components/Layout/Card';
 import S from './studychannel.module.css'
 import supabase from '../../supabase/supabase';
@@ -10,25 +10,47 @@ type Card = Tables<'board'>
 function StudyChannel() {
  
   const [cardData, setCardData] = useState<Card[]>([])
+  const filterTab = ["최신순", "좋아요순", "모집마감순"]
   
-    useEffect(() => {
-      const cardData = async () => {
-        const { data, error } = await supabase.from("board").select("*");
-        if (error) {
-            console.log(error.message)
-        } else {
-          setCardData(
-            [...data].sort(
-              (a, b) =>
-                parseInt(b.board_id.replace(/\D/g, "")) -
-                parseInt(a.board_id.replace(/\D/g, ""))
-            )
-          );
-          }
-      };
-      cardData()
-    }, []);
+
+  const filterRef = useRef<(HTMLButtonElement|null)[]>([])
+
+  useEffect(() => {
+    const cardData = async () => {
+      const { data, error } = await supabase.from("board").select("*");
+      if (error) {
+        console.log(error.message)
+      } else {
+        setCardData(
+          [...data].sort(
+            (a, b) =>
+              parseInt(b.board_id.replace(/\D/g, "")) -
+              parseInt(a.board_id.replace(/\D/g, ""))
+          )
+        );
+      }
+    };
+    cardData()
+  }, []);
   
+  function handleFilter(e:React.MouseEvent) {
+  
+    if (filterRef.current == null) return
+    if (e.currentTarget === filterRef.current[0]) {
+     const sorted = [...cardData].sort(
+       (a, b) =>
+         parseInt(b.board_id.replace(/\D/g, "")) -
+         parseInt(a.board_id.replace(/\D/g, ""))
+      )
+      setCardData(sorted)
+    } else if (e.currentTarget === filterRef.current[1]) {
+      const sorted = [...cardData].sort((a, b) => b.likes - a.likes)
+      setCardData(sorted)
+    } else if (e.currentTarget === filterRef.current[2]) {
+      const sorted = [...cardData].sort((a, b) => new Date(b.due_date).getTime() - new Date(a.due_date).getTime())
+      setCardData(sorted)
+    }
+  }
 
   
   
@@ -36,12 +58,11 @@ function StudyChannel() {
     <main className={S.container}>
       <div className={S.channelHeader}>
         <div className={S.filterTab}>
-          <button type="button" className={S.filterBtn}>
-            모집마감순
-          </button>
-          <button type="button" className={S.filterBtn}>
-            좋아요순
-          </button>
+          {filterTab.map((tab, i) => (
+            <button type="button" className={S.filterBtn} key={i} ref={(el) => { if (el) filterRef.current[i] = el } } onClick={(e) => handleFilter(e)}>
+              {tab}
+            </button>
+          ))}
         </div>
         <form className={S.searchBox}>
           <input
@@ -80,10 +101,7 @@ function StudyChannel() {
         <div className={S.cardGrid}>
           {...cardData &&
             [...cardData].map((card: Card) => (
-              <Card
-                {...card}
-                key={card.board_id}
-              />
+              <Card {...card} key={card.board_id} />
             ))}
         </div>
       </section>
