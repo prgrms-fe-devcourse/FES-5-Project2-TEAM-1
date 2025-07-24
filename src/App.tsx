@@ -3,10 +3,8 @@ import RightSidebar from './components/Layout/RightSidebar'
 import './App.css'
 import './style/reset.css'
 import LeftSidebar from './components/Layout/LeftSidebar';
+import StudyJoinInfomation from './pages/Study/StudyJoinInfomation';
 
-import StudyChannel from './pages/Study/StudyChannel';
-
-// import StudyChannel from './pages/Study/StudyChannel';
 
 
 
@@ -14,10 +12,16 @@ function App() {
   
   return (
     <div className="container">
-      <LeftSidebar />
+      <nav className='leftcontainer'>
+        <LeftSidebar />
+      </nav>
       {/* 컴포넌트 들어오면 됩니다 */}
-      <StudyChannel></StudyChannel>
-      <RightSidebar />
+      <main className="components">
+        <StudyJoinInfomation />
+      </main>
+      <nav className='rightcontainer'>
+        <RightSidebar />
+      </nav>
     </div>
   );
 }
