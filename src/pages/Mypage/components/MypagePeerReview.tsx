@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import type { Tables } from "src/supabase/database.types"
-import compareUserId from "../../utils/compareUserId"
+import compareUserId from "../../../utils/compareUserId"
 import S from './MypagePeerReview.module.css'
 
 import { Swiper, SwiperSlide, type SwiperClass } from "swiper/react"
@@ -95,6 +95,7 @@ function MypagePeerReview() {
           </svg>
         </button>
         <Swiper 
+          className="peerReview"
           modules={[Navigation]}
           grabCursor
           initialSlide={0}

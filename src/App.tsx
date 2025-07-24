@@ -5,7 +5,7 @@ import './style/reset.css'
 import LeftSidebar from './components/Layout/LeftSidebar';
 import StudyMemberChannel from './pages/Study/StudyMemberChannel';
 import StudyChannel from './pages/Study/StudyChannel';
-import Mypage from './pages/Mypage/Mypage.tsx';
+import Mypage from './pages/Mypage/mypage.tsx';
 
 function App() {
   
