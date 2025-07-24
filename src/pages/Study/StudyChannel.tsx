@@ -9,12 +9,16 @@ import { debounce } from '@/utils/debounce';
 type Card = Tables<'board'>
 
 function StudyChannel() {
- 
 
+  const cardPerPage = 9;
+ 
+  const [currentPage, setCurrentPage] = useState(1)
   const [cardData, setCardData] = useState<Card[]>([])
-  const [searchedCardData,setSearchedCardData] = useState<Card[]>([])
+  const [,setSearchedCardData] = useState<Card[]>([])
   const filterTab = ["최신순", "좋아요순", "모집마감순"]
   const filterRef = useRef<(HTMLButtonElement|null)[]>([])
+  
+  
 
   useEffect(() => {
     const cardData = async () => {
@@ -39,7 +43,6 @@ function StudyChannel() {
   },[cardData])
 
   function handleFilter(e:React.MouseEvent) {
-  
     if (filterRef.current == null) return
     if (e.currentTarget === filterRef.current[0]) {
      const sorted = [...cardData].sort(
@@ -66,16 +69,29 @@ function StudyChannel() {
         card.address.toLowerCase().includes(lowerValue)
     );
     setSearchedCardData(filtered)
-  },400 )
+    setCurrentPage(1)
+  }, 400)
+  
+  const totalPages = Math.ceil(cardData.length / cardPerPage);
+  const maxVisible = 5;
 
+  const startIdx = (currentPage - 1) * cardPerPage
+  const endIdx = startIdx + cardPerPage
+  const paginatedCards = cardData.slice(startIdx, endIdx);
 
-
+  const startPage = Math.max(1, currentPage - 2)
+  const endPage = Math.min(totalPages, startPage + maxVisible - 1)
+  const adjustedStartPage = Math.max(1, endPage - maxVisible + 1);
+  const visiblePage = Array.from({ length: endPage - adjustedStartPage + 1 }, (_, i) => adjustedStartPage + i)
+  
+  
   
   return (
     <main className={S.container}>
       <div className={S.channelHeader}>
         <div className={S.filterTab}>
-          {filterTab.map((tab, i) => (
+          {
+            filterTab.map((tab, i) => (
             <button
               type="button"
               className={S.filterBtn}
@@ -89,13 +105,13 @@ function StudyChannel() {
             </button>
           ))}
         </div>
-        <form className={S.searchBox} >
+        <form className={S.searchBox}>
           <input
             type="text"
             placeholder="검색어를 입력하세요"
             className={S.studySearch}
             onChange={(e) => {
-              debouncedSearch(e.target.value)
+              debouncedSearch(e.target.value);
             }}
           />
           <button type="submit" className={S.searchBtn}>
@@ -127,8 +143,8 @@ function StudyChannel() {
       </div>
       <section>
         <div className={S.cardGrid}>
-          {...searchedCardData &&
-            [...searchedCardData].map((card: Card) => (
+          {...paginatedCards &&
+            [...paginatedCards].map((card: Card) => (
               <Card {...card} key={card.board_id} />
             ))}
         </div>
@@ -136,25 +152,31 @@ function StudyChannel() {
       <nav>
         <ul className={S.pagenation}>
           <li>
-            <button className={S.pagenationNumber}>&lt;</button>
+            <button className={S.pagenationNumber}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
           </li>
+
+          {
+            visiblePage.map((pageNum) => {
+              return(
+              <li key={pageNum}>
+                <button
+                  onClick={() => setCurrentPage(pageNum)}
+                  className = { currentPage === pageNum ? S.active : S.pagenationNumber}
+                >
+                  { pageNum }
+                </button>
+              </li>
+            )})}
           <li>
-            <button className={S.active}>1</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>2</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>3</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>4</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>5</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>&gt;</button>
+            <button
+              onClick={()=> setCurrentPage((p)=>Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className={S.pagenationNumber}>&gt;</button>
           </li>
         </ul>
       </nav>
