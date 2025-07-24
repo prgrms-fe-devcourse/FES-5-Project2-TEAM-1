@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import Card from '../../components/Layout/Card';
+import Card from '@/components/Layout/Card';
 import S from './studychannel.module.css'
-import supabase from '../../supabase/supabase';
+import supabase from '@/supabase/supabase';
 import type { Tables } from 'src/supabase/database.types';
+
 
 
 type Card = Tables<'board'>
@@ -11,8 +12,6 @@ function StudyChannel() {
  
   const [cardData, setCardData] = useState<Card[]>([])
   const filterTab = ["최신순", "좋아요순", "모집마감순"]
-  
-
   const filterRef = useRef<(HTMLButtonElement|null)[]>([])
 
   useEffect(() => {
@@ -24,8 +23,8 @@ function StudyChannel() {
         setCardData(
           [...data].sort(
             (a, b) =>
-              parseInt(b.board_id.replace(/\D/g, "")) -
-              parseInt(a.board_id.replace(/\D/g, ""))
+              new Date (b.create_at).getTime() -
+              new Date (a.create_at).getTime()
           )
         );
       }
@@ -52,14 +51,20 @@ function StudyChannel() {
     }
   }
 
-  
-  
   return (
     <main className={S.container}>
       <div className={S.channelHeader}>
         <div className={S.filterTab}>
           {filterTab.map((tab, i) => (
-            <button type="button" className={S.filterBtn} key={i} ref={(el) => { if (el) filterRef.current[i] = el } } onClick={(e) => handleFilter(e)}>
+            <button
+              type="button"
+              className={S.filterBtn}
+              key={i}
+              ref={(el) => {
+                if (el) filterRef.current[i] = el;
+              }}
+              onClick={(e) => handleFilter(e)}
+            >
               {tab}
             </button>
           ))}
@@ -101,7 +106,9 @@ function StudyChannel() {
         <div className={S.cardGrid}>
           {...cardData &&
             [...cardData].map((card: Card) => (
-              <Card {...card} key={card.board_id} />
+         
+                <Card {...card} key={card.board_id} />
+        
             ))}
         </div>
       </section>
