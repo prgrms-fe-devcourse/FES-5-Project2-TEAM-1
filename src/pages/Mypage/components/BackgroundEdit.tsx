@@ -3,7 +3,7 @@ import E from '../MypageEdit.module.css';
 import type { Tables } from 'src/supabase/database.types';
 import supabase from '../../../supabase/supabase';
 import type { User } from '../Mypage';
-import Alert from 'src/utils/Alert';
+import Alert from '../../../utils/Alert';
 
 interface Props {
   prevImage: string;
