@@ -9,6 +9,16 @@
   box-sizing: border-box;
 }
 
+.container{
+  width: 100%;
+  background-color: #F5F5F5;
+  /* padding: 104px 232px; */
+  border: 0.5px solid black;
+
+  display: flex;
+  flex-direction: column;
+}
+
 
 .peerReview{
   /* position: relative;

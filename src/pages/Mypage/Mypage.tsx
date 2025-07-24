@@ -13,28 +13,34 @@ import sBottom from './MypageBottom.module.css';
 
 function Mypage() {
   return (
-    <div className={sTop.container}>
-        <div className={sTop.wrapper}>
-            <h1 className={sTop.mypage}>마이 페이지</h1>
-            <MypageProfile />
-            <MypageDetail />
-            <MypageInterest />
-            <MypageSocial />
-            
-            <div className={sBottom.peerReview}>
-              <MypagePeerReview/>
+    <div style={{display:"flex", flexDirection:"column"}}>
+      {
+        /* <div className={sTop.container}>
+            <div className={sTop.wrapper}>
+                <h1 className={sTop.mypage}>마이 페이지</h1>
+                <MypageProfile />
+                <MypageDetail />
+                <MypageInterest />
+                <MypageSocial />
             </div>
-            <div className={sBottom.channel}>
-              <MypageChannel/>
-            </div>
-            <div className={sBottom.scrap}>
-              <MypageScrap/>
-            </div>
-            <div className={sBottom.post}>
-              <MypagePost/>
-            </div>
+        </div> */
+      }
+      <div className={sBottom.container}>
+        <div className={sBottom.peerReview}>
+          <MypagePeerReview/>
         </div>
+        <div className={sBottom.channel}>
+          <MypageChannel/>
+        </div>
+        <div className={sBottom.scrap}>
+          <MypageScrap/>
+        </div>
+        <div className={sBottom.post}>
+          <MypagePost/>
+        </div>
+      </div>
     </div>
+    
   )
 }
 

@@ -4,7 +4,7 @@ import compareUserId from "../../utils/compareUserId"
 import S from './MypagePeerReview.module.css'
 
 import { Swiper, SwiperSlide, type SwiperClass } from "swiper/react"
-import { Pagination, Navigation } from "swiper/modules"
+import { Navigation } from "swiper/modules"
 
 import './MypagePeerReview.css'
 import 'swiper/css'; 
