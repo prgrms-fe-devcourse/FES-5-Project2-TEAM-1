@@ -6,7 +6,7 @@ import Calender from "../../../components/Calender";
 
 function BoardOptions() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isHidden, setIsHidden] = useState<boolean>(true);
+  const [isHidden] = useState<boolean>(true);
   const [joinCls, setJoinCls] = useState<"0" | "1">("0");
   const [boardCls, setBoardCls] = useState<"0" | "1">("0");
 
@@ -82,6 +82,7 @@ function BoardOptions() {
           </label>
           <input
             type="text"
+            required
             placeholder="제목을 입력해주세요"
             onChange={handleChangeTitle}
           />

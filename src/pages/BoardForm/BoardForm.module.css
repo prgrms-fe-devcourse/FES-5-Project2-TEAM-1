@@ -173,21 +173,6 @@
   display: flex;
   gap: 40px;
   margin-bottom: 28px;
-  .hashTag {
-    border: 0.3px solid #555555;
-    border-radius: 12px;
-    box-sizing: border-box;
-    input {
-      width: 472px;
-      height: 36px;
-      border: none;
-      border-radius: 12px;
-      margin-left: 10px;
-    }
-    input:focus {
-      outline: none !important;
-    }
-  }
 }
 .boardWriteForm {
   width: 100%;

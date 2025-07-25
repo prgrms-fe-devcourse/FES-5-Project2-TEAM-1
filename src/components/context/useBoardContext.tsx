@@ -1,9 +1,11 @@
 import { createContext, useContext } from "react";
 import type { Tables } from "../../supabase/database.types";
 
+type boardType = Omit<Tables<"board">, "board_id" | "create_at" | "likes">;
+
 interface BoardDataType {
-  boardData: Tables<"board"> | null;
-  setBoardData: React.Dispatch<React.SetStateAction<Tables<"board"> | null>>;
+  boardData: boardType | null;
+  setBoardData: React.Dispatch<React.SetStateAction<boardType | null>>;
 }
 
 export const BoardContext = createContext<BoardDataType | null>(null);
