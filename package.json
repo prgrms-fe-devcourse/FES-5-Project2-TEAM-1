@@ -11,9 +11,13 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.52.0",
+    "@yaireo/tagify": "^4.35.3",
+    "date-fns": "^4.1.0",
     "@types/swiper": "^5.4.3",
     "gsap": "^3.13.0",
+    "moment": "^2.30.1",
     "react": "^19.1.0",
+    "react-calendar": "^6.0.0",
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0",
     "swiper": "^11.2.10",

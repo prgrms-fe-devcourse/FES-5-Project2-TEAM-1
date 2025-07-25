@@ -1,0 +1,14 @@
+.container {
+  position: absolute;
+}
+
+.default {
+  width: 100px;
+  height: 20px;
+  input {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #555555;
+  }
+}

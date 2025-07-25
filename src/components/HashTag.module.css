@@ -1,0 +1,9 @@
+/* 해시태그 스타일링변경 */
+/* 참고 링크 - https://github.com/yairEO/tagify?tab=readme-ov-file#events  */
+
+.hashTag {
+  width: 483px;
+  border-radius: 12px;
+  --tag-bg: #a6b37d;
+  --tag--max-width: 600px;
+}
