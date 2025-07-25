@@ -1,4 +1,3 @@
-import Recomment from './Recomment';
 import S from './ThreadList.module.css'
 
 function ThreadList() {
@@ -52,7 +51,6 @@ function ThreadList() {
           10
         </button>
       </div>
-      <Recomment/>
     </li>
   );
 }

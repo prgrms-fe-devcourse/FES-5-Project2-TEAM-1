@@ -8,6 +8,7 @@ import StudyJoinInfomation from './pages/Study/StudyJoinInfomation';
 import StudyMemberChannel from './pages/Study/StudyMemberChannel';
 import Thread from './pages/Study/components/Thread';
 import MainContent from './pages/Mainpage/MainContent';
+import Mypage from './pages/Mypage/Mypage';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             <Route path='/channel/:id' element={<StudyMemberChannel />} />
             <Route path='/channel/member/:id' element={<StudyMemberChannel />} />
             <Route path='/channel/thread/:id' element={<Thread />} />
+            <Route path='/mypage' element={<Mypage/>}/>
         </Routes>
       </main>
       <nav className="rightcontainer">
