@@ -80,10 +80,17 @@ function Mypage() {
               editMode={editMode}
               setUserData={setUserData}
             />
-            <MypageName user={userData} />
-            <MypageDetails user={userData} />
-            <MypageInterest user={userData} />
-            <MypageSocial user={userData} />
+            <MypageName 
+              user={userData}
+              editMode={editMode}
+              setUserData={setUserData} 
+            />
+            <MypageDetails 
+              user={userData} />
+            <MypageInterest 
+              user={userData} />
+            <MypageSocial 
+              user={userData} />
             { editMode && <button type="submit" onClick={handleSave}>완료</button>}
         </div>
     </div>

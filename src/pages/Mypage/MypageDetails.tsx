@@ -6,7 +6,7 @@ interface Props {
     user: User | null;
 }
 
-function MypageDetails({ user}: Props) {
+function MypageDetails({ user }: Props) {
 
     const userData = user && user.profile[0];
     if( !userData ) {
