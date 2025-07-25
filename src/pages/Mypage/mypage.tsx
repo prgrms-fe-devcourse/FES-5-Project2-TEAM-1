@@ -61,13 +61,6 @@ function Mypage() {
     setEditMode( prev => !prev );
   }
 
-  const handleEditModeChange = ( value: boolesn ) => {
-    setEditMode(value);
-    if( !value ) {
-      setShowEdit(false);
-    }
-  }
-
   const handleSave = async () => {
     setEditMode( false );
   }
@@ -96,7 +89,10 @@ function Mypage() {
               setShowEdit={setShowEdit}
             />
             <MypageDetails 
-              user={userData} />
+              user={userData}
+              editMode={editMode}
+              setUserData={setUserData}
+              />
             <MypageInterest 
               user={userData} />
             <MypageSocial 

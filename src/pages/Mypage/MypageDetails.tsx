@@ -4,9 +4,11 @@ import S from './MypageTop.module.css'
 
 interface Props {
     user: User | null;
+    editMode: boolean;
+    setUserData: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-function MypageDetails({ user }: Props) {
+function MypageDetails({ user, editMode, setUserData }: Props) {
 
     const userData = user && user.profile[0];
     if( !userData ) {
