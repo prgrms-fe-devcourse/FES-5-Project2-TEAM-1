@@ -1,0 +1,26 @@
+.container{
+  width: 228px;
+  height: 48px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 10px;
+  background-color: #fff;
+}
+
+.member{
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  font-size: 16px;
+
+  img{
+    width: 24px;
+    height: 24px;
+  };
+}
+
+.showmore{
+  background-color: transparent;
+  height: 100%;
+}

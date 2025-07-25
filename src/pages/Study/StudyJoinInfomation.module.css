@@ -1,0 +1,51 @@
+.container{
+  margin: 56px 105px 0px;
+
+}
+
+.channelInfoBox{
+  display: flex;
+  gap: 12px;
+
+  img{
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.textInfo{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+}
+
+.title{
+  display:flex;
+  gap: 16px; 
+  font-size: 48px;
+  font-weight: bold;
+  align-items: center;
+  
+  button{
+    background-color: transparent;
+    margin-top: 12px;
+  }
+}
+
+
+.tagBox{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+    color:rgba(85, 85, 85, 0.7);
+    
+  span{
+    display: inline-flex;
+  }
+}
+
+.content{
+  margin-top: 48px;
+  font-size: 20px;
+}

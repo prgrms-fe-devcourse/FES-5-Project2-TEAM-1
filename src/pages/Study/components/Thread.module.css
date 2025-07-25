@@ -1,0 +1,73 @@
+.layout{
+  margin: 60px 105px 0;
+}
+
+.writerBox{
+  background-color: #fff;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-radius: 8px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  padding-right: 40px;
+}
+
+.profile{
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  img{
+    width: 36px;
+    height: 36px;
+  }
+}
+
+
+.inputContent{
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+
+  input[type="text"]{
+    border: 0;
+    outline: none;
+        transform: translateY(-40px);
+        background-color: transparent;
+  }
+
+
+}
+.partition{
+  background-color: rgba(85, 85, 85, 0.5);
+  width: 1px;
+  min-height: 94px;
+  margin-left: 16px;
+}
+
+
+.confirmBtnWrap{
+  display: flex;
+  justify-content: flex-end;
+
+  .confirm{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 20px;
+  border-radius: 8px;
+  background-color: #b99470;
+  color:#fff;
+}
+}
+
+
+.threads{
+  display: flex;
+  flex-direction: column;
+ 
+}

@@ -1,12 +1,15 @@
+/* rightsidebar */
 .container{
   width: 220px;
   background-color: #FFC0CB;
-  height: 100vh;
-
-
-  overflow-x: hidden;
-  
+  flex-shrink: 0;
   justify-content: space-between;
+}
+
+.height{
+  height: 100vh;
+  position: fixed;
+  top: 0;
 }
 
 .loginBox{
@@ -56,6 +59,16 @@
     cursor: pointer;
     padding-left: 30px;
 
+    > svg{
+      transition:0.3s;
+    }
+    
+    
+    &:hover > svg{
+      background-color: rgba(0, 0, 0, 0.1);
+      padding: 3px;
+      border-radius: 4px;
+    }
     p{
       font-size: 12px;
       color: #aa8a90;
@@ -130,7 +143,7 @@
     padding: 10px;
     margin-left: 10px;
     border-radius: 16px;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
 
     .membershipTextBox{
       padding: 0px 4px;
@@ -163,7 +176,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
+      transition: 0.3s;
+
+      &:hover{
+        background-color: #8b9669;
+
+      }
     }
   }
 }
