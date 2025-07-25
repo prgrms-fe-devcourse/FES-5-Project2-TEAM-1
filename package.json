@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.52.0",
+    "@yaireo/tagify": "^4.35.3",
     "date-fns": "^4.1.0",
     "gsap": "^3.13.0",
     "moment": "^2.30.1",
