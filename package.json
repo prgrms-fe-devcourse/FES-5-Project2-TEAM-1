@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.52.0",
+    "@types/swiper": "^5.4.3",
     "@yaireo/tagify": "^4.35.3",
     "date-fns": "^4.1.0",
-    "@types/swiper": "^5.4.3",
     "gsap": "^3.13.0",
     "moment": "^2.30.1",
     "react": "^19.1.0",
@@ -22,7 +22,6 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.30.1",
     "swiper": "^11.2.10",
-
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
@@ -30,6 +29,7 @@
     "@types/node": "^24.0.15",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "@uidotdev/usehooks": "^2.4.1",
     "@vitejs/plugin-react": "^4.6.0",
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
