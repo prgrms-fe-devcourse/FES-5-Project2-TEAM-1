@@ -1,11 +1,3 @@
-/* rightsidebar */
-.container{
-  width: 220px;
-  background-color: #FFC0CB;
-  flex-shrink: 0;
-  justify-content: space-between;
-}
-
 .height{
   height: 100vh;
   position: fixed;

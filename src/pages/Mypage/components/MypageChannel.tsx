@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Tables } from "src/supabase/database.types"
-import compareUserId from "../../utils/compareUserId";
+import compareUserId from "../../../utils/compareUserId";
 import S from './MypageChannel.module.css'
 
 import { Swiper, SwiperSlide, type SwiperClass } from "swiper/react"
@@ -34,8 +34,6 @@ function MypageChannel() {
     fetchChannels();
     console.log('가입 채널 패치 완료');
   },[])
-
-  console.log('가입된 채널',channels);
 
   const adjustMargin = () => {
     const screenWidth = window.innerWidth;
@@ -72,6 +70,7 @@ function MypageChannel() {
           </svg>
         </button>
         <Swiper 
+          className="channel"
           modules={[Navigation]}
           initialSlide={0}
           centeredSlides = {true}
