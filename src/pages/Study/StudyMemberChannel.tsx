@@ -1,10 +1,13 @@
-// import StudyMemberChannelContent from './components/StudyMemberChannelContent';
-
+import { useLocation } from 'react-router-dom';
 import S from './StudyMemberChannel.module.css'
 import StudyMemberChannelContent from './components/StudyMemberChannelContent';
 // import Thread from './components/Thread';
 
 function StudyMemberChannel() {
+  const location = useLocation()
+  const card = location.state.card ?? {}
+  
+  
   return (
     <main className={S.container}>
       <nav className={S.header}>
@@ -15,7 +18,7 @@ function StudyMemberChannel() {
           <a href="">스레드</a>
         </div>
       </nav>
-      {<StudyMemberChannelContent />}
+      {<StudyMemberChannelContent {...card} />}
       {/* <Thread/> */}
     </main>
   );

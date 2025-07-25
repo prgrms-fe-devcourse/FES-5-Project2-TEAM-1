@@ -1,13 +1,24 @@
-import { useBoard } from '@/components/context/BoardContext';
+import type { Tables } from '@/supabase/database.types';
 import S from './Cruitmember.module.css'
 import { DdayCounter } from './utills/DdayCounter';
+import { useEffect, useState } from 'react';
 
-function Cruitmember() {
 
-const { selectedBoard } = useBoard();
-if (!selectedBoard) throw new Error("데이터가 없습니다");
-const { address, images, member, due_date } = selectedBoard;
-const dDay = DdayCounter(due_date);
+type Props = Tables<'board'>
+
+
+function Cruitmember({ images, address, due_date, member,join_cls}: Props) {
+  
+  const [dDay, setDDay] = useState(DdayCounter(due_date))
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDDay(DdayCounter(due_date));
+    }, 1000)
+    
+    return () => clearInterval(timer)
+  },[due_date])
+
 
   return (
     <section className={S.container}>
@@ -82,7 +93,7 @@ const dDay = DdayCounter(due_date);
                 />
               </svg>
             </span>
-            <p>{due_date}</p>
+            <p>{ due_date}</p>
           </li>
           <li className={S.infoList}>
             <span>
@@ -113,7 +124,11 @@ const dDay = DdayCounter(due_date);
             </span>
             <p>{member}명</p>
           </li>
-          <li className={S.infoList}>
+
+          {
+            join_cls === "0" ? 
+            ''
+            : <li className={S.infoList}>
             <p className={S.dDay}>
               모집마감까지 <span>{dDay[0]}</span>
               <span>{dDay[1]}</span>일<span>{dDay[2]}</span>
@@ -123,6 +138,8 @@ const dDay = DdayCounter(due_date);
             </p>
             <button type="submit">가입신청하기</button>
           </li>
+          }
+        
         </ul>
       </div>
     </section>

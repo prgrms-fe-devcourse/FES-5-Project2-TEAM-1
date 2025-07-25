@@ -3,10 +3,10 @@ import RightSidebar from './components/Layout/RightSidebar'
 import './App.css'
 import './style/reset.css'
 import LeftSidebar from './components/Layout/LeftSidebar';
+import { Route, Routes } from 'react-router-dom';
 import StudyChannel from './pages/Study/StudyChannel';
-import { RouterProvider } from './router';
-import { routes } from './router/router';
-// import StudyMemberChannel from './pages/Study/StudyMemberChannel';
+import StudyJoinInfomation from './pages/Study/StudyJoinInfomation';
+import StudyMemberChannel from './pages/Study/StudyMemberChannel';
 
 
 
@@ -21,7 +21,11 @@ function App() {
       </nav>
       {/* 컴포넌트 들어오면 됩니다 */}
       <main className="components">
-        <RouterProvider navigation={<StudyChannel />} routes={routes} />
+        <Routes>
+          <Route path="/study" element={<StudyChannel />} />
+          <Route path="/study/:id" element={<StudyJoinInfomation />} />
+          <Route path='/channel/:id' element={<StudyMemberChannel/>} />
+        </Routes>
       </main>
       <nav className="rightcontainer">
         <RightSidebar />
