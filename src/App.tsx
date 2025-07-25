@@ -9,9 +9,6 @@ import Mypage from './pages/Mypage/Mypage.tsx';
 import MainContent from './pages/Mainpage/MainContent';
 import Footer from './pages/Mainpage/Footer';
 
-
-=======
-
 function App() {
   return (
     <div className="container">
