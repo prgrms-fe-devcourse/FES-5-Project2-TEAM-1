@@ -188,3 +188,18 @@
             }
         }
 }
+
+
+.editDetailBtn {
+    width: 3rem;
+
+    position: absolute;
+    right: 1.8rem;
+    bottom: 1.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+}

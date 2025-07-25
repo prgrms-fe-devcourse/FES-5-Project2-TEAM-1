@@ -11,6 +11,7 @@ import MypageChannel from './components/MypageChannel';
 import MypagePeerReview from './components/MypagePeerReview';
 import MypagePost from './components/MypagePost';
 import MypageScrap from './components/MypageScrap';
+
 // type UserBase = Tables<'user_base'>;
 // type UserProfile = Tables<'user_profile'>;
 // type UserInterest = Tables<'user_interest'>;
@@ -23,9 +24,12 @@ export type User = Tables<'user_base'> & {
   profile: UserProfileWithJoins[];
 };
 function Mypage() {
+
   const [userData, setUserData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+
+
   useEffect(() => {
     const fetchUser = async () => {
       const { data, error } = await supabase

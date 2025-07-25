@@ -3,6 +3,7 @@ import type { User } from './Mypage';
 import S from './MypageTop.module.css';
 import E from './MypageEdit.module.css';
 import supabase from '../../supabase/supabase';
+import { useToast } from '@/utils/useToast';
 
 
 interface Props {
@@ -14,6 +15,8 @@ interface Props {
 }
 
 function MypageName({ user, editMode, setUserData, showEdit, setShowEdit}: Props) {
+
+  const { success, error } = useToast();
 
   if( !user ) {
     return <p>프로필 정보가 없습니다.</p>;
@@ -29,7 +32,7 @@ function MypageName({ user, editMode, setUserData, showEdit, setShowEdit}: Props
     const handleSaveBtn = async () => {
 
       if( typeof userName !== 'string' || !userName?.trim() ) {
-        alert('올바른 이름 을 입력해주세요.');
+        error('이름 입력을 다시해주세요.')
         return;
       }
 
@@ -48,7 +51,7 @@ function MypageName({ user, editMode, setUserData, showEdit, setShowEdit}: Props
         .eq('id', id);
 
       if( nameError ) {
-          console.error('DB 업데이트 실패!!', nameError );
+          error('업데이트 실패')
           return;
       }
 
@@ -58,7 +61,7 @@ function MypageName({ user, editMode, setUserData, showEdit, setShowEdit}: Props
         .eq('id', id);
 
       if( roleError ) {
-        console.error('DB 업데이트 실패', roleError);
+        error('업데이트 실패')
         return;
       }
 
@@ -75,7 +78,7 @@ function MypageName({ user, editMode, setUserData, showEdit, setShowEdit}: Props
             }
         })
       
-      alert('성공적으로 업로드가 완료되었습니다~!');
+      success('업로드 성공!');
       setShowEdit(false);
     }
 
