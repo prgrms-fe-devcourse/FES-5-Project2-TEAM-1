@@ -27,6 +27,7 @@ function Mypage() {
 
   const [userData, setUserData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   useEffect(() => {
 
@@ -60,6 +61,13 @@ function Mypage() {
     setEditMode( prev => !prev );
   }
 
+  const handleEditModeChange = ( value: boolesn ) => {
+    setEditMode(value);
+    if( !value ) {
+      setShowEdit(false);
+    }
+  }
+
   const handleSave = async () => {
     setEditMode( false );
   }
@@ -83,7 +91,9 @@ function Mypage() {
             <MypageName 
               user={userData}
               editMode={editMode}
-              setUserData={setUserData} 
+              setUserData={setUserData}
+              showEdit={showEdit} 
+              setShowEdit={setShowEdit}
             />
             <MypageDetails 
               user={userData} />
