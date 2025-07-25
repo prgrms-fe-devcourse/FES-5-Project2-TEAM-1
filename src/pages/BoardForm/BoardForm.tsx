@@ -34,7 +34,7 @@ function BoardForm() {
   const [markdown, setMarkDown] = useState("");
   const [boardData, setBoardData] = useState<boardType | null>(formInit);
   const [hashTagData, setHashTagData] = useState<hashTagType[] | null>(null);
-
+  const [boardImage, setBoardImage] = useState<File | null>(null);
   //마크다운 실시간 변환 => debounce적용
   const handleBoardWrite = debounce(
     (e: React.InputEvent<HTMLTextAreaElement>) => {
@@ -75,8 +75,28 @@ function BoardForm() {
     if (hashTagData) {
       insertHashTag(hashTagData);
     }
-  };
 
+    if (boardImage) {
+      const fileExt = boardImage.name.split(".").pop();
+      const fileName = `b7009e60-8628-4a42-b9a1-f6bdb264e3a7.${fileExt}`;
+      const filePath = fileName;
+
+      const { error: uploadError } = await supabase.storage
+        .from("boardimage")
+        .upload(filePath, boardImage, {
+          upsert: true,
+        });
+
+      if (uploadError) {
+        throw new Error("이미지 업로드에 실패했습니다.");
+      }
+    }
+  };
+  const getBoardImage = (fileData: HTMLInputElement) => {
+    if (!fileData.files) return;
+    const file = fileData.files[0] ?? null;
+    setBoardImage(file);
+  };
   const insertHashTag = async (hashData: hashTagType[]) => {
     const { error } = await supabase.from("board_tag").insert(hashData);
     if (error) {
@@ -100,7 +120,7 @@ function BoardForm() {
       <form onSubmit={handleSubmit}>
         <div className={S.bContainer}>
           <div className={S.boardEdit}>
-            <BoardOptions />
+            <BoardOptions getBoardImage={getBoardImage} />
             <BoardOptionSub onHashTag={handleHashTag} />
             <BoardWriteForm onInput={handleBoardWrite} />
           </div>

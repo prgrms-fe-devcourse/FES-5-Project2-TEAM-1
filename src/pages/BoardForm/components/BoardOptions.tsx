@@ -4,7 +4,11 @@ import { useBoardContext } from "../../../components/context/useBoardContext";
 import type { Tables } from "../../../supabase/database.types";
 import Calender from "../../../components/Calender";
 
-function BoardOptions() {
+interface Props {
+  getBoardImage: (file: HTMLInputElement) => void;
+}
+
+function BoardOptions({ getBoardImage }: Props) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isHidden] = useState<boolean>(true);
   const [joinCls, setJoinCls] = useState<"0" | "1">("0");
@@ -16,6 +20,8 @@ function BoardOptions() {
   const handelFileUpload = () => {
     const file = files.current as HTMLInputElement;
     if (!file.files) return;
+
+    getBoardImage(file);
     const fileImageUrl = URL.createObjectURL(file.files[0]);
     setImageUrl(fileImageUrl);
     setBoardData((prev) => {
@@ -155,6 +161,7 @@ function BoardOptions() {
         <label htmlFor="file-upload">사진 첨부</label>
         <input
           type="file"
+          accept="image/*"
           id="file-upload"
           ref={files}
           onChange={handelFileUpload}
