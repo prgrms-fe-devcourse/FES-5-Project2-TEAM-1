@@ -225,6 +225,30 @@ export type Database = {
           parent_id?: string
           profile_id?: string
         }
+      news_cards: {
+        Row: {
+          description: string
+          id: number
+          image: string
+          title: string
+          url: string
+        }
+        Insert: {
+          description: string
+          id?: never
+          image: string
+          title: string
+          url: string
+        }
+        Update: {
+          description?: string
+          id?: never
+          image?: string
+          title?: string
+          url?: string
+        }
+        Relationships: []
+
         Relationships: [
           {
             foreignKeyName: "fk_board_to_comment"
@@ -234,6 +258,7 @@ export type Database = {
             referencedColumns: ["board_id"]
           },
         ]
+
       }
       news_cards: {
         Row: {
@@ -434,6 +459,7 @@ export type Database = {
           profile_images?: string
           user_id?: string
         }
+
         Relationships: [
           {
             foreignKeyName: "fk_user_to_user_profile"
@@ -443,6 +469,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+
       }
       user_social: {
         Row: {
