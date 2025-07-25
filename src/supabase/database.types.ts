@@ -57,15 +57,7 @@ export type Database = {
           profile_id?: string
           title?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_user_profile_to_board"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
+        Relationships: []
       }
       board_save: {
         Row: {
@@ -128,15 +120,7 @@ export type Database = {
           hash_tag?: string | null
           tag_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_board_to_board_tag"
-            columns: ["board_id"]
-            isOneToOne: false
-            referencedRelation: "board"
-            referencedColumns: ["board_id"]
-          },
-        ]
+        Relationships: []
       }
       channel: {
         Row: {
@@ -172,15 +156,7 @@ export type Database = {
           profile_id?: string
           title?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_user_profile_to_channel"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
+        Relationships: []
       }
       channel_member: {
         Row: {
@@ -198,22 +174,7 @@ export type Database = {
           member_id?: string
           profile_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_channel_to_channel_member"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "channel"
-            referencedColumns: ["channel_id"]
-          },
-          {
-            foreignKeyName: "fk_user_profile_to_channel_member"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
+        Relationships: []
       }
       channel_tag: {
         Row: {
@@ -234,15 +195,7 @@ export type Database = {
           contents?: string
           tag_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_channel_to_channel_tag"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "channel"
-            referencedColumns: ["channel_id"]
-          },
-        ]
+        Relationships: []
       }
       comment: {
         Row: {
@@ -334,22 +287,7 @@ export type Database = {
           review_score?: number
           writer_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_user_profile_to_peer_review"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "fk_user_profile_to_peer_review1"
-            columns: ["writer_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
+        Relationships: []
       }
       post: {
         Row: {
@@ -367,22 +305,7 @@ export type Database = {
           post_id?: string
           profile_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_board_to_post"
-            columns: ["board_id"]
-            isOneToOne: false
-            referencedRelation: "board"
-            referencedColumns: ["board_id"]
-          },
-          {
-            foreignKeyName: "fk_user_profile_to_post"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
+        Relationships: []
       }
       scrap: {
         Row: {
@@ -400,22 +323,7 @@ export type Database = {
           profile_id?: string
           scrap_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_board_to_scrap"
-            columns: ["board_id"]
-            isOneToOne: false
-            referencedRelation: "board"
-            referencedColumns: ["board_id"]
-          },
-          {
-            foreignKeyName: "fk_user_profile_to_scrap"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
+        Relationships: []
       }
       thread: {
         Row: {
@@ -445,22 +353,7 @@ export type Database = {
           profile_id?: string
           thread_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_channel_to_thread"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "channel"
-            referencedColumns: ["channel_id"]
-          },
-          {
-            foreignKeyName: "fk_user_profile_to_thread"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
+        Relationships: []
       }
       user_base: {
         Row: {
@@ -508,15 +401,7 @@ export type Database = {
           interest_id?: string
           profile_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_user_profile_to_user_interest"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
+        Relationships: []
       }
       user_profile: {
         Row: {
@@ -581,15 +466,7 @@ export type Database = {
           social_id?: string
           social_link?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_user_profile_to_user_social"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
