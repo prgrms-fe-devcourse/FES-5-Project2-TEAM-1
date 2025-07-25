@@ -1,10 +1,23 @@
+import HashTag from "@/components/HashTag";
 import S from "../BoardForm.module.css";
-import BoardHashTag from "./BoardHashTag";
 
-function BoardOptionSub() {
+interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onHashTag: (tag: any) => void;
+}
+function BoardOptionSub({ onHashTag }: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const callBack = (tag: any) => {
+    onHashTag(tag);
+  };
   return (
     <div className={S.boardOptionSub}>
-      <BoardHashTag />
+      <HashTag
+        // taglist={["JavaScript", "Node.js", "React", "c#"]}
+        // defalutList={["JavaScript"]}
+        // editable={false}
+        callBack={callBack}
+      />
       <div className={S.optionButton}>
         <ul>
           <li>
