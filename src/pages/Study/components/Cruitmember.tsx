@@ -1,16 +1,29 @@
-
+import type { Tables } from '@/supabase/database.types';
 import S from './Cruitmember.module.css'
+import { DdayCounter } from './utills/DdayCounter';
+import { useEffect, useState } from 'react';
 
 
-function Cruitmember() {
+type Props = Tables<'board'>
 
 
+function Cruitmember({ images, address, due_date, member,join_cls}: Props) {
+  
+  const [dDay, setDDay] = useState(DdayCounter(due_date))
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDDay(DdayCounter(due_date));
+    }, 1000)
+    
+    return () => clearInterval(timer)
+  },[due_date])
 
 
   return (
     <section className={S.container}>
       <div className={S.contentWrap}>
-        <img src="" alt="" />
+        <img src={images} alt="" />
         <ul className={S.textInfo}>
           <li className={S.infoList}>
             <span>
@@ -29,7 +42,7 @@ function Cruitmember() {
                 />
               </svg>
             </span>
-            <p></p>
+            <p>{address }</p>
           </li>
           <li className={S.infoList}>
             <span>
@@ -80,7 +93,7 @@ function Cruitmember() {
                 />
               </svg>
             </span>
-            <p></p>
+            <p>{ due_date}</p>
           </li>
           <li className={S.infoList}>
             <span>
@@ -109,18 +122,24 @@ function Cruitmember() {
                 />
               </svg>
             </span>
-            <p>명</p>
+            <p>{ member}명</p>
           </li>
-          <li className={S.infoList}>
+
+          {
+            join_cls === "0" ? 
+            ''
+            : <li className={S.infoList}>
             <p className={S.dDay}>
-              {/* 모집마감까지 <span>{dDay[0]}</span>
+              모집마감까지 <span>{dDay[0]}</span>
               <span>{dDay[1]}</span>일<span>{dDay[2]}</span>
               <span>{dDay[3]}</span>시간
               <span>{dDay[4]}</span>
-              <span>{dDay[5]}</span>분 남았습니다 */}
+              <span>{dDay[5]}</span>분 남았습니다
             </p>
             <button type="submit">가입신청하기</button>
           </li>
+          }
+        
         </ul>
       </div>
     </section>
