@@ -3,7 +3,7 @@ import type { Tables } from "@/supabase/database.types";
 import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
 import { useRouter } from '../../router/index';
-import { useBoard } from '../context/BoardContext';
+
 
 
 type Props = Tables<"board">;
@@ -11,13 +11,13 @@ type Props = Tables<"board">;
 function Card(card: Props) {
   const {address,contents,due_date,title,likes,board_id,join_cls,member,profile_id} = card
 
-  const board = useBoard()
+
   
     const [cardLike, setCardLike] = useState(likes);
     const [isPressed, setIsPressed] = useState(false);
     const [isScrap, setIsScrap] = useState(false);
-    const { setHistoryRoute } = useRouter();
-    const { setSelectedBoard } = useBoard()
+    
+  
 
     useEffect(() => {
       const storedLike = JSON.parse(localStorage.getItem(`like-${board_id}`) ?? "false")  
@@ -76,12 +76,13 @@ function Card(card: Props) {
 
       if ((e.target as HTMLButtonElement).closest('button')) {
         return
-      } else {
-        setSelectedBoard(card);
-        history.pushState(null, "", `JoinInfo/${card.board_id}`);
-        setHistoryRoute(`/JoinInfo/${card.board_id}`);
-        window.dispatchEvent(new PopStateEvent("popstate"));
       }
+      // else {
+      //   setSelectedBoard(card);
+      //   history.pushState(null, "", `JoinInfo/${card.board_id}`);
+      //   setHistoryRoute(`/JoinInfo/${card.board_id}`);
+      //   window.dispatchEvent(new PopStateEvent("popstate"));
+      // }
      
   }
   

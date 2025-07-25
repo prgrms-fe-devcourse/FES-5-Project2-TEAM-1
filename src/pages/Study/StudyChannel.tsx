@@ -11,15 +11,11 @@ type Card = Tables<'board'>
 function StudyChannel() {
 
   const cardPerPage = 9;
- 
   const [currentPage, setCurrentPage] = useState(1)
   const [cardData, setCardData] = useState<Card[]>([])
-  const [,setSearchedCardData] = useState<Card[]>([])
   const filterTab = ["최신순", "좋아요순", "모집마감순"]
   const filterRef = useRef<(HTMLButtonElement|null)[]>([])
   
-  
-
   useEffect(() => {
     const cardData = async () => {
       const { data, error } = await supabase.from("board").select("*");
@@ -39,7 +35,7 @@ function StudyChannel() {
   }, []);
   
   useEffect(() => {
-    setSearchedCardData(cardData)
+    setCardData(cardData)
   },[cardData])
 
   function handleFilter(e:React.MouseEvent) {
@@ -68,17 +64,16 @@ function StudyChannel() {
         card.contents.toLowerCase().includes(lowerValue) ||
         card.address.toLowerCase().includes(lowerValue)
     );
-    setSearchedCardData(filtered)
+    setCardData(filtered)
     setCurrentPage(1)
   }, 400)
   
-  const totalPages = Math.ceil(cardData.length / cardPerPage);
-  const maxVisible = 5;
-
   const startIdx = (currentPage - 1) * cardPerPage
   const endIdx = startIdx + cardPerPage
   const paginatedCards = cardData.slice(startIdx, endIdx);
 
+  const totalPages = Math.ceil(cardData.length / cardPerPage);
+  const maxVisible = 5;
   const startPage = Math.max(1, currentPage - 2)
   const endPage = Math.min(totalPages, startPage + maxVisible - 1)
   const adjustedStartPage = Math.max(1, endPage - maxVisible + 1);
@@ -152,7 +147,8 @@ function StudyChannel() {
       <nav>
         <ul className={S.pagenation}>
           <li>
-            <button className={S.pagenationNumber}
+            <button
+              className={S.pagenationNumber}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
             >

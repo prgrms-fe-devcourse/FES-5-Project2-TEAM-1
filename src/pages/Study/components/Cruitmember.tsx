@@ -1,18 +1,16 @@
-import { useBoard } from '@/components/context/BoardContext';
+
 import S from './Cruitmember.module.css'
-import { DdayCounter } from './utills/DdayCounter';
+
 
 function Cruitmember() {
 
-const { selectedBoard } = useBoard();
-if (!selectedBoard) throw new Error("데이터가 없습니다");
-const { address, images, member, due_date } = selectedBoard;
-const dDay = DdayCounter(due_date);
+
+
 
   return (
     <section className={S.container}>
       <div className={S.contentWrap}>
-        <img src={images} alt="" />
+        <img src="" alt="" />
         <ul className={S.textInfo}>
           <li className={S.infoList}>
             <span>
@@ -31,7 +29,7 @@ const dDay = DdayCounter(due_date);
                 />
               </svg>
             </span>
-            <p>{address}</p>
+            <p></p>
           </li>
           <li className={S.infoList}>
             <span>
@@ -82,7 +80,7 @@ const dDay = DdayCounter(due_date);
                 />
               </svg>
             </span>
-            <p>{due_date}</p>
+            <p></p>
           </li>
           <li className={S.infoList}>
             <span>
@@ -111,15 +109,15 @@ const dDay = DdayCounter(due_date);
                 />
               </svg>
             </span>
-            <p>{member}명</p>
+            <p>명</p>
           </li>
           <li className={S.infoList}>
             <p className={S.dDay}>
-              모집마감까지 <span>{dDay[0]}</span>
+              {/* 모집마감까지 <span>{dDay[0]}</span>
               <span>{dDay[1]}</span>일<span>{dDay[2]}</span>
               <span>{dDay[3]}</span>시간
               <span>{dDay[4]}</span>
-              <span>{dDay[5]}</span>분 남았습니다
+              <span>{dDay[5]}</span>분 남았습니다 */}
             </p>
             <button type="submit">가입신청하기</button>
           </li>
