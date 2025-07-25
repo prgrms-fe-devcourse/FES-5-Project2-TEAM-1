@@ -1,6 +1,22 @@
+import supabase from '@/supabase/supabase';
 import S from './ChannelComment.module.css'
+import { useState } from 'react';
+import type { Tables } from '@/supabase/database.types';
+
+
+type Profile = Tables<'user_profile'>
 
 function ChannelComment() {
+
+  const [profile,setProfile] = useState<Profile[]>([])
+
+  const profileData = async () => {
+    const { data } = await supabase.from("user_profile").select("*");
+    setProfile([...data])
+  }
+
+  profileData()
+  
   return (
     <section className={S.container}>
       <div className={S.comment}>

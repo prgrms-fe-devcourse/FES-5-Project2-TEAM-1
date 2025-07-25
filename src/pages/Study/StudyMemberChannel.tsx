@@ -1,22 +1,21 @@
-// import StudyMemberChannelContent from './components/StudyMemberChannelContent';
-
+import { Link } from 'react-router-dom';
 import S from './StudyMemberChannel.module.css'
-import StudyMemberChannelContent from './components/StudyMemberChannelContent';
-// import Thread from './components/Thread';
+
 
 function StudyMemberChannel() {
+
   return (
     <main className={S.container}>
       <nav className={S.header}>
         <div className={S.headerinner}>
-          <a href="" className={S.active}>
+          <Link to="/channel/memeber/:id" className={S.active}>
             홈
-          </a>
-          <a href="">스레드</a>
+          </Link>
+          <Link to="/channel/thread/:id">
+            스레드
+          </Link>
         </div>
       </nav>
-      {<StudyMemberChannelContent />}
-      {/* <Thread/> */}
     </main>
   );
 }

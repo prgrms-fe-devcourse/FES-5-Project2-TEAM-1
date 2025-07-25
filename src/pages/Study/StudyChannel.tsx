@@ -7,7 +7,7 @@ import { debounce } from '@/utils/debounce';
 
 
 type Card = Tables<'board'>
-
+type Tag = Tables<'board_tag'>
 function StudyChannel() {
 
   const cardPerPage = 9;
@@ -15,7 +15,19 @@ function StudyChannel() {
   const [cardData, setCardData] = useState<Card[]>([])
   const filterTab = ["최신순", "좋아요순", "모집마감순"]
   const filterRef = useRef<(HTMLButtonElement|null)[]>([])
-  
+  const [hashTag, setHashTag] = useState<Tag[]>([])
+
+  useEffect(() => {
+    const tagData = async () => {
+
+      const { data, error } = await supabase.from('board_tag').select('*')
+      if(error) console.error()
+      if(data) setHashTag(data)
+    }
+    tagData()
+  })
+
+
   useEffect(() => {
     const cardData = async () => {
       const { data, error } = await supabase.from("board").select("*");
@@ -140,7 +152,7 @@ function StudyChannel() {
         <div className={S.cardGrid}>
           {...paginatedCards &&
             [...paginatedCards].map((card: Card) => (
-              <Card {...card} key={card.board_id} />
+              <Card card={card} tag={hashTag } key={card.board_id} />
             ))}
         </div>
       </section>
