@@ -3,7 +3,7 @@ import E from '../MypageEdit.module.css';
 import type { Tables } from 'src/supabase/database.types';
 import supabase from '../../../supabase/supabase';
 import type { User } from '../Mypage';
-import Alert from '../../../utils/Alert';
+import CloseIcon  from '/icons/edit_close.svg';
 
 interface Props {
   prevImage: string;
@@ -16,6 +16,7 @@ interface Props {
 function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData, setUserData }: Props) {
 
     const [file, setFile] = useState<File | null>(null);
+    // const [showAlert, setShowAlert] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
@@ -76,8 +77,6 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
                 return;
             }
 
-            // Alert('성공적으로 저장이 완료되었습니다~!')
-
             setUserData( (prev) => {
                 if( !prev ) return prev;
 
@@ -91,6 +90,9 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
                     ]
                 } as typeof prev;
             })
+
+            alert('성공적으로 업로드가 완료되었습니다~!');
+            setShowDropdown(false);
     
     }
 
@@ -107,8 +109,10 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
     <div className={E.backgroundEditWrapper}>
         <div ref={popupRef} className={E.backgroundEditContainer}>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px'}}>
-                <h1>Cover image</h1>
-                <button onClick={handleClosePopup}>X</button>
+                <h1>배경 이미지</h1>
+                <button onClick={handleClosePopup} className={E.bgEditCloseBtn}>
+                    <img src={CloseIcon} alt='배경 이미지 수정창 닫기 버튼' />
+                </button>
             </div>
             {
                 file 
@@ -116,10 +120,10 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
                     : (<img src={prevImage}/>)
             }
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3rem', flex: '11'}}>
-                <button onClick={handleDeleteFile}>Delete</button>
+                <button onClick={handleDeleteFile} className={E.bgEditDeleteBtn}>삭제</button>
                 <input ref={inputRef} type='file' id='fileInput' style={{display: 'none'}} accept='image/*' onChange={handleFileChange} />
-                <button onClick={handleFileUpload}>Upload</button>
-                <button onClick={handleFileApply}>Apply</button>
+                <button onClick={handleFileUpload}>업로드</button>
+                <button onClick={handleFileApply}>적용</button>
             </div>
         </div>
     </div>
