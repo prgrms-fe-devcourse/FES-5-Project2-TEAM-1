@@ -8,14 +8,17 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-type Props = Tables<"board">;
+type Board = Tables<"board"> 
+type Tag = Tables<'board_tag'>[]
+type Props = {
+  card: Board,
+  tag: Tag,
+}
 
-
-function Card(card: Props) {
+function Card({card,tag}:Props) {
   const {address,contents,due_date,title,likes,board_id,join_cls,member,profile_id} = card
 
-
-  
+   
     const [cardLike, setCardLike] = useState(likes);
     const [isPressed, setIsPressed] = useState(false);
     const [isScrap, setIsScrap] = useState(false);
@@ -72,13 +75,13 @@ function Card(card: Props) {
       }
     }
 
-    const handleRoute = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,card:Props) => {
+    const handleRoute = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,card:Board) => {
       e.preventDefault()
 
       if ((e.target as HTMLButtonElement).closest('button')) {
         return
       } else {
-        return join_cls === "0"? navigate(`/channel/${board_id}`,{state:{card}}):navigate(`/study/${board_id}`,{state : {card}})
+       navigate(`/study/${board_id}`,{state : {card}})
       }
   }
   
@@ -115,7 +118,11 @@ function Card(card: Props) {
           <p>{contents}</p>
         </div>
         <div className={S.tagBox}>
-          #태그 #태그 #태그{" "}
+        {
+          tag.map((t) => 
+            <span>{t.hash_tag}</span>
+            )
+          }
           <span>
             <svg
               width="3"

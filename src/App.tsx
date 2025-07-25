@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import StudyChannel from './pages/Study/StudyChannel';
 import StudyJoinInfomation from './pages/Study/StudyJoinInfomation';
 import StudyMemberChannel from './pages/Study/StudyMemberChannel';
+import Thread from './pages/Study/components/Thread';
 
 
 
@@ -24,7 +25,9 @@ function App() {
         <Routes>
           <Route path="/study" element={<StudyChannel />} />
           <Route path="/study/:id" element={<StudyJoinInfomation />} />
-          <Route path='/channel/:id' element={<StudyMemberChannel/>} />
+          <Route path='/channel/:id' element={<StudyMemberChannel />} />
+          <Route path='/channel/memeber/:id' element={<StudyMemberChannel />} />
+          <Route path='/channel/thread/:id' element={<Thread/>}/>
         </Routes>
       </main>
       <nav className="rightcontainer">

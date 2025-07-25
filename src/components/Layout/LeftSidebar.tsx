@@ -28,7 +28,7 @@ function LeftSidebar() {
                 </a>
               </li>
               <Link to="/study" className={S.navList}>
-                <a href="" className={S.navListText}>
+                <li className={S.navListText}>
                   <svg
                     width="24"
                     height="24"
@@ -52,10 +52,10 @@ function LeftSidebar() {
                     />
                   </svg>
                   <h2>Study</h2>
-                </a>
+                </li>
               </Link>
               <li className={S.navList}>
-                <a href="" className={S.navListText}>
+                <div className={S.navListText}>
                   <svg
                     width="25"
                     height="17"
@@ -99,10 +99,10 @@ function LeftSidebar() {
                     />
                   </svg>
                   <h2>Community</h2>
-                </a>
+                </div>
               </li>
               <li className={S.navList}>
-                <a href="" className={S.navListText}>
+                <div className={S.navListText}>
                   <svg
                     width="25"
                     height="25"
@@ -128,7 +128,7 @@ function LeftSidebar() {
                     </defs>
                   </svg>
                   <h2>Contact</h2>
-                </a>
+                </div>
               </li>
             </ul>
         </nav>
