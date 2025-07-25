@@ -8,10 +8,11 @@ import { useEffect, useState } from 'react';
 import supabase from '../../supabase/supabase';
 import type { Tables } from 'src/supabase/database.types';
 
-import MypageChannel from './components/MypageChannel';
-import MypagePeerReview from './components/MypagePeerReview';
-import MypagePost from './components/MypagePost';
-import MypageScrap from './components/MypageScrap';
+import MypageChannel from './MypageChannel';
+import MypagePeerReview from './MypagePeerReview';
+import MypagePost from './MypagePost';
+import MypageScrap from './MypageScrap';
+import sBottom from './MypageBottom.module.css';
 
 
 
@@ -90,11 +91,18 @@ function Mypage() {
             <MypageDetails user={userData} />
             <MypageInterest user={userData} />
             <MypageSocial user={userData} />
-
-            <MypagePeerReview/>
-            <MypageChannel/>
-            <MypageScrap/>
-            <MypagePost/>
+            <div className={sBottom.peerReview}>
+              <MypagePeerReview/>
+            </div>
+            <div className={sBottom.channel}>
+              <MypageChannel/>
+            </div>
+            <div className={sBottom.scrap}>
+              <MypageScrap/>
+            </div>
+            <div className={sBottom.post}>
+              <MypagePost/>
+            </div>
             { editMode && <button type="submit" onClick={handleSave}>완료</button>}
 
         </div>
