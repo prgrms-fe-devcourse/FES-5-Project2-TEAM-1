@@ -3,17 +3,19 @@ import Card from '@/components/Layout/Card';
 import S from './studychannel.module.css'
 import supabase from '@/supabase/supabase';
 import type { Tables } from 'src/supabase/database.types';
-
+import { debounce } from '@/utils/debounce';
 
 
 type Card = Tables<'board'>
 
 function StudyChannel() {
- 
+
+  const cardPerPage = 9;
+  const [currentPage, setCurrentPage] = useState(1)
   const [cardData, setCardData] = useState<Card[]>([])
   const filterTab = ["최신순", "좋아요순", "모집마감순"]
   const filterRef = useRef<(HTMLButtonElement|null)[]>([])
-
+  
   useEffect(() => {
     const cardData = async () => {
       const { data, error } = await supabase.from("board").select("*");
@@ -32,8 +34,11 @@ function StudyChannel() {
     cardData()
   }, []);
   
+  useEffect(() => {
+    setCardData(cardData)
+  },[cardData])
+
   function handleFilter(e:React.MouseEvent) {
-  
     if (filterRef.current == null) return
     if (e.currentTarget === filterRef.current[0]) {
      const sorted = [...cardData].sort(
@@ -46,16 +51,42 @@ function StudyChannel() {
       const sorted = [...cardData].sort((a, b) => b.likes - a.likes)
       setCardData(sorted)
     } else if (e.currentTarget === filterRef.current[2]) {
-      const sorted = [...cardData].sort((a, b) => new Date(b.due_date).getTime() - new Date(a.due_date).getTime())
+      const sorted = [...cardData].sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime())
       setCardData(sorted)
     }
   }
 
+  const debouncedSearch = debounce((value: string) => {
+    const lowerValue = value.toLowerCase()
+    const filtered = cardData.filter(
+      (card) =>
+        card.title.toLowerCase().includes(lowerValue) ||
+        card.contents.toLowerCase().includes(lowerValue) ||
+        card.address.toLowerCase().includes(lowerValue)
+    );
+    setCardData(filtered)
+    setCurrentPage(1)
+  }, 400)
+  
+  const startIdx = (currentPage - 1) * cardPerPage
+  const endIdx = startIdx + cardPerPage
+  const paginatedCards = cardData.slice(startIdx, endIdx);
+
+  const totalPages = Math.ceil(cardData.length / cardPerPage);
+  const maxVisible = 5;
+  const startPage = Math.max(1, currentPage - 2)
+  const endPage = Math.min(totalPages, startPage + maxVisible - 1)
+  const adjustedStartPage = Math.max(1, endPage - maxVisible + 1);
+  const visiblePage = Array.from({ length: endPage - adjustedStartPage + 1 }, (_, i) => adjustedStartPage + i)
+  
+  
+  
   return (
     <main className={S.container}>
       <div className={S.channelHeader}>
         <div className={S.filterTab}>
-          {filterTab.map((tab, i) => (
+          {
+            filterTab.map((tab, i) => (
             <button
               type="button"
               className={S.filterBtn}
@@ -74,8 +105,11 @@ function StudyChannel() {
             type="text"
             placeholder="검색어를 입력하세요"
             className={S.studySearch}
+            onChange={(e) => {
+              debouncedSearch(e.target.value);
+            }}
           />
-          <button type="button" className={S.searchBtn}>
+          <button type="submit" className={S.searchBtn}>
             <svg
               width="24"
               height="24"
@@ -104,36 +138,41 @@ function StudyChannel() {
       </div>
       <section>
         <div className={S.cardGrid}>
-          {...cardData &&
-            [...cardData].map((card: Card) => (
-         
-                <Card {...card} key={card.board_id} />
-        
+          {...paginatedCards &&
+            [...paginatedCards].map((card: Card) => (
+              <Card {...card} key={card.board_id} />
             ))}
         </div>
       </section>
       <nav>
         <ul className={S.pagenation}>
           <li>
-            <button className={S.pagenationNumber}>&lt;</button>
+            <button
+              className={S.pagenationNumber}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
           </li>
+
+          {
+            visiblePage.map((pageNum) => {
+              return(
+              <li key={pageNum}>
+                <button
+                  onClick={() => setCurrentPage(pageNum)}
+                  className = { currentPage === pageNum ? S.active : S.pagenationNumber}
+                >
+                  { pageNum }
+                </button>
+              </li>
+            )})}
           <li>
-            <button className={S.active}>1</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>2</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>3</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>4</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>5</button>
-          </li>
-          <li>
-            <button className={S.pagenationNumber}>&gt;</button>
+            <button
+              onClick={()=> setCurrentPage((p)=>Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className={S.pagenationNumber}>&gt;</button>
           </li>
         </ul>
       </nav>

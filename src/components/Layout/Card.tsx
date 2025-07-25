@@ -14,6 +14,8 @@ type Props = Tables<"board">;
 function Card(card: Props) {
   const {address,contents,due_date,title,likes,board_id,join_cls,member,profile_id} = card
 
+
+  
     const [cardLike, setCardLike] = useState(likes);
     const [isPressed, setIsPressed] = useState(false);
     const [isScrap, setIsScrap] = useState(false);
