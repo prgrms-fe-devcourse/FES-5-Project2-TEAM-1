@@ -1,8 +1,7 @@
 
 
 import { useLocation } from 'react-router-dom';
-import ChannelComment from './components/ChannelComment';
-import Cruitmember from './components/Cruitmember';
+
 import S from './StudyJoinInfomation.module.css'
 import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
@@ -121,8 +120,6 @@ function StudyJoinInfomation() {
           </div>
         </div>
         <article className={S.content}></article>
-        <Cruitmember {...card} />
-        <ChannelComment />
       </div>
     </main>
   );

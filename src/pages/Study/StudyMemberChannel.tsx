@@ -8,7 +8,7 @@ function StudyMemberChannel() {
     <main className={S.container}>
       <nav className={S.header}>
         <div className={S.headerinner}>
-          <Link to="/channel/memeber/:id" className={S.active}>
+          <Link to="/channel/member/:id" className={S.active}>
             홈
           </Link>
           <Link to="/channel/thread/:id">

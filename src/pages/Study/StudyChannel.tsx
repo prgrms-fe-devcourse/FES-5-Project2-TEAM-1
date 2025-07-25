@@ -2,49 +2,38 @@ import { useEffect, useRef, useState } from 'react';
 import Card from '@/components/Layout/Card';
 import S from './studychannel.module.css'
 import supabase from '@/supabase/supabase';
-import type { Tables } from 'src/supabase/database.types';
 import { debounce } from '@/utils/debounce';
+import type { Tables } from '@/supabase/database.types';
 
 
-type Card = Tables<'board'>
-type Tag = Tables<'board_tag'>
+type BoardTag = {
+  board_tag: Tables<"board_tag">[];
+};
+type Board = Tables<"board">;
+type CardProps = Board & BoardTag;
+
 function StudyChannel() {
 
   const cardPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1)
-  const [cardData, setCardData] = useState<Card[]>([])
+  const [cardData, setCardData] = useState<CardProps[]>([])
   const filterTab = ["최신순", "좋아요순", "모집마감순"]
   const filterRef = useRef<(HTMLButtonElement|null)[]>([])
-  const [hashTag, setHashTag] = useState<Tag[]>([])
+ 
+  console.log(cardData)
 
   useEffect(() => {
-    const tagData = async () => {
-
-      const { data, error } = await supabase.from('board_tag').select('*')
-      if(error) console.error()
-      if(data) setHashTag(data)
-    }
-    tagData()
-  })
-
-
-  useEffect(() => {
-    const cardData = async () => {
-      const { data, error } = await supabase.from("board").select("*");
-      if (error) {
-        console.log(error.message)
-      } else {
-        setCardData(
-          [...data].sort(
-            (a, b) =>
-              new Date (b.create_at).getTime() -
-              new Date (a.create_at).getTime()
-          )
-        );
-      }
+      const boardTable = async () => {
+        const { data } = await supabase
+          .from("board")
+          .select(" *, board_tag(*)")
+          .eq("board_id", "d1dc2e76-e222-46db-bdc9-ff1c9879bcc0");
+        if(data) setCardData(data);
     };
-    cardData()
-  }, []);
+      boardTable();
+  },[])
+
+
   
   useEffect(() => {
     setCardData(cardData)
@@ -150,9 +139,10 @@ function StudyChannel() {
       </div>
       <section>
         <div className={S.cardGrid}>
-          {...paginatedCards &&
-            [...paginatedCards].map((card: Card) => (
-              <Card card={card} tag={hashTag } key={card.board_id} />
+          {
+            paginatedCards &&
+                paginatedCards?.map((card: CardProps) => (
+              <Card card={card} key={card.board_id} />
             ))}
         </div>
       </section>

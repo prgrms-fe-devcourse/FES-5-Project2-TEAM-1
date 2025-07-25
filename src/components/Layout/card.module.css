@@ -56,7 +56,6 @@
   display:flex;
   flex-direction: column;
   margin-top: 20px;
-  
   overflow: hidden;
   gap: 6px;
 
@@ -80,15 +79,12 @@
 }
 
 .tagBox{
-  margin-top: 20px;
+  margin-top: 40px;
   display: flex;
   align-items: center;
   gap: 4px;
     color:rgba(85, 85, 85, 0.7);
-    
-  span{
-    display: inline-flex;
-  }
+  
 }
 
 .likeBtn{
@@ -106,4 +102,16 @@
 .scrapBtn{
   width: 15px;
   height: 18px;
+}
+
+.tagStyle{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  width: 48px;
+  font-size: 12px;
+  background-color: dodgerblue;
+  color:#fff;
+  border-radius: 4px;
 }
