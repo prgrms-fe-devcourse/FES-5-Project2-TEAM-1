@@ -3,6 +3,7 @@ import S from './MypageTop.module.css';
 import E from './MypageEdit.module.css'
 import BackgroundEdit from './components/BackgroundEdit';
 import { useState } from 'react';
+import ProfileEdit from './components/ProfileEdit';
 
 
 interface Props {
@@ -15,7 +16,9 @@ interface Props {
   function MypageProfile({ user, editMode, setUserData }:  Props) {
 
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showProfileDrop, setShowProfileDrop] = useState(false);
     const [prevImage, setPrevImage] = useState('');
+    const [prevProfileImage, setPrevProfileImage] = useState('');
 
     if (!user || !user.profile ) {
       return <p>프로필 정보가 없습니다.</p>;
@@ -24,11 +27,14 @@ interface Props {
     const profileData = user.profile[0];
 
     const handleEditBackground = () => {
-      setShowDropdown(prev => !prev);
+      setShowDropdown(true);
       setPrevImage(profileData.background_images);
     }
 
-    
+    const handleEditProfile = () => {
+      setShowProfileDrop(true);
+      setPrevProfileImage(profileData.profile_images);
+    }
 
     return (
     <>
@@ -57,7 +63,26 @@ interface Props {
           }
         </div>
         <div className={S.mypageProfile}>
-          <img src={profileData.profile_images} />
+          {
+            editMode 
+            ? ( 
+              <>
+                <button type="button" onClick={handleEditProfile} className={E.editProfileBtn}>
+                  <img src={profileData.profile_images} className={E.editProfileImg} />
+                </button>
+                { showProfileDrop && 
+                  <ProfileEdit 
+                    prevProfileImage={prevProfileImage} 
+                    setPrevProfileImage={setPrevProfileImage} 
+                    setShowProfileDrop={setShowProfileDrop}
+                    profileData={profileData}
+                    setUserData={setUserData}  
+                  />
+                }
+              </> 
+            )
+            : ( <img src={profileData.profile_images} className={S.mypageProfileImg} />)
+          }
         </div>
       </div>
     </>
