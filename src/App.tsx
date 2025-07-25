@@ -5,7 +5,7 @@ import LeftSidebar from './components/Layout/LeftSidebar';
 
 import StudyChannel from './pages/Study/StudyChannel';
 import StudyMemberChannel from './pages/Study/StudyMemberChannel';
-import Mypage from './pages/Mypage/Mypage.tsx';
+import Mypage from './pages/Mypage/Mypage';
 import MainContent from './pages/Mainpage/MainContent';
 import Footer from './pages/Mainpage/Footer';
 
