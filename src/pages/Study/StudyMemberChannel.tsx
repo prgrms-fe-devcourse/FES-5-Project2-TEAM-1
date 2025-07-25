@@ -1,6 +1,8 @@
 // import StudyMemberChannelContent from './components/StudyMemberChannelContent';
+
 import S from './StudyMemberChannel.module.css'
-import Thread from './components/Thread';
+import StudyMemberChannelContent from './components/StudyMemberChannelContent';
+// import Thread from './components/Thread';
 
 function StudyMemberChannel() {
   return (
@@ -13,8 +15,8 @@ function StudyMemberChannel() {
           <a href="">스레드</a>
         </div>
       </nav>
-      {/* <StudyMemberChannelContent /> */}
-      <Thread/>
+      {<StudyMemberChannelContent />}
+      {/* <Thread/> */}
     </main>
   );
 }

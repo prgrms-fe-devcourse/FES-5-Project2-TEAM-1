@@ -29,7 +29,7 @@ function ChannelComment() {
             <button type="button" className={S.recommentBtn}>
               답글
             </button>
-            <li className={S.recomment}>
+            <div className={S.recomment}>
             <div className={S.writer}>
             <img src="/images/너굴.png" alt="" />
             <div className={S.memberComment}>
@@ -37,7 +37,7 @@ function ChannelComment() {
               <p>안돼 돌아가</p>
                 </div>
                 </div>
-            </li>
+            </div>
           </div>
         </li>
       </ul>
