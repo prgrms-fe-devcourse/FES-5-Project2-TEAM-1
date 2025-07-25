@@ -18,8 +18,16 @@ function App() {
         <LeftSidebar />
       </nav>
       {/* 컴포넌트 들어오면 됩니다 */}
-
-      <Mypage />
+      <main className="components">
+        <Routes>
+          <Route path="/study" element={<StudyChannel />} />
+          <Route path="/study/:id" element={<StudyJoinInfomation />} />
+          <Route path='/channel/:id' element={<StudyMemberChannel />} />
+          <Route path='/channel/memeber/:id' element={<StudyMemberChannel />} />
+          <Route path='/channel/thread/:id' element={<Thread/>}/>
+          <Route path="/mypage" element={<Mypage />} />
+        </Routes>
+      </main>
       <nav className="rightcontainer">
 
         <RightSidebar />

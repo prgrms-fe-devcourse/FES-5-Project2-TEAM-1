@@ -87,6 +87,10 @@ function Mypage() {
               user={userData} />
             <MypageSocial
               user={userData} />
+            <MypagePeerReview/>
+            <MypageChannel/>
+            <MypageScrap/>
+            <MypagePost/>
             { editMode && <button type="submit" onClick={handleSave}>완료</button>}
         </div>
     </div>
