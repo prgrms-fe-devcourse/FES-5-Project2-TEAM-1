@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import S from './StudyMemberChannel.module.css'
+import StudyJoinInfomation from './StudyJoinInfomation';
 
 
 function StudyMemberChannel() {
@@ -14,8 +15,10 @@ function StudyMemberChannel() {
           <Link to="/channel/thread/:id">
             스레드
           </Link>
+          <Link to='mypage'>관리</Link>
         </div>
       </nav>
+      <StudyJoinInfomation/>
     </main>
   );
 }

@@ -6,11 +6,13 @@ import { debounce } from '@/utils/debounce';
 import type { Tables } from '@/supabase/database.types';
 
 
-type BoardTag = {
+
+type Board = Tables<"board">;
+type CardProps = Board & 
+{
   board_tag: Tables<"board_tag">[];
 };
-type Board = Tables<"board">;
-type CardProps = Board & BoardTag;
+
 
 function StudyChannel() {
 
@@ -19,25 +21,20 @@ function StudyChannel() {
   const [cardData, setCardData] = useState<CardProps[]>([])
   const filterTab = ["최신순", "좋아요순", "모집마감순"]
   const filterRef = useRef<(HTMLButtonElement|null)[]>([])
- 
-  console.log(cardData)
 
   useEffect(() => {
       const boardTable = async () => {
         const { data } = await supabase
           .from("board")
           .select(" *, board_tag(*)")
-          .eq("board_id", "d1dc2e76-e222-46db-bdc9-ff1c9879bcc0");
         if(data) setCardData(data);
     };
       boardTable();
   },[])
 
-
-  
-  useEffect(() => {
-    setCardData(cardData)
-  },[cardData])
+  // useEffect(() => {
+  //   setCardData(cardData)
+  // },[cardData])
 
   function handleFilter(e:React.MouseEvent) {
     if (filterRef.current == null) return
@@ -79,8 +76,6 @@ function StudyChannel() {
   const endPage = Math.min(totalPages, startPage + maxVisible - 1)
   const adjustedStartPage = Math.max(1, endPage - maxVisible + 1);
   const visiblePage = Array.from({ length: endPage - adjustedStartPage + 1 }, (_, i) => adjustedStartPage + i)
-  
-  
   
   return (
     <main className={S.container}>
@@ -142,7 +137,7 @@ function StudyChannel() {
           {
             paginatedCards &&
                 paginatedCards?.map((card: CardProps) => (
-              <Card card={card} key={card.board_id} />
+                  <Card card={card} key={card.board_id} />
             ))}
         </div>
       </section>

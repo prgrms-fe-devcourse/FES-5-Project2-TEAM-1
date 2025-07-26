@@ -8,21 +8,30 @@ import type { Tables } from '@/supabase/database.types';
 
 
 
+type Board = Tables<"board">;
+type CardProps = Board & 
+{
+  board_tag: Tables<"board_tag">[];
+};
 
 
-type BoardTag =  {
-  board_tag : Tables<'board_tag'>[]
+interface Props{
+  card: CardProps
 }
-type Board = Tables<'board'>
 
-type CardProps = Board & BoardTag
+function Card({ card }:Props) {
+  const {
+    address,
+    contents,
+    title,
+    likes,
+    board_id,
+    member,
+    profile_id,
+    board_tag,
+  } = card;
 
-function Card(card:CardProps) {
-  const {address,contents,due_date,title,likes,board_id,join_cls,member,profile_id} = card
-  const {board_tag} = card
-  console.log(board_tag)
-
-   
+  
     const [cardLike, setCardLike] = useState(likes);
     const [isPressed, setIsPressed] = useState(false);
     const [isScrap, setIsScrap] = useState(false);
@@ -61,12 +70,12 @@ function Card(card:CardProps) {
     }
       
     const handleLike = async () => {
-    const pressState = isPressed ? cardLike - 1 : cardLike + 1;
-    const nextState = !isPressed;
-   
-    setCardLike(pressState);
-    setIsPressed(!isPressed)
-    localStorage.setItem(`like-${board_id}`,JSON.stringify(nextState))
+      const pressState = isPressed ? cardLike - 1 : cardLike + 1;
+      const nextState = !isPressed;
+
+      setCardLike(pressState);
+      setIsPressed(!isPressed)
+      localStorage.setItem(`like-${board_id}`,JSON.stringify(nextState))
   
       const { error } = await supabase.from('board').update({ likes: pressState}).eq('board_id', board_id)
       
@@ -74,7 +83,7 @@ function Card(card:CardProps) {
         console.error('좋아요 업데이트 실패', error.message)
         setCardLike(isPressed ? cardLike - 1 : cardLike + 1)
         setIsPressed(!isPressed)
-         localStorage.setItem(`like-${board_id}`, JSON.stringify(nextState));
+        localStorage.setItem(`like-${board_id}`, JSON.stringify(nextState));
       }
     }
 
@@ -84,19 +93,14 @@ function Card(card:CardProps) {
       if ((e.target as HTMLButtonElement).closest('button')) {
         return
       } else {
-       navigate(`/study/${board_id}`,{state : {card}})
+       navigate(`/channel/${board_id}`, { state: { card } });
       }
   }
   
   return (
     <div className={S.container} onClick={(e) => handleRoute(e, card)}>
       <div className={S.cardTop}>
-        <div className={S.cardTopLeft}>
-          <div className={join_cls == "0" ? S.freebadge : S.acceptbadge}>
-            {join_cls == "0" ? "자유가입" : "승인가입"}
-          </div>
-          <div>모집기간 D-{due_date}</div>
-        </div>
+        <h4>{title}</h4>
         <div className={S.cardTopRight}>
           <button className={S.scrapBtn} onClick={handleScrap}>
             {isScrap ? (
@@ -116,13 +120,14 @@ function Card(card:CardProps) {
         </div>
       </div>
       <div className={S.titleBox}>
-        <h4>{title}</h4>
         <p>{contents}</p>
       </div>
       <div className={S.tagBox}>
-        {/* {
-          board_tag.map((t) => <div className={S.tagStyle}>{t.hash_tag}</div>)
-        } */}
+        {
+          board_tag.map((t) => (
+          <div key={t.tag_id}>{t.hash_tag}</div>
+          ))
+        }
         <span>
           <svg
             width="3"
@@ -137,7 +142,7 @@ function Card(card:CardProps) {
               fillOpacity="0.7"
             />
           </svg>
-        </span>{" "}
+        </span>
         {address}
         <span>
           <svg

@@ -1,0 +1,53 @@
+.container{
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.profileWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileImage img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.contentBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.meta {
+  display: flex;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.text {
+  margin: 4px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.likeBtn{
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}

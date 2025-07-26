@@ -4,11 +4,11 @@ import './style/reset.css'
 import LeftSidebar from './components/Layout/LeftSidebar';
 import { Route, Routes } from 'react-router-dom';
 import StudyChannel from './pages/Study/StudyChannel';
-import StudyJoinInfomation from './pages/Study/StudyJoinInfomation';
 import StudyMemberChannel from './pages/Study/StudyMemberChannel';
 import Thread from './pages/Study/components/Thread';
 import MainContent from './pages/Mainpage/MainContent';
 import Mypage from './pages/Mypage/Mypage';
+import StudyJoinInfomation from './pages/Study/StudyJoinInfomation';
 
 
 function App() {
@@ -23,9 +23,8 @@ function App() {
         <Routes>  
             <Route path ="/" element={<MainContent/>}/>
             <Route path="/study" element={<StudyChannel />} />
-            <Route path="/study/:id" element={<StudyJoinInfomation />} />
             <Route path='/channel/:id' element={<StudyMemberChannel />} />
-            <Route path='/channel/member/:id' element={<StudyMemberChannel />} />
+            <Route path='/channel/member/:id' element={<StudyJoinInfomation/>} />
             <Route path='/channel/thread/:id' element={<Thread />} />
             <Route path='/mypage' element={<Mypage/>}/>
         </Routes>
