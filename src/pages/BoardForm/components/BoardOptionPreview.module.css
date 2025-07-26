@@ -1,0 +1,40 @@
+.boardOptionPreview {
+  height: 191px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-left: 16px;
+  margin-bottom: 28px;
+}
+.previewImage {
+  width: 180px;
+  height: 160px;
+  border: 1px solid black;
+  border-radius: 8px;
+  position: relative;
+  margin-top: 10px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.previewOption {
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+  h1 {
+    font-size: 2em;
+    font-weight: 700;
+    border-bottom: 2px solid #eaecef;
+    padding-bottom: 0.3em;
+  }
+}
+.titlePreview {
+  font-size: 2em;
+  font-weight: bold;
+  border: none;
+  outline: none;
+}

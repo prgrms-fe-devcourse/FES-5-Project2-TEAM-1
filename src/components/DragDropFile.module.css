@@ -1,0 +1,30 @@
+.fileUplaod {
+  width: 180px;
+  height: 160px;
+  border: 1px solid black;
+  border-radius: 8px;
+  position: relative;
+
+  label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  label:hover {
+    background-color: #f0f0f0;
+  }
+}
+.img {
+  margin-top: 10px;
+  width: 40px;
+  height: 40px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
