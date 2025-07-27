@@ -1,5 +1,5 @@
 .container{
-  width: 100vw;
+  max-width: 100vw;
   display: flex;
   height: auto;
   justify-content: space-between;
@@ -22,5 +22,4 @@
 }
 .components{
   flex-grow: 1;
-  min-width: 0;
 }

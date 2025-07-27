@@ -6,11 +6,11 @@ import ChannelComment from "./components/ChannelComment";
 
 function StudyJoinInfomation() {
   const location = useLocation();
-  const card = location.state.card;
+  const card = location.state?.card;
 
   if (!card) throw new Error("데이터가 들어오지 않습니다");
-  const { images, title, address, member, board_tag, contents } = card;
-
+  const { images, title, address, member, board_tag, contents} = card;
+ 
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -90,7 +90,7 @@ function StudyJoinInfomation() {
           <Project />
         </section>
         <section>
-          <ChannelComment />
+          <ChannelComment {...card}/>
         </section>
       </div>
     </main>

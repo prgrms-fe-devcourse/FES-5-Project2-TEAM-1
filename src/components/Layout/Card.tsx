@@ -76,7 +76,6 @@ function Card({ card }:Props) {
       setCardLike(pressState);
       setIsPressed(!isPressed)
       localStorage.setItem(`like-${board_id}`,JSON.stringify(nextState))
-  
       const { error } = await supabase.from('board').update({ likes: pressState}).eq('board_id', board_id)
       
       if (error) {
