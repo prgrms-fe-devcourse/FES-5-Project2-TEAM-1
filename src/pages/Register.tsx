@@ -65,16 +65,10 @@ function Register() {
             return;
         }
 
-
-
         alert('회원가입이 성공적으로 완료되었습니다!');
         localStorage.clear();
         navigate("/login");
-
-        
     }
-
-
 
 
   return (
@@ -139,13 +133,17 @@ function Register() {
 
                 {certificatePreview && (
                     <div className={S.preview}>
-                        <img 
-                        src={certificatePreview} 
-                        alt="수료증 이미지" 
-                        style={{maxWidth:'200px'}} />
+                        {certificateFile?.type.startsWith('image/') ? (
+                            <img 
+                                src={certificatePreview} 
+                                alt="수료증 이미지" 
+                                style={{ maxWidth: '200px' }} 
+                            />
+                        ) : (
+                            <p>{''}</p>
+                        )}
                     </div>
                 )}
-
 
                 <div className={S.checkbox}>
                     <input 

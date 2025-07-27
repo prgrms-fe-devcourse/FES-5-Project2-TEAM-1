@@ -1,38 +1,18 @@
 import S from './rightsidebar.module.css'
 import '../../style/reset.css'
-import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/auth/AuthProvider';
 import supabase from '@/supabase/supabase';
 
 function RightSidebar() {
 
-  const [user, setUser] = useState<any>(null);
+  const {user, logout} = useAuth()
   const navigate = useNavigate()
 
-  useEffect(()=>{
-    const getUser = async () => {
-      const {data: {user}} = await supabase.auth.getUser()
-      setUser(user)
-    }
-    getUser()
-
-    const {data: listener} = supabase.auth.onAuthStateChange((_event, session)=>{
-      setUser(session?.user ?? null)
-    })
-
-    return()=>{
-      listener?.subscription.unsubscribe()
-    }
-  }, [])
-
   const handleLogout = async () => {
-    await supabase.auth.signOut()
+    await logout()
     navigate('/')
   }
-
-
-
-
 
 
   return (

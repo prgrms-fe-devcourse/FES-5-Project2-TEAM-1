@@ -10,7 +10,6 @@
     align-items: center;
 }
 
-
 .registerBox{
     width: 900px;
     display: flex;
@@ -89,7 +88,6 @@
     font-size:14px;
     margin-top:20px;
 }
-
 
 .register{
     /* margin: 18px 0; */

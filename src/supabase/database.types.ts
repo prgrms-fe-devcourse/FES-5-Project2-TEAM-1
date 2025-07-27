@@ -4,62 +4,95 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export type Database = {
   // Allows to automatically instanciate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)";
-  };
+    PostgrestVersion: "12.2.3 (519615d)"
+  }
   public: {
     Tables: {
       board: {
         Row: {
-          address: string
-          board_cls: Database["public"]["Enums"]["board_cls"]
+          active: boolean | null
+          address: string | null
+          board_cls: Database["public"]["Enums"]["board_cls"] | null
           board_id: string
           contents: string
           create_at: string
-          due_date: string
-          images: string
-          join_cls: Database["public"]["Enums"]["join_cls"]
+          images: string | null
           likes: number
-          member: string
+          meeting_time: string | null
+          member: string | null
           profile_id: string
           title: string
         }
         Insert: {
-          address: string
-          board_cls?: Database["public"]["Enums"]["board_cls"]
+          active?: boolean | null
+          address?: string | null
+          board_cls?: Database["public"]["Enums"]["board_cls"] | null
           board_id?: string
           contents: string
           create_at?: string
-          due_date?: string
-          images: string
-          join_cls?: Database["public"]["Enums"]["join_cls"]
+          images?: string | null
           likes?: number
-          member: string
+          meeting_time?: string | null
+          member?: string | null
           profile_id?: string
           title: string
         }
         Update: {
-          address?: string
-          board_cls?: Database["public"]["Enums"]["board_cls"]
+          active?: boolean | null
+          address?: string | null
+          board_cls?: Database["public"]["Enums"]["board_cls"] | null
           board_id?: string
           contents?: string
           create_at?: string
-          due_date?: string
-          images?: string
-          join_cls?: Database["public"]["Enums"]["join_cls"]
+          images?: string | null
           likes?: number
-          member?: string
+          meeting_time?: string | null
+          member?: string | null
           profile_id?: string
           title?: string
         }
         Relationships: [
           {
             foreignKeyName: "fk_user_profile_to_board"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["profile_id"]
+          },
+        ]
+      }
+      board_member: {
+        Row: {
+          board_id: string
+          member_id: string
+          profile_id: string
+        }
+        Insert: {
+          board_id?: string
+          member_id?: string
+          profile_id?: string
+        }
+        Update: {
+          board_id?: string
+          member_id?: string
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_member_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "board"
+            referencedColumns: ["board_id"]
+          },
+          {
+            foreignKeyName: "fk_user_profile_to_channel_member"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
@@ -138,112 +171,6 @@ export type Database = {
           },
         ]
       }
-      channel: {
-        Row: {
-          address: string
-          channel_id: string
-          channel_images: string | null
-          contents: string
-          create_at: string
-          due_date: string
-          oper_time: string
-          profile_id: string
-          title: string
-        }
-        Insert: {
-          address: string
-          channel_id?: string
-          channel_images?: string | null
-          contents: string
-          create_at?: string
-          due_date?: string
-          oper_time?: string
-          profile_id?: string
-          title: string
-        }
-        Update: {
-          address?: string
-          channel_id?: string
-          channel_images?: string | null
-          contents?: string
-          create_at?: string
-          due_date?: string
-          oper_time?: string
-          profile_id?: string
-          title?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_user_profile_to_channel"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
-      }
-      channel_member: {
-        Row: {
-          channel_id: string
-          member_id: string
-          profile_id: string
-        }
-        Insert: {
-          channel_id?: string
-          member_id?: string
-          profile_id?: string
-        }
-        Update: {
-          channel_id?: string
-          member_id?: string
-          profile_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_channel_to_channel_member"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "channel"
-            referencedColumns: ["channel_id"]
-          },
-          {
-            foreignKeyName: "fk_user_profile_to_channel_member"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
-            referencedColumns: ["profile_id"]
-          },
-        ]
-      }
-      channel_tag: {
-        Row: {
-          channel_id: string
-          color_code: string
-          contents: string
-          tag_id: string
-        }
-        Insert: {
-          channel_id?: string
-          color_code: string
-          contents: string
-          tag_id?: string
-        }
-        Update: {
-          channel_id?: string
-          color_code?: string
-          contents?: string
-          tag_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_channel_to_channel_tag"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "channel"
-            referencedColumns: ["channel_id"]
-          },
-        ]
-      }
       comment: {
         Row: {
           board_id: string
@@ -251,16 +178,14 @@ export type Database = {
           contents: string
           create_at: string
           likes: number
-          parent_id: string
           profile_id: string
         }
         Insert: {
           board_id?: string
           comment_id?: string
           contents: string
-          create_at?: string
+          create_at: string
           likes?: number
-          parent_id?: string
           profile_id?: string
         }
         Update: {
@@ -269,16 +194,64 @@ export type Database = {
           contents?: string
           create_at?: string
           likes?: number
-          parent_id?: string
           profile_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "comment_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "board"
+            referencedColumns: ["board_id"]
+          },
           {
             foreignKeyName: "fk_board_to_comment"
             columns: ["board_id"]
             isOneToOne: false
             referencedRelation: "board"
             referencedColumns: ["board_id"]
+          },
+        ]
+      }
+      comment_reply: {
+        Row: {
+          comment_id: string
+          contents: string
+          created_at: string
+          likes: number
+          profile_id: string
+          reply_id: string
+        }
+        Insert: {
+          comment_id?: string
+          contents: string
+          created_at?: string
+          likes?: number
+          profile_id?: string
+          reply_id?: string
+        }
+        Update: {
+          comment_id?: string
+          contents?: string
+          created_at?: string
+          likes?: number
+          profile_id?: string
+          reply_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comment_reply_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comment"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "comment_reply_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -419,46 +392,85 @@ export type Database = {
       }
       thread: {
         Row: {
-          channel_id: string
+          board_id: string
           contents: string
           create_at: string
           likes: number
-          parent_id: string
           profile_id: string
           thread_id: string
         }
         Insert: {
-          channel_id?: string
+          board_id?: string
           contents: string
           create_at?: string
           likes?: number
-          parent_id?: string
           profile_id?: string
           thread_id?: string
         }
         Update: {
-          channel_id?: string
+          board_id?: string
           contents?: string
           create_at?: string
           likes?: number
-          parent_id?: string
           profile_id?: string
           thread_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "fk_channel_to_thread"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "channel"
-            referencedColumns: ["channel_id"]
-          },
           {
             foreignKeyName: "fk_user_profile_to_thread"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
             referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "thread_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "board"
+            referencedColumns: ["board_id"]
+          },
+        ]
+      }
+      thread_reply: {
+        Row: {
+          contents: string
+          created_at: string
+          likes: number | null
+          profile_id: string
+          reply_id: string
+          thread_id: string
+        }
+        Insert: {
+          contents: string
+          created_at?: string
+          likes?: number | null
+          profile_id?: string
+          reply_id?: string
+          thread_id?: string
+        }
+        Update: {
+          contents?: string
+          created_at?: string
+          likes?: number | null
+          profile_id?: string
+          reply_id?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thread_reply_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "thread_reply_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "thread"
+            referencedColumns: ["thread_id"]
           },
         ]
       }

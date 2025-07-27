@@ -1,16 +1,15 @@
-import RightSidebar from './components/Layout/RightSidebar'
+
 import './App.css'
 import './style/reset.css'
-import LeftSidebar from './components/Layout/LeftSidebar';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
-import StudyChannel from './pages/Study/StudyChannel';
-import StudyMemberChannel from './pages/Study/StudyMemberChannel';
-import Mypage from './pages/Mypage/Mypage';
+import RightSidebar from './components/Layout/RightSidebar'
+import LeftSidebar from './components/Layout/LeftSidebar';
 import MainContent from './pages/Mainpage/MainContent';
 import Footer from './pages/Mainpage/Footer';
-import { Route, Routes, useLocation } from 'react-router-dom';
-import Login from './pages/Login/Login';
 import Register from './pages/Register';
+import Login from "./pages/Login/login";
+
 
 function App() {
 
@@ -25,7 +24,6 @@ function App() {
         </nav>
       )}
       {/* 컴포넌트 들어오면 됩니다 */}
-      {/* <Mypage /> */}
       <div className="mainWrapper">
         <Routes>
           <Route path="/" element={<MainContent />} />

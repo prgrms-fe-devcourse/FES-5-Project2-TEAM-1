@@ -5,11 +5,7 @@ import supabase from "@/supabase/supabase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-
-
-
-function login() {
-
+function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
@@ -24,19 +20,14 @@ function login() {
         password:password,
         });
         
-
         if(error){
             console.error(error.message);
             setError('아이디 또는 비밀번호가 일치하지 않습니다.');
-            
         } else {
             alert('로그인 성공!');
             navigate("/")
         }
-
     }
-
-
 
 
   return (
@@ -85,4 +76,4 @@ function login() {
     </div>
   )
 }
-export default login
+export default Login
