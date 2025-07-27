@@ -95,7 +95,7 @@ function MypageChannel() {
           <img src="src/assets/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
         </button>
         <Swiper 
-          className="channel"
+          className="team"
           modules={[Navigation]}
           initialSlide={0}
           centeredSlides = {true}
@@ -114,7 +114,7 @@ function MypageChannel() {
         >
           {
             teams && teams.map(({board, board_id})=>(
-              <SwiperSlide key={board_id} className="channel">
+              <SwiperSlide key={board_id} className="team">
                 <div className={S.teamCard}>
                   <img className={S.teamImg} src={board.images ? board.images : 'defaultBackground.img'} alt="채널" />
                   <p className={S.teamTitle}>{board.title}</p>
