@@ -11,6 +11,7 @@ import Mypage from './pages/Mypage/Mypage';
 import StudyJoinInfomation from './pages/Study/StudyJoinInfomation';
 import ToastProvider from './components/ToastProvider';
 import MainContent from './pages/Mainpage/MainContent';
+import Management from './pages/Team/Management';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path='/channel/:id' element={<StudyMemberChannel />} />
             <Route path='/channel/memeber/:id' element={<StudyMemberChannel />} />
             <Route path='/channel/thread/:id' element={<Thread/>}/>
+            <Route path='/channel/management' element={<Management/>}/>
             <Route path="/mypage" element={<Mypage />} />
           </Routes>
         </main>

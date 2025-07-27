@@ -15,7 +15,7 @@ function StudyMemberChannel() {
           <Link to="/channel/thread/:id">
             스레드
           </Link>
-          <Link to='mypage'>관리</Link>
+          <Link to='/channel/management'>관리</Link>
         </div>
       </nav>
       <StudyJoinInfomation/>
