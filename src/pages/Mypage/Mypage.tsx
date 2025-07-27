@@ -60,9 +60,12 @@ function Mypage() {
   const handleSave = async () => {
     setEditMode( false );
   }
-//   const handleDeleteUser = () => {
-//     //
-//   }
+
+
+  if (!userData) {
+    return <p>유저 데이터를 불러오는 중입니다...</p>;
+  }
+
   return (
     <div className={S.container}>
         <div className={S.wrapper}>

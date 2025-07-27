@@ -18,12 +18,12 @@ function MypageName({ user, editMode, setUserData, showEdit, setShowEdit}: Props
 
   const { success, error } = useToast();
 
+  const [userName, setUserName] = useState<string>(user?.name ?? '');
+  const [role, setRole] = useState<string>(user?.role ?? '');
+
   if( !user ) {
     return <p>프로필 정보가 없습니다.</p>;
   }
-
-  const [userName, setUserName] = useState<string>(user.name);
-  const [role, setRole] = useState<string>(user.role);
 
     const handleEditName = () => {
       setShowEdit(true);
@@ -78,7 +78,7 @@ function MypageName({ user, editMode, setUserData, showEdit, setShowEdit}: Props
             }
         })
       
-      success('업로드 성공!');
+      success('저장 성공!');
       setShowEdit(false);
     }
 
