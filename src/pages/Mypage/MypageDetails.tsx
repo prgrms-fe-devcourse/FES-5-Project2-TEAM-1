@@ -1,12 +1,16 @@
 import type { User } from './Mypage'
 import S from './MypageTop.module.css'
+import Edit from '/icons/edit_pencil.svg';
+import E from './MypageEdit.module.css';
 
 
 interface Props {
     user: User | null;
+    editMode: boolean,
+    setUserData: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-function MypageDetails({ user}: Props) {
+function MypageDetails({ user, editMode, setUserData}: Props) {
 
     const userData = user && user.profile[0];
     if( !userData ) {
@@ -29,6 +33,13 @@ function MypageDetails({ user}: Props) {
                 <p>{userData.age}</p>
             </li>
         </ul>
+        { editMode &&
+            <div className={E.editDetailBtn}>
+                <button>
+                    <img src={Edit} />
+                </button>
+            </div>
+        }
     </div>
   )
 }

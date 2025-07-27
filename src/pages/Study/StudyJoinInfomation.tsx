@@ -1,39 +1,64 @@
+
+
+import { useLocation } from 'react-router-dom';
 import ChannelComment from './components/ChannelComment';
 import Cruitmember from './components/Cruitmember';
 import S from './StudyJoinInfomation.module.css'
-import { useBoard } from '@/components/context/BoardContext';
+import { useEffect, useState } from 'react';
+import supabase from '@/supabase/supabase';
+
+
 
 
 
 function StudyJoinInfomation() {
 
-  const {selectedBoard} = useBoard()
-  if(!selectedBoard) throw new Error('데이터가 없습니다')
-  
-  const { title,address,images,member,contents } = selectedBoard
+  const location = useLocation()
+  const card = location.state.card ?? {}
+  if(!card) throw new Error('데이터가 들어오지 않습니다')
+  const { images,title,address,member,board_id,profile_id} = card
+   const [isScrap, setIsScrap] = useState(false);
+
+
+    useEffect(() => {
+      const storedScrap = JSON.parse(localStorage.getItem(`scrap-${board_id}`) ?? "false")  
+      setIsScrap(storedScrap)
+    }, [board_id]);
+
+   
+    const handleScrap = async () => {
+    const nextScrapState = !isScrap
+    setIsScrap(nextScrapState)
+    localStorage.setItem(`scrap-${board_id}`, JSON.stringify(nextScrapState));
+    
+    const { data } = await supabase
+      .from("scrap")
+      .select("*").eq('profile_id',profile_id).eq('board_id',board_id).single()
+    
+      if (data?.scrap_id) {
+        await supabase.from('scrap').delete().eq('scrap_id', data.scrap_id)
+      } else {
+        await supabase.from('scrap').insert([{
+          scrap_id: `scrap${Date.now()}`,
+          profile_id,
+          board_id,
+        }])
+      } }
 
   return (
     <main className={S.container}>
       <div className={S.layout}>
         <div className={S.channelInfoBox}>
-          <img src={images} alt="" />
+          <img src={images} alt="스터디 이미지" />
           <div className={S.textInfo}>
             <div className={S.title}>
-              <h2>{ title }</h2>
-              <button>
-                <svg
-                  width="32"
-                  height="48"
-                  viewBox="0 0 15 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.4209 0.150391H12.4209C13.4381 0.150391 14.2705 0.982843 14.2705 2V17.7715L7.48047 14.8623L7.4209 14.8369L7.36133 14.8623L0.571289 17.7715L0.581055 2C0.581055 0.981862 1.40472 0.150391 2.4209 0.150391Z"
-                    stroke="#222222"
-                    strokeWidth="0.3"
-                  />
-                </svg>
+              <h2>{title}</h2>
+              <button className={S.scrapBtn} onClick={handleScrap}>
+                {isScrap ? (
+                  <img src="/icons/scrapActive.png" alt="" />
+                ) : (
+                  <img src="/icons/scrap.png" alt="" />
+                )}
               </button>
             </div>
             <div className={S.tagBox}>
@@ -95,10 +120,8 @@ function StudyJoinInfomation() {
             </div>
           </div>
         </div>
-        <article className={S.content}>
-        {contents}
-        </article>
-        <Cruitmember />
+        <article className={S.content}></article>
+        <Cruitmember {...card} />
         <ChannelComment />
       </div>
     </main>

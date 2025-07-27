@@ -1,3 +1,4 @@
+import MypageSocialConvert from './components/MypageSocialConvert';
 import type { User } from './Mypage';
 import S from './MypageTop.module.css'
 
@@ -21,7 +22,9 @@ function MypageSocial({user}: Props) {
           <div>
             {userSocial.social}
           </div>
-        </div>      
+        </div> 
+        {/* edit 모드 아닐때 MapyaSocialConvert 렌더링 */}
+        <MypageSocialConvert/>
     </>
   )
 }

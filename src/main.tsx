@@ -5,6 +5,10 @@ import '@/style/main.css'
 // import Login from './pages/Login/Login';
 // import Register from './pages/Register';
 import App from './App.tsx'
+import ToastProvider from './components/ToastProvider.tsx';
+
+
+
 import { AuthProvider } from './auth/AuthProvider.tsx'
 
 createRoot(document.getElementById("root")!).render(

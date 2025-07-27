@@ -1,8 +1,6 @@
 .container {
-    width: 100vw;
-    margin: 104px 232px;
     background-color: #F5F5F5;
-
+    margin: 104px 232px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -104,7 +102,38 @@
 
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: space-between;
+    gap: 1.5rem;
+
+    .mypageNameRole {
+        display: flex;
+        gap: 1rem;
+        flex: 9;
+    }
+
+    .mypageNameEdit {
+
+        width: 7rem;
+        height: 3.2rem;
+        border-radius: 10px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        transition: border 0.2s;
+
+        button {
+            img {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+        }
+
+        &:hover {
+            border: 1px dotted #A6B37D;
+        }   
+    }
 
     .mypageName {
         width: 9.5rem;
@@ -113,11 +142,10 @@
         display: flex;
         justify-content: end;
         align-items: center;
-
     }
 
     .mypageRole {
-        width: 20%;
+        width: 20rem;
         height: 100%;
 
         display: flex;
@@ -137,6 +165,8 @@
     display: flex;
     justify-content: center;
     align-items: center; 
+
+    position: relative;
 
     ul {
         width: 100%;
