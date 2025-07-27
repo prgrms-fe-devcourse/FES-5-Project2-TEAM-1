@@ -1,0 +1,25 @@
+.socialContainer{
+  display: flex;
+  gap: 30px;
+  margin-bottom: 64px;
+}
+
+.social{
+  padding: 5px;
+
+  border-radius: 15px;
+  border: 1px solid #D4D4D4;
+  background: url(<path-to-image>) rgb(255, 255, 255) 50% / cover no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialLink{
+ 
+  img{
+    width: 45px;
+    height: 45px ;
+  }
+}

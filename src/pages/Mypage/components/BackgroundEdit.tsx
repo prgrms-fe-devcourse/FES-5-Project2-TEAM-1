@@ -4,6 +4,7 @@ import type { Tables } from 'src/supabase/database.types';
 import supabase from '../../../supabase/supabase';
 import type { User } from '../Mypage';
 import CloseIcon  from '/icons/edit_close.svg';
+import { useToast } from '@/utils/useToast';
 
 interface Props {
   prevImage: string;
@@ -14,6 +15,8 @@ interface Props {
 }
 
 function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData, setUserData }: Props) {
+
+    const { success } = useToast();
 
     const [file, setFile] = useState<File | null>(null);
     // const [showAlert, setShowAlert] = useState(false);
@@ -91,7 +94,8 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
                 } as typeof prev;
             })
 
-            alert('성공적으로 업로드가 완료되었습니다~!');
+            // alert('성공적으로 업로드가 완료되었습니다~!');
+            success('업로드 성공!')
             setShowDropdown(false);
     
     }
