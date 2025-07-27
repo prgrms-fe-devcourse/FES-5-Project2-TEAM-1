@@ -12,6 +12,7 @@ import S from './MypagePost.module.css';
     - 리스트로 뿌리기
  */
 
+type Post = Tables<'post'>
 type Board = Tables<'board'>
 type NewBoard = Pick<Board,'board_id'|'title'|'contents'>;
 
@@ -19,16 +20,24 @@ type NewBoard = Pick<Board,'board_id'|'title'|'contents'>;
 
 function MypagePost() {
   // const [currentUserId, setCurrentUserId] = useState<string|null>(null);
-  const [boardContents, setBoardContents] = useState<Board[]|null>(null);
-  const [newBoardContents, setNewBoardContents] = useState<NewBoard[]|null>(null);
+  const [boards, setBoards] = useState<Board[]|null>(null);
+  const [posts, setPosts] = useState<Post[]|null>(null);
+  const [newBoards, setNewBoards] = useState<NewBoard[]|null>(null);
   
-
   useEffect(()=>{
-    const fetchPostsAndBoards = async() => {
+    const fetchPosts = async() => {
       const postData = await compareUserId('11e880fd-65ca-4778-b8e9-1888c1e65233','post');
       if(!postData) return console.error('포스트 불러오기 실패');
+      setPosts(postData);
+    }
+    fetchPosts();
+  },[])
+  // 스크랩과 같은 생각
 
-      const boardData = await Promise.all(postData.map( async(post)=> {  
+  useEffect(()=>{
+    const fetchBoards = async() => {
+      if (!posts) return;
+      const data = await Promise.all(posts.map( async(post)=> {  
         const {data, error} = await supabase
         .from('board')
         .select('*')
@@ -40,36 +49,35 @@ function MypagePost() {
         return data; 
       }));
       
-      if(!boardData) return;
-      setBoardContents(boardData);
+      if(!data) return;
+      setBoards(data);
     }
 
-    fetchPostsAndBoards();
-    // console.log('스크랩 & 보드 패치 완료')
-  },[])
-  // 스크랩과 같은 생각
+    fetchBoards();
+  },[posts])
 
 
   useEffect(()=>{
-    if(!boardContents) return;
-    const copyBoardContentsList:string[] = boardContents.map(({contents})=>contents);
+    if(!boards) return;
+    const copyBoardContentsList:string[] = boards.map(({contents})=>contents);
 
-    setNewBoardContents(
-      boardContents.map(({board_id, title},idx)=>{
+    setNewBoards(
+      boards.map(({board_id, title},idx)=>{
         return {board_id, title, contents : copyBoardContentsList[idx].slice(0,50)}
         }
       )
     )
 
-  },[boardContents])
+  },[boards])
+
 
   return (
     <>
-      <p className={S.sectionName}>포스트</p>
-      <div className={S.postContainer}>
+      <h2 className={S.sectionName}>포스트</h2>
+      <section className={S.postContainer}>
         <ul className={S.postList}>
           {
-            newBoardContents && newBoardContents.map(({board_id, title, contents})=>(
+            newBoards && newBoards.map(({board_id, title, contents})=>(
               <li key={board_id} className={S.post}>
                 <p className={S.postTitle}>{title}</p>
                 <p className={S.postContent}>{contents}</p>
@@ -77,7 +85,7 @@ function MypagePost() {
             ))
           }
         </ul>
-      </div>
+      </section>
     </>
   )
 }

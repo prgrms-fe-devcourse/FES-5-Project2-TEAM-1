@@ -23,8 +23,8 @@
   align-items: center;
 }
 
-.prevButton,
-.nextButton{
+.prevButton>img,
+.nextButton>img{
   width: 45px;
   height: 45px;
   stroke-width: 1px;
