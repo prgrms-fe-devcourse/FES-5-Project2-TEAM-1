@@ -2,6 +2,7 @@
     background: #e8bacb;
     background: radial-gradient(circle,rgba(232, 186, 203, 0.87) 0%, rgba(199, 214, 237, 0.93) 100%);
     color: white;
+    line-height: 20px;
 
     .Toastify__toast-icon svg{
         fill: white;

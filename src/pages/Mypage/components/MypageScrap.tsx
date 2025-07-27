@@ -10,50 +10,85 @@ import supabase from "@/supabase/supabase";
     - 보드 contents 일정 글자 이하로만 보이게 설정해야함
  
     */
+type Scrap = Tables<'scrap'>
 type Board = Tables<'board'>
+type NewBoard = Pick<Board,'board_id'|'title'|'contents'>;
 
 function MypageScrap() {
-  const [boardContents, setBoardContents] = useState<Board[]|null>(null);
-
+  const [scraps, setScraps] = useState<Scrap[]|null>(null);
+  const [boards, setBoards] = useState<Board[]|null>(null);
+  const [newBoards, setNewBoards] = useState<NewBoard[]|null>(null);
 
   useEffect(()=>{
     const fetchScrapsAndBoards = async() => {
-      const scrapData = await compareUserId('11e880fd-65ca-4778-b8e9-1888c1e65233','scrap');
+      const data = await compareUserId('11e880fd-65ca-4778-b8e9-1888c1e65233','scrap');
+      if(!data) return console.error('스크랩 불러오기 실패');
+      setScraps(data);
+    }
+    
+    fetchScrapsAndBoards();
+  },[])
+  // 아래 이유때문이라도 이 컴포넌트 내부에서 db조회를 하는게 훨씬 최신화가 되지 않나? 싶은 생각
+  // 스크랩이 추가되거나 삭제됐을때 실행돼야함 -> 작업이 다른 페이지에서 이뤄지니까 마이페이지에 오면 다시 렌더링되지 않을까..? 종속성 배열 넣지 않아도?
+  // 글쓴이가 글을 삭제한경우는 어떻게 보일지 처리해야할듯? -> 보드 아이디가 사라지니까 애초에 셀렉트가 안될듯?
 
-      const boardData = await Promise.all(scrapData!.map( async(scrap)=> {  
+  
+  
+  useEffect(()=>{
+    const fetchBoards = async() => {
+      if (!scraps) return;
+      const data = await Promise.all(scraps.map( async(scrap)=> {  
         const {data, error} = await supabase
         .from('board')
         .select('*')
         .eq('board_id',scrap.board_id)
         .single();   
+        
+        if(error) return console.error('보드 불러오기 실패');
+    
         return data; 
+    
       }));
-      if(!boardData) return;
-      setBoardContents(boardData);
+      if(!data) return;
+      setBoards(data);
     }
 
-    fetchScrapsAndBoards();
-    console.log('스크랩 & 보드 패치 완료')
-  },[])
+    fetchBoards();
+  },[scraps])
+
+
   
-  // console.log('보드내용 : ', boardContents)
+  useEffect(()=>{
+    if(!boards) return;
+    const copyBoardContentsList:string[] = boards.map(({contents})=>contents);
+
+    setNewBoards(
+      boards.map(({board_id, title},idx)=>{
+        return {board_id, title, contents : copyBoardContentsList[idx].slice(0,50)}
+        }
+      )
+    )
+
+  },[boards])
+
+
 
 
   return (
     <>
-      <p className={S.sectionName}>스크랩</p>
-      <div className={S.scrapContainer}>
+      <h2 className={S.sectionName}>스크랩</h2>
+      <section className={S.scrapContainer}>
         <ul className={S.scrapList}>
           {
-            boardContents && boardContents.map(({board_id, title, contents})=>(
+            newBoards && newBoards.map(({board_id, title, contents})=>(
               <li key={board_id} className={S.scrap}>
                 <p className={S.scrapTitle}>{title}</p>
-                <p className={S.scrapContent}>{contents.length>50 ? contents.slice(0,50) : contents}</p>
+                <p className={S.scrapContent}>{contents}</p>
               </li>
             ))
           }
         </ul>
-      </div>
+      </section>
     </>
   )
 }
