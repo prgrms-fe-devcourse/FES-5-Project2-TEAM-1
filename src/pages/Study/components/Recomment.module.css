@@ -28,8 +28,9 @@
 }
 
 .contentBox {
-  flex: 1;
+width: 88%;
   display: flex;
+  justify-content: flex-end;
   flex-direction: column;
   gap: 0.75rem;
   align-content: space-between;
@@ -37,8 +38,26 @@
 
 .meta {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   font-size: 0.9rem;
-  color: #555;
+  color: #222;
+
+  .time{
+    font-size: 12px;
+    color:rgba(85, 85, 85, 0.5)
+  }
+
+  .edit{
+    display: flex;
+    gap: 4px;
+
+    >button{
+      font-size: 12px;
+color:rgba(85, 85, 85, 0.5)
+    }
+    
+  }
 }
 
 .username {

@@ -56,7 +56,10 @@ function ChannelComment(card:Props) {
 
     if (commentData) setComments(commentData);
   };
-  const matchComment = comments.filter(comment => comment.board_id === board_id)
+  const handleDeleteComment = (targetId: string) => {
+    setComments(prev =>prev.filter(c => c.comment_id !== targetId))
+  }
+  const matchComment = comments.filter(comment => comment.board_id === board_id).sort((a,b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
 
   return (
     <div className={S.container}>
@@ -82,7 +85,7 @@ function ChannelComment(card:Props) {
         </div>
         <ul className={S.commentList}>
           {matchComment.map((comment) => (
-            <CommentItem comment={comment}  key={comment.comment_id} />
+            <CommentItem comment={comment} key={comment.comment_id} onDelete={()=>handleDeleteComment(comment.comment_id) } />
           ))}
         </ul>
       </div>
