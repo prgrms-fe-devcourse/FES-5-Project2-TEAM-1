@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import type { User } from './Mypage';
 import S from './MypageTop.module.css';
 import E from './MypageEdit.module.css';
@@ -10,16 +10,21 @@ interface Props {
     user: User | null;
     editMode: boolean;
     setUserData: React.Dispatch<React.SetStateAction<User | null>>;
-    showEdit: boolean,
-    setShowEdit: (value: boolean) => void;
 }
 
-function MypageName({ user, editMode, setUserData, showEdit, setShowEdit}: Props) {
+function MypageName({ user, editMode, setUserData}: Props) {
 
   const { success, error } = useToast();
 
   const [userName, setUserName] = useState<string>(user?.name ?? '');
   const [role, setRole] = useState<string>(user?.role ?? '');
+  const [showEdit, setShowEdit] = useState(false);
+
+  useEffect(() => {
+      if( !editMode ) {
+        setShowEdit(false);
+      }
+  }, [editMode]);
 
   if( !user ) {
     return <p>프로필 정보가 없습니다.</p>;
@@ -97,11 +102,6 @@ function MypageName({ user, editMode, setUserData, showEdit, setShowEdit}: Props
         setShowEdit(false);
       }
     }
-
-    if( !editMode ) {
-      setShowEdit(false);
-    }
-
 
   return (
     <div className={S.mypageNameContainer}>

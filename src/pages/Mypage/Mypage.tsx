@@ -27,8 +27,6 @@ function Mypage() {
 
   const [userData, setUserData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
-
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -54,13 +52,13 @@ function Mypage() {
     }
     fetchUser();
   }, [ ])
+
   const handleEditUserPage = () => {
     setEditMode( prev => !prev );
   }
   const handleSave = async () => {
     setEditMode( false );
   }
-
 
   if (!userData) {
     return <p>유저 데이터를 불러오는 중입니다...</p>;
@@ -82,8 +80,6 @@ function Mypage() {
               user={userData}
               editMode={editMode}
               setUserData={setUserData}
-              showEdit={showEdit}
-              setShowEdit={setShowEdit}
             />
             <MypageDetails
               user={userData}
