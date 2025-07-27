@@ -1,7 +1,40 @@
 import S from './rightsidebar.module.css'
 import '../../style/reset.css'
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import supabase from '@/supabase/supabase';
 
 function RightSidebar() {
+
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    const getUser = async () => {
+      const {data: {user}} = await supabase.auth.getUser()
+      setUser(user)
+    }
+    getUser()
+
+    const {data: listener} = supabase.auth.onAuthStateChange((_event, session)=>{
+      setUser(session?.user ?? null)
+    })
+
+    return()=>{
+      listener?.subscription.unsubscribe()
+    }
+  }, [])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    navigate('/')
+  }
+
+
+
+
+
+
   return (
     <nav className={S.container}>
       <div className={S.height}>
@@ -9,10 +42,12 @@ function RightSidebar() {
           <div className={S.profileImage}></div>
           <div className={S.loginBoxGreeting}>
             <p>Hello🖐️</p>
-            <h3>UserName</h3>
+            <h3>{user ? user.email.split('@')[0] : 'Guest'}</h3>
           </div>
           <div className={S.loginLogout}>
-            <svg
+            {user ? (
+              <button onClick={handleLogout}>
+                <svg
               width="24"
               height="22"
               viewBox="0 0 20 19"
@@ -24,7 +59,14 @@ function RightSidebar() {
                 fill="#222222"
               />
             </svg>
-            <p>Logout</p>
+            {<p>Logout</p>}
+              </button>
+            ) : (
+              <>
+                <Link to="/login"  className={S.linkButton}>로그인</Link>
+                <Link to="/register"  className={S.linkButton}>회원가입</Link>
+              </>
+            )}
           </div>
         </div>
 

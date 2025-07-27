@@ -1,0 +1,117 @@
+
+.container{
+    width:100vw;
+    height:100vh;
+    background: url("/public/images/background.png");
+    background-size:cover;
+    background-position:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.registerBox{
+    width: 900px;
+    display: flex;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: #AA6D2F;
+    box-shadow: 4px 6px 4px 0 rgba(0, 0, 0, 0.25);
+    padding: 40px 32px;
+    position:relative;
+    gap:32px;
+}
+
+.leftSide{
+    flex:1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .image{
+        width:100%;
+        /* max-width:300px; */
+        max-height:fit-content;
+        border-radius: 16px;
+    }
+}
+
+.form{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    gap:12px;
+    color:#FFFFFF;
+
+    h2{
+        font-size:24px;
+        text-align: center;
+        font-weight: bold;
+        color:#FFFFFF;
+        margin-bottom:20px;
+    }
+
+    label{
+        color:#FFFFFF;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="file"]{
+        padding:5px;
+        border-radius: 16px;
+        border:none;
+        outline:none;
+        font-size:16px;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+        border: none;
+        border-radius: 12px;
+        background-color: #7abf8d;
+        color: #FFFFFF;
+        font-size:14px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #63a674;
+}
+
+}
+
+.checkbox{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:14px;
+    margin-top:20px;
+}
+
+
+.register{
+    /* margin: 18px 0; */
+    padding:12px;
+    font-size:16px;
+    color:#FFFFFF;
+    background-color:rgba(166 179 125);
+    border-radius: 8px;
+    cursor:pointer;
+    font-weight:bold;
+
+    &:hover{
+        background-color: rgba(137, 162, 55);
+    }
+}
+
+.p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:5px;
+    font-size:14px;
+    text-align: center;
+    color:#ff0000;
+}
