@@ -8,7 +8,6 @@ import { useToast } from "@/utils/useToast";
 type Social = Tables<'user_social'>;
 
 function MypageSocialConvert() {
-  
   const [socialData, setSocialData] = useState<Social[]|null>(null);
   const [copiedText, setCopy] = useCopyToClipboard();
   const { success } = useToast();
@@ -23,9 +22,9 @@ function MypageSocialConvert() {
   },[])
   // 유저가 바뀌면서 소셜 값도 바뀔때 useEffect가 계속 실행돼야하지 않을까?
 
-  const showSuccessCopy = () => {
+  useEffect(()=>{
     copiedText && success(`복사 완료! ${copiedText}`)
-  }
+  },[copiedText])
 
   return ( 
     <section className={S.socialContainer}>
@@ -33,7 +32,7 @@ function MypageSocialConvert() {
         socialData && socialData.map(({social, social_id, social_link})=>(
           <div className={S.social} key={social_id}>
             
-            <button type="button" onClick={()=>{setCopy(social_link); showSuccessCopy()}} className={S.socialLink} title='복사하기' >
+            <button type="button" onClick={()=>{setCopy(social_link)}} className={S.socialLink} title='복사하기' >
               {
                 social === 'instagram' ? <img src="src\assets\instagram.svg" alt="instagram"/>
                 : social === 'github' ? <img src="src\assets\github.svg" alt="github" />
