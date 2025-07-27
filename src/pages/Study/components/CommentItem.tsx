@@ -13,12 +13,14 @@ type Reply = Tables<'comment_reply'>
 
 
 function CommentItem({comment}: Props) {
-  const { contents, likes, create_at, comment_id,profile_id } = comment;
+  const { contents, likes, create_at, comment_id, profile_id } = comment;
 
   const [like, setLike] = useState<number>(likes);
   const [isPress, setIsPress] = useState(false);
   const [isReplyPress, setIsReplyPrss] = useState(false)
-  const [reply,setReply] = useState<Reply[]>([])
+  const [reply, setReply] = useState<Reply[]>([])
+  const [createReply, setCreateReply] = useState('')
+  
    useEffect(() => {
     const storedPress = JSON.parse(localStorage.getItem(`like-${comment_id}`) ?? "false");
     setIsPress(storedPress) 
@@ -54,14 +56,26 @@ function CommentItem({comment}: Props) {
     setIsReplyPrss(!isReplyPress)
   }
 
-  const handleSubmitReply = async() => {
-    await supabase.from('comment_reply').insert([{
+
+  const handleSubmitReply = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+  
+    const {error} = await supabase.from('comment_reply').insert([{
       comment_id,
       profile_id,
-      contents,
+      contents:createReply,
       likes:0,
-      create_at:new Date()
+      created_at:new Date()
     }])
+    if(error) console.log(error.message)
+    setCreateReply('')
+    
+    const { data:replyData } = await supabase
+      .from("comment_reply")
+      .select("*")
+      .eq('comment_id',comment_id)
+    
+    if (replyData) setReply(replyData)
   }
 
   return (
@@ -86,19 +100,21 @@ function CommentItem({comment}: Props) {
             </button>
             <span>{like}</span>
           </div>
-          <div className={S.recomment} onClick={handleReply }>
+          <div className={S.recomment} onClick={handleReply}>
             <button type="button">↪ Reply</button>
-            <span>10</span>
+            <span>{ reply.length }</span>
           </div>
         </div>
         {isReplyPress && (
           <div>
-            <form className={S.replyInputBox} onSubmit={handleSubmitReply}>
+            <form className={S.replyInputBox} onSubmit={(e)=>handleSubmitReply(e)}>
               <textarea
                 className={S.replyInput}
+                value={createReply}
                 placeholder="답글을 입력하세요"
+                onChange={(e)=>setCreateReply(e.target.value)}
               ></textarea>
-              <button type="button" className={S.replyButton}>
+              <button type="submit" className={S.replyButton}>
                 등록
               </button>
             </form>
@@ -106,7 +122,7 @@ function CommentItem({comment}: Props) {
             {reply &&
               reply.map((comment) => (
                 <Recomment
-                  reply = {reply}
+                  reply = {comment}
                   key={comment.comment_id}
                   handleLikeToggle={() => handleLikeToggle(comment_id)}
                 />

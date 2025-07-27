@@ -4,9 +4,6 @@ import supabase from '@/supabase/supabase';
 import type { Tables } from '@/supabase/database.types';
 import CommentItem from './CommentItem';
 
-
-
-
 type Props = Tables<'board'>
 type Comment = Tables<'comment'>
 
@@ -37,8 +34,8 @@ function ChannelComment(card:Props) {
  
     const { error } = await supabase.from("comment").insert([
       {
-        board_id: String(board_id),
-        profile_id: String(profile_id),
+        board_id,
+        profile_id,
         contents: writeComment,
         likes: 0,
         create_at: new Date(),
@@ -59,7 +56,6 @@ function ChannelComment(card:Props) {
 
     if (commentData) setComments(commentData);
   };
-
   const matchComment = comments.filter(comment => comment.board_id === board_id)
 
   return (
