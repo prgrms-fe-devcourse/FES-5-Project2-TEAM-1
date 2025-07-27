@@ -11,6 +11,7 @@ import MypageChannel from './components/MypageChannel';
 import MypagePeerReview from './components/MypagePeerReview';
 import MypagePost from './components/MypagePost';
 import MypageScrap from './components/MypageScrap';
+import MoveToTop from './components/MoveToTop';
 
 // type UserBase = Tables<'user_base'>;
 // type UserProfile = Tables<'user_profile'>;
@@ -95,6 +96,7 @@ function Mypage() {
             <MypageChannel/>
             <MypageScrap/>
             <MypagePost/>
+            <MoveToTop/>
             { editMode && <button type="submit" onClick={handleSave}>완료</button>}
         </div>
     </div>
