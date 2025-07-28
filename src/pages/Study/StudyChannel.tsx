@@ -2,41 +2,39 @@ import { useEffect, useRef, useState } from 'react';
 import Card from '@/components/Layout/Card';
 import S from './studychannel.module.css'
 import supabase from '@/supabase/supabase';
-import type { Tables } from 'src/supabase/database.types';
 import { debounce } from '@/utils/debounce';
+import type { Tables } from '@/supabase/database.types';
 
 
-type Card = Tables<'board'>
+
+type Board = Tables<"board">;
+type CardProps = Board & 
+{
+  board_tag: Tables<"board_tag">[];
+};
+
 
 function StudyChannel() {
 
   const cardPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1)
-  const [cardData, setCardData] = useState<Card[]>([])
-  const filterTab = ["최신순", "좋아요순", "모집마감순"]
+  const [cardData, setCardData] = useState<CardProps[]>([])
+  const filterTab = ["최신순", "좋아요순"]
   const filterRef = useRef<(HTMLButtonElement|null)[]>([])
-  
+
   useEffect(() => {
-    const cardData = async () => {
-      const { data, error } = await supabase.from("board").select("*");
-      if (error) {
-        console.log(error.message)
-      } else {
-        setCardData(
-          [...data].sort(
-            (a, b) =>
-              new Date (b.create_at).getTime() -
-              new Date (a.create_at).getTime()
-          )
-        );
-      }
+      const boardTable = async () => {
+        const { data } = await supabase
+          .from("board")
+          .select(" *, board_tag(*)")
+        if(data) setCardData(data);
     };
-    cardData()
-  }, []);
-  
-  useEffect(() => {
-    setCardData(cardData)
-  },[cardData])
+      boardTable();
+  },[])
+
+  // useEffect(() => {
+  //   setCardData(cardData)
+  // },[cardData])
 
   function handleFilter(e:React.MouseEvent) {
     if (filterRef.current == null) return
@@ -50,9 +48,6 @@ function StudyChannel() {
     } else if (e.currentTarget === filterRef.current[1]) {
       const sorted = [...cardData].sort((a, b) => b.likes - a.likes)
       setCardData(sorted)
-    } else if (e.currentTarget === filterRef.current[2]) {
-      const sorted = [...cardData].sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime())
-      setCardData(sorted)
     }
   }
 
@@ -62,7 +57,7 @@ function StudyChannel() {
       (card) =>
         card.title.toLowerCase().includes(lowerValue) ||
         card.contents.toLowerCase().includes(lowerValue) ||
-        card.address.toLowerCase().includes(lowerValue)
+        card.address?.toLowerCase().includes(lowerValue)
     );
     setCardData(filtered)
     setCurrentPage(1)
@@ -78,8 +73,6 @@ function StudyChannel() {
   const endPage = Math.min(totalPages, startPage + maxVisible - 1)
   const adjustedStartPage = Math.max(1, endPage - maxVisible + 1);
   const visiblePage = Array.from({ length: endPage - adjustedStartPage + 1 }, (_, i) => adjustedStartPage + i)
-  
-  
   
   return (
     <main className={S.container}>
@@ -138,9 +131,10 @@ function StudyChannel() {
       </div>
       <section>
         <div className={S.cardGrid}>
-          {...paginatedCards &&
-            [...paginatedCards].map((card: Card) => (
-              <Card {...card} key={card.board_id} />
+          {
+            paginatedCards &&
+                paginatedCards?.map((card: CardProps) => (
+                  <Card card={card} key={card.board_id} />
             ))}
         </div>
       </section>

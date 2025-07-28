@@ -107,3 +107,99 @@
         border-radius: 50%;
     }
 }
+
+.editNamecontainer {
+    width: 100%;
+    height: 80%;
+    border: 1px solid #A6B37D;
+    border-radius: 10px;
+    padding: 0 1rem;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    flex: 9;
+
+    button {
+        font-size: 2rem;
+    }
+
+    input {
+        width: 8.5rem;
+        height: 3rem;
+        font-size: 2rem;
+        font-weight: 700;
+        background-color: transparent;
+
+        border: none;
+
+        display: flex;
+        justify-content: end;
+        align-items: center;
+
+        &::placeholder {
+            width: 100%;
+            font-size: 1.8rem;
+            background-color: transparent;
+
+            text-align: right;
+            color: #d3d2d2;
+        }
+    }
+
+    select {
+        width: 20rem;
+        height: 3rem;
+        background-color: transparent;
+
+        border: none;
+
+        display: flex;
+        justify-content: start;
+        align-items: center;
+
+        font-size: 1.5rem;
+
+    }
+    
+}
+
+.editNameBtn {
+        flex: 1;
+
+        display: flex;
+        gap: 4px;
+
+        button {
+            width: 100%;
+            height: 3.2rem;
+            border-radius: 10px;
+            background-color: #A6B37D;
+            color: white;
+            font-size: 1.1rem;
+
+            transition: all 0.4s;
+
+            &:hover {
+                background-color: #ffffff;
+                color: #A6B37D;
+                border: 1px solid #A6B37D;
+            }
+        }
+}
+
+
+.editDetailBtn {
+    width: 3rem;
+
+    position: absolute;
+    right: 1.8rem;
+    bottom: 1.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+}

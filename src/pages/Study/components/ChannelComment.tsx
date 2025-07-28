@@ -1,47 +1,99 @@
+import { useEffect, useRef, useState } from 'react';
 import S from './ChannelComment.module.css'
+import supabase from '@/supabase/supabase';
+import type { Tables } from '@/supabase/database.types';
+import CommentItem from './CommentItem';
 
-function ChannelComment() {
+type Props = Tables<'board'>
+type Comment = Tables<'comment'>
+
+function ChannelComment(card:Props) {
+
+  const {board_id,profile_id} = card
+  const [writeComment,setWriteComment] = useState('')
+  const [comments, setComments] = useState<Comment[]>([])
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  
+  useEffect(() => {
+    const commentItem = async () => {
+      const { data } = await supabase.from("comment").select("*");
+      if (!data) return;
+      setComments(data);
+    };
+    commentItem();
+  },[]);
+ 
+  const handleClickInputBox = (e:React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement
+    if(target.closest('button'))return
+    textareaRef.current?.focus();
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+ 
+    const { error } = await supabase.from("comment").insert([
+      {
+        board_id,
+        profile_id,
+        contents: writeComment,
+        likes: 0,
+        create_at: new Date(),
+      },
+    ]);
+
+    if (error) {
+      console.log(error.message)
+      return;
+    }
+
+    setWriteComment("");
+
+    const { data: commentData } = await supabase
+      .from("comment")
+      .select("*")
+      .eq("board_id", board_id);
+
+    if (commentData) setComments(commentData);
+  };
+  const handleDeleteComment = (targetId: string) => {
+    setComments(prev =>prev.filter(c => c.comment_id !== targetId))
+  }
+  const matchComment = comments.filter(comment => comment.board_id === board_id).sort((a,b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
+
   return (
-    <section className={S.container}>
-      <div className={S.comment}>
-        <div className={S.commetInputBox}>
-          <div className={S.writer}>
-            <img src="/images/너굴.png" alt="" />
-            <p>글쓴이</p>
-          </div>
-          <input type="text" />
+    <div className={S.container}>
+      <div className={S.inputScreen} onClick={handleClickInputBox}>
+        <form onSubmit={handleSubmit}>
+          <textarea
+            ref={textareaRef}
+            value={writeComment}
+            placeholder="댓글을 적어주세요"
+            onChange={(e) => setWriteComment(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                const target = e.target as HTMLInputElement
+                setWriteComment(target.value)
+              }
+            }}
+          ></textarea>
           <button type="submit" className={S.commentBtn}>
             댓글
           </button>
-        </div>
+        </form>
       </div>
-
-      <ul className={S.commentListWrap}>
-        <li className={S.commentList}>
-          <div className={S.writer}>
-            <img src="/images/너굴.png" alt="" />
-            <div className={S.memberComment}>
-              <h6>글쓴이</h6>
-              <p>팀장님 퇴근 좀 시켜주세요</p>
-            </div>
-          </div>
-          <div className={S.recommentWrap}>
-            <button type="button" className={S.recommentBtn}>
-              답글
-            </button>
-            <div className={S.recomment}>
-            <div className={S.writer}>
-            <img src="/images/너굴.png" alt="" />
-            <div className={S.memberComment}>
-              <h6>글쓴이</h6>
-              <p>안돼 돌아가</p>
-                </div>
-                </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </section>
+      <hr />
+      <div className={S.recomment}>
+        <div className={S.commentAmount}>
+          댓글 <span>{matchComment.length}</span>
+        </div>
+        <ul className={S.commentList}>
+          {matchComment.map((comment) => (
+            <CommentItem comment={comment} key={comment.comment_id} onDelete={()=>handleDeleteComment(comment.comment_id) } />
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
 export default ChannelComment

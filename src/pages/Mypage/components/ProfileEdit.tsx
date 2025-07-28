@@ -7,6 +7,7 @@ import type { User } from '../Mypage';
 import { useRef, useState } from 'react';
 import Default_profile from '/images/default_cover.png';
 import supabase from '../../../supabase/supabase';
+import { useToast } from '@/utils/useToast';
 
 
 interface Props {
@@ -18,6 +19,8 @@ interface Props {
 }
 
 function ProfileEdit({ prevProfileImage, setPrevProfileImage, setShowProfileDrop, profileData, setUserData}: Props) {
+
+    const { success, error } = useToast();
 
     const [file, setFile] = useState<File | null>(null);
 
@@ -58,7 +61,7 @@ function ProfileEdit({ prevProfileImage, setPrevProfileImage, setShowProfileDrop
             .upload(`profile/${fileName}`, file);
         
         if( uploadError ) {
-            console.log('파일 업로드 실패', uploadError);
+            error('업로드 실패!');
             return;
         }
 
@@ -72,7 +75,7 @@ function ProfileEdit({ prevProfileImage, setPrevProfileImage, setShowProfileDrop
             .eq('profile_id', profile_id)
 
         if( profileError ) {
-            console.error('DB 업데이트 실패!!', profileError );
+            error('업로드 실패!');
             return;
         }
 
@@ -90,7 +93,7 @@ function ProfileEdit({ prevProfileImage, setPrevProfileImage, setShowProfileDrop
             }
         })
 
-        alert('성공적으로 업로드가 완료되었습니다~!');
+        success('업로드 성공!');
         setShowProfileDrop(false);
 
     }

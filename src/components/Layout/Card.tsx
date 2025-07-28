@@ -1,23 +1,42 @@
 import S from './card.module.css'
-import type { Tables } from "@/supabase/database.types";
+
 import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
-import { useRouter } from '../../router/index';
+import { useNavigate } from 'react-router-dom';
+import type { Tables } from '@/supabase/database.types';
 
 
 
-type Props = Tables<"board">;
 
-function Card(card: Props) {
-  const {address,contents,due_date,title,likes,board_id,join_cls,member,profile_id} = card
+type Board = Tables<"board">;
+type CardProps = Board & 
+{
+  board_tag: Tables<"board_tag">[];
+};
 
+
+interface Props{
+  card: CardProps
+}
+
+
+function Card({ card }:Props) {
+  const {
+    address,
+    contents,
+    title,
+    likes,
+    board_id,
+    member,
+    profile_id,
+    board_tag,
+  } = card;
 
   
     const [cardLike, setCardLike] = useState(likes);
     const [isPressed, setIsPressed] = useState(false);
     const [isScrap, setIsScrap] = useState(false);
-    
-  
+    const navigate = useNavigate()
 
     useEffect(() => {
       const storedLike = JSON.parse(localStorage.getItem(`like-${board_id}`) ?? "false")  
@@ -26,9 +45,7 @@ function Card(card: Props) {
       setIsScrap(storedScrap)
     }, [board_id]);
 
-   
     const handleScrap = async () => {
-    
     const nextScrapState = !isScrap
     setIsScrap(nextScrapState)
     localStorage.setItem(`scrap-${board_id}`, JSON.stringify(nextScrapState));
@@ -54,54 +71,42 @@ function Card(card: Props) {
     }
       
     const handleLike = async () => {
-    const pressState = isPressed ? cardLike - 1 : cardLike + 1;
-    const nextState = !isPressed;
-   
-    setCardLike(pressState);
-    setIsPressed(!isPressed)
-    localStorage.setItem(`like-${board_id}`,JSON.stringify(nextState))
-  
+      const pressState = isPressed ? cardLike - 1 : cardLike + 1;
+      const nextState = !isPressed;
+
+      setCardLike(pressState);
+      setIsPressed(!isPressed)
+      localStorage.setItem(`like-${board_id}`,JSON.stringify(nextState))
       const { error } = await supabase.from('board').update({ likes: pressState}).eq('board_id', board_id)
       
       if (error) {
         console.error('좋아요 업데이트 실패', error.message)
         setCardLike(isPressed ? cardLike - 1 : cardLike + 1)
         setIsPressed(!isPressed)
-         localStorage.setItem(`like-${board_id}`, JSON.stringify(nextState));
+        localStorage.setItem(`like-${board_id}`, JSON.stringify(nextState));
       }
     }
 
-    const handleRoute = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,card:Props) => {
+    const handleRoute = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,card:CardProps) => {
       e.preventDefault()
 
       if ((e.target as HTMLButtonElement).closest('button')) {
         return
+      } else {
+       navigate(`/channel/${board_id}`, { state: { card } });
       }
-      // else {
-      //   setSelectedBoard(card);
-      //   history.pushState(null, "", `JoinInfo/${card.board_id}`);
-      //   setHistoryRoute(`/JoinInfo/${card.board_id}`);
-      //   window.dispatchEvent(new PopStateEvent("popstate"));
-      // }
-     
   }
   
-    return (
-      <div className={S.container} onClick={(e)=>handleRoute(e,card)}>
-        <div className={S.cardTop}>
-          <div className={S.cardTopLeft}>
-           <div className={join_cls == '0' ? S.freebadge : S.acceptbadge}>{
-            join_cls == '0' ? '자유가입' : '승인가입'
-          }</div>
-          <div>모집기간 D-{due_date}</div>
-        </div>
+  return (
+    <div className={S.container} onClick={(e) => handleRoute(e, card)}>
+      <div className={S.cardTop}>
+        <h4>{title}</h4>
         <div className={S.cardTopRight}>
           <button className={S.scrapBtn} onClick={handleScrap}>
-            {
-              isScrap ? (
-              <img src="/icons/scraplittleActive.png" alt="" />
+            {isScrap ? (
+              <img src="/icons/scraplittleActive.png" alt="스크랩 활성화" />
             ) : (
-              <img src="/icons/scraplittle.svg" alt="" />
+              <img src="/icons/scraplittle.svg" alt="스크랩 비 활성화" />
             )}
           </button>
           <button className={S.likeBtn} onClick={handleLike}>
@@ -115,11 +120,14 @@ function Card(card: Props) {
         </div>
       </div>
       <div className={S.titleBox}>
-        <h4>{title}</h4>
         <p>{contents}</p>
       </div>
       <div className={S.tagBox}>
-        #태그 #태그 #태그{" "}
+        {
+          board_tag.map((t) => (
+          <div key={t.tag_id}>{t.hash_tag}</div>
+          ))
+        }
         <span>
           <svg
             width="3"
@@ -134,7 +142,7 @@ function Card(card: Props) {
               fillOpacity="0.7"
             />
           </svg>
-        </span>{" "}
+        </span>
         {address}
         <span>
           <svg

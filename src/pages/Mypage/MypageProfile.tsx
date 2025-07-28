@@ -28,6 +28,7 @@ interface Props {
 
     const handleEditBackground = () => {
       setShowDropdown(true);
+      
       setPrevImage(profileData.background_images);
     }
 

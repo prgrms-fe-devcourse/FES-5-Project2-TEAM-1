@@ -1,43 +1,49 @@
-import ChannelComment from './components/ChannelComment';
-import Cruitmember from './components/Cruitmember';
-import S from './StudyJoinInfomation.module.css'
-import { useBoard } from '@/components/context/BoardContext';
+import { useParams } from "react-router-dom";
+import S from "./StudyJoinInfomation.module.css";
+import type { Tables } from "@/supabase/database.types";
+import Project from "./components/Project";
+import ChannelComment from "./components/ChannelComment";
+import { useEffect, useState } from "react";
+import supabase from "@/supabase/supabase";
 
 
+type Board = Tables<"board">;
+type CardProps = Board & 
+{
+  board_tag: Tables<"board_tag">[];
+};
 
 function StudyJoinInfomation() {
-
-  const {selectedBoard} = useBoard()
-  if(!selectedBoard) throw new Error('데이터가 없습니다')
+  const { id } = useParams()
+  const [card, setCard] = useState<CardProps|null>(null)
   
-  const { title,address,images,member,contents } = selectedBoard
+  useEffect(() => {
+    if (!id) throw new Error('id가없습니다')  
+    const fetchData = async () => {
+      const { data, error } = await supabase.from('board').select('*,board_tag(*)').eq('board_id', id).single()
+      if(error) throw new Error('데이터가 들어오지않아요')
 
+      setCard(data as CardProps)
+    }
+      fetchData()
+  },[id])
+
+  if(!card) return 
+  const { images, title, address, member, board_tag, contents} = card
+ 
   return (
     <main className={S.container}>
       <div className={S.layout}>
         <div className={S.channelInfoBox}>
-          <img src={images} alt="" />
+          {images && <img src={images} alt="스터디 이미지" />}
           <div className={S.textInfo}>
             <div className={S.title}>
-              <h2>{ title }</h2>
-              <button>
-                <svg
-                  width="32"
-                  height="48"
-                  viewBox="0 0 15 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.4209 0.150391H12.4209C13.4381 0.150391 14.2705 0.982843 14.2705 2V17.7715L7.48047 14.8623L7.4209 14.8369L7.36133 14.8623L0.571289 17.7715L0.581055 2C0.581055 0.981862 1.40472 0.150391 2.4209 0.150391Z"
-                    stroke="#222222"
-                    strokeWidth="0.3"
-                  />
-                </svg>
-              </button>
+              <h2>{title}</h2>
             </div>
             <div className={S.tagBox}>
-              #태그 #태그 #태그{" "}
+              {(board_tag as Tables<"board_tag">[]).map((t) => (
+                <div key={t.tag_id}>{t.hash_tag}</div>
+              ))}
               <span>
                 <svg
                   width="3"
@@ -95,13 +101,20 @@ function StudyJoinInfomation() {
             </div>
           </div>
         </div>
-        <article className={S.content}>
-        {contents}
-        </article>
-        <Cruitmember />
-        <ChannelComment />
+        <article className={S.content}>{contents}</article>
+        <section>
+          <div className={S.project}>
+            <h4>프로젝트안내</h4>
+            <button type="button">프로젝트 생성</button>
+          </div>
+          <Project />
+        </section>
+        <section>
+          <ChannelComment {...card} />
+        </section>
       </div>
     </main>
   );
 }
-export default StudyJoinInfomation
+
+export default StudyJoinInfomation;
