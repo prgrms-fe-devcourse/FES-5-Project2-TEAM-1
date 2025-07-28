@@ -213,6 +213,48 @@ export type Database = {
           },
         ]
       }
+      comment_reply: {
+        Row: {
+          comment_id: string
+          contents: string
+          created_at: string
+          likes: number
+          profile_id: string
+          reply_id: string
+        }
+        Insert: {
+          comment_id?: string
+          contents: string
+          created_at?: string
+          likes?: number
+          profile_id?: string
+          reply_id?: string
+        }
+        Update: {
+          comment_id?: string
+          contents?: string
+          created_at?: string
+          likes?: number
+          profile_id?: string
+          reply_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comment_reply_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comment"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "comment_reply_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["profile_id"]
+          },
+        ]
+      }
       news_cards: {
         Row: {
           description: string
