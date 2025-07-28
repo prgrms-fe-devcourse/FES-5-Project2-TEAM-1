@@ -184,7 +184,7 @@ export type Database = {
           board_id?: string
           comment_id?: string
           contents: string
-          create_at: string
+          create_at?: string
           likes?: number
           profile_id?: string
         }
