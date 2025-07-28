@@ -26,6 +26,21 @@
   display: flex;
   gap: 16px;
   margin-top: 16px;
+  flex: 1;
+
+
+.editContent {
+  width: 100%;
+  padding: 8px 12px;
+  line-height: 1.5;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: none;
+ 
+  display: block;
+}
 
   .partition{
   background-color: rgba(85, 85, 85, 0.5);
@@ -40,6 +55,7 @@
   margin: 12px;
   margin-left: 24px;
   display: flex;
+  align-items: center;
   gap: 12px;
 
   .like{
@@ -49,15 +65,78 @@
   }
 
   .comment{
-        display:flex;
+    display:flex;
     align-items: center;
     gap: 4px;
   }
 }
+
+
+.writerBox{
+  display: flex;
+  justify-content: space-between;
 
 .meta{
   display: flex;
   align-items: center;
   gap: 12px;
   font-size: 12px;
+  
+  .timeStamp{
+    margin-top: 8px;
+    color:rgba(85, 85, 85, 0.5)
+  }
+}
+
+.edit{
+  display: flex;
+  gap: 4px;
+
+  >button{
+    color:rgba(85, 85, 85, 0.5)
+    }
+  }
+}
+
+
+.reply{
+  display:flex;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.textContents{
+  display: flex;
+  flex-direction: column;
+}
+
+.replyInputBox{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+ 
+
+
+.replyInput{
+  width: 90%;
+  margin-top: 12px;
+  margin-left: 36px;
+  outline: none;
+  border: 0;
+  border-bottom : 1px solid rgba(0, 0, 0, 0.25);
+  resize:none;
+}
+
+.replyButton{
+  border-radius: 4px;
+  color:#fff;
+  width: 80px;
+  height: 30px;
+  background-color: #b99470;
+  transition:0.3s;
+
+  &:hover{
+    background-color: #997b5d;;
+  }
+}
 }

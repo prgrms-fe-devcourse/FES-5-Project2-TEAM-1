@@ -22,7 +22,6 @@ function StudyJoinInfomation() {
     const fetchData = async () => {
       const { data, error } = await supabase.from('board').select('*,board_tag(*)').eq('board_id', id).single()
       if(error) throw new Error('데이터가 들어오지않아요')
-
       setCard(data as CardProps)
     }
       fetchData()
