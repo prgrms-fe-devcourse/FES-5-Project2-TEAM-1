@@ -34,8 +34,7 @@ function App() {
               />
               <Route path="thread" element={<Thread />} />
             </Route>
-
-
+            
             <Route path="/mypage" element={<Mypage />} />
           </Routes>
         </main>

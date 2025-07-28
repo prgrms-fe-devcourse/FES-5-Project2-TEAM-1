@@ -66,12 +66,16 @@ function ChannelComment(card:Props) {
       <div className={S.inputScreen} onClick={handleClickInputBox}>
         <form onSubmit={handleSubmit}>
           <textarea
-            name=""
-            id=""
             ref={textareaRef}
             value={writeComment}
             placeholder="댓글을 적어주세요"
-            onChange={(e)=>setWriteComment(e.target.value)}
+            onChange={(e) => setWriteComment(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                const target = e.target as HTMLInputElement
+                setWriteComment(target.value)
+              }
+            }}
           ></textarea>
           <button type="submit" className={S.commentBtn}>
             댓글
