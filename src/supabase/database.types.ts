@@ -184,7 +184,7 @@ export type Database = {
           board_id?: string
           comment_id?: string
           contents: string
-          create_at?: string
+          create_at: string
           likes?: number
           profile_id?: string
         }
@@ -213,7 +213,7 @@ export type Database = {
           },
         ]
       }
-      commnet_reply: {
+      comment_reply: {
         Row: {
           comment_id: string
           contents: string
@@ -240,14 +240,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "commnet_reply_comment_id_fkey"
+            foreignKeyName: "comment_reply_comment_id_fkey"
             columns: ["comment_id"]
             isOneToOne: false
             referencedRelation: "comment"
             referencedColumns: ["comment_id"]
           },
           {
-            foreignKeyName: "commnet_reply_profile_id_fkey"
+            foreignKeyName: "comment_reply_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
@@ -402,7 +402,7 @@ export type Database = {
         Insert: {
           board_id?: string
           contents: string
-          create_at?: string
+          create_at: string
           likes?: number
           profile_id?: string
           thread_id?: string
@@ -540,6 +540,7 @@ export type Database = {
           profile_id: string
           profile_images: string
           user_id: string
+          visibility: Json
         }
         Insert: {
           address: string
@@ -550,6 +551,7 @@ export type Database = {
           profile_id?: string
           profile_images: string
           user_id?: string
+          visibility?: Json
         }
         Update: {
           address?: string
@@ -560,6 +562,7 @@ export type Database = {
           profile_id?: string
           profile_images?: string
           user_id?: string
+          visibility?: Json
         }
         Relationships: [
           {
