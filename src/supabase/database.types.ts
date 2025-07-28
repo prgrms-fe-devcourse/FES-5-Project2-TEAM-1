@@ -402,7 +402,7 @@ export type Database = {
         Insert: {
           board_id?: string
           contents: string
-          create_at?: string
+          create_at: string
           likes?: number
           profile_id?: string
           thread_id?: string
@@ -540,6 +540,7 @@ export type Database = {
           profile_id: string
           profile_images: string
           user_id: string
+          visibility: Json
         }
         Insert: {
           address: string
@@ -550,6 +551,7 @@ export type Database = {
           profile_id?: string
           profile_images: string
           user_id?: string
+          visibility?: Json
         }
         Update: {
           address?: string
@@ -560,6 +562,7 @@ export type Database = {
           profile_id?: string
           profile_images?: string
           user_id?: string
+          visibility?: Json
         }
         Relationships: [
           {

@@ -6,10 +6,8 @@ import '@/style/main.css'
 // import Register from './pages/Register';
 import App from './App.tsx'
 import ToastProvider from './components/ToastProvider.tsx';
-
-
-
 import { AuthProvider } from './auth/AuthProvider.tsx'
+
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

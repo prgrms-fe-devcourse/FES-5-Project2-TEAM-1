@@ -5,12 +5,12 @@ import { useCallback, useRef } from "react";
 
 interface Props {
   taglist?: string[];
-  defalutList?: string[];
+  defaultList?: string[];
   editable?: boolean;
   callBack?: (tag: object[]) => void;
 }
 
-function HashTag({ taglist, defalutList, editable, callBack }: Props) {
+function HashTag({ taglist, defaultList, editable, callBack }: Props) {
   const hasgTag = useRef(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,7 +27,7 @@ function HashTag({ taglist, defalutList, editable, callBack }: Props) {
           className={S.hashTag}
           whitelist={taglist}
           userInput={false}
-          defaultValue={defalutList}
+          defaultValue={defaultList}
         ></Tags>
       )}
       {taglist && !editable && (
@@ -36,7 +36,7 @@ function HashTag({ taglist, defalutList, editable, callBack }: Props) {
           className={S.hashTag}
           whitelist={taglist}
           settings={{ dropdown: { enabled: 0 } }}
-          defaultValue={defalutList}
+          defaultValue={defaultList}
           userInput={false}
           readOnly
         ></Tags>

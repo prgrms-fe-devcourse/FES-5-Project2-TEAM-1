@@ -1,58 +1,90 @@
 .container{
-  margin-left: 20px;
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.inputProfile{
+  display: flex;
 }
 
 
-.writerBox{
+.replyProfile{
+  display: flex;
+}
+.profileWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileImage img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.contentBox {
+width: 88%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-content: space-between;
+}
+
+.meta {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  
+  align-items: flex-end;
+  font-size: 0.9rem;
+  color: #222;
 
-    input[type="text"]{
-    border: 0;
-    border-bottom:1px solid rgba(85, 85, 85, 0.3);
-    outline: none;
-    width: 85%;
-
-    &:focus{
-    border-bottom:1px solid rgba(85, 85, 85, 0.7);
-    }
-    
-    &::placeholder{
-      padding-top: 4px;
-      }
-    
+  .time{
+    font-size: 12px;
+    color:rgba(85, 85, 85, 0.5)
   }
 
-    .commentBtn{
-      border-radius: 4px;
-      color:#fff;
-      display: flex;
-      justify-content: center;
-      align-items:center;
-      padding: 10px 15px;
-      height: 18px;
-      background-color: #b99470
-    }
+  .edit{
+    display: flex;
+    gap: 4px;
 
-  .profile{
+    >button{
+      font-size: 12px;
+color:rgba(85, 85, 85, 0.5)
+    }
+    
+  }
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 8px;
   font-size: 16px;
+}
+
+.text {
+  margin: 4px 0;
+}
+
+.actions {
   display: flex;
-  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.likeBtn{
+  display: flex;
   gap: 4px;
-
-  img{
-    width: 36px;
-    height: 36px;
-  }
-}
-}
-
-
-.recomments{
-  display: flex;
   align-items: center;
-  gap: 16px;
-  font-size: 16px;
+}
+
+.recomment{
+  display: flex;
+  gap: 4px;
+  align-items: center;
 }

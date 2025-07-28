@@ -1,0 +1,39 @@
+.container{
+  height: 160px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.cardInner{
+  padding: 28px 15px;
+  display: flex;
+
+  img{
+    width: 220px;
+    height: 140px;
+  }
+
+  .iconList{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+
+}
+
+.list{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+
+  .icon > img{
+    width: 20px;
+    height: 16px;
+  }
+}

@@ -1,19 +1,22 @@
-import S from "../BoardForm.module.css";
-import mark from "./markdown.module.css";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import MarkDownConvert from "@/components/MarkDownConvert";
+import BoardOptionPreview from "./BoardOptionPreview";
+import S from "./BoardPreview.module.css";
+import { useBoardContext } from "@/components/context/useBoardContext";
+import { useEffect, useState } from "react";
 
-interface Props {
-  markdown: string;
-}
-function BoardPreview({ markdown }: Props) {
+function BoardPreview() {
+  const [markdown, setMarkDown] = useState("");
+  const { postData } = useBoardContext();
+  useEffect(() => {
+    if (postData) {
+      setMarkDown(postData.contents ?? "");
+    }
+  }, [postData]);
   return (
-    <div className={`${S.boardPreview} ${mark.markdown}`}>
-      {markdown === "" ? (
-        <p className={S.boardPreviewDefaultText}>Preview</p>
-      ) : (
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
-      )}
+    <div className={S.boardPreview}>
+      <BoardOptionPreview />
+      <hr />
+      <MarkDownConvert markdown={markdown} addClass={S.boardMarkDown} />
     </div>
   );
 }

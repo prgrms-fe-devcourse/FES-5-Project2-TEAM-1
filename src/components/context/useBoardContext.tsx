@@ -1,15 +1,29 @@
-import { createContext, useContext } from "react";
-import type { Tables } from "../../supabase/database.types";
+import { createContext, useContext, useState } from "react";
 
-type boardType = Omit<Tables<"board">, "board_id" | "create_at" | "likes">;
+type boardType = {
+  title: string;
+  contents: string;
+};
 
 interface BoardDataType {
-  boardData: boardType | null;
-  setBoardData: React.Dispatch<React.SetStateAction<boardType | null>>;
+  postData: boardType | null;
+  setPostData: React.Dispatch<React.SetStateAction<boardType>>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const BoardContext = createContext<BoardDataType | null>(null);
 
+export function BoardProvider({ children }: { children: React.ReactNode }) {
+  const [postData, setPostData] = useState({ title: "", contents: "" });
+
+  return (
+    <BoardContext.Provider value={{ postData, setPostData }}>
+      {children}
+    </BoardContext.Provider>
+  );
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
 export function useBoardContext() {
   const ctx = useContext(BoardContext);
   if (!ctx)
