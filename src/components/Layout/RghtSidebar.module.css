@@ -4,13 +4,15 @@
   background-color: #FFC0CB;
   flex-shrink: 0;
   justify-content: space-between;
-  box-shadow: -3px 0px 4px rgba(0, 0, 0, 0.25);
+
 }
 
 .height{
   height: 100vh;
   position: fixed;
   top: 0;
+  right: 0;
+  box-shadow: -3px 0px 4px rgba(0, 0, 0, 0.25);
 }
 
 .loginBox{
