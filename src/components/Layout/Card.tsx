@@ -16,6 +16,7 @@ type Props = {
 }
 
 function Card({card,tag}:Props) {
+  if (!card) return null;
   const {address,contents,due_date,title,likes,board_id,join_cls,member,profile_id} = card
 
    

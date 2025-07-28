@@ -213,7 +213,7 @@ export type Database = {
           },
         ]
       }
-      commnet_reply: {
+      comment_reply: {
         Row: {
           comment_id: string
           contents: string
@@ -240,14 +240,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "commnet_reply_comment_id_fkey"
+            foreignKeyName: "comment_reply_comment_id_fkey"
             columns: ["comment_id"]
             isOneToOne: false
             referencedRelation: "comment"
             referencedColumns: ["comment_id"]
           },
           {
-            foreignKeyName: "commnet_reply_profile_id_fkey"
+            foreignKeyName: "comment_reply_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
