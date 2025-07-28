@@ -10,8 +10,7 @@
 .markdown h1 {
   font-size: 2em;
   font-weight: 700;
-  margin-top: 1.2em;
-  margin-bottom: 0.5em;
+
   border-bottom: 2px solid #eaecef;
   padding-bottom: 0.3em;
 }
@@ -19,8 +18,6 @@
 .markdown h2 {
   font-size: 1.5em;
   font-weight: 600;
-  margin-top: 1.2em;
-  margin-bottom: 0.5em;
   border-bottom: 1px solid #eaecef;
   padding-bottom: 0.2em;
 }
@@ -28,8 +25,6 @@
 .markdown h3 {
   font-size: 1.2em;
   font-weight: 600;
-  margin-top: 1em;
-  margin-bottom: 0.3em;
 }
 
 /* 텍스트 스타일 */
@@ -119,4 +114,10 @@
 .markdown th {
   background-color: #f6f8fa;
   font-weight: bold;
+}
+.boardPreviewDefaultText {
+  display: flex;
+  justify-content: center;
+  font-size: 36px;
+  color: #555555;
 }

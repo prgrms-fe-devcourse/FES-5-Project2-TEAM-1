@@ -20,7 +20,6 @@ createRoot(document.getElementById("root")!).render(
         </AuthProvider>
       </BrowserRouter>
     </ToastProvider>
-   
   </StrictMode>
 );
 

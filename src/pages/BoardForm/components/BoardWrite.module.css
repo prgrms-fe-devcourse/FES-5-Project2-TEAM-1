@@ -1,0 +1,21 @@
+.boardWriteForm {
+  width: 100%;
+
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  textarea {
+    width: 95%;
+    height: 540px;
+    background-color: #f5f5f5;
+    padding-top: 10px;
+    border: none;
+    border-radius: 8px;
+    box-sizing: border-box;
+    resize: none;
+  }
+  textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
