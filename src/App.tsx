@@ -44,7 +44,7 @@ function App() {
               <Route path="memberchannel" element={<StudyMemberChannel />} />
               <Route path="thread" element={<Thread />} />
             </Route>
-            <Route path="/mypage" element={<Mypage />} />
+            <Route path="/mypage/:id" element={<Mypage />} />
           </Routes>
           {!isAuthPage && <Footer />}
         </div>
