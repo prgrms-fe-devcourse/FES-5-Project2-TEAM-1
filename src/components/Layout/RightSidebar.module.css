@@ -17,9 +17,10 @@
   margin-top: 28px;
   width: 220px;
   justify-content: center;
+  align-items: center;
   padding-right: 24px;
   padding-left: 24px;
-  gap: 8px;
+  gap: 12px;
   position: relative;
  
 
@@ -40,7 +41,7 @@
 
 
     p{
-      font-size: 12px;
+      font-size: 10px;
       color: rgba(0, 0, 0, 0.5);
 
     }
@@ -57,7 +58,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    padding-left: 30px;
+    /* padding-left: 10px; */
 
     > svg{
       transition:0.3s;
@@ -99,7 +100,7 @@
   gap: 16px;
 
   li{
-    font-size: 12px;
+    font-size: 10px;
     padding-left: 20px;
   }
 
@@ -112,7 +113,7 @@
       display:flex;
        padding: 4px;
        padding-left: 12px;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
    
     }
@@ -185,4 +186,8 @@
       }
     }
   }
+}
+
+.linkButton{
+  margin-bottom:5px;
 }
