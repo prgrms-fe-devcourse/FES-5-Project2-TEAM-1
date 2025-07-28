@@ -1,6 +1,6 @@
-import Approve from './components/approve'
-import MangementChannel from './components/ManagementChannel'
-import ManagementMembers from './components/ManagementMembers'
+import Approve from './Approve'
+import MangementChannel from './ManagementChannel'
+import ManagementMembers from './ManagementMembers'
 import S from './Management.module.css'
 
 function Management() {
