@@ -27,7 +27,6 @@ export type User = Tables<'user_base'> & {
 function Mypage() {
   const [userData, setUserData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
   const [profileId, setProfileId] = useState('');
   const {user:currentUser}  = useAuth();
   const {id:urlProfileId} = useParams();
@@ -40,14 +39,13 @@ function Mypage() {
         .from("user_profile")
         .select("profile_id")
         .eq("user_id", currentUser.id)
-        .single(); // 싱글이어도 객체를 반환한다는거 잊지않기...☆
+        .single(); 
       if (error || !data) {
         console.error("user_base 조회 실패", error);
         return;
       }
-      // 여기서 setter에 바로 data를 넣어주니까 계속 데이터가 안불러와졌던거임.. ㅋ
       const {profile_id} = data;
-      console.log(profile_id);
+      // console.log(profile_id);
       setProfileId(profile_id);
     }
     fetchUserProfile();
@@ -77,24 +75,23 @@ function Mypage() {
     }
     fetchUser();
   }, [ ])
+
   const handleEditUserPage = () => {
     setEditMode( prev => !prev );
   }
-  const handleSave = async () => {
-    setEditMode( false );
+
+  if (!userData) {
+    return <p>유저 데이터를 불러오는 중입니다...</p>;
   }
-//   const handleDeleteUser = () => {
-//     //
-//   }
+
   return (
     <div className={S.container}>
       
         <div className={S.wrapper}>
             <h1 className={S.mypage}>마이 페이지</h1>
             <button type='button' className={S.editBtn} onClick={handleEditUserPage}>
-              {editMode ? '취소' : <img src='/icons/edit.svg' alt='수정 버튼' />}
+              {editMode ? '완료' : <img src='/icons/edit.svg' alt='수정 버튼' />}
             </button>
-            {/* <TestGetUser/> */}
             <MypageProfile
               user={userData}
               editMode={editMode}
@@ -104,8 +101,6 @@ function Mypage() {
               user={userData}
               editMode={editMode}
               setUserData={setUserData}
-              showEdit={showEdit}
-              setShowEdit={setShowEdit}
             />
             <MypageDetails
               user={userData}
@@ -130,7 +125,6 @@ function Mypage() {
             }
             <MoveToTop/>
 
-            { editMode && <button type="submit" onClick={handleSave}>완료</button>}
         </div>
     </div>
   )

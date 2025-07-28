@@ -1,4 +1,4 @@
-import S from './Rightsidebar.module.css'
+import S from './RghtSidebar.module.css'
 import '../../style/reset.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthProvider';
@@ -25,7 +25,7 @@ function RightSidebar() {
         return;
       }
       const {profile_id} = data;
-      console.log(profile_id);
+      // console.log(profile_id);
       setProfileId(profile_id);
     }
     fetchUserProfile();

@@ -273,6 +273,24 @@ export type Database = {
         }
         Relationships: []
       }
+      debug_log: {
+        Row: {
+          id: number
+          message: string | null
+          time: string | null
+        }
+        Insert: {
+          id?: number
+          message?: string | null
+          time?: string | null
+        }
+        Update: {
+          id?: number
+          message?: string | null
+          time?: string | null
+        }
+        Relationships: []
+      }
       news_cards: {
         Row: {
           description: string
@@ -500,12 +518,18 @@ export type Database = {
           nickname: string | null
           recent_at: string | null
           role: string | null
+          nickname: string | null
+          recent_at: string | null
+          role: string | null
           status: Database["public"]["Enums"]["status"]
         }
         Insert: {
           create_at?: string
           id?: string
           name: string
+          nickname?: string | null
+          recent_at?: string | null
+          role?: string | null
           nickname?: string | null
           recent_at?: string | null
           role?: string | null
@@ -551,6 +575,7 @@ export type Database = {
       user_profile: {
         Row: {
           address: string | null
+          address: string | null
           age: number
           background_images: string
           email: string
@@ -559,19 +584,25 @@ export type Database = {
           profile_images: string
           user_id: string
           visibility: Json
+          visibility: Json
         }
         Insert: {
           address?: string | null
+          address?: string | null
           age?: number
+          background_images?: string
           background_images?: string
           email: string
           gender: string
           profile_id?: string
           profile_images?: string
+          profile_images?: string
           user_id?: string
+          visibility?: Json
           visibility?: Json
         }
         Update: {
+          address?: string | null
           address?: string | null
           age?: number
           background_images?: string
@@ -580,6 +611,7 @@ export type Database = {
           profile_id?: string
           profile_images?: string
           user_id?: string
+          visibility?: Json
           visibility?: Json
         }
         Relationships: [

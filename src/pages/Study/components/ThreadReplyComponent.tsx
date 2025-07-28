@@ -1,64 +1,69 @@
-import type { Tables } from '@/supabase/database.types'
-import S from './Recomment.module.css'
-import { commentTime } from './utills/commentTime'
-import { useEffect, useState } from 'react'
-import supabase from '@/supabase/supabase'
+import { useEffect, useState } from 'react';
+import S from './ThreadReplyComponent.module.css'
+import type { Tables } from '@/supabase/database.types';
+import { commentTime } from './utills/commentTime';
+import supabase from '@/supabase/supabase';
 
-type Props = {
-  reply: Tables<'comment_reply'>
-  onDelete:() =>void
+
+type ThreadReply = Tables<'thread_reply'>
+interface Prop{
+  reply: ThreadReply,
+  onDelete:()=>void
 }
-function Recomment({ reply,onDelete }: Props) {
-  const { reply_id, contents , created_at,likes } = reply
-  const [isPress, setIsPress] = useState(false)
-  const [like, setLike] = useState(likes)
-  const [isEditing,setIsEditing] = useState(false)
-  const [editReply,setEditReply] = useState(contents)
-  const [content,setContent] = useState(contents)
-   useEffect(() => {
-     const storedPress = JSON.parse(
-       localStorage.getItem(`like-${reply_id}`) ?? "false"
-     );
-     setIsPress(storedPress);
-   }, [reply_id]);
+
+function ThreadReplyComponent({reply,onDelete}:Prop) {
+
+  const { created_at, contents, likes, reply_id } = reply
   
-  const handleLikeToggle = async (reply_id: string) => {
-   const pressState = isPress ? like - 1 : like + 1;
-   const nextState = !isPress;
 
-   setLike(pressState);
-   setIsPress(nextState);
-   localStorage.setItem(`like-${reply_id}`, JSON.stringify(nextState));
-
-   const { error } = await supabase
-     .from("comment_reply")
-     .update({ likes: pressState })
-     .eq("reply_id", reply_id)
-     .select()
-     .single();
-   if (error) console.error();
-  };
- 
+  const [isEditing, setIsEditing] = useState(false)
+  const [editReply, setEditReply] = useState(contents)
+  const [content,setContent] =useState(contents)
+  const [isPress, setIsPress] = useState(false)
+  const [like,setLike] = useState<number>(likes ?? 0)
   const commentTimeCheck = commentTime(created_at)
 
+  useEffect(() => {
+    const storedPress = JSON.parse(localStorage.getItem(`like-${reply_id}`) ?? 'false') 
+    setIsPress(storedPress)
+  },[reply_id])
+
+  const handleLikeToggle = async () => {
+    
+    const pressState = isPress ? like - 1 : like + 1
+    const nextState = !isPress
+    setLike(pressState)
+    setIsPress(nextState)
+    localStorage.setItem(`like-${reply_id}`, JSON.stringify(nextState));
+
+    const { error } = await supabase.from('thread_reply').update({
+      likes: pressState
+    }).eq('reply_id', reply_id).select().single()
+    if(error) console.log(error.message)
+  };  
+  
+
   const handleSave = async() => {
-    const { error } = await supabase.from('comment_reply').update({ contents: editReply }).eq('reply_id', reply_id)
+    const { error } = await supabase.from('thread_reply').update({
+      contents:editReply
+    }).eq('reply_id', reply_id)
     setIsEditing(!isEditing)
     setContent(editReply)
-    if(error) console.log(error.message)
+    if(error) console.log(error.message) 
   }
-
-  const handleDelete = async () => {
-    const checkDelete = confirm('정말로 삭제하시겠습니까?')
-    if (checkDelete) {
+  
+  const handleDelete = async() => {
+       const deleteComment = confirm("정말로 삭제하시겠습니까?");
+       if (deleteComment) {
          const { error } = await supabase
-           .from("comment_reply")
+           .from("thread_reply")
            .delete()
            .eq("reply_id", reply_id);
-         if (error) console.error();
-         onDelete?.();
-    }
+          if(error) console.log(error.message)
+         if (!error) onDelete?.();
+       }
   }
+  
     const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
@@ -67,8 +72,9 @@ function Recomment({ reply,onDelete }: Props) {
       }
     };
 
+  
   return (
-    <div className={S.container} key={reply_id}>
+    <div className={S.container}>
       <div className={S.profileImage}>
         <img src="/images/여울.png" alt="프로필" />
       </div>
@@ -109,7 +115,7 @@ function Recomment({ reply,onDelete }: Props) {
        
         <div className={S.actions}>
           <div className={S.likeBtn}>
-            <button type="button" onClick={() => handleLikeToggle(reply_id)}>
+            <button type="button" onClick={handleLikeToggle}>
               {isPress ? (
                 <img src="/icons/likeActive.png" alt="좋아요 활성화" />
               ) : (
@@ -123,4 +129,4 @@ function Recomment({ reply,onDelete }: Props) {
     </div>
   );
 }
-export default Recomment
+export default ThreadReplyComponent
