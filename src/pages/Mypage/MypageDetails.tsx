@@ -286,7 +286,7 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
             </ul>
         )
         }
-        { editMode && (
+        { editMode ? (
             showEdit ? (
                 <div className={E.editDetailSaveClose}>
                     <button onClick={handleSaveDetail}>저장</button>
@@ -303,7 +303,9 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
                 </button>
             </div>
             )
-        )}
+        )
+        : <div className={S.mypageDetailEdit}></div>
+        }
     </div>
   )
 }
