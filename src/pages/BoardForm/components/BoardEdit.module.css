@@ -1,0 +1,12 @@
+.boardEdit {
+  width: 678px;
+  border: 1px solid #b99470;
+  border-radius: 8px;
+  hr {
+    width: 95%;
+    border: none;
+    border-top: 2px solid #ccc;
+    margin: 0 auto;
+    margin-bottom: 28px;
+  }
+}
