@@ -19,6 +19,7 @@ interface Props{
   card: CardProps
 }
 
+
 function Card({ card }:Props) {
   const {
     address,
