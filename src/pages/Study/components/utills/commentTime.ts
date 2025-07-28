@@ -1,6 +1,6 @@
 export function commentTime(dateString: string): string {
   const now = new Date(Date.now())
-  const created = new Date(dateString );
+  const created = new Date(dateString);
   const diff = (now.getTime() - created.getTime()) / 1000; 
 
   const minutes = Math.floor(diff / 60);
