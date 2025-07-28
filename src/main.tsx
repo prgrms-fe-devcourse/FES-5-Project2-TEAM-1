@@ -12,12 +12,14 @@ import ToastProvider from './components/ToastProvider.tsx';
 import { AuthProvider } from './auth/AuthProvider.tsx'
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode> 
+  <StrictMode>
+    <ToastProvider>
       <BrowserRouter>
         <AuthProvider>
           <App />
         </AuthProvider>
       </BrowserRouter>
+    </ToastProvider>
   </StrictMode>
 );
 
