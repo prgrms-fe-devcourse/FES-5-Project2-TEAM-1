@@ -1,7 +1,20 @@
-import S from './rightsidebar.module.css'
+import S from './Rightsidebar.module.css'
 import '../../style/reset.css'
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/auth/AuthProvider';
+
 
 function RightSidebar() {
+
+  const {user, logout} = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    await logout()
+    navigate('/')
+  }
+
+
   return (
     <nav className={S.container}>
       <div className={S.height}>
@@ -9,10 +22,12 @@ function RightSidebar() {
           <div className={S.profileImage}></div>
           <div className={S.loginBoxGreeting}>
             <p>Hello🖐️</p>
-            <h3>UserName</h3>
+            <h3>{user ? user.email.split('@')[0] : 'Guest'}</h3>
           </div>
           <div className={S.loginLogout}>
-            <svg
+            {user ? (
+              <button onClick={handleLogout}>
+                <svg
               width="24"
               height="22"
               viewBox="0 0 20 19"
@@ -24,7 +39,14 @@ function RightSidebar() {
                 fill="#222222"
               />
             </svg>
-            <p>Logout</p>
+            {<p>Logout</p>}
+              </button>
+            ) : (
+              <>
+                <Link to="/login"  className={S.linkButton}>로그인</Link>
+                <Link to="/register"  className={S.linkButton}>회원가입</Link>
+              </>
+            )}
           </div>
         </div>
 

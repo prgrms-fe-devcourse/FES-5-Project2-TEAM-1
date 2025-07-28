@@ -1,21 +1,40 @@
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import S from "./StudyJoinInfomation.module.css";
 import type { Tables } from "@/supabase/database.types";
 import Project from "./components/Project";
 import ChannelComment from "./components/ChannelComment";
+import { useEffect, useState } from "react";
+import supabase from "@/supabase/supabase";
+
+
+type Board = Tables<"board">;
+type CardProps = Board & 
+{
+  board_tag: Tables<"board_tag">[];
+};
 
 function StudyJoinInfomation() {
-  const location = useLocation();
-  const card = location.state?.card;
+  const { id } = useParams()
+  const [card, setCard] = useState<CardProps|null>(null)
+  
+  useEffect(() => {
+    if (!id) throw new Error('id가없습니다')  
+    const fetchData = async () => {
+      const { data, error } = await supabase.from('board').select('*,board_tag(*)').eq('board_id', id).single()
+      if(error) throw new Error('데이터가 들어오지않아요')
+      setCard(data as CardProps)
+    }
+      fetchData()
+  },[id])
 
-  if (!card) throw new Error("데이터가 들어오지 않습니다");
-  const { images, title, address, member, board_tag, contents} = card;
+  if(!card) return 
+  const { images, title, address, member, board_tag, contents} = card
  
   return (
     <main className={S.container}>
       <div className={S.layout}>
         <div className={S.channelInfoBox}>
-          <img src={images} alt="스터디 이미지" />
+          {images && <img src={images} alt="스터디 이미지" />}
           <div className={S.textInfo}>
             <div className={S.title}>
               <h2>{title}</h2>
@@ -90,7 +109,7 @@ function StudyJoinInfomation() {
           <Project />
         </section>
         <section>
-          <ChannelComment {...card}/>
+          <ChannelComment {...card} />
         </section>
       </div>
     </main>

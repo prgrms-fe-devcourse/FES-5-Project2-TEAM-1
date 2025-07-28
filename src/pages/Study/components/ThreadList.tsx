@@ -1,56 +1,236 @@
+import type { Tables } from '@/supabase/database.types';
 import S from './ThreadList.module.css'
+import { commentTime } from './utills/commentTime';
+import { useEffect, useState } from 'react';
+import supabase from '@/supabase/supabase';
+import ThreadReplyComponent from './ThreadReplyComponent';
 
-function ThreadList() {
+
+type Thread = Tables<"thread">;
+type ThreadReply = Tables<'thread_reply'>
+interface Props{
+  data: Thread,
+  onDelete : () => void
+}
+
+function ThreadList({ data,onDelete }: Props) {
+
+  const { contents, likes, create_at,thread_id,profile_id} = data
+  const [isPress,setIsPress] = useState(false)
+  const [like, setLike] = useState(likes)
+  const [isEditing, setIsEditing] = useState(false)
+  const [isReplyPress, setIsReplyPress] = useState(false)
+  const [content, setContent] = useState(contents)
+  const [editContent,setEditContent] = useState(contents)
+  const [createReply, setCreateReply] = useState<string>('')
+  const [reply,setReply] = useState<ThreadReply[]>([])
+  const timeStamp = commentTime(create_at)
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from("thread_reply")
+        .select("*")
+        .eq("thread_id", thread_id);
+      if (error) console.log(error.message);
+      if(data) setReply(data);
+    }
+    fetchData()
+  },[thread_id])
+
+  const handleLike = async() => {
+    const likeState = isPress ? like - 1 : like + 1
+    const nextState = !isPress
+
+    setLike(likeState)
+    setIsPress(nextState)
+    localStorage.setItem(`like-${data.thread_id}`, JSON.stringify(nextState))
+    
+    const { error } = await supabase.from('thread_reply').update({
+      likes:likeState
+    }).eq('thread_id', thread_id).select().single()
+    
+    if(error) console.log(error.message)
+  }
+
+  const handleSave = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent) => {
+      if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+    }
+    
+      if (!editContent.trim()) return;
+
+    const { error } = await supabase.from('thread').update({
+      contents:editContent
+    }).eq('thread_id',thread_id)
+    setContent(editContent)
+    setIsEditing(!isEditing)
+     if (error) console.error();
+  }
+
+
+  const handleReplyDelete = (targetId: string) => {
+    setReply(reply.filter((item) => item.reply_id !== targetId));
+  };
+
+  const handleReply = () => {
+    setIsReplyPress(!isReplyPress)
+  }
+
+  const handleDelete = async () => {
+    const deleteComment = confirm("정말로 삭제하시겠습니까?");
+    if (deleteComment) {
+      const { error } = await supabase
+        .from("thread")
+        .delete()
+        .eq("thread_id", thread_id);
+      if (error) {
+        console.error("삭제 실패:", error.message);
+      }
+
+      if (error) console.error();
+      if (!error) onDelete?.();
+    }
+  };
+
+  const handleSubmitReply = async (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault()
+      if (!createReply.trim()) return;
+
+    const { error } = await supabase.from('thread_reply').insert([{
+      thread_id,
+      profile_id,
+      contents: createReply,
+      likes: 0,
+      created_at: new Date()
+    }])
+    if (error) console.log(error.message)
+    setCreateReply("");
+    
+    const { data:threadData } = await supabase.from('thread_reply').select('*').eq('thread_id',thread_id)
+    if(threadData) setReply(threadData)
+      
+  }; 
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (!createReply.trim()) return;
+      handleSubmitReply();
+    }
+  };
+
+  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    
+    if (e.key === "Enter" && !e.shiftKey) {
+       e.preventDefault();
+      if (!editContent.trim()) return;
+      handleSave(e)
+    }
+  };
+
+  const recentlyReply = [...reply].sort((a, b) => (
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  ))
+
   return (
     <li className={S.listContainer}>
       <div className={S.writerBox}>
-        <div className={S.profile}>
-          <img src="/images/너굴.png" alt="" />
-          <p>이름</p>
+        <div className={S.meta}>
+          <div className={S.profile}>
+            <img src="/images/너굴.png" alt="" />
+            <p>이름</p>
+          </div>
+          <div className={S.timeStamp}>{timeStamp}</div>
+        </div>
+        <div className={S.edit}>
+          {isEditing ? (
+            <>
+              <button type="submit" onClick={handleSave}>
+                저장
+              </button>
+              <button type="button" onClick={() => setIsEditing(!isEditing)}>
+                취소
+              </button>
+            </>
+          ) : (
+            <button type="button" onClick={() => setIsEditing(!isEditing)}>
+              수정
+            </button>
+          )}
+          <button type="submit" onClick={handleDelete}>
+            삭제
+          </button>
         </div>
       </div>
+
       <div className={S.content}>
         <div className={S.partition}></div>
-        <p>너무 더워요 살려주세요</p>
+        <div className={S.textContainer}>
+          {isEditing ? (
+            <input
+              className={S.editContent}
+              type="text"
+              value={editContent}
+              onKeyDown={handleEditKeyDown}
+              onChange={(e) => setEditContent(e.target.value)}
+              autoFocus
+            />
+          ) : (
+            <p>{content}</p>
+          )}
+        </div>
       </div>
       <div className={S.iconWrap}>
-        <button type="button" className={S.like}>
-          <svg
-            width="18"
-            height="17"
-            viewBox="0 0 18 17"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <mask id="path-1-inside-1_464_3057" fill="white">
-              <path d="M1.99234 1.58108C3.87656 -0.527097 6.93127 -0.526955 8.81558 1.58108L8.98745 1.77444L9.32144 1.43557C11.3137 -0.592105 14.3818 -0.44788 16.175 1.75784C17.9679 3.96356 17.8068 7.39525 15.8146 9.42287L11.839 13.4678L8.81558 16.8516L1.99234 9.21682C0.108023 7.10843 0.108023 3.68947 1.99234 1.58108Z" />
-            </mask>
-            <path
-              d="M1.99234 1.58108L1.76866 1.38116L1.76865 1.38117L1.99234 1.58108ZM8.81558 1.58108L9.0398 1.38177L9.03925 1.38115L8.81558 1.58108ZM8.98745 1.77444L8.76323 1.97375L8.97615 2.21328L9.20112 1.98502L8.98745 1.77444ZM9.32144 1.43557L9.5351 1.64616L9.53543 1.64582L9.32144 1.43557ZM16.175 1.75784L16.4077 1.5686L16.4077 1.5686L16.175 1.75784ZM15.8146 9.42287L16.0286 9.63317L16.0286 9.63313L15.8146 9.42287ZM11.839 13.4678L11.6251 13.2575L11.6201 13.2626L11.6153 13.2679L11.839 13.4678ZM8.81558 16.8516L8.59189 17.0515L8.8156 17.3018L9.03929 17.0515L8.81558 16.8516ZM1.99234 9.21682L2.21602 9.01691L2.21602 9.01691L1.99234 9.21682ZM1.99234 1.58108L2.21602 1.781C3.98096 -0.193723 6.82686 -0.193612 8.59191 1.78101L8.81558 1.58108L9.03925 1.38115C7.03569 -0.860297 3.77216 -0.860472 1.76866 1.38116L1.99234 1.58108ZM8.81558 1.58108L8.59136 1.78039L8.76323 1.97375L8.98745 1.77444L9.21168 1.57513L9.0398 1.38177L8.81558 1.58108ZM8.98745 1.77444L9.20112 1.98502L9.5351 1.64616L9.32144 1.43557L9.10777 1.22498L8.77379 1.56385L8.98745 1.77444ZM9.32144 1.43557L9.53543 1.64582C11.4023 -0.254233 14.2619 -0.1198 15.9422 1.94708L16.175 1.75784L16.4077 1.5686C14.5017 -0.77596 11.2251 -0.929978 9.10744 1.22532L9.32144 1.43557ZM16.175 1.75784L15.9422 1.94707C17.6388 4.03428 17.4857 7.29397 15.6006 9.21262L15.8146 9.42287L16.0286 9.63313C18.1279 7.49652 18.2971 3.89283 16.4077 1.5686L16.175 1.75784ZM15.8146 9.42287L15.6006 9.21258L11.6251 13.2575L11.839 13.4678L12.053 13.6781L16.0286 9.63317L15.8146 9.42287ZM11.839 13.4678L11.6153 13.2679L8.59187 16.6517L8.81558 16.8516L9.03929 17.0515L12.0627 13.6677L11.839 13.4678ZM8.81558 16.8516L9.03927 16.6517L2.21602 9.01691L1.99234 9.21682L1.76865 9.41673L8.59189 17.0515L8.81558 16.8516ZM1.99234 9.21682L2.21602 9.01691C0.433462 7.02237 0.433462 3.77553 2.21602 1.78099L1.99234 1.58108L1.76865 1.38117C-0.217415 3.60341 -0.217415 7.19449 1.76865 9.41673L1.99234 9.21682Z"
-              fill="#222222"
-              mask="url(#path-1-inside-1_464_3057)"
-            />
-          </svg>
-          3
-        </button>
-        <button type="button" className={S.comment}>
-          <svg
-            width="19"
-            height="17"
-            viewBox="0 0 19 17"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1.91309 0.75H16.3135C16.6911 0.750038 17.0152 0.860365 17.2949 1.08301L17.4121 1.18555C17.7167 1.47706 17.8632 1.81739 17.8633 2.21973V15.6133C17.8633 15.7659 17.8277 15.8786 17.7695 15.9639C17.7255 16.0282 17.6612 16.0883 17.5693 16.1396L17.4678 16.1885C17.3196 16.2492 17.1951 16.2611 17.0879 16.2412C16.9808 16.2213 16.8699 16.1656 16.7559 16.0566L14.6855 14.0781L14.6133 14.0088H1.91309C1.48135 14.0087 1.12024 13.8645 0.81543 13.5732C0.510291 13.2816 0.363281 12.9413 0.363281 12.5391V2.21973C0.363324 1.81751 0.510277 1.47712 0.81543 1.18555C1.12021 0.894382 1.48141 0.750043 1.91309 0.75Z"
-              stroke="#555555"
-              stroke-opacity="0.7"
-              stroke-width="0.5"
-            />
-          </svg>
-          10
-        </button>
+        <div className={S.likeBtn}>
+          <button type="button" className={S.like} onClick={handleLike}>
+            {isPress ? (
+              <img src="/icons/likeActive.png" alt="좋아요 활성화" />
+            ) : (
+              <img src="/icons/like.svg" alt="" />
+            )}
+            {like}
+          </button>
+        </div>
+        <div className={S.reply} onClick={handleReply}>
+          <button type="button" className={S.comment}>
+            ↪ Reply
+          </button>
+          <span>{reply.length}</span>
+        </div>
       </div>
+      {isReplyPress && (
+        <div>
+          <form
+            className={S.replyInputBox}
+            onSubmit={handleSubmitReply}
+          >
+            <textarea
+              className={S.replyInput}
+              value={createReply}
+              placeholder="답글을 입력하세요"
+              onKeyDown={handleKeyDown}
+              onChange={(e) => setCreateReply(e.target.value)}
+            ></textarea>
+            <button type="submit" className={S.replyButton}>
+              등록
+            </button>
+          </form>
+
+          {recentlyReply &&
+            recentlyReply.map((comment) => (
+              <ThreadReplyComponent
+                reply={comment}
+                key={comment.reply_id}
+                onDelete={() => {
+                  handleReplyDelete(comment.reply_id);
+                }}
+              />
+            ))}
+        </div>
+      )}
     </li>
   );
 }

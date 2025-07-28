@@ -29,8 +29,10 @@ function ChannelComment(card:Props) {
     textareaRef.current?.focus();
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+     
+    if (writeComment.trim() === '') return;
  
     const { error } = await supabase.from("comment").insert([
       {
@@ -52,13 +54,25 @@ function ChannelComment(card:Props) {
     const { data: commentData } = await supabase
       .from("comment")
       .select("*")
-      .eq("board_id", board_id);
+      .eq("board_id", board_id)
 
     if (commentData) setComments(commentData);
   };
+
   const handleDeleteComment = (targetId: string) => {
     setComments(prev =>prev.filter(c => c.comment_id !== targetId))
   }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+if (e.key === "Enter" && !e.shiftKey) {
+  e.preventDefault(); // 줄바꿈 방지만
+  const form = e.currentTarget.form;
+  if (form) {
+    form.requestSubmit(); 
+  }
+}
+  };
+
   const matchComment = comments.filter(comment => comment.board_id === board_id).sort((a,b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
 
   return (
@@ -66,12 +80,11 @@ function ChannelComment(card:Props) {
       <div className={S.inputScreen} onClick={handleClickInputBox}>
         <form onSubmit={handleSubmit}>
           <textarea
-            name=""
-            id=""
             ref={textareaRef}
             value={writeComment}
             placeholder="댓글을 적어주세요"
-            onChange={(e)=>setWriteComment(e.target.value)}
+            onChange={(e) => setWriteComment(e.target.value)}
+            onKeyDown={handleKeyDown}
           ></textarea>
           <button type="submit" className={S.commentBtn}>
             댓글

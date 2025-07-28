@@ -19,7 +19,7 @@ function StudyChannel() {
   const cardPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1)
   const [cardData, setCardData] = useState<CardProps[]>([])
-  const filterTab = ["최신순", "좋아요순", "모집마감순"]
+  const filterTab = ["최신순", "좋아요순"]
   const filterRef = useRef<(HTMLButtonElement|null)[]>([])
 
   useEffect(() => {
@@ -48,9 +48,6 @@ function StudyChannel() {
     } else if (e.currentTarget === filterRef.current[1]) {
       const sorted = [...cardData].sort((a, b) => b.likes - a.likes)
       setCardData(sorted)
-    } else if (e.currentTarget === filterRef.current[2]) {
-      const sorted = [...cardData].sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime())
-      setCardData(sorted)
     }
   }
 
@@ -60,7 +57,7 @@ function StudyChannel() {
       (card) =>
         card.title.toLowerCase().includes(lowerValue) ||
         card.contents.toLowerCase().includes(lowerValue) ||
-        card.address.toLowerCase().includes(lowerValue)
+        card.address?.toLowerCase().includes(lowerValue)
     );
     setCardData(filtered)
     setCurrentPage(1)

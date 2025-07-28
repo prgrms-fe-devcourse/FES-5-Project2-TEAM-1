@@ -1,0 +1,120 @@
+.popup {
+  width: 940px;
+  height: 710px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  z-index: 50;
+}
+
+.searchBar {
+  width: 880px;
+  height: 48px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid black;
+  img {
+    width: 24px;
+    height: 24px;
+  }
+  input {
+    width: 100%;
+    height: 24px;
+    background-color: #fff;
+    border: none;
+  }
+  input:focus {
+    outline: none !important;
+  }
+}
+.contents {
+  display: flex;
+  gap: 32px;
+}
+.mapList {
+  width: 250px;
+  height: 510px;
+  border: 0.5px solid #555555;
+  border-radius: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  ul {
+    padding-top: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    li {
+      width: 220px;
+      height: 58px;
+      margin-left: 10px;
+      border: 1px solid #555555;
+      border-radius: 8px;
+      a {
+        height: 58px;
+        div {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          p {
+            padding-top: 2px;
+            margin-left: 4px;
+          }
+        }
+      }
+    }
+    li:hover {
+      background-color: #f5f5f5;
+    }
+  }
+}
+.address {
+  font-size: 16px;
+  font-weight: 700;
+}
+.addressDetail {
+  font-weight: 500;
+  font-size: 12px;
+}
+.mapView {
+  width: 630px;
+  height: 570px;
+  border: 0.2px solid #555555;
+  border-radius: 8px;
+}
+.rightSide {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  button {
+    width: 250px;
+    height: 50px;
+    border-radius: 8px;
+    background-color: #a6b37d;
+    font-weight: 600;
+    font-size: 16px;
+    color: #555555;
+    img {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+    }
+  }
+}
+.closeButton {
+  position: absolute;
+  right: 0%;
+  top: 0%;
+  translate: 80% -80%;
+}
