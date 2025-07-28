@@ -1,68 +1,49 @@
+import { useParams } from "react-router-dom";
+import S from "./StudyJoinInfomation.module.css";
+import type { Tables } from "@/supabase/database.types";
+import Project from "./components/Project";
+import ChannelComment from "./components/ChannelComment";
+import { useEffect, useState } from "react";
+import supabase from "@/supabase/supabase";
 
 
-import { useLocation } from 'react-router-dom';
-import ChannelComment from './components/ChannelComment';
-import Cruitmember from './components/Cruitmember';
-import S from './StudyJoinInfomation.module.css'
-import { useEffect, useState } from 'react';
-import supabase from '@/supabase/supabase';
-
-
-
-
+type Board = Tables<"board">;
+type CardProps = Board & 
+{
+  board_tag: Tables<"board_tag">[];
+};
 
 function StudyJoinInfomation() {
+  const { id } = useParams()
+  const [card, setCard] = useState<CardProps|null>(null)
+  
+  useEffect(() => {
+    if (!id) throw new Error('id가없습니다')  
+    const fetchData = async () => {
+      const { data, error } = await supabase.from('board').select('*,board_tag(*)').eq('board_id', id).single()
+      if(error) throw new Error('데이터가 들어오지않아요')
 
-  const location = useLocation()
-  const card = location.state.card ?? {}
-  if(!card) throw new Error('데이터가 들어오지 않습니다')
-  const { images,title,address,member,board_id,profile_id} = card
-   const [isScrap, setIsScrap] = useState(false);
+      setCard(data as CardProps)
+    }
+      fetchData()
+  },[id])
 
-
-    useEffect(() => {
-      const storedScrap = JSON.parse(localStorage.getItem(`scrap-${board_id}`) ?? "false")  
-      setIsScrap(storedScrap)
-    }, [board_id]);
-
-   
-    const handleScrap = async () => {
-    const nextScrapState = !isScrap
-    setIsScrap(nextScrapState)
-    localStorage.setItem(`scrap-${board_id}`, JSON.stringify(nextScrapState));
-    
-    const { data } = await supabase
-      .from("scrap")
-      .select("*").eq('profile_id',profile_id).eq('board_id',board_id).single()
-    
-      if (data?.scrap_id) {
-        await supabase.from('scrap').delete().eq('scrap_id', data.scrap_id)
-      } else {
-        await supabase.from('scrap').insert([{
-          scrap_id: `scrap${Date.now()}`,
-          profile_id,
-          board_id,
-        }])
-      } }
-
+  if(!card) return 
+  const { images, title, address, member, board_tag, contents} = card
+ 
   return (
     <main className={S.container}>
       <div className={S.layout}>
         <div className={S.channelInfoBox}>
-          <img src={images} alt="스터디 이미지" />
+          {images && <img src={images} alt="스터디 이미지" />}
           <div className={S.textInfo}>
             <div className={S.title}>
               <h2>{title}</h2>
-              <button className={S.scrapBtn} onClick={handleScrap}>
-                {isScrap ? (
-                  <img src="/icons/scrapActive.png" alt="" />
-                ) : (
-                  <img src="/icons/scrap.png" alt="" />
-                )}
-              </button>
             </div>
             <div className={S.tagBox}>
-              #태그 #태그 #태그{" "}
+              {(board_tag as Tables<"board_tag">[]).map((t) => (
+                <div key={t.tag_id}>{t.hash_tag}</div>
+              ))}
               <span>
                 <svg
                   width="3"
@@ -120,11 +101,20 @@ function StudyJoinInfomation() {
             </div>
           </div>
         </div>
-        <article className={S.content}></article>
-        <Cruitmember {...card} />
-        <ChannelComment />
+        <article className={S.content}>{contents}</article>
+        <section>
+          <div className={S.project}>
+            <h4>프로젝트안내</h4>
+            <button type="button">프로젝트 생성</button>
+          </div>
+          <Project />
+        </section>
+        <section>
+          <ChannelComment {...card} />
+        </section>
       </div>
     </main>
   );
 }
-export default StudyJoinInfomation
+
+export default StudyJoinInfomation;

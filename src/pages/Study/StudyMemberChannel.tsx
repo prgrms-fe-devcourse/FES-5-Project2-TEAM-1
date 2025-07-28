@@ -1,21 +1,36 @@
-import { Link } from 'react-router-dom';
+import {  NavLink, Outlet } from 'react-router-dom';
 import S from './StudyMemberChannel.module.css'
 
-
 function StudyMemberChannel() {
+
 
   return (
     <main className={S.container}>
       <nav className={S.header}>
         <div className={S.headerinner}>
-          <Link to="/channel/memeber/:id" className={S.active}>
+          <NavLink
+            to="."
+            end
+            className={({ isActive }) => (isActive ? S.active : "")}
+          >
             홈
-          </Link>
-          <Link to="/channel/thread/:id">
+          </NavLink>
+          <NavLink
+            to="thread"
+            className={({ isActive }) => (isActive ? S.active : "")}
+          >
             스레드
-          </Link>
+          </NavLink>
+          <NavLink
+            to="mypage"
+            className={({ isActive }) => (isActive ? S.active : "")}
+          >
+            관리
+          </NavLink>
         </div>
       </nav>
+
+      <Outlet />
     </main>
   );
 }
