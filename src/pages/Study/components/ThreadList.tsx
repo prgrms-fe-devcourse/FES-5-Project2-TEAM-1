@@ -58,6 +58,7 @@ function ThreadList({ data,onDelete }: Props) {
       if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
     }
+    
       if (!editContent.trim()) return;
 
     const { error } = await supabase.from('thread').update({
@@ -95,6 +96,8 @@ function ThreadList({ data,onDelete }: Props) {
 
   const handleSubmitReply = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault()
+      if (!createReply.trim()) return;
+
     const { error } = await supabase.from('thread_reply').insert([{
       thread_id,
       profile_id,
@@ -111,8 +114,9 @@ function ThreadList({ data,onDelete }: Props) {
   }; 
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    e.preventDefault();
+    
     if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
       if (!createReply.trim()) return;
       handleSubmitReply();
     }

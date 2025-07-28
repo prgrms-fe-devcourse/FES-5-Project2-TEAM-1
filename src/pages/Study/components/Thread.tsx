@@ -41,7 +41,9 @@ function Thread() {
   }
 
   
-  const handleSubmit = async() => { 
+  const handleSubmit = async () => { 
+    if (!updateContent.trim()) return;
+    
     const {error} =  await supabase.from('thread').insert([{
       board_id,
       profile_id,
@@ -60,8 +62,9 @@ function Thread() {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    e.preventDefault();
+  
     if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
     if(!updateContent.trim()) return
       handleSubmit()
     }
@@ -72,34 +75,50 @@ function Thread() {
   ))
 
   return (
-    <div className={S.layout}>
-      <div className={S.writerBox}>
-        <div className={S.profile}>
-          <img src="/images/너굴.png" alt="" />
-          <p>이름</p>
+    <>
+      <div className={S.layout}>
+        <div className={S.container}>
+          <div className={S.writerBox}>
+            <div className={S.profile}>
+              <img src="/images/너굴.png" alt="" />
+              <p>이름</p>
+            </div>
+            <div className={S.inputContent} onClick={handleInputbarClick}>
+              <div className={S.partition}></div>
+              <textarea
+                ref={inputRef}
+                value={updateContent}
+                placeholder="내용을 입력해 주세요"
+                onChange={(e) =>setUpdateContent(e.target.value)}
+                onKeyDown={handleKeyDown}
+              ></textarea>
+            </div>
+            <div className={S.confirmBtnWrap}>
+              <button
+                type="submit"
+                className={S.confirm}
+                onClick={handleSubmit}
+              >
+                등록
+              </button>
+            </div>
+          </div>
+          <ul className={S.threads}>
+            {recentlyThread &&
+              recentlyThread.map((reply) => (
+                <ThreadList
+                  data={reply}
+                  key={reply.thread_id}
+                  onDelete={() => handleDelete(reply.thread_id)}
+                />
+              ))}
+          </ul>
         </div>
-        <div className={S.inputContent} onClick={handleInputbarClick}>
-          <div className={S.partition}></div>
-          <textarea
-            ref={inputRef}
-            value={updateContent}
-            placeholder="내용을 입력해 주세요"
-            onChange={(e) => setUpdateContent(e.target.value)}
-            onKeyDown={handleKeyDown}
-          ></textarea>
-        </div>
-        <div className={S.confirmBtnWrap}>
-          <button type="submit" className={S.confirm} onClick={handleSubmit}>
-            등록
-          </button>
+        <div className={S.member}>
+          <div>최근 접속한 사용자</div>
         </div>
       </div>
-      <ul className={S.threads}>
-        {recentlyThread && recentlyThread.map((reply) => (
-          <ThreadList data={reply} key={reply.thread_id} onDelete={()=>handleDelete(reply.thread_id)}/>
-        ))}
-      </ul>
-    </div>
+    </>
   );
 }
 export default Thread

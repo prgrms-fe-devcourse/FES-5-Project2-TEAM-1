@@ -31,6 +31,8 @@ function ChannelComment(card:Props) {
 
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
+     
+    if (writeComment.trim() === '') return;
  
     const { error } = await supabase.from("comment").insert([
       {
@@ -52,7 +54,7 @@ function ChannelComment(card:Props) {
     const { data: commentData } = await supabase
       .from("comment")
       .select("*")
-      .eq("board_id", board_id).order('created_at', {ascending:false})
+      .eq("board_id", board_id)
 
     if (commentData) setComments(commentData);
   };
@@ -62,11 +64,13 @@ function ChannelComment(card:Props) {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      if (!writeComment.trim()) return;
-      handleSubmit();
-    }
+if (e.key === "Enter" && !e.shiftKey) {
+  e.preventDefault(); // 줄바꿈 방지만
+  const form = e.currentTarget.form;
+  if (form) {
+    form.requestSubmit(); 
+  }
+}
   };
 
   const matchComment = comments.filter(comment => comment.board_id === board_id).sort((a,b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
