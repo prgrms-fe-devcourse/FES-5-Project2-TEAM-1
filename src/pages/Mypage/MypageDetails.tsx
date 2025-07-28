@@ -48,8 +48,6 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
     const [gender, setGender] = useState('');
     const [isClicked, setIsClicked] = useState(false);
 
-    console.log( hide);
-
     const today = new Date();
     const yearNow = today.getFullYear();
 

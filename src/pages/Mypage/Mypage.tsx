@@ -57,9 +57,6 @@ function Mypage() {
   const handleEditUserPage = () => {
     setEditMode( prev => !prev );
   }
-  const handleSave = async () => {
-    setEditMode( false );
-  }
 
   if (!userData) {
     return <p>유저 데이터를 불러오는 중입니다...</p>;
@@ -70,7 +67,7 @@ function Mypage() {
         <div className={S.wrapper}>
             <h1 className={S.mypage}>마이 페이지</h1>
             <button type='button' className={S.editBtn} onClick={handleEditUserPage}>
-              {editMode ? '취소' : <img src='/icons/edit.svg' alt='수정 버튼' />}
+              {editMode ? '완료' : <img src='/icons/edit.svg' alt='수정 버튼' />}
             </button>
             <MypageProfile
               user={userData}
@@ -96,7 +93,7 @@ function Mypage() {
             <MypageScrap/>
             <MypagePost/>
             <MoveToTop/>
-            { editMode && <button type="submit" onClick={handleSave}>완료</button>}
+
         </div>
     </div>
   )
