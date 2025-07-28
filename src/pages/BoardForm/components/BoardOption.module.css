@@ -8,7 +8,7 @@
 .boardOptionDetail {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 20px;
   flex: 1;
 }
 

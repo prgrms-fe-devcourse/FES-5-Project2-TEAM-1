@@ -3,8 +3,11 @@ import BoardPreview from "./components/BoardPreview";
 import BoardEdit from "./components/BoardEdit";
 import { ProfileImageProvider } from "@/components/context/useProfileImage";
 import { BoardProvider } from "@/components/context/useBoardContext";
+import { useState } from "react";
+import MapSearchPopup from "@/components/MapSearchPopup";
 
 function BoardForm() {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <ProfileImageProvider>
       <BoardProvider>
@@ -14,11 +17,20 @@ function BoardForm() {
             <BoardPreview />
           </div>
           <div className={S.boardBottonArea}>
-            <button type="button">임시 저장</button>
+            <button type="button" onClick={() => setIsOpen(true)}>
+              임시 저장
+            </button>
             <button id={S.boardWrite} type="submit">
               글 게시
             </button>
           </div>
+          {isOpen && (
+            <MapSearchPopup
+              onClose={() => {
+                setIsOpen(false);
+              }}
+            />
+          )}
         </form>
       </BoardProvider>
     </ProfileImageProvider>

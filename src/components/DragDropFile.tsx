@@ -41,10 +41,11 @@ function DragDropFile({ onChangeFile }: Props) {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        프로필로 등록할 이미지를 올려주세요
+        {/* 프로필로 등록할 이미지를 올려주세요 */}
         <div className={S.img}>
-          <img src="/icons/Cloud_upload.svg" alt="" />
+          <img src="/images/file-upload.png" alt="" />
         </div>
+        upload image
       </label>
       <input id="fileUpload" type="file" hidden onChange={handleChange}></input>
     </div>
