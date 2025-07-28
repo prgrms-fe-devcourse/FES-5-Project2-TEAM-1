@@ -1,117 +1,95 @@
 .container{
-  margin-top: 40px;
-  height: 345px;
-  border-top-left-radius:4px ;
-  border-top-right-radius:4px ;
+  margin-top: 64px;
   background-color: #fff;
-  overflow: hidden;
+  border-radius: 16px;
+  min-height: 400px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+ 
+  
 }
 
-.comment{
-  background-color: #a6b37d;
-  height: 72px;
-  width: 100%;
+.inputScreen{
+  border-radius: 16px;
+  width: 95%;
+  height: 120px;
+  background-color: #f5f5f5;
+  margin: 30px;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    cursor: text;
 
-  .commetInputBox{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  textarea{
+    width: 90%;
     height: 100%;
-    width: 100%;
-    padding: 0 14px
-  }
-  .writer{
-    
-    display: flex;
-    align-items: center;
-    font-size: 24px;
-    gap: 4px;
-
-    p{
-      color:#fff;
-    }
-    
-
-    img{
-      width: 36px;
-      height: 36px;
-    }
-  }
-
-  input[type="text"]{
-    border-radius: 4px;
-    width: 980px;
-    height: 32px;
+    background-color: transparent;
     border: 0;
-    outline: none;
-    padding-left: 20px;
+    outline:none;
+    padding-top: 26px;
+    padding-left: 26px;
+    resize: none;
+  
 
-    &:focus{
-      padding-left: 20px;
+    &:focus::placeholder{
+      color:transparent
     }
   }
 
   .commentBtn{
-    width: 80px;
-    height: 28px;
-    border-radius: 12px;
-    padding: 10px 5px;
-    background-color: #b99470;
+    width: 100px;
+    height: 32px;
+    border-radius: 8px;
+    background-color:#b99470;
     color:#fff;
-    font-size: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: absolute;
+    right: 20px;
+    bottom: 12px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+
+    &:hover{
+    background-color:#997b5d;
+
+    }
   }
 }
 
-.commentListWrap{
+  hr {
+    margin: 0 auto;
+    border: none;
+   height: 0.1px;
+   border-radius: 4px;
+   background-color: #ccc;
+   width: 95%;
+  }
+
+  .recomment{
+    margin-top: 20px;
+    padding-left: 32px;
+    
+  .commentAmount{
+    display:flex;
+    align-items: center;
+    gap: 4px;
+
+    >span{
     display: flex;
-    padding: 24px 14px 0;
-
-
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem 0.125rem;
+    width: 3.125rem;
+    height: 1.25rem;
+    border-radius: 4px;
+    color:#B99470;
+    font-weight: 500;
+    background-color:rgba(185, 148, 112, 0.3);
+      }
+    } 
+    
     .commentList{
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      margin-top: 20px;
     }
-
-    .writer{
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    h6{
-      font-size: 20px;
-    }
-    img{
-      width: 36px;
-      height: 36px;
-    }
-    
-    .memberComment{
-      display: flex;
-      flex-direction: column;
-      font-size: 16px;
-      gap: 4px;
-    }
-    
-
-    .recommentWrap{
-     margin-top: 8px;
-      margin-left: 44px;
-
-
-      .recommentBtn{
-      background-color: transparent;
-      font-size: 16px;
-      font-weight: 500;
-      color:blue;
-    }
-    .recomment{
-      margin-top: 4px;
-    }
-    }
-    
-
-}
+  }
+ 

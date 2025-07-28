@@ -1,18 +1,31 @@
-import Recomment from './Recomment';
+import type { Tables } from '@/supabase/database.types';
 import S from './ThreadList.module.css'
+import { commentTime } from './utills/commentTime';
 
-function ThreadList() {
+
+interface Props{
+  data: Tables<'thread'>
+}
+
+function ThreadList({ data }: Props) {
+
+  const { contents, likes, create_at } = data
+  const timeStamp = commentTime(create_at)
+
   return (
     <li className={S.listContainer}>
       <div className={S.writerBox}>
-        <div className={S.profile}>
-          <img src="/images/너굴.png" alt="" />
-          <p>이름</p>
+        <div className={S.meta}>
+          <div className={S.profile}>
+            <img src="/images/너굴.png" alt="" />
+            <p>이름</p>
+          </div>
+          <div className={S.timeStamp}>{timeStamp}</div>
         </div>
       </div>
       <div className={S.content}>
         <div className={S.partition}></div>
-        <p>너무 더워요 살려주세요</p>
+        <p>{contents}</p>
       </div>
       <div className={S.iconWrap}>
         <button type="button" className={S.like}>
@@ -32,7 +45,7 @@ function ThreadList() {
               mask="url(#path-1-inside-1_464_3057)"
             />
           </svg>
-          3
+          {likes}
         </button>
         <button type="button" className={S.comment}>
           <svg
@@ -45,14 +58,13 @@ function ThreadList() {
             <path
               d="M1.91309 0.75H16.3135C16.6911 0.750038 17.0152 0.860365 17.2949 1.08301L17.4121 1.18555C17.7167 1.47706 17.8632 1.81739 17.8633 2.21973V15.6133C17.8633 15.7659 17.8277 15.8786 17.7695 15.9639C17.7255 16.0282 17.6612 16.0883 17.5693 16.1396L17.4678 16.1885C17.3196 16.2492 17.1951 16.2611 17.0879 16.2412C16.9808 16.2213 16.8699 16.1656 16.7559 16.0566L14.6855 14.0781L14.6133 14.0088H1.91309C1.48135 14.0087 1.12024 13.8645 0.81543 13.5732C0.510291 13.2816 0.363281 12.9413 0.363281 12.5391V2.21973C0.363324 1.81751 0.510277 1.47712 0.81543 1.18555C1.12021 0.894382 1.48141 0.750043 1.91309 0.75Z"
               stroke="#555555"
-              stroke-opacity="0.7"
-              stroke-width="0.5"
+              strokeOpacity="0.7"
+              strokeWidth="0.5"
             />
           </svg>
           10
         </button>
       </div>
-      <Recomment/>
     </li>
   );
 }
