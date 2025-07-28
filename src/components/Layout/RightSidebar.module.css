@@ -1,17 +1,14 @@
-/* rightsidebar */
 .container{
   width: 220px;
   background-color: #FFC0CB;
   flex-shrink: 0;
   justify-content: space-between;
 }
-
 .height{
   height: 100vh;
   position: fixed;
   top: 0;
 }
-
 .loginBox{
   display:flex;
   margin-top: 28px;
@@ -21,8 +18,6 @@
   padding-left: 24px;
   gap: 8px;
   position: relative;
- 
-
   .profileImage{
     width: 44px;
     height: 44px;
@@ -31,39 +26,32 @@
     background-color: #fff;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25) ;
   }
-
   .loginBoxGreeting{
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 4px;
-
-
     p{
       font-size: 12px;
       color: rgba(0, 0, 0, 0.5);
-
     }
     h3{
       font-size: 12px;
       font-weight: 600;
     }
   }
-
   .loginLogout{
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     padding-left: 30px;
-
     > svg{
       transition:0.3s;
     }
-    
-    
+   
+   
     &:hover > svg{
       background-color: rgba(0, 0, 0, 0.1);
       padding: 3px;
@@ -71,12 +59,10 @@
     }
     p{
       font-size: 12px;
-      color: #aa8a90;
+      color: #AA8A90;
     }
   }
 }
-
-
 .loginBox::after{
   content:"";
   position: absolute;
@@ -86,8 +72,6 @@
   transform: translateX(6px,-6px);
   background-color: #55555557
 }
-
-
 .navListWrap{
   margin-top: 32px;
   display:flex;
@@ -97,26 +81,22 @@
   padding: 4px;
   top: 100vh;
   gap: 16px;
-
   li{
     font-size: 12px;
     padding-left: 20px;
   }
-
   .navList{
     display: flex;
     transition:  0.5s;
     padding: 2px;
-
     .navListText{
       display:flex;
        padding: 4px;
        padding-left: 12px;
       gap: 12px;
       align-items: center;
-   
+  
     }
-
   h3{
     font-weight: 600;
     font-size: 24px;
@@ -124,27 +104,23 @@
   }
   &.navList:hover{
     background-color: #55555527;
-
       padding-bottom: 2px;
       border-radius: 4px;
   }
-
   }
   }
-
   .membershipBox{
     margin-top: 104px;
-    background-color: rgba(255, 255, 255, 0.5); 
+    background-color: rgba(255, 255, 255, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     width: 200px;
-  
+ 
     padding: 10px;
     margin-left: 10px;
     border-radius: 16px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
-
     .membershipTextBox{
       padding: 0px 4px;
     display: flex;
@@ -152,13 +128,12 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
-    
+   
    h4{
       font-size: 16px;
       font-weight: 600;
       color:#222;
     }
-
     p{
       font-size: 12px;
       color:#555555d2;
@@ -166,7 +141,6 @@
       text-align: center;
       line-height: 14px;
     }
-
     .membershipButton{
       width: 148px;
       height: 30px;
@@ -178,10 +152,8 @@
       align-items: center;
       box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
       transition: 0.3s;
-
       &:hover{
-        background-color: #8b9669;
-
+        background-color: #8B9669;
       }
     }
   }

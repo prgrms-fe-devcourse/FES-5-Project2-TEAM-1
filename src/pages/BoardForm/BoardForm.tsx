@@ -6,7 +6,6 @@ import BoardPreview from "./components/BoardPreview";
 import BoardWriteForm from "./components/BoardWriteForm";
 import { debounce } from "@/utils/debounce";
 import type { Tables } from "@/supabase/database.types";
-import { BoardContext } from "@/components/context/useBoardContext";
 import supabase from "@/supabase/supabase";
 
 //board 테이블 type 지정

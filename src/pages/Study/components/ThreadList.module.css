@@ -54,3 +54,10 @@
     gap: 4px;
   }
 }
+
+.meta{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+}
