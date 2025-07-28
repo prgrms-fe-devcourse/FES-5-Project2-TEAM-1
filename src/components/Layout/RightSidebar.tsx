@@ -2,7 +2,7 @@ import S from './Rightsidebar.module.css'
 import '../../style/reset.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthProvider';
-import supabase from '@/supabase/supabase';
+
 
 function RightSidebar() {
 
