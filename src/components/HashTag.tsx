@@ -2,22 +2,29 @@ import Tags from "@yaireo/tagify/react"; // React-wrapper file
 import "@yaireo/tagify/dist/tagify.css"; // Tagify CSS
 import S from "./HashTag.module.css";
 import { useCallback, useRef } from "react";
+import type { ChangeEventData } from "@yaireo/tagify";
 
 interface Props {
-  taglist?: string[];
-  defaultList?: string[];
+  taglist?: string[] | null;
+  defaultList?: string[] | null;
   editable?: boolean;
-  callBack?: (tag: object[]) => void;
+  callBack?: (tag: BaseTagData[]) => void;
 }
-
+interface BaseTagData {
+  value: string;
+}
 function HashTag({ taglist, defaultList, editable, callBack }: Props) {
   const hasgTag = useRef(null);
+  console.log(taglist);
+  console.log(defaultList);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onChange = useCallback((e: any) => {
-    if (!callBack) return;
-    callBack(e.detail.tagify.getCleanValue());
-  }, []);
+  const onChange = useCallback(
+    (e: CustomEvent<ChangeEventData<BaseTagData>>) => {
+      if (!callBack) return;
+      callBack(e.detail.tagify.getCleanValue());
+    },
+    []
+  );
 
   return (
     <>
@@ -27,7 +34,7 @@ function HashTag({ taglist, defaultList, editable, callBack }: Props) {
           className={S.hashTag}
           whitelist={taglist}
           userInput={false}
-          defaultValue={defaultList}
+          value={defaultList}
         ></Tags>
       )}
       {taglist && !editable && (
@@ -36,7 +43,7 @@ function HashTag({ taglist, defaultList, editable, callBack }: Props) {
           className={S.hashTag}
           whitelist={taglist}
           settings={{ dropdown: { enabled: 0 } }}
-          defaultValue={defaultList}
+          value={defaultList}
           userInput={false}
           readOnly
         ></Tags>
@@ -44,7 +51,7 @@ function HashTag({ taglist, defaultList, editable, callBack }: Props) {
       {!taglist && (
         <Tags
           ref={hasgTag}
-          className={S.hashTag}
+          className={S.hashTagInput}
           settings={{ maxTags: 5 }}
           placeholder="해시태그를 입력해주세요"
           onChange={onChange}

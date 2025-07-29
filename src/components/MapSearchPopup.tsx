@@ -80,6 +80,8 @@ function MapSearchPopup({ onClose }: Props) {
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
       const target = e.target as HTMLInputElement;
       setSearchText(target.value);
     }
@@ -113,6 +115,7 @@ function MapSearchPopup({ onClose }: Props) {
       return;
     }
   };
+
   if (!isLoaded) return <div>지도를 불러오는 중입니다...</div>;
 
   return (
