@@ -12,6 +12,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.52.0",
     "@types/swiper": "^5.4.3",
+    "@types/yaireo__tagify": "^4.27.0",
     "@yaireo/tagify": "^4.35.3",
     "date-fns": "^4.1.0",
     "gsap": "^3.13.0",

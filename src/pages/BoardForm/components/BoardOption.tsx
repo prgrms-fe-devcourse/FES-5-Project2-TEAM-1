@@ -4,14 +4,25 @@ import HashTag from "@/components/HashTag";
 import { useProfileImageContext } from "@/components/context/useProfileImage";
 import { useId } from "react";
 import { useBoardContext } from "@/components/context/useBoardContext";
+import { useHashTagContext } from "@/components/context/useHashTag";
+import BoardButtonArea from "./BoardButtonArea";
+
+interface BaseTagData {
+  value: string;
+}
 
 function BoardOption() {
   const { setProfileImage } = useProfileImageContext();
   const { setPostData } = useBoardContext();
+  const { sethashTagData } = useHashTagContext();
   const titleId = useId();
 
   const handleFileSelect = (file: File) => {
     setProfileImage(file);
+  };
+
+  const handleHashTag = (values: BaseTagData[]) => {
+    sethashTagData(values);
   };
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,26 +47,8 @@ function BoardOption() {
             placeholder="제목을 입력해주세요"
           />
         </div>
-        <HashTag />
-        <div className={S.optionButton}>
-          <ul>
-            <li>
-              <a href="">
-                <img src="/icons/Picture.png" alt="" />
-              </a>
-            </li>
-            <li>
-              <a href="">
-                <img src="/icons/Link.png" alt="" />
-              </a>
-            </li>
-            <li>
-              <a href="">
-                <img src="/icons/Code.png" alt="" />
-              </a>
-            </li>
-          </ul>
-        </div>
+        <HashTag callBack={handleHashTag} />
+        <BoardButtonArea />
       </div>
     </div>
   );
