@@ -64,7 +64,7 @@ function ChannelComment(card:Props) {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
   e.preventDefault(); // 줄바꿈 방지만
   const form = e.currentTarget.form;
   if (form) {
