@@ -13,7 +13,7 @@ interface BaseTagData {
 
 function BoardOption() {
   const { setProfileImage } = useProfileImageContext();
-  const { setPostData } = useBoardContext();
+  const { postData, setPostData } = useBoardContext();
   const { sethashTagData } = useHashTagContext();
   const titleId = useId();
 
@@ -44,6 +44,7 @@ function BoardOption() {
             type="text"
             id={titleId}
             onChange={onChangeTitle}
+            value={postData?.title}
             placeholder="제목을 입력해주세요"
           />
         </div>
