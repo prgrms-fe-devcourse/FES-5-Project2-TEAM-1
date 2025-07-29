@@ -49,7 +49,7 @@ function MainStudyCard({ search }: Props) {
       ) : (
         <div className={S.cardGrid}>
           {filteredCards.map((card) => (
-            <Card key={card.board_id} card={card} tag={[]} />
+            <Card key={card.board_id} card={{ ...card, board_tag: [] }} />
           ))}
         </div>
       )}

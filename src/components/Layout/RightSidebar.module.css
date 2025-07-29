@@ -14,6 +14,7 @@
   margin-top: 28px;
   width: 220px;
   justify-content: center;
+  align-items: center;
   padding-right: 24px;
   padding-left: 24px;
   gap: 8px;
@@ -43,10 +44,13 @@
   .loginLogout{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center; */
+    justify-content: flex-start;
+    text-align: center;
     cursor: pointer;
-    padding-left: 30px;
+    gap:5px;
+    font-size: 12px;
+    /* padding-left: 30px; */
     > svg{
       transition:0.3s;
     }
@@ -60,6 +64,19 @@
     p{
       font-size: 12px;
       color: #AA8A90;
+    }
+
+    .linkButton{
+      background-color: #A6B37D;
+      opacity: 0.8;
+      padding:10px 8px;
+      border-radius: 21px;
+      color:#FFFFFF;
+      transition: background-color 0.3s;
+
+      &:hover{
+        background-color: rgba(137, 162, 55);
+    }
     }
   }
 }
