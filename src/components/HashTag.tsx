@@ -15,9 +15,6 @@ interface BaseTagData {
 }
 function HashTag({ taglist, defaultList, editable, callBack }: Props) {
   const hasgTag = useRef(null);
-  console.log(taglist);
-  console.log(defaultList);
-
   const onChange = useCallback(
     (e: CustomEvent<ChangeEventData<BaseTagData>>) => {
       if (!callBack) return;

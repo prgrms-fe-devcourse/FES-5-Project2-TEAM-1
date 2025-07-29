@@ -35,6 +35,7 @@ function BoardForm() {
     success("글이 게시되었습니다!");
     if (data) {
       insertHashTag(data[0].board_id);
+      imageUpload(data[0].board_id);
     }
   };
 
@@ -57,7 +58,7 @@ function BoardForm() {
 
   const handleBoardUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    let imageUrl = "";
+
     if (!postData || postData?.title === "") {
       errorPop("제목을 작성해주세요!");
       return;
@@ -67,9 +68,19 @@ function BoardForm() {
       return;
     }
 
+    const insertData = {
+      profile_id: "4071d997-95f6-4630-bae5-5b69ea4d76d7",
+      title: postData.title,
+      contents: postData.contents,
+    };
+
+    insertBoard(insertData);
+  };
+  const imageUpload = async (board_id: string) => {
+    let imageUrl = "";
     if (!profileImage) return;
-    const fileName = `${Date.now()}-${profileImage.name}`; // 중복 방지를 위한 이름
-    const filePath = `uploads/${fileName}`; // 원하는 디렉토리 구조
+    const fileName = `${board_id}-${profileImage.name}`; // 중복 방지를 위한 이름
+    const filePath = `${fileName}`; // 원하는 디렉토리 구조
 
     const { error } = await supabase.storage
       .from("boardimage")
@@ -86,16 +97,14 @@ function BoardForm() {
 
     imageUrl = publicUrlData.publicUrl;
 
-    const insertData = {
-      profile_id: "4071d997-95f6-4630-bae5-5b69ea4d76d7",
-      title: postData.title,
-      images: imageUrl,
-      contents: postData.contents,
-    };
-    URL.revokeObjectURL(imageUrl);
-    insertBoard(insertData);
+    const { data, error: updateError } = await supabase
+      .from("board")
+      .update({ images: imageUrl })
+      .eq("board_id", board_id)
+      .select();
+    console.log(data);
+    console.log(updateError);
   };
-
   return (
     <div>
       <div className={S.bContainer}>

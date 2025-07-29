@@ -51,7 +51,7 @@ function BoardButtonArea() {
         {BUTTON_LIST.map((icons) => {
           const src = `/icons/${icons.tag}.svg`;
           return (
-            <li>
+            <li key={icons.tag}>
               {icons.tag !== "Picture" ? (
                 <a
                   href="#"

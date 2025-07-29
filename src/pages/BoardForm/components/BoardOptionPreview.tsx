@@ -3,14 +3,14 @@ import S from "./BoardOptionPreview.module.css";
 import { useEffect, useState } from "react";
 import { useBoardContext } from "@/components/context/useBoardContext";
 
-import { useHashTagContext } from "@/components/context/useHashTag";
+// import { useHashTagContext } from "@/components/context/useHashTag";
 
 function BoardOptionPreview() {
   const { profileImage } = useProfileImageContext();
   const [image, setImage] = useState("");
   const { postData } = useBoardContext();
-  const { hashTagData } = useHashTagContext();
-  console.log("BoardOptionPreview 리렌더됨", hashTagData);
+  // const { hashTagData } = useHashTagContext();
+
   useEffect(() => {
     if (profileImage) {
       const reader = new FileReader();
