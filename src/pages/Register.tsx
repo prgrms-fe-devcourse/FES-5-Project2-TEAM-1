@@ -19,7 +19,7 @@ function Register() {
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [certificateFile, setCertificateFile] = useState<File | null>(null);
-    const [certificatePreview, setCertificatePreview] = useState<string | null>(null);
+    // const [certificatePreview, setCertificatePreview] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [agree, setAgree] = useState(false);
 
@@ -120,11 +120,12 @@ function Register() {
                 id={emailId} 
                 name="email" 
                 required 
+                placeholder="이메일을 입력해주세요"
                 onChange={(e)=>setEmail(e.target.value)}
                 />
 
                 <label htmlFor={pwId}>비밀번호</label>
-                <input 
+                <PasswordInput 
                 type="password" 
                 id={pwId}
                 name="password" 
@@ -151,33 +152,9 @@ function Register() {
                 // required 
                 onChange={(e)=>{
                     const file = e.target.files?.[0] ?? null;
-                    setCertificateFile(file);
-                    if(file){
-                        const reader = new FileReader();
-                        reader.onloadend = () =>{
-                            setCertificatePreview(reader.result as string);
-                        };
-
-                        reader.readAsDataURL(file);
-                    } else {
-                        setCertificatePreview(null);
-                    }
+                    setCertificateFile(file)
                 }} 
                 />
-
-                {certificatePreview && (
-                    <div className={S.preview}>
-                        {certificateFile?.type.startsWith('image/') ? (
-                            <img 
-                                src={certificatePreview} 
-                                alt="수료증 이미지" 
-                                style={{ maxWidth: '200px' }} 
-                            />
-                        ) : (
-                            <p>{''}</p>
-                        )}
-                    </div>
-                )}
 
                 <div className={S.checkbox}>
                     <input 
