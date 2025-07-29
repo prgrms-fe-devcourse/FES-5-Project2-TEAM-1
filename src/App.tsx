@@ -16,10 +16,10 @@ import MainContent from './pages/Mainpage/MainContent';
 import Footer from './pages/Mainpage/Footer';
 import Register from './pages/Register';
 import Login from "./pages/Login/login";
-import Management from './pages/Study/components/Management';
-import Approve from './pages/Study/components/Approve';
-import ManagementMembers from './pages/Study/components/ManagementMembers';
-import MangementChannel from './pages/Study/components/ManagementChannel';
+import Management from './pages/Study/components/management/Management';
+import Approve from './pages/Study/components/management/Approve';
+import ManagementMembers from './pages/Study/components/management/ManagementMembers';
+import MangementChannel from './pages/Study/components/management/ManagementChannel';
 
 
 function App() {
