@@ -26,9 +26,6 @@ function MypageName({ user, editMode, setUserData}: Props) {
       }
   }, [editMode]);
 
-  if( !user ) {
-    return <p>프로필 정보가 없습니다.</p>;
-  }
 
     const handleEditName = () => {
       setShowEdit(true);
@@ -110,6 +107,7 @@ function MypageName({ user, editMode, setUserData}: Props) {
           <div className={E.editNamecontainer}>
             <input type='text' placeholder={userName}  onChange={handleInputChange} />
             <select onChange={handleSelectChange} defaultValue={role}>
+              <option value="">분야를 선택해주세요.</option>
               <option value="프론트엔드">프론트엔드</option>
               <option value="백엔드">백엔드</option>
               <option value="데이터 엔지니어">데이터 엔지니어</option>
