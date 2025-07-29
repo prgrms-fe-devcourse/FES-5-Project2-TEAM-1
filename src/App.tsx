@@ -35,8 +35,6 @@ function App() {
             <LeftSidebar />
           </nav>
         )}
-
-        {/* 컴포넌트 들어오면 됩니다 */}
         <div className="mainWrapper">
           <Routes>
             <Route path="/" element={<MainContent />} />

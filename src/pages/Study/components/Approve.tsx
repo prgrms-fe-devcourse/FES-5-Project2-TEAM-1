@@ -54,7 +54,7 @@ const dump:Dump[] = [
 
 function Approve() {
   return (
-    <main>
+    <main className={S.approveContainer}>
       {
         dump && dump.map(({name, role, img},index)=>(
           <div className={S.card} key={index}>

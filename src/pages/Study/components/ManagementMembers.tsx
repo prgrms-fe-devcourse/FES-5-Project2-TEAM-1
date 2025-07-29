@@ -57,7 +57,7 @@ function ManagementMembers() {
 
   
   return (
-    <main>
+    <main className={S.managementMembersContainer}>
       {
         dump && dump.map(({name, role , img},index)=>(
           <div className={S.card} key={index}>

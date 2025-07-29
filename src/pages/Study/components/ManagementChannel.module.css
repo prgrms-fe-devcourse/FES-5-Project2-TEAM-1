@@ -1,3 +1,8 @@
+.mangementChannelContainer{
+  display: flex;
+  flex-direction: column;
+}
+
 .contentHeader{
   margin-bottom: 51px;
 
@@ -170,11 +175,6 @@ form{
 .deleteButton{
   width: 164px;
   height: 47px;
-
-  position: absolute;
-  right: 0px;
-  bottom: 0px;
-
 
   border-radius: 10px;
   border: 1px solid #F00;

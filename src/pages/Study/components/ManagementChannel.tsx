@@ -1,4 +1,3 @@
-import Calender from '@/components/Calender'
 import S from './ManagementChannel.module.css'
 
 function MangementChannel() {
@@ -6,7 +5,7 @@ function MangementChannel() {
 
 
   return (
-    <main>
+    <main className={S.mangementChannelContainer}>
       <h1 className={S.contentHeader}>프로젝트 생성</h1>
       <form>
         <h2>모집 타입</h2>

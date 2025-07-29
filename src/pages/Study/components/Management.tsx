@@ -29,27 +29,11 @@ function Management() {
           </NavLink>
         </div>
       </nav>
-      <Outlet/>
+      <section className={S.content}>
+        <h1 hidden>관리 메뉴</h1>
+        <Outlet/>
+      </section>
     </main>
   )
 }
 export default Management
-
-
-// function Management() {
-//   return (
-//     <div className={S.container}>
-//       <aside className={S.managementSidebar}>
-//         <p>승인요청</p>
-//         <p>멤버관리</p>
-//         <p>채널관리</p>
-//       </aside>
-//       <main className={S.content}>
-//         {/* <MangementChannel/>  */}
-//         {/* <Approve/>        */}
-//         <ManagementMembers/>
-//       </main>
-//     </div>
-//   )
-// }
-// export default Management
