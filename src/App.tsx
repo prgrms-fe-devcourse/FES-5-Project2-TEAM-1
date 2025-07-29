@@ -16,6 +16,10 @@ import MainContent from './pages/Mainpage/MainContent';
 import Footer from './pages/Mainpage/Footer';
 import Register from './pages/Register';
 import Login from "./pages/Login/login";
+import Management from './pages/Study/components/Management';
+import Approve from './pages/Study/components/Approve';
+import ManagementMembers from './pages/Study/components/ManagementMembers';
+import MangementChannel from './pages/Study/components/ManagementChannel';
 
 
 function App() {
@@ -43,6 +47,11 @@ function App() {
               <Route index element={<StudyJoinInfomation />} />
               <Route path="memberchannel" element={<StudyMemberChannel />} />
               <Route path="thread" element={<Thread />} />
+              <Route path="management" element={<Management/>}>
+                <Route index element={<MangementChannel/>}/>
+                <Route path="approve" element={<Approve/>}/>
+                <Route path="managementmembers" element={<ManagementMembers/>}/>
+              </Route>
             </Route>
             <Route path="/mypage" element={<Mypage />} />
           </Routes>
