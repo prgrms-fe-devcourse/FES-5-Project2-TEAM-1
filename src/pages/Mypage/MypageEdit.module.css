@@ -320,3 +320,19 @@
         height: 2rem;
     }
 }
+
+.editInterestBlockWrapper {
+    position: relative;
+}
+
+.editInterestMinusBtn {
+    width: 2.2rem;
+
+    position: absolute;
+    top: -1.4rem;
+    right: 0.5rem;
+}
+
+.editInterestPlusBtn {
+    width: 2rem;
+}

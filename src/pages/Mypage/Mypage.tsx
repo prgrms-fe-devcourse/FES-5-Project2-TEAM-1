@@ -41,7 +41,7 @@ function Mypage() {
           social: user_social(*)
           )
           `)
-        .eq('id', 'e6fd8f91-4bc2-40a4-99e2-a821401129e2')
+        .eq('id', '9c6f18e9-a726-4c22-bc2d-137c62d0790f')
         .single();
         if( data ) {
           setUserData( data as unknown as User );
@@ -85,9 +85,15 @@ function Mypage() {
               setUserData={setUserData}
               />
             <MypageInterest
-              user={userData} />
+              user={userData}
+              editMode={editMode}
+              setUserData={setUserData}
+              />
             <MypageSocial
-              user={userData} />
+              user={userData}
+              editMode={editMode}
+              setUserData={setUserData}
+              />
             <MypagePeerReview/>
             <MypageChannel/>
             <MypageScrap/>
