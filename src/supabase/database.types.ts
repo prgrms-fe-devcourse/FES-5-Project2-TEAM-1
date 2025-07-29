@@ -102,43 +102,25 @@ export type Database = {
       }
       board_save: {
         Row: {
-          address: string
-          board_cls: Database["public"]["Enums"]["board_cls"]
-          board_id: string
-          contents: string
+          contents: string | null
           create_at: string
-          due_date: string
-          images: string
-          join_cls: Database["public"]["Enums"]["join_cls"]
-          member: string
           profile_id: string
-          title: string
+          title: string | null
+          update_at: string
         }
         Insert: {
-          address: string
-          board_cls?: Database["public"]["Enums"]["board_cls"]
-          board_id?: string
-          contents: string
+          contents?: string | null
           create_at?: string
-          due_date?: string
-          images: string
-          join_cls?: Database["public"]["Enums"]["join_cls"]
-          member: string
           profile_id?: string
-          title: string
+          title?: string | null
+          update_at?: string
         }
         Update: {
-          address?: string
-          board_cls?: Database["public"]["Enums"]["board_cls"]
-          board_id?: string
-          contents?: string
+          contents?: string | null
           create_at?: string
-          due_date?: string
-          images?: string
-          join_cls?: Database["public"]["Enums"]["join_cls"]
-          member?: string
           profile_id?: string
-          title?: string
+          title?: string | null
+          update_at?: string
         }
         Relationships: []
       }
@@ -273,41 +255,20 @@ export type Database = {
         }
         Relationships: []
       }
-      debug_log: {
-        Row: {
-          id: number
-          message: string | null
-          time: string | null
-        }
-        Insert: {
-          id?: number
-          message?: string | null
-          time?: string | null
-        }
-        Update: {
-          id?: number
-          message?: string | null
-          time?: string | null
-        }
-        Relationships: []
-      }
       news_cards: {
         Row: {
-          description: string
           id: number
           image: string
           title: string
           url: string
         }
         Insert: {
-          description: string
           id?: never
           image: string
           title: string
           url: string
         }
         Update: {
-          description?: string
           id?: never
           image?: string
           title?: string
@@ -418,7 +379,7 @@ export type Database = {
             referencedColumns: ["board_id"]
           },
           {
-            foreignKeyName: "fk_user_profile_to_scrap"
+            foreignKeyName: "scrap_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
@@ -518,18 +479,12 @@ export type Database = {
           nickname: string | null
           recent_at: string | null
           role: string | null
-          nickname: string | null
-          recent_at: string | null
-          role: string | null
           status: Database["public"]["Enums"]["status"]
         }
         Insert: {
           create_at?: string
           id?: string
           name: string
-          nickname?: string | null
-          recent_at?: string | null
-          role?: string | null
           nickname?: string | null
           recent_at?: string | null
           role?: string | null
@@ -564,7 +519,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_user_profile_to_user_interest"
+            foreignKeyName: "user_interest_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
@@ -575,7 +530,6 @@ export type Database = {
       user_profile: {
         Row: {
           address: string | null
-          address: string | null
           age: number
           background_images: string
           email: string
@@ -584,25 +538,19 @@ export type Database = {
           profile_images: string
           user_id: string
           visibility: Json
-          visibility: Json
         }
         Insert: {
           address?: string | null
-          address?: string | null
           age?: number
           background_images?: string
-          background_images?: string
           email: string
-          gender: string
+          gender?: string
           profile_id?: string
-          profile_images?: string
           profile_images?: string
           user_id?: string
           visibility?: Json
-          visibility?: Json
         }
         Update: {
-          address?: string | null
           address?: string | null
           age?: number
           background_images?: string
@@ -612,11 +560,10 @@ export type Database = {
           profile_images?: string
           user_id?: string
           visibility?: Json
-          visibility?: Json
         }
         Relationships: [
           {
-            foreignKeyName: "fk_user_to_user_profile"
+            foreignKeyName: "user_profile_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_base"
@@ -648,7 +595,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_user_profile_to_user_social"
+            foreignKeyName: "user_social_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "user_profile"

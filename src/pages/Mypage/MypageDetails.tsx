@@ -78,8 +78,6 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
         setIsClicked(false);
     }
 
-    console.log( gender );
-
     const handleSaveDetail = async () => {
 
         if ( !user.profile[0] ) return;
@@ -183,6 +181,7 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
         width: '40rem',
         border: '2px solid #A6B37D',
         top: '2.2rem',
+        zIndex: '2'
     } as React.CSSProperties
 
   return (
@@ -218,8 +217,8 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
                 <div className={E.editDetailGender}>
                     <select onChange={handleGender}>
                         <option value='선택'>성별을 선택해주세요.</option>
-                        <option value='여성'>여성</option>
-                        <option value='남성'>남성</option>
+                        <option value='female'>여성</option>
+                        <option value='male'>남성</option>
                     </select>
                     <button onClick={() => handleHideToggle('gender')}>
                         { hide.gender
@@ -286,7 +285,7 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
             </ul>
         )
         }
-        { editMode && (
+        { editMode ? (
             showEdit ? (
                 <div className={E.editDetailSaveClose}>
                     <button onClick={handleSaveDetail}>저장</button>
@@ -303,7 +302,9 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
                 </button>
             </div>
             )
-        )}
+        )
+        : <div className={S.mypageDetailEdit}></div>
+        }
     </div>
   )
 }
