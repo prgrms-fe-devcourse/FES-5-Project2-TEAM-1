@@ -1,4 +1,4 @@
-import Calender from '@/components/Calender'
+
 import S from './ManagementChannel.module.css'
 
 function MangementChannel() {

@@ -22,7 +22,7 @@ function StudyMemberChannel() {
             스레드
           </NavLink>
           <NavLink
-            to="mypage"
+            to="manage"
             className={({ isActive }) => (isActive ? S.active : "")}
           >
             관리

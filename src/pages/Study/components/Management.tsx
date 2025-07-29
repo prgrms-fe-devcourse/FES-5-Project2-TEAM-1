@@ -12,9 +12,9 @@ function Management() {
         <p>채널관리</p>
       </aside>
       <main className={S.content}>
-        {/* <MangementChannel/>  */}
-        {/* <Approve/>        */}
-        <ManagementMembers/>
+        <MangementChannel/> 
+        {/* <Approve/>       
+        <ManagementMembers/> */}
       </main>
     </div>
   )
