@@ -26,7 +26,11 @@ type Team = {
   'board': PickBoard
 }
 
-function MypageChannel() {
+interface Props {
+  profileId : string;
+}
+
+function MypageChannel({profileId}:Props) {
   const [teams, setTeams] = useState<Team[]|null>(null);
   const [swiper, setSwiper] = useState<SwiperClass>();
   const swiperWrappedRef = useRef<HTMLElement|null>(null);
@@ -43,7 +47,7 @@ function MypageChannel() {
           images
         )
       `)
-      .eq('profile_id','11e880fd-65ca-4778-b8e9-1888c1e65233');
+      .eq('profile_id',profileId);
 
       if(error) return console.error('팀 불러오기 실패')
 
@@ -58,7 +62,7 @@ function MypageChannel() {
     };
     fetchChannels();
     // console.log('가입 채널 패치 완료');
-  },[])
+  },[profileId])
 
   const adjustMargin = () => {
     const screenWidth = window.innerWidth;
@@ -92,7 +96,7 @@ function MypageChannel() {
       <h2 className={S.sectionName}>참여중인 스터디</h2>
       <section className={S.teamContainer}>
         <button type="button" className={S.prevButton} onClick={handlePrev}>
-          <img src="src/assets/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
+          <img src="/src/assets/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
         </button>
         <Swiper 
           className="team"
@@ -124,7 +128,7 @@ function MypageChannel() {
           }
         </Swiper>
         <button type="button" className={S.nextButton} onClick={handleNext}>
-          <img src="src/assets/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
+          <img src="/src/assets/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
         </button>
       </section>
     </>

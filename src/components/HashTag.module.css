@@ -2,7 +2,11 @@
 /* 참고 링크 - https://github.com/yairEO/tagify?tab=readme-ov-file#events  */
 
 .hashTag {
-
+  --tag-bg: #a6b37d;
+  --tag--max-width: 600px;
+}
+.hashTagInput {
+  width: 400px;
   --tag-bg: #a6b37d;
   --tag--max-width: 600px;
 }

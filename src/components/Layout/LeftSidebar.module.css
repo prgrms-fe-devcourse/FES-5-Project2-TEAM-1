@@ -1,8 +1,12 @@
+
+
 .height{
   height: 100vh;
+  width: 220px;
   position: fixed;
   top: 0;
- 
+  left: 0;
+  box-shadow: 8px 0px 20px rgba(0, 0, 0, 0.08);
 }
 
 .navListWrap{
@@ -88,6 +92,7 @@
         width: 204px;
       border-radius: 4px;
       }
+
     .profileImage::after{
       content:'';
       position: absolute;

@@ -37,8 +37,7 @@ function CommentItem({comment,onDelete}: Props) {
         if(data) setReply(data);
       };
       comment_reply();
-    },[comment_id])
-
+  }, [comment_id])
   
  const handleLikeToggle = async (comment_id: string) => {
    const pressState = isPress ? like - 1 : like + 1;
@@ -61,29 +60,31 @@ function CommentItem({comment,onDelete}: Props) {
     setIsReplyPrss(!isReplyPress)
   }
 
-  const handleSubmitReply = async (e:React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-  
+  const handleSubmitReply = async (e?:React.FormEvent<HTMLFormElement>) => {
+      e?.preventDefault(); 
+    if (!createReply.trim()) return;
+    
     const {error} = await supabase.from('comment_reply').insert([{
       comment_id,
       profile_id,
       contents:createReply,
       likes:0,
       created_at:new Date()
-    }])
+    }]).select().single()
+
     if(error) console.log(error.message)
     setCreateReply('')
     
     const { data:replyData } = await supabase
       .from("comment_reply")
       .select("*")
-      .eq('comment_id',comment_id)
-    
-    if (replyData) setReply(replyData)
+      .eq('comment_id', comment_id)
+      if(!replyData) return
+      setReply(replyData);
   }
 
   const handleSave = async() => {
-    const {error} = await supabase.from('comment').update({contents:editContent}).eq('comment_id',comment_id)
+    const {error} = await supabase.from('comment_reply').update({contents:editContent}).eq('comment_id',comment_id)
     setIsEditing(!isEditing) 
     setContent(editContent);
     if(error) console.error()
@@ -93,7 +94,7 @@ function CommentItem({comment,onDelete}: Props) {
     const deleteComment = confirm('정말로 삭제하시겠습니까?')
     if (deleteComment) {
        const { error } = await supabase
-         .from("comment")
+         .from("comment_reply")
          .delete()
         .eq("comment_id", comment_id);
       if (error) console.error();
@@ -104,6 +105,26 @@ function CommentItem({comment,onDelete}: Props) {
   const handleReplyDelete = (targetId:string) => {
     setReply(prev => prev.filter(c => c.reply_id !== targetId))
   }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+       e.preventDefault();
+      if (!createReply.trim()) return;
+      handleSubmitReply();
+    }
+  };
+
+  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (!editContent.trim()) return;
+      handleSave();
+    }
+  }
+
+  const recentlyReply = [...reply].sort((a, b) => (
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  ))
 
   return (
     <li className={S.container} key={comment_id}>
@@ -134,9 +155,7 @@ function CommentItem({comment,onDelete}: Props) {
             type="text"
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleSave();
-            }}
+            onKeyDown={handleEditKeyDown}
             autoFocus
           />
         ) : (
@@ -169,6 +188,7 @@ function CommentItem({comment,onDelete}: Props) {
                 className={S.replyInput}
                 value={createReply}
                 placeholder="답글을 입력하세요"
+                onKeyDown={handleKeyDown}
                 onChange={(e) => setCreateReply(e.target.value)}
               ></textarea>
               <button type="submit" className={S.replyButton}>
@@ -176,9 +196,9 @@ function CommentItem({comment,onDelete}: Props) {
               </button>
             </form>
 
-            {reply &&
-              reply.map((comment) => (
-                <Recomment reply={comment} key={comment.comment_id} onDelete={() => { handleReplyDelete(comment.reply_id) }} />
+            {recentlyReply &&
+              recentlyReply.map((comment) => (
+                <Recomment reply={comment} key={comment.reply_id} onDelete={() => { handleReplyDelete(comment.reply_id) }} />
               ))}
           </div>
         )}

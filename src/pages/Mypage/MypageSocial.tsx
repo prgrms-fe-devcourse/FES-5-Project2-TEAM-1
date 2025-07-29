@@ -6,9 +6,11 @@ import S from './MypageTop.module.css'
 
 interface Props {
   user: User | null;
+  editMode: boolean,
+  setUserData: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-function MypageSocial({user}: Props) {
+function MypageSocial({user, editMode, setUserData}: Props) {
 
   const userSocial = user && user.profile[0].social[0];
   if( !userSocial ) {

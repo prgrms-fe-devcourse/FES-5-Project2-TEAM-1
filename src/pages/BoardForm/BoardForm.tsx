@@ -1,143 +1,132 @@
-import { useState } from "react";
 import S from "./BoardForm.module.css";
-import BoardOptions from "./components/BoardOptions";
-import BoardOptionSub from "./components/BoardOptionSub";
 import BoardPreview from "./components/BoardPreview";
-import BoardWriteForm from "./components/BoardWriteForm";
-import { debounce } from "@/utils/debounce";
-import type { Tables } from "@/supabase/database.types";
+import BoardEdit from "./components/BoardEdit";
+import { useState } from "react";
+import MapSearchPopup from "@/components/MapSearchPopup";
 import supabase from "@/supabase/supabase";
+import { useBoardContext } from "@/components/context/useBoardContext";
 
-//board 테이블 type 지정
-type boardType = Omit<Tables<"board">, "board_id" | "create_at" | "likes">;
-//board_tag 테이블 type 지정
-type hashTagType = Omit<Tables<"board_tag">, "tag_id">;
+import { useToast } from "@/utils/useToast";
+import { useHashTagContext } from "@/components/context/useHashTag";
 
-type tagType = {
-  value: string;
-};
-//글쓰기 폼 기본값
-const formInit: boardType = {
-  profile_id: "",
-  title: "",
-  contents: "",
-  member: "0",
-  address: "",
-  board_cls: "0",
-  join_cls: "0",
-  images: "",
-  due_date: "",
-};
+import { useProfileImageContext } from "@/components/context/useProfileImage";
+
+interface boardData {
+  profile_id: string;
+  title: string;
+  contents: string;
+}
 
 function BoardForm() {
-  const [markdown, setMarkDown] = useState("");
-  const [boardData, setBoardData] = useState<boardType | null>(formInit);
-  const [hashTagData, setHashTagData] = useState<hashTagType[] | null>(null);
-  const [boardImage, setBoardImage] = useState<File | null>(null);
-  //마크다운 실시간 변환 => debounce적용
-  const handleBoardWrite = debounce(
-    (e: React.InputEvent<HTMLTextAreaElement>) => {
-      const textarea = e.target as HTMLTextAreaElement;
-      setMarkDown(textarea.value);
-    },
-    500
-  );
+  const [isOpen, setIsOpen] = useState(false);
+  const { postData } = useBoardContext();
+  const { hashTagData } = useHashTagContext();
+  const { profileImage } = useProfileImageContext();
+  const { success, error: errorPop } = useToast();
 
-  //hash태그 data-mapping
-  const handleHashTag = (tag: tagType[]) => {
-    console.log(tag);
-    const hashTagArr: hashTagType[] = tag.map((data) => {
-      const value: string = data.value;
-      const tagObj: hashTagType = {
-        board_id: "d1dc2e76-e222-46db-bdc9-ff1c9879bcc0",
-        hash_tag: value,
-        color_code: "#a6b37d",
-      };
-      return tagObj;
-    });
-    if (!hashTagArr) return;
-    setHashTagData(hashTagArr);
-  };
-
-  //글 게시 submit 이벤트 핸들러
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!boardData) return;
-    const insertBoardData: boardType = {
-      ...boardData,
-      contents: markdown,
-      address: "서울특별시",
-      profile_id: "b7009e60-8628-4a42-b9a1-f6bdb264e3a7",
-    };
-
-    insertBoard(insertBoardData);
-    if (hashTagData) {
-      insertHashTag(hashTagData);
-    }
-
-    if (boardImage) {
-      const fileExt = boardImage.name.split(".").pop();
-      const fileName = `b7009e60-8628-4a42-b9a1-f6bdb264e3a7.${fileExt}`;
-      const filePath = fileName;
-
-      const { error: uploadError } = await supabase.storage
-        .from("boardimage")
-        .upload(filePath, boardImage, {
-          upsert: true,
-        });
-
-      if (uploadError) {
-        throw new Error("이미지 업로드에 실패했습니다.");
-      }
-    }
-  };
-  const getBoardImage = (fileData: HTMLInputElement) => {
-    if (!fileData.files) return;
-    const file = fileData.files[0] ?? null;
-    setBoardImage(file);
-  };
-  const insertHashTag = async (hashData: hashTagType[]) => {
-    const { error } = await supabase.from("board_tag").insert(hashData);
-    if (error) {
-      throw new Error("글게시에 실패하였습니다.");
-    }
-  };
-
-  //supabase board테이블 insert
-  const insertBoard = async (insertItem: boardType) => {
-    console.log(insertItem);
-    const { error } = await supabase
+  const insertBoard = async (insertData: boardData) => {
+    const { data, error } = await supabase
       .from("board")
-      .insert([insertItem])
+      .insert(insertData)
       .select();
     if (error) {
       throw new Error("글게시에 실패하였습니다.");
     }
+    success("글이 게시되었습니다!");
+    if (data) {
+      insertHashTag(data[0].board_id);
+      imageUpload(data[0].board_id);
+    }
+  };
+
+  const insertHashTag = async (board_id: string) => {
+    if (!hashTagData) return;
+
+    const hashTag = hashTagData.map((tags) => {
+      return {
+        board_id: board_id,
+        hash_tag: tags.value,
+        color_code: "#a6b37d",
+      };
+    });
+
+    const { error } = await supabase.from("board_tag").insert(hashTag);
+    if (error) {
+      throw new Error("tag insert 실패.");
+    }
+  };
+
+  const handleBoardUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (!postData || postData?.title === "") {
+      errorPop("제목을 작성해주세요!");
+      return;
+    }
+    if (!postData || postData?.contents === "") {
+      errorPop("글을 작성해주세요");
+      return;
+    }
+
+    const insertData = {
+      profile_id: "4071d997-95f6-4630-bae5-5b69ea4d76d7",
+      title: postData.title,
+      contents: postData.contents,
+    };
+
+    insertBoard(insertData);
+  };
+  const imageUpload = async (board_id: string) => {
+    let imageUrl = "";
+    if (!profileImage) return;
+    const fileName = `${board_id}-${profileImage.name}`; // 중복 방지를 위한 이름
+    const filePath = `${fileName}`; // 원하는 디렉토리 구조
+
+    const { error } = await supabase.storage
+      .from("boardimage")
+      .upload(filePath, profileImage);
+
+    if (error) {
+      errorPop("이미지 업로드에 실패하였습니다.");
+      throw new Error(error.message);
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("boardimage")
+      .getPublicUrl(filePath);
+
+    imageUrl = publicUrlData.publicUrl;
+
+    const { data, error: updateError } = await supabase
+      .from("board")
+      .update({ images: imageUrl })
+      .eq("board_id", board_id)
+      .select();
+    console.log(data);
+    console.log(updateError);
   };
   return (
-    <BoardContext.Provider value={{ boardData, setBoardData }}>
-      <form onSubmit={handleSubmit}>
-        <div className={S.bContainer}>
-          <div className={S.boardEdit}>
-            <BoardOptions getBoardImage={getBoardImage} />
-            <BoardOptionSub onHashTag={handleHashTag} />
-            <BoardWriteForm onInput={handleBoardWrite} />
-          </div>
-          <BoardPreview markdown={markdown} />
-        </div>
-        <div className={S.boardBottonArea}>
-          <button type="button">
-            <img src="/icons/place.png" alt="" /> 장소 찾기
-          </button>
-          <div>
-            <button type="button">임시 저장</button>
-            <button id={S.boardWrite} type="submit">
-              글 게시
-            </button>
-          </div>
-        </div>
-      </form>
-    </BoardContext.Provider>
+    <div>
+      <div className={S.bContainer}>
+        <BoardEdit />
+        <BoardPreview />
+      </div>
+      <div className={S.boardBottonArea}>
+        <button type="button" onClick={() => setIsOpen(true)}>
+          임시 저장
+        </button>
+        <button id={S.boardWrite} type="button" onClick={handleBoardUpload}>
+          글 게시
+        </button>
+      </div>
+      {isOpen && (
+        <MapSearchPopup
+          onClose={() => {
+            setIsOpen(false);
+          }}
+        />
+      )}
+    </div>
   );
 }
 export default BoardForm;

@@ -59,6 +59,13 @@ function Recomment({ reply,onDelete }: Props) {
          onDelete?.();
     }
   }
+    const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        if (!editReply.trim()) return;
+        handleSave();
+      }
+    };
 
   return (
     <div className={S.container} key={reply_id}>
@@ -92,9 +99,7 @@ function Recomment({ reply,onDelete }: Props) {
               type="text"
               value={editReply}
               onChange={(e) => setEditReply(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleSave()
-              }}
+              onKeyDown={handleEditKeyDown}
               autoFocus
             />
           ): (

@@ -1,0 +1,21 @@
+.optionButton {
+  width: 400px;
+  height: 32px;
+  border: 0.5px solid #b99470;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  ul {
+    display: flex;
+    gap: 20px;
+    li {
+      width: 20px;
+      height: 20px;
+    }
+    li:hover {
+      background-color: #777777;
+    }
+  }
+}

@@ -10,6 +10,8 @@
     top: -20rem;
     left: -10rem;
 
+    z-index: 5;
+
 }
 
 .container {

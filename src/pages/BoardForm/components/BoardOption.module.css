@@ -1,0 +1,29 @@
+.boardOption {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-left: 16px;
+  margin-bottom: 16px;
+  padding-top: 16px;
+}
+.boardOptionDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.boardTitle {
+  padding-top: 28px;
+  input {
+    width: 400px;
+    background-color: #f5f2eb;
+    border-style: none;
+    border-bottom: 0.5px solid #b99470;
+    box-sizing: border-box;
+    font-size: 32px;
+  }
+  input:focus {
+    outline: none !important;
+  }
+}

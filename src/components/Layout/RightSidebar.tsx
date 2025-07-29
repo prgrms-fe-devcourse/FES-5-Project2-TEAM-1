@@ -1,29 +1,57 @@
-import S from './Rightsidebar.module.css'
+import S from './RghtSidebar.module.css'
 import '../../style/reset.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthProvider';
 import supabase from '@/supabase/supabase';
+import { useEffect, useState } from 'react';
 
 function RightSidebar() {
-
+  
+  const [profileId, setProfileId] = useState('');
+  const {user:currentUser}  = useAuth();
   const {user, logout} = useAuth()
   const navigate = useNavigate()
+
+  useEffect(()=>{
+    const fetchUserProfile = async() => {
+      if(!currentUser) return;
+      const { data, error} = await supabase
+        .from("user_profile")
+        .select("profile_id")
+        .eq("user_id", currentUser.id)
+        .single();
+      if (error || !data) {
+        console.error("user_base 조회 실패", error);
+        return;
+      }
+      const {profile_id} = data;
+      // console.log(profile_id);
+      setProfileId(profile_id);
+    }
+    fetchUserProfile();
+  },[currentUser])
 
   const handleLogout = async () => {
     await logout()
     navigate('/')
   }
 
-
   return (
     <nav className={S.container}>
       <div className={S.height}>
         <div className={S.loginBox}>
           <div className={S.profileImage}></div>
-          <div className={S.loginBoxGreeting}>
-            <p>Hello🖐️</p>
-            <h3>{user ? user.email.split('@')[0] : 'Guest'}</h3>
-          </div>
+            {user ? (
+            <Link to={`/mypage/${profileId}`} className={S.loginBoxGreeting} title='마이페이지 이동'>
+              <p>Hello🖐️</p>
+              <h3>{user.email.split('@')[0]}</h3>
+            </Link>
+            ) : (
+            <div className={S.loginBoxGreeting}>
+              <p>Hello🖐️</p>
+              <h3>Guest</h3>
+            </div>
+            )}
           <div className={S.loginLogout}>
             {user ? (
               <button onClick={handleLogout}>
