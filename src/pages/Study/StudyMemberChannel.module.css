@@ -1,5 +1,7 @@
 .container{
  flex:1; 
+ display: flex;
+   justify-content: space-between;
  z-index: 9999;
 }
 

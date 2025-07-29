@@ -15,6 +15,7 @@ import Footer from "./pages/Mainpage/Footer";
 import Register from "./pages/Register";
 import Login from "./pages/Login/login";
 import BoardWrite from "./pages/BoardForm/BoardWrite";
+import Approve from "./pages/Study/components/Approve";
 
 function App() {
   const location = useLocation();
@@ -41,6 +42,7 @@ function App() {
               <Route index element={<StudyJoinInfomation />} />
               <Route path="memberchannel" element={<StudyMemberChannel />} />
               <Route path="thread" element={<Thread />} />
+              <Route path='approve' element={<Approve/>}/>
             </Route>
             <Route path="/Write" element={<BoardWrite />} />
             <Route path="/mypage/:id" element={<Mypage />} />
