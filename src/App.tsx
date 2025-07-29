@@ -43,7 +43,7 @@ function App() {
               <Route path="thread" element={<Thread />} />
             </Route>
             <Route path="/Write" element={<BoardWrite />} />
-            <Route path="/mypage" element={<Mypage />} />
+            <Route path="/mypage/:id" element={<Mypage />} />
           </Routes>
           {!isAuthPage && <Footer />}
         </div>

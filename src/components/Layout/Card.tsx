@@ -31,7 +31,6 @@ function Card({ card }:Props) {
     profile_id,
     board_tag,
   } = card;
-
   
     const [cardLike, setCardLike] = useState(likes);
     const [isPressed, setIsPressed] = useState(false);

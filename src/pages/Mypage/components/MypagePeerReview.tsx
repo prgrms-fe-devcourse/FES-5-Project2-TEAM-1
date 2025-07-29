@@ -9,11 +9,27 @@ import './MypageSwiper.css'
 import 'swiper/css'; 
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import supabase from "@/supabase/supabase"
 
 type PeerReview = Tables<'peer_review'>
 type PeerReviewsList = { writer_id: string; writerProfileImage:string; review_contents:string; review_score:number; review_contents_preview:string };
 
-function MypagePeerReview() {
+/**
+ * 현재 접속한 유저랑, 조회한 마이페이지 유저 params랑 같은지() 비교
+ * 아이디로 비교하면 위험할거 같으니까,, 그 아이디 기준으로 nickname이 같은지 비교?
+ * 
+ * user_base의 nickname을 param으로 전달하고
+ * 그것과 현재 접속한 userId가 일치하면
+ * user_profile에서 그 아이디의 profile_id를 뽑아서
+ * peer_review에서 profile_id가 일치하는 데이터 반환
+ * 
+ * param으로 받은 profileId와 현재접속한 유저 id -> profile_id 비교
+ */
+
+interface Props {
+  profileId : string;
+}
+function MypagePeerReview({profileId}:Props) {
   const [rawPeerReviews, setRawPeerReviews] = useState<PeerReview[]|null>(null)
   const [peerReviews, setPeerReviews] = useState<PeerReviewsList[]|null>(null);
   const [swiper, setSwiper] = useState<SwiperClass>();
@@ -21,16 +37,18 @@ function MypagePeerReview() {
   const swiperWrappedRef = useRef<HTMLElement|null>(null);
 
   useEffect(()=>{
+    if(!profileId) return;
     const fetchPeerReviews = async() => {
-      const data = await compareUserId('11e880fd-65ca-4778-b8e9-1888c1e65233','peer_review');
+      const {data} = await supabase.from('peer_review').select('*').eq('profile_id',profileId);
       if(!data) return console.error('피어리뷰 불러오기 실패');
       setRawPeerReviews(data);
-
     }
     fetchPeerReviews();
-    // console.log('피어리뷰 패치 완료')
-  },[])
+    console.log('피어리뷰 패치 완료')
+  },[profileId])
 
+
+  
   useEffect(()=>{
     const refinedPeerReviews = async() => {
       if(!rawPeerReviews) return;
@@ -86,7 +104,7 @@ function MypagePeerReview() {
       <h2 className={S.sectionName}>피어리뷰</h2>
       <section className={S.peerReviewContainer}>
         <button type="button" className={S.prevButton} onClick={handlePrev}>
-          <img src="src/assets/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
+          <img src="/src/assets/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
         </button>
         <Swiper 
           className="peerReview"
@@ -128,7 +146,7 @@ function MypagePeerReview() {
           }
         </Swiper>
         <button type="button" className={S.nextButton} onClick={handleNext}>
-          <img src="src/assets/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
+          <img src="/src/assets/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
         </button>
       </section>
     </>
