@@ -5,6 +5,7 @@ import supabase from "@/supabase/supabase";
 import { useNavigate } from "react-router-dom";
 import PasswordInput from "@/components/PasswordInput";
 import Swal from "sweetalert2";
+import { showErrorAlert, showInfoAlert, showSuccessAlert } from "@/utils/sweetAlert";
 
 function Register() {
 
@@ -28,43 +29,22 @@ function Register() {
         e.preventDefault();
 
         setError(null);
+        
 
         if(password !== passwordConfirm){
-            Swal.fire({
-                icon:'error',
-                title:'비밀번호 불일치',
-                text:'비밀번호가 일치하지 않습니다. 다시 확인해주세요.',
-                // confirmButtonColor:' #FFB6B9',
-                confirmButtonColor: '#FCD5CE',
-                background: '#FFFBEA',
-                iconColor: '#6B9B6B',
-            })
+            await showErrorAlert('비밀번호 불일치', '비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
             setError('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
             return;
         }
 
         if(!certificateFile){
-            Swal.fire({
-                icon: 'warning',
-                title: '수료증 업로드 누락',
-                text: '수료증 파일을 업로드해주세요.',
-                confirmButtonColor: '#FCD5CE',
-                background: '#FFFBEA',
-                iconColor: '#6B9B6B',
-            });
+            await showInfoAlert('수료증 업로드 누락', '수료증 파일을 업로드해주세요.');
             setError('수료증 파일을 업로드해주세요.');
             return;
         }
 
         if(agree === false){
-            Swal.fire({
-                icon: 'warning',
-                title: '약관 동의 필요',
-                text: '모든 이용 약관에 동의해주세요.',
-                confirmButtonColor: '#FCD5CE',
-                background: '#FFFBEA',
-                iconColor: '#6B9B6B',
-            });
+            await showInfoAlert('약관 동의 필요', '모든 이용 약관에 동의해주세요.');
             setError('모든 이용 약관에 동의해주세요.');
             return;
         }
@@ -77,14 +57,7 @@ function Register() {
 
         if(signUpError || !user){
             console.error('회원가입 실패!', signUpError?.message);
-            Swal.fire({
-                icon: 'error',
-                title: '회원가입 실패',
-                text: signUpError?.message || '알 수 없는 오류가 발생했어요.',
-                confirmButtonColor: '#FCD5CE',
-                background: '#FFFBEA',
-                iconColor: '#6B9B6B',
-            });
+            showErrorAlert('회원가입 실패', '회원가입에 실패했습니다.');
             setError(signUpError?.message || '회원가입에 실패했습니다.');
             return;
         }
@@ -102,16 +75,7 @@ function Register() {
             return;
         }
 
-        Swal.fire({
-            title: '🎉 회원가입 성공!',
-            text: '프둥이숲에 오신 걸 환영해요 🍃',
-            icon: 'success',
-            confirmButtonColor: '#FCD5CE',
-            background: '#FFFBEA',
-            iconColor: '#6B9B6B',
-            timer: 1500,
-            showConfirmButton: false,
-        });
+        await showSuccessAlert('회원가입 성공!', '프둥이숲에 오신 걸 환영합니다!🎉');
         setTimeout(() => {
             localStorage.clear();
             navigate("/login");

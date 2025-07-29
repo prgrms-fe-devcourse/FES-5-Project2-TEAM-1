@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import PasswordInput from "@/components/PasswordInput";
 import Swal from "sweetalert2";
+import { showErrorAlert, showSuccessAlert } from "@/utils/sweetAlert";
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -24,30 +25,13 @@ function Login() {
         
         if(error){
             console.error(error.message);
-            Swal.fire({
-                icon:'error',
-                title:'로그인 실패',
-                text:'이메일 또는 비밀번호가 일치하지 않습니다.',
-                // confirmButtonColor: '#6B9B6B',
-                confirmButtonColor: '#FCD5CE',
-                background: '#FFFBEA',
-                iconColor: '#6B9B6B',
-            })
+            await showErrorAlert('로그인 실패', '이메일 또는 비밀번호가 일치하지 않습니다.');
             setError('이메일 또는 비밀번호가 일치하지 않습니다.');
         } else {
-            Swal.fire({
-                icon:'success',
-                title:'로그인 성공',
-                text:'프둥이숲에 오신 걸 환영해요!🎉',
-                confirmButtonColor: '#A8D5BA',
-                background: '#FFFBEA',
-                iconColor: '#6B9B6B',
-                timer:1200,
-                showConfirmButton: false,
-            });
+            await showSuccessAlert('로그인 성공!', '환영합니다 좋은 하루 되세요!🌱')
             setTimeout(()=>{
                 navigate("/");
-            },1300);
+            },500);
     }
 };
 
