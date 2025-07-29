@@ -3,10 +3,14 @@ import S from "./BoardOptionPreview.module.css";
 import { useEffect, useState } from "react";
 import { useBoardContext } from "@/components/context/useBoardContext";
 
+// import { useHashTagContext } from "@/components/context/useHashTag";
+
 function BoardOptionPreview() {
   const { profileImage } = useProfileImageContext();
   const [image, setImage] = useState("");
   const { postData } = useBoardContext();
+  // const { hashTagData } = useHashTagContext();
+
   useEffect(() => {
     if (profileImage) {
       const reader = new FileReader();
@@ -16,21 +20,21 @@ function BoardOptionPreview() {
       reader.readAsDataURL(profileImage);
     }
   }, [profileImage]);
+
   return (
     <div className={S.boardOptionPreview}>
       <div className={S.previewImage}>
-        <img src={image ? image : "/images/no_image.png"} alt="" />
+        {image && <img src={image} alt="프로필이미지" />}
       </div>
       <div className={S.previewOption}>
         <div>
           <input
             type="text"
-            placeholder="미리보기"
             className={S.titlePreview}
             value={postData?.title}
+            readOnly
           />
         </div>
-        <div>해시태그</div>
       </div>
     </div>
   );
