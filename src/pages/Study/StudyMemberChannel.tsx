@@ -28,6 +28,7 @@ function StudyMemberChannel() {
             관리
           </NavLink>
         </div>
+        <button className={S.joinBtn} type="submit">가입하기</button>
       </nav>
 
       <Outlet />
