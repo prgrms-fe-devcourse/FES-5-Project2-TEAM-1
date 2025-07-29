@@ -14,6 +14,10 @@ import MainContent from "./pages/Mainpage/MainContent";
 import Footer from "./pages/Mainpage/Footer";
 import Register from "./pages/Register";
 import Login from "./pages/Login/login";
+import Management from './pages/Study/components/management/Management';
+import Approve from './pages/Study/components/management/Approve';
+import ManagementMembers from './pages/Study/components/management/ManagementMembers';
+import MangementChannel from './pages/Study/components/management/ManagementChannel';
 import BoardWrite from "./pages/BoardForm/BoardWrite";
 
 function App() {
@@ -29,8 +33,6 @@ function App() {
             <LeftSidebar />
           </nav>
         )}
-
-        {/* 컴포넌트 들어오면 됩니다 */}
         <div className="mainWrapper">
           <Routes>
             <Route path="/" element={<MainContent />} />
@@ -41,6 +43,11 @@ function App() {
               <Route index element={<StudyJoinInfomation />} />
               <Route path="memberchannel" element={<StudyMemberChannel />} />
               <Route path="thread" element={<Thread />} />
+              <Route path="management" element={<Management/>}>
+                <Route index element={<MangementChannel/>}/>
+                <Route path="approve" element={<Approve/>}/>
+                <Route path="managementmembers" element={<ManagementMembers/>}/>
+              </Route>
             </Route>
             <Route path="/Write" element={<BoardWrite />} />
             <Route path="/mypage/:id" element={<Mypage />} />
