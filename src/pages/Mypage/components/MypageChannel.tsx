@@ -38,6 +38,7 @@ function MypageChannel({profileId}:Props) {
 
   useEffect( () => {
     const fetchChannels = async() => {
+      if(!profileId) return; // 이거 안해주면 profileId fetch 되기 전까지 에러 난다
       const {data, error} = await supabase
       .from('board_member')
       .select(`
