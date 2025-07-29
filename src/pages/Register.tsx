@@ -5,12 +5,13 @@ import supabase from "@/supabase/supabase";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
-
+    const nameId = useId();
     const emailId= useId();
     const pwId = useId();
     const pwConfirmId = useId();
     const fileId = useId();
 
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -44,6 +45,11 @@ function Register() {
         const {data:{user}, error:signUpError} = await supabase.auth.signUp({
             email,
             password,
+            options:{
+                data:{
+                    name,
+                }
+            }
         });
 
         if(signUpError || !user){
@@ -58,7 +64,7 @@ function Register() {
         const {error:uploadError} = await supabase.storage
         .from('certificates')
         .upload(filePath, certificateFile);
-
+        
         if(uploadError){
             console.error('파일 업로드 실패:', uploadError.message);
             setError('수료증 파일 업로드에 실패했습니다.');
@@ -80,12 +86,21 @@ function Register() {
             <form onSubmit={handleRegister} className={S.form}>
 
                 <h2>회원가입을 진행해주세요</h2>
-
+                
+                <label htmlFor={nameId}>성함</label>
+                <input 
+                type="text" 
+                id={nameId} 
+                name="userName" 
+                required 
+                placeholder="수료증과 동일한 성명을 입력해주세요"
+                onChange={(e)=>setName(e.target.value)}/>
+                
                 <label htmlFor={emailId}>이메일</label>
                 <input  
                 type="text" 
                 id={emailId} 
-                name="username" 
+                name="email" 
                 required 
                 onChange={(e)=>setEmail(e.target.value)}
                 />
@@ -96,6 +111,7 @@ function Register() {
                 id={pwId}
                 name="password" 
                 required 
+                placeholder="6자 이상 입력해주세요"
                 onChange={(e)=>setPassword(e.target.value)} 
                 />
 
