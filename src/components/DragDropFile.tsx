@@ -34,20 +34,32 @@ function DragDropFile({ onChangeFile }: Props) {
     e.target.value = "";
   };
   return (
-    <div className={S.fileUplaod}>
-      <label
-        htmlFor="fileUpload"
-        // Label에 드래그 앤 드랍 이벤트 추가
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-      >
-        {/* 프로필로 등록할 이미지를 올려주세요 */}
-        <div className={S.img}>
-          <img src="/images/file-upload.png" alt="" />
-        </div>
-        upload image
-      </label>
-      <input id="fileUpload" type="file" hidden onChange={handleChange}></input>
+    <div className={S.uploadContainer}>
+      <div className={S.fileUplaod}>
+        <label
+          htmlFor="fileUpload"
+          // Label에 드래그 앤 드랍 이벤트 추가
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
+          {/* 프로필로 등록할 이미지를 올려주세요 */}
+          <div className={S.img}>
+            <img src="/images/imageUpload.png" alt="" />
+          </div>
+          <div className={S.description}>
+            <span className={S.title}>Drag & drop images</span>
+            <span className={S.contents}>
+              or Click to upload from your computer
+            </span>
+          </div>
+        </label>
+        <input
+          id="fileUpload"
+          type="file"
+          hidden
+          onChange={handleChange}
+        ></input>
+      </div>
     </div>
   );
 }
