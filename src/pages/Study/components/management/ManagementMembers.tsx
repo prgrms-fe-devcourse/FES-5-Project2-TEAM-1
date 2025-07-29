@@ -1,4 +1,4 @@
-import S from './Approve.module.css'
+import S from './ManagementMembers.module.css'
 
 type Dump = {
   name:string,
@@ -52,25 +52,25 @@ const dump:Dump[] = [
 
 
 
-function Approve() {
+
+function ManagementMembers() {
+
+  
   return (
-    <main>
+    <main className={S.managementMembersContainer}>
       {
-        dump && dump.map(({name, role, img},index)=>(
+        dump && dump.map(({name, role , img},index)=>(
           <div className={S.card} key={index}>
             <img src={img} alt="프로필" />
             <div className={S.information}>
               <p className={S.name}>{name}</p>
               <p className={S.role}>{role}</p>
             </div>
-            <div className={S.buttonGroup}>
-              <button className={S.accept} type="button">승인</button>
-              <button className={S.decline} type="button">거절</button>
+            <button className={S.reject} type="button">내보내기</button>
             </div>
-          </div>
         ))
       }
     </main>
   )
 }
-export default Approve
+export default ManagementMembers
