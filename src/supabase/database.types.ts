@@ -541,7 +541,6 @@ export type Database = {
           profile_images: string
           user_id: string
           visibility: Json
-          visibility: Json
         }
         Insert: {
           address: string
@@ -553,7 +552,6 @@ export type Database = {
           profile_images: string
           user_id?: string
           visibility?: Json
-          visibility?: Json
         }
         Update: {
           address?: string
@@ -564,7 +562,6 @@ export type Database = {
           profile_id?: string
           profile_images?: string
           user_id?: string
-          visibility?: Json
           visibility?: Json
         }
         Relationships: [

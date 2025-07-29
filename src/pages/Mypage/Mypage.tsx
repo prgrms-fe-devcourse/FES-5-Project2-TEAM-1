@@ -113,7 +113,10 @@ function Mypage() {
               setUserData={setUserData}
               />
             <MypageSocial
-              user={userData} />
+              user={userData}
+              editMode={editMode}
+              setUserData={setUserData}
+              />
          
             <MypagePeerReview profileId={profileId}/>
             <MypageChannel profileId={profileId}/>
