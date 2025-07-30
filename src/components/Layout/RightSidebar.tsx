@@ -144,7 +144,7 @@ function RightSidebar() {
                     fill="#222222"
                   />
                 </svg>
-              )}
+              </a>
               <span className={S.navListText}>
                 <h3>Notification</h3>
               </span>
