@@ -1,13 +1,18 @@
 
-main{
-  display: grid; 
-  /* grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); */
+.approveContainer{
+  /* display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   grid-template-columns: repeat(4,1fr);
+  align-items: start; 
+  gap: 20px; */
+
+  display: flex;
+  flex-wrap: wrap; 
   align-items: start; 
   gap: 20px;
 }
 
-.card{
+.approveContainer .card{
   width: 270px;
   padding: 16px;
 
@@ -33,7 +38,7 @@ main{
   }
 }
 
-.information{
+.approveContainer .information{
   display: flex;
   flex-direction: column;
 
@@ -52,14 +57,14 @@ main{
   }
 }
 
-.buttonGroup{
+.approveContainer .buttonGroup{
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
 }
 
-.card button{
+.approveContainer .card button{
   width: 89px;
   height: 40px;
   border-radius: 8px;
@@ -72,13 +77,23 @@ main{
   line-height: normal;
 }
 
-.accept{
+.approveContainer .accept{
   background: #BBDADA;
   box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.25);
+  transition: 0.3s;
+
+  &:hover{
+    background-color: #95acac;
+  }
 }
 
-.decline{
+.approveContainer .decline{
   background: #FFC0CB;
   box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.25);
+  transition: 0.3s;
+
+  &:hover{
+    background-color: #c7979f;
+  }
 }
 

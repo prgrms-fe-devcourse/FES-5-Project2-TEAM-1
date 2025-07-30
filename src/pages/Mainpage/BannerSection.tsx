@@ -12,7 +12,7 @@ function BannerSection({search, setSearch}: Props) {
   return (
     <section className={S.container}>
             <div className={S.bannerImage}>
-                <img src="images/banner.png" alt="모여봐요 프둥이숲" />
+                <img src="images/banner2.png" alt="모여봐요 프둥이숲" />
             </div>
             <div className={S.searchWrapper}>
                 <svg

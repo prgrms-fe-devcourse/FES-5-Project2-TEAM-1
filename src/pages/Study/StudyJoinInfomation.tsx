@@ -5,6 +5,7 @@ import Project from "./components/Project";
 import ChannelComment from "./components/ChannelComment";
 import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
+import MarkDownConvert from "@/components/MarkDownConvert";
 
 
 type Board = Tables<"board">;
@@ -30,6 +31,8 @@ function StudyJoinInfomation() {
   if(!card) return 
   const { images, title, address, member, board_tag, contents} = card
  
+
+
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -37,7 +40,12 @@ function StudyJoinInfomation() {
           {images && <img src={images} alt="스터디 이미지" />}
           <div className={S.textInfo}>
             <div className={S.title}>
-              <h2>{title}</h2>
+              <div className={S.titleTop}>
+                <h2>{title}</h2>
+                <button type="button" className={S.setting}>
+                  <img src="/icons/edit.svg" alt="" />
+                </button>
+              </div>
             </div>
             <div className={S.tagBox}>
               {(board_tag as Tables<"board_tag">[]).map((t) => (
@@ -100,7 +108,7 @@ function StudyJoinInfomation() {
             </div>
           </div>
         </div>
-        <article className={S.content}>{contents}</article>
+        <MarkDownConvert markdown={contents} addClass={S.contents}/>
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>

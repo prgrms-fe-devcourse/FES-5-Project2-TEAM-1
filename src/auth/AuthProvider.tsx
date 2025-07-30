@@ -1,57 +1,95 @@
 import supabase from "@/supabase/supabase";
-import { createContext, useContext, useEffect, useState } from "react"
-
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
-  id:string;
-  email:string;
+  id: string;
+  email: string;
+  profileId: string;
 }
 
 interface AuthContextType {
-    user:User | null;
-    isAuth:boolean;
-    logout:() => void;
+  user: User | null;
+  isAuth: boolean;
+  logout: () => void;
+  isLoading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthProvider({children}:{children:React.ReactNode}) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const [user, setUser] = useState<User | null>(null);
-    
-    useEffect(()=>{
-        supabase.auth.getUser().then(({data:{user}}) => {
-            if(user){
-                setUser({id:user.id, email:user.email!})
-            }
-        })
+  useEffect(() => {
+    const getSessionUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-        const {data:listener} = supabase.auth.onAuthStateChange((event, session)=>{
-            if(event === 'SIGNED_IN' && session?.user){
-                setUser({id:session.user.id, email:session.user.email!});
-            } else if (event === "SIGNED_OUT"){
-                setUser(null);
-            }
-        })
+      if (session?.user) {
+        const { data, error } = await supabase
+          .from("user_profile")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .single();
 
-        return () => listener.subscription.unsubscribe() 
-    }, [])
+        if (error) console.error("유저 프로필 조회 실패:", error);
 
-    const logout = async () => {
-        await supabase.auth.signOut();
-        setUser(null);
-    }
+        setUser({
+          id: session.user.id,
+          email: session.user.email!,
+          profileId: data.profile_id,
+        });
+      }
 
+      setIsLoading(false);
+    };
+
+    getSessionUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "SIGNED_IN" && session?.user) {
+          const { data, error } = await supabase
+            .from("user_profile")
+            .select("*")
+            .eq("user_id", session.user.id)
+            .limit(1)
+            .single();
+
+          if (error) {
+            console.error("유저 프로필 조회 실패.");
+          }
+
+          setUser({
+            id: session.user.id,
+            email: session.user.email!,
+            profileId: data.profile_id,
+          });
+        } else if (event === "SIGNED_OUT") {
+          setUser(null);
+        }
+        setIsLoading(false);
+      }
+    );
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
 
   return (
-    <AuthContext value={{user, isAuth:!!user, logout}}>
-        {children}
+    <AuthContext value={{ user, isAuth: !!user, logout, isLoading }}>
+      {children}
     </AuthContext>
-  )
+  );
 }
 
-export function useAuth(){
-    const ctx = useContext(AuthContext);
-    if(!ctx) throw new Error('<AuthProvider> 안에서만 사용할 수 있습니다.');
-    return ctx;
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("<AuthProvider> 안에서만 사용할 수 있습니다.");
+  return ctx;
 }

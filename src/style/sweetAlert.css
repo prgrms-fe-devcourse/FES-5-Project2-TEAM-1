@@ -1,0 +1,40 @@
+
+
+/* sweetalert 창 공통 css */
+
+
+/* 기본 alert창의 전체 스타일  */
+.my-swal-popup {
+  border-radius: 21px !important;
+  background: #FFFBEA;
+}
+
+/* 배경 이미지가 포함된 alert창 스타일 */
+.my-swal-popup.with-bg{
+  background: 
+    linear-gradient(to bottom, 
+      rgba(255,255,255,0.3) 0%, 
+      rgba(255,255,255,0.85) 50%, 
+      #ffffff 50%, 
+      #ffffff 100%),
+    url('images/successImg2.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: top;
+  border-radius: 24px;
+  width: 512px !important;
+  padding: 32px 24px;
+}
+
+/* alert창의 확인 버튼 스타일 */
+.my-confirm-button {
+  border-radius: 12px !important;
+  padding: 8px 20px;
+  font-weight: 600;
+}
+
+/* 아이콘 배경 스타일 */
+.custom-icon-background .swal2-icon-content {
+  position: relative;
+  z-index: 2;
+}
