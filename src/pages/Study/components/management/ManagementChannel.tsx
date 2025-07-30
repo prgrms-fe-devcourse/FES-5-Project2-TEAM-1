@@ -1,22 +1,87 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import S from './ManagementChannel.module.css'
 import DaumPostcodeEmbed from 'react-daum-postcode'
+import { useNavigate, useParams } from 'react-router-dom';
+import type { Tables } from '@/supabase/database.types';
+import supabase from '@/supabase/supabase';
+import { useToast } from '@/utils/useToast';
+import Swal from 'sweetalert2';
 
 /**
  * 
  * 오프라인 선택 후 장소(address)가 값이 없다면 저장할때 확인 받기
  * form 태그 submit 할때 현재값들 데이터로 반환하면 될듯
+ * form 태그 내에 변동사항이 생길때만 저장되도록,
+ * => 아니면 저장 버튼 없애고 change 생길때마다 업데이트??
+ * 기록된 값이 있다면 가져오기
+ * 
+ * 모집 활성화 여부 따로 업데이트하기(onClick 하자마자 업데이트 시키면 될듯)
+ * 
+ * db에 board에 업데이트 하기
+ * board_id는 주소 params
+ * 
+ * 모임장소 온라인/ 오프라인 데이터 불러왔을때 선택이 반영되도록 해야함
  */
 
+type Board = Tables<'board'>;
+type PickBoard = Pick<Board,'member'|'board_cls'|'address'|'meeting_time'|'active'>;
 
 function MangementChannel() {
 
-  const [isOffline, setIsOffline] = useState<boolean>(false);
+  const [category, setCategory] = useState<'0'|'1'|null>('0');
+  const [meetingTime, setMeetingTime] = useState<string|null>(null);
+  const [members, setMembers] = useState<number>(1);
   const [address, setAddress] = useState<string|null>(null);
+  const [isOffline, setIsOffline] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(true);
-  const [category, setCategory] = useState<string>('study');
-  const [contributors, setContributors] = useState<number>(1);
+  const [projectData, setProjectData] = useState<PickBoard|null>(null);
+  const {id:board_id} = useParams();
+  const { success, error } = useToast();
+  const navigate = useNavigate();
+
+  // console.log('파라미터', board_id);
+
+  useEffect(()=>{
+    const fetchProjectDetails = async() => {
+      const {data, error} = await supabase
+      .from('board')
+      .select('member, board_cls, address, meeting_time, active')
+      .eq('board_id',board_id)
+      .single()
+      .returns<PickBoard>();
+      
+      if(error) console.error('프로젝트 상세 정보 불러오기 실패 : ', error.message)
+      setProjectData(data)
+    }
+    fetchProjectDetails();
+  },[board_id])
+
+  useEffect(()=>{
+    // console.log(projectData);
+    if(!projectData) return;
+    const {member, board_cls, address, meeting_time, active} = projectData;
+    setCategory(board_cls);
+    setMeetingTime(meeting_time);
+    setMembers(member);
+    setAddress(address);
+    setIsOffline(address ? true : false);
+    setIsActive(active);
+
+  },[projectData])
+
+  const handleCheckedOnline = () => {
+    // address가 null일때
+    // 얘를 클릭했을때
+    return !isOffline ? true : false
+  }
+
+  const handleCheckedOffline = () => {
+    // address가 있을때
+    // 얘를 클릭했을때
+    return isOffline ? true : false
+  }
+
 
   const handleAddAdress = ({address}:{address:string}) => {
     setAddress(address);
@@ -31,56 +96,133 @@ function MangementChannel() {
   }
 
   const handleUpButton = () => {
-    setContributors(prev => prev+1)
+    setMembers(prev => prev+1)
   }
 
   const handleDownButton = () => {
-    if(contributors === 1) return;
-    setContributors(prev => prev-1)
+    if(members === 1) return;
+    setMembers(prev => prev-1)
   }
+
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if(isOffline && !address){
+      error('모임 장소를 선택해주세요')
+      return;
+    }
+    const convertAddress = address ? address : null
+
+    const modifiedContents = {
+      member: String(members),
+      board_cls: category,
+      meeting_time: meetingTime,
+      address: convertAddress,
+    }
+
+    // console.log(modifiedContents);
+    const updateProjectDetails = async() => {
+      const {error} = await supabase
+      .from('board')
+      .update(modifiedContents)
+      .eq('board_id',board_id)
+    }
+    updateProjectDetails();
+    success('저장됐습니다')
+  }
+
+  const handleActive = () => {
+    setIsActive(prev => !prev)
+  }
+
+  useEffect(()=>{
+    // console.log(isActive);
+    const updateActive = async() => {
+      const {error} = await supabase
+      .from('board')
+      .update({active:isActive})
+      .eq('board_id',board_id)  
+    }
+    updateActive();
+  },[isActive])
+
+
+  const handleDeleteChannel = () => {
+    // 정말 삭제할것인지 여부 묻기
+    // 삭제 진행
+    Swal.fire({
+      title:'정말 삭제하시겠습니까?',
+      text: '채널의 데이터가 모두 삭제됩니다. 되돌릴 수 없습니다.',
+      icon: 'warning',
+      showCancelButton:true,
+      confirmButtonText:'채널 삭제',
+      cancelButtonText:'취소',
+      confirmButtonColor:'#F00',
+    }).then(result => {
+      if(result.isConfirmed){
+        const deleteChannel = async() => {
+          const {error} = await supabase.from('board').delete().eq('board_id',board_id);
+
+          if(error) {
+            console.error('채널 삭제 실패 : ', error.message);
+          }
+
+          Swal.fire({
+            title:'삭제가 완료되었습니다.', 
+            text: '잠시후 메인으로 이동합니다', 
+            icon: 'success',
+            timer: 3000,
+            timerProgressBar: true,
+          })
+          navigate('/');
+        }
+        deleteChannel();
+      }
+    })
+  }
+
 
   return (
     <main className={S.mangementChannelContainer}>
       <h1 className={S.contentHeader}>프로젝트 생성</h1>
-      <form>
-        <h2>모집 타입</h2>
+      <form className={S.projectDetailForm} onSubmit={handleSubmit}>
+        <h2 className={S.sectionHeader}>모집 타입</h2>
         <section className={S.category}>
             <div className={S.study}>
-              <input type="radio" name="category" id="study" defaultChecked onChange={()=>setCategory('study')}/>
+              <input type="radio" name="category" id="study" defaultChecked onChange={()=>setCategory('0')}/>
               <label htmlFor="study">스터디</label>
             </div>
             <div className={S.project}>
-              <input type="radio" name="category" id="project" onChange={()=>setCategory('project')}/>
+              <input type="radio" name="category" id="project" onChange={()=>setCategory('1')}/>
               <label htmlFor="project">프로젝트</label>
             </div>
         </section>
 
         <div className={S.dateContributors}>
           <section className={S.time}>
-            <h2>모임 시간</h2>
-            {/* <Calender/> */}
-            <input type="text" name="" id="" placeholder='매주 월요일 저녁 9시'/>
+            <h2 className={S.sectionHeader}>모임 시간</h2>
+            <input type="text" name="" id="" value={meetingTime ? meetingTime : ''} placeholder='매주 월요일 저녁 9시' onChange={(e)=>{setMeetingTime(e.target.value)}}/>
           </section>
 
           <section className={S.contributors}>
-            <h2>모집 인원</h2>
+            <h2 className={S.sectionHeader}>모집 인원</h2>
             <div className={S.countButton}>
               <button className={S.upButton} type="button" onClick={handleUpButton}>∧</button>
-              <p>{contributors}</p>
+              <p>{members}</p>
               <button className={S.downButton} type="button" onClick={handleDownButton}>∨</button>
             </div>
           </section>
         </div>
 
-        <h2>모임 장소</h2>
+        <h2 className={S.sectionHeader}>모임 장소</h2>
         <section className={S.location}>
           <div className={S.locationRadio}>
             <div className={S.online}>
-              <input type="radio" name="location" id="online" defaultChecked onChange={()=>{setIsOffline(false)}}/>
+              <input type="radio" name="location" id="online" checked={handleCheckedOnline()} onChange={()=>{setIsOffline(false); setAddress(null)}}/>
               <label htmlFor="online">온라인</label>
             </div>
             <div className={S.offline}>
-              <input type="radio" name="location" id="offline" onChange={()=>{setIsOffline(true)}}/>
+              <input type="radio" name="location" id="offline" checked={handleCheckedOffline()} onChange={()=>{setIsOffline(true)}}/>
               <label htmlFor="offline">오프라인</label>
             </div>
           </div>
@@ -98,21 +240,23 @@ function MangementChannel() {
           }
         </section>
 
-        <button className={S.saveButton} type="button">저장</button>
-        <h2>모집 활성화</h2>
-        <section className={S.isActive}>
-          <div className={S.active}>
-            <input type="radio" name="isActive" id="active" defaultChecked onChange={()=>{setIsActive(true)}}/>
-            <label htmlFor="active">활성화</label>
-          </div>
-          <div className={S.inactive}>
-            <input type="radio" name="isActive" id="inactive" onChange={()=>{setIsActive(false)}}/>
-            <label htmlFor="inactive">비활성화</label>
-          </div>
-        </section>
+        <button className={S.saveButton} type="submit">저장</button>
       </form>
 
-      <button className={S.deleteButton} type="button">채널삭제</button>
+      <h2 className={S.sectionHeader}>모집 활성화</h2>
+      <section className={S.isActive}>
+        <div className={S.active}>
+          <input type="radio" name="isActive" id="active" defaultChecked onChange={handleActive}/>
+          <label htmlFor="active">활성화</label>
+        </div>
+        <div className={S.inactive}>
+          <input type="radio" name="isActive" id="inactive" onChange={handleActive}/>
+          <label htmlFor="inactive">비활성화</label>
+        </div>
+      </section>
+
+      <h2 className={S.sectionHeader}>채널 제거</h2>
+      <button className={S.deleteButton} type="button" onClick={handleDeleteChannel}>채널 삭제하기</button>
     </main>
   )
 }
