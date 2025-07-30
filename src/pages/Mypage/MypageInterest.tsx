@@ -105,9 +105,6 @@ function MypageInterest({user, editMode, setUserData}: Props) {
 
     }
 
-    console.log( interests );
-
-
   return (
     <>
         <div className={S.mypageInterest}>
