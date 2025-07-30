@@ -84,12 +84,12 @@ function MypagePost({profileId}:Props) {
         <ul className={S.postList}>
           {
             newBoards && newBoards.map(({board_id, title, contents})=>(
-              <Link to={`/channel/${board_id}`}>
-                <li key={board_id} className={S.post}>
+              <li key={board_id} className={S.post}>
+                  <Link to={`/channel/${board_id}`}>
                   <p className={S.postTitle}>{title}</p>
                   <p className={S.postContent}>{contents}</p>
-                </li>
-              </Link>
+                </Link>
+              </li>
             ))
           }
         </ul>

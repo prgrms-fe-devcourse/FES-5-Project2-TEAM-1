@@ -79,12 +79,12 @@ function MypageScrap({profileId}:Props) {
         <ul className={S.scrapList}>
           {
             newBoards && newBoards.map(({board_id, title, contents})=>(
-              <Link to={`/channel/${board_id}`}>
-                <li key={board_id} className={S.scrap}>
+              <li key={board_id} className={S.scrap}>
+                <Link to={`/channel/${board_id}`}>
                   <p className={S.scrapTitle}>{title}</p>
                   <p className={S.scrapContent}>{contents}</p>
-                </li>
-              </Link>
+                </Link>
+              </li>
             ))
           }
         </ul>

@@ -99,10 +99,14 @@ function MypagePeerReview({profileId}:Props) {
           grabCursor
           initialSlide={0}
           centeredSlides = {true}
-          slidesPerView="auto"
+          slidesPerView={"auto"}
           speed={900}
           slideToClickedSlide
           spaceBetween={40}
+            style={{
+              padding: "0 6rem",
+              boxSizing: "border-box"
+            }}
           breakpoints={{
             640: {spaceBetween: 20},
             768: {spaceBetween: 30},
