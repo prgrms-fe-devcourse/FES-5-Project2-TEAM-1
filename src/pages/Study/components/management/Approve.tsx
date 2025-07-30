@@ -7,9 +7,6 @@ import type { Tables } from '@/supabase/database.types'
 import { useToast } from '@/utils/useToast'
 
 
-
-
-
 type User = Tables<"user_profile"> & {
     user_base: Tables<"user_base">;
   };
