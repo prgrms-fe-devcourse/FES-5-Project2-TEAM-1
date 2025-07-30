@@ -21,8 +21,8 @@ function StudyChannel() {
   const [currentPage, setCurrentPage] = useState(1)
   const [cardData, setCardData] = useState<CardProps[]>([])
   const filterTab = ["최신순", "좋아요순"]
-  const filterRef = useRef<(HTMLButtonElement|null)[]>([])
-
+  const filterRef = useRef<(HTMLButtonElement | null)[]>([])
+  
   useEffect(() => {
       const boardTable = async () => {
         const { data } = await supabase
@@ -57,7 +57,8 @@ function StudyChannel() {
       (card) =>
         card.title.toLowerCase().includes(lowerValue) ||
         card.contents.toLowerCase().includes(lowerValue) ||
-        card.address?.toLowerCase().includes(lowerValue)
+        card.address?.toLowerCase().includes(lowerValue) ||
+        card.board_tag.hash_tag?.toLowerCase().includes(lowerValue)
     );
     setCardData(filtered)
     setCurrentPage(1)
