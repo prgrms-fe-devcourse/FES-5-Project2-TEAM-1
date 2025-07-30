@@ -20,7 +20,6 @@ function BoardButtonArea() {
   const { setPostData } = useBoardContext();
 
   const handleMarkdownMenu = (icons: MarkdownOption) => {
-    console.log(icons);
     setPostData((prev) => {
       return { ...prev, contents: prev.contents + icons.text };
     });
