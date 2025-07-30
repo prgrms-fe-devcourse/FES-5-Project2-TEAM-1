@@ -39,7 +39,12 @@ function StudyJoinInfomation() {
           {images && <img src={images} alt="스터디 이미지" />}
           <div className={S.textInfo}>
             <div className={S.title}>
-              <h2>{title}</h2>
+              <div className={S.titleTop}>
+                <h2>{title}</h2>
+                <button type="button" className={S.setting}>
+                  <img src="/icons/edit.svg" alt="" />
+                </button>
+              </div>
             </div>
             <div className={S.tagBox}>
               {(board_tag as Tables<"board_tag">[]).map((t) => (
