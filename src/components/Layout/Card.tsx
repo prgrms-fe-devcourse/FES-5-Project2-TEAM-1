@@ -19,8 +19,9 @@ interface Props{
   card: CardProps
 }
 
-
-function Card({ card }:Props) {
+function Card({ card }: Props) {
+  
+  
   const {
     address,
     contents,
@@ -86,19 +87,23 @@ function Card({ card }:Props) {
       }
     }
 
-    const handleRoute = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,card:CardProps) => {
-      e.preventDefault()
-
-      if ((e.target as HTMLButtonElement).closest('button')) {
-        return
+    const handleRoute = (
+      e: React.MouseEvent<HTMLElement, MouseEvent>,
+      card: CardProps
+    ) => {
+      e.preventDefault();
+      if ((e.target as HTMLButtonElement).closest("span")) {
+        navigate(`/channel/${board_id}`, { state: { card } });
       } else {
-       navigate(`/channel/${board_id}`, { state: { card } });
+        return;
       }
-  }
+    };
+    const replaceText = contents.replace(/[#*]/g, "");
+  
   
   return (
-    <div className={S.container} onClick={(e) => handleRoute(e, card)}>
-      <div className={S.cardTop}>
+    <section className={S.container} onClick={(e) => handleRoute(e, card)}>
+      <div className={S.cardTop} >
         <h4>{title}</h4>
         <div className={S.cardTopRight}>
           <button className={S.scrapBtn} onClick={handleScrap}>
@@ -118,11 +123,12 @@ function Card({ card }:Props) {
           </button>
         </div>
       </div>
-      <div className={S.titleBox}>
-        <p>{contents}</p>
-      </div>
-      <div className={S.tagBox}>
+      <span className={S.titleBox}>
+        <p>{replaceText}</p>
+      </span>
+      <span className={S.tagBox}>
         {
+          board_tag&&
           board_tag.map((t) => (
           <div key={t.tag_id}>{t.hash_tag}</div>
           ))
@@ -181,8 +187,8 @@ function Card({ card }:Props) {
           </svg>
         </span>
         {member}
-      </div>
-    </div>
+      </span>
+    </section>
   );
 }
 export default Card

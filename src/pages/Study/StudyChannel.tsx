@@ -4,6 +4,7 @@ import S from './studychannel.module.css'
 import supabase from '@/supabase/supabase';
 import { debounce } from '@/utils/debounce';
 import type { Tables } from '@/supabase/database.types';
+import { Link } from 'react-router-dom';
 
 
 
@@ -41,8 +42,7 @@ function StudyChannel() {
     if (e.currentTarget === filterRef.current[0]) {
      const sorted = [...cardData].sort(
        (a, b) =>
-         parseInt(b.board_id.replace(/\D/g, "")) -
-         parseInt(a.board_id.replace(/\D/g, ""))
+         new Date(b.create_at).getTime() - new Date (a.create_at).getTime()
       )
       setCardData(sorted)
     } else if (e.currentTarget === filterRef.current[1]) {
@@ -62,10 +62,14 @@ function StudyChannel() {
     setCardData(filtered)
     setCurrentPage(1)
   }, 400)
+
+  const recentlyCardData = [...cardData].sort(
+    (a, b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime()
+  );
   
   const startIdx = (currentPage - 1) * cardPerPage
   const endIdx = startIdx + cardPerPage
-  const paginatedCards = cardData.slice(startIdx, endIdx);
+  const paginatedCards = recentlyCardData.slice(startIdx, endIdx);
 
   const totalPages = Math.ceil(cardData.length / cardPerPage);
   const maxVisible = 5;
@@ -78,8 +82,7 @@ function StudyChannel() {
     <main className={S.container}>
       <div className={S.channelHeader}>
         <div className={S.filterTab}>
-          {
-            filterTab.map((tab, i) => (
+          {filterTab.map((tab, i) => (
             <button
               type="button"
               className={S.filterBtn}
@@ -125,16 +128,17 @@ function StudyChannel() {
             </svg>
           </button>
         </form>
-        <button type="button" className={S.postBtn}>
-          글쓰기
-        </button>
+        <Link to='/Write'>
+          <button type="button" className={S.postBtn}>
+            글쓰기
+          </button>
+        </Link>
       </div>
       <section>
         <div className={S.cardGrid}>
-          {
-            paginatedCards &&
-                paginatedCards?.map((card: CardProps) => (
-                  <Card card={card} key={card.board_id} />
+          {paginatedCards &&
+            paginatedCards?.map((card: CardProps) => (
+              <Card card={card} key={card.board_id} />
             ))}
         </div>
       </section>
@@ -150,23 +154,28 @@ function StudyChannel() {
             </button>
           </li>
 
-          {
-            visiblePage.map((pageNum) => {
-              return(
+          {visiblePage.map((pageNum) => {
+            return (
               <li key={pageNum}>
                 <button
                   onClick={() => setCurrentPage(pageNum)}
-                  className = { currentPage === pageNum ? S.active : S.pagenationNumber}
+                  className={
+                    currentPage === pageNum ? S.active : S.pagenationNumber
+                  }
                 >
-                  { pageNum }
+                  {pageNum}
                 </button>
               </li>
-            )})}
+            );
+          })}
           <li>
             <button
-              onClick={()=> setCurrentPage((p)=>Math.min(totalPages, p + 1))}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className={S.pagenationNumber}>&gt;</button>
+              className={S.pagenationNumber}
+            >
+              &gt;
+            </button>
           </li>
         </ul>
       </nav>
