@@ -13,7 +13,6 @@ type CurrentUser = {
   profileImage:string;
 }
 function RightSidebar() {
-  
 
   const { user, isLoading, logout } = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser>({ profileId: '', email: '', id: '', profileImage: '', });
