@@ -4,7 +4,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 interface User {
   id: string;
   email: string;
-  profileId: string;
 }
 
 interface AuthContextType {
@@ -12,6 +11,7 @@ interface AuthContextType {
   isAuth: boolean;
   logout: () => void;
   isLoading: boolean;
+  profileId: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -19,6 +19,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [profileId, setProfileId] = useState<string | null>(null);
 
   useEffect(() => {
     const getSessionUser = async () => {
@@ -27,18 +28,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } = await supabase.auth.getSession();
 
       if (session?.user) {
-        const { data, error } = await supabase
-          .from("user_profile")
-          .select("*")
-          .eq("user_id", session.user.id)
-          .single();
-
-        if (error) console.error("유저 프로필 조회 실패:", error);
-
         setUser({
           id: session.user.id,
           email: session.user.email!,
-          profileId: data.profile_id,
         });
       }
 
@@ -50,21 +42,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === "SIGNED_IN" && session?.user) {
-          const { data, error } = await supabase
-            .from("user_profile")
-            .select("*")
-            .eq("user_id", session.user.id)
-            .limit(1)
-            .single();
-
-          if (error) {
-            console.error("유저 프로필 조회 실패.");
-          }
-
           setUser({
             id: session.user.id,
             email: session.user.email!,
-            profileId: data.profile_id,
           });
         } else if (event === "SIGNED_OUT") {
           setUser(null);
@@ -72,9 +52,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       }
     );
-
     return () => listener.subscription.unsubscribe();
   }, []);
+  useEffect(() => {
+    const getProfile = async () => {
+      if (!user) return;
+      const { data, error } = await supabase
+        .from("user_profile")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
+
+      if (error) {
+        console.error("유저 프로필 조회 실패.");
+      }
+      if (data) {
+        setProfileId(data.profile_id);
+      }
+    };
+
+    getProfile();
+  }, [user]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -82,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext value={{ user, isAuth: !!user, logout, isLoading }}>
+    <AuthContext value={{ user, isAuth: !!user, logout, isLoading, profileId }}>
       {children}
     </AuthContext>
   );
