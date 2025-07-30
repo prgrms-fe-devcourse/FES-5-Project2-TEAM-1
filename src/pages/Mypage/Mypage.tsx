@@ -13,7 +13,6 @@ import MypagePost from './components/MypagePost';
 import MypageScrap from './components/MypageScrap';
 import MoveToTop from './components/MoveToTop';
 import { useAuth } from '@/auth/AuthProvider';
-import DeleteAccount from './components/DeleteAccount';
 import { useParams } from 'react-router-dom';
 
 
@@ -122,10 +121,6 @@ function Mypage() {
               <MypageScrap profileId={profileId}/> : ''
             }
             <MypagePost profileId={profileId}/>
-            { // 현재 접속한 유저와 조회한 마이페이지 주인이 같을때만 렌더링
-              urlProfileId === profileId ? 
-              <DeleteAccount profileId={profileId}/> : ''
-            }
             <MoveToTop/>
 
         </div>
