@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/auth/AuthProvider";
 import BoardUpdate from "./BoardUpdate";
+import { showErrorAlert } from "@/utils/sweetAlert";
 
 function BoardWrite() {
   const { id: boardId } = useParams();
@@ -15,8 +16,7 @@ function BoardWrite() {
 
   useEffect(() => {
     if (!user) {
-      // alert("로그인 후 이용해주세요!");
-      console.log("로그인 후 이용해주세요!");
+      showErrorAlert("로그인 후 이용해주세요");
       navigate("/login");
       return;
     } else if (user) {

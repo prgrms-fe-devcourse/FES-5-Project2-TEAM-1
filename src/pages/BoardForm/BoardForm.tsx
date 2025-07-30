@@ -128,7 +128,7 @@ function BoardForm({ userId }: Props) {
       title: postData.title,
       contents: postData.contents,
     };
-    console.log(insertData);
+
     insertBoard(insertData);
   };
   const imageUpload = async (board_id: string) => {
