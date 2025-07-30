@@ -21,24 +21,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getUser().then(async ({ data: { user } }) => {
-      if (user) {
+    const getSessionUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session?.user) {
         const { data, error } = await supabase
           .from("user_profile")
           .select("*")
-          .eq("user_id", user.id)
+          .eq("user_id", session.user.id)
           .single();
-        if (error) {
-          console.error("유저 프로필 조회 실패.");
-        }
+
+        if (error) console.error("유저 프로필 조회 실패:", error);
+
         setUser({
-          id: user.id,
-          email: user.email!,
+          id: session.user.id,
+          email: session.user.email!,
           profileId: data.profile_id,
         });
       }
+
       setIsLoading(false);
-    });
+    };
+
+    getSessionUser();
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (event, session) => {

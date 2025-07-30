@@ -8,13 +8,16 @@ import { useParams } from 'react-router-dom';
 
 
 type Thread = Tables<'thread'>
-
+type User = Tables<'user_profile'> & {
+  user_base:Tables<'user_base'>
+}
 
 function Thread() {
 
   const { id } = useParams()
   const [threadData, setThreadData] = useState<Thread[]>([])
   const [updateContent, setUpdateContent] = useState('')
+  const [recentlyUser,setRecentlyUser] = useState<User[]>([])
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
  
   useEffect(() => {
@@ -26,14 +29,44 @@ function Thread() {
     };
     fetchData()
   }, [id])
- 
 
-
-  if (!threadData) return
   const targetThread = threadData.find(thread => thread.board_id == id)
   const board_id = targetThread?.board_id
   const profile_id = targetThread?.profile_id
   
+
+  useEffect(() => {
+    const profileId = threadData
+      .map((t) => t.profile_id)
+      .filter((id): id is string => typeof id === "string")
+
+    const recentlyUser = async () => {
+      const { data,error } = await supabase
+        .from("user_profile")
+        .select("*,user_base(*)")
+        .in("profile_id", profileId);
+    
+      if (!data) return;
+      if(error) console.error()
+      const users = data as User[];
+
+   const sorted = users
+     .filter((u) => u.user_base?.recent_at) 
+     .sort(
+       (a, b) =>
+         new Date(b.user_base.recent_at!).getTime() -
+         new Date(a.user_base.recent_at!).getTime()
+     );
+      if (!sorted) return;
+      setRecentlyUser(sorted);
+    };
+    recentlyUser();
+  }, [threadData]);
+
+
+
+
+
   const handleInputbarClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const target = e.target as HTMLElement
     if (target.closest('button')) return 
@@ -89,7 +122,7 @@ function Thread() {
                 ref={inputRef}
                 value={updateContent}
                 placeholder="내용을 입력해 주세요"
-                onChange={(e) =>setUpdateContent(e.target.value)}
+                onChange={(e) => setUpdateContent(e.target.value)}
                 onKeyDown={handleKeyDown}
               ></textarea>
             </div>
@@ -115,7 +148,19 @@ function Thread() {
           </ul>
         </div>
         <div className={S.member}>
-          <div>최근 접속한 사용자</div>
+          <div className={S.recentlyUserTitle}>최근 접속한 사용자</div>
+          <ul className={S.recentlyProfileWrap}>
+            {recentlyUser.map((user) => {
+              return (
+                <li>
+                  <div className={S.recentlyProfile}>
+                    <img src={user.profile_images} alt="" />
+                    <p>{user.user_base.name}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </>

@@ -19,6 +19,7 @@ function RightSidebar() {
   const {user, isLoading, logout}  = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:'', profileImage:'',});
   const navigate = useNavigate()
+  const [isNotification,setIsNotification] = useState(false)
 
   useEffect(()=>{
     if(!user) {
@@ -59,6 +60,11 @@ function RightSidebar() {
     navigate('/')
   }
 
+  const handleNotification = () => {
+    setIsNotification(!isNotification)
+    
+  }
+
   return (
     <nav className={S.container}>
       <div className={S.height}>
@@ -76,7 +82,7 @@ function RightSidebar() {
               <p>Hello🖐️</p>
               <h3>Guest</h3>
             </div>
-            )}
+          )}
           <div className={S.loginLogout}>
             {user ? (
               <button onClick={handleLogout}>
@@ -96,8 +102,12 @@ function RightSidebar() {
               </button>
             ) : (
               <>
-                <Link to="/login"  className={S.linkButton}>로그인</Link>
-                <Link to="/register"  className={S.linkButton}>회원가입</Link>
+                <Link to="/login" className={S.linkButton}>
+                  로그인
+                </Link>
+                <Link to="/register" className={S.linkButton}>
+                  회원가입
+                </Link>
               </>
             )}
           </div>
@@ -134,8 +144,10 @@ function RightSidebar() {
                     fill="#222222"
                   />
                 </svg>
+              )}
+              <span className={S.navListText}>
                 <h3>Notification</h3>
-              </a>
+              </span>
             </li>
             <li className={S.navList}>
               <a href="#" className={S.navListText}>

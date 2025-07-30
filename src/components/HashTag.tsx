@@ -48,6 +48,7 @@ function HashTag({ taglist, defaultList, editable, callBack }: Props) {
       {!taglist && (
         <Tags
           ref={hasgTag}
+          value={defaultList}
           className={S.hashTagInput}
           settings={{ maxTags: 5 }}
           placeholder="해시태그를 입력해주세요"
