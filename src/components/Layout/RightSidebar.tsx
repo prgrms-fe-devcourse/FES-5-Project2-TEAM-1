@@ -12,9 +12,11 @@ type CurrentUser = {
   id:string;
   profileImage:string;
 }
+function RightSidebar() {
+  
 
-    const {user, isLoading, logout}  = useAuth();
-  const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:'', profileImage:'',});
+  const { user, isLoading, logout } = useAuth();
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({ profileId: '', email: '', id: '', profileImage: '', });
   const navigate = useNavigate()
   const [isNotification,setIsNotification] = useState(false)
 
