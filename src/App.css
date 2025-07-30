@@ -28,6 +28,24 @@
   width: 220px;
   background-color: #FFC0CB;
   flex-shrink: 0;
+  z-index: 99;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(10px);  
+  background: rgba(0, 0, 0, 0.2); 
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 .components{
   flex-grow: 1;

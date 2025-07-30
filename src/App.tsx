@@ -19,13 +19,16 @@ import Approve from './pages/Study/components/management/Approve';
 import ManagementMembers from './pages/Study/components/management/ManagementMembers';
 import MangementChannel from './pages/Study/components/management/ManagementChannel';
 import BoardWrite from "./pages/BoardForm/BoardWrite";
+import { useState } from "react";
 
 
 function App() {
   const location = useLocation();
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
-
+  const [isOverlay,setIsOverlay] = useState(false)
+  
+  
   return (
     <ToastProvider>
       <div className="container">
@@ -34,6 +37,10 @@ function App() {
             <LeftSidebar />
           </nav>
         )}
+        {
+          isOverlay && 
+            <div className={`overlay ${isOverlay ? 'visible' : ''}`} onClick={()=>setIsOverlay(false)}></div> 
+        }
         <div className="mainWrapper">
           <Routes>
             <Route path="/" element={<MainContent />} />
@@ -44,22 +51,25 @@ function App() {
               <Route index element={<StudyJoinInfomation />} />
               <Route path="memberchannel" element={<StudyMemberChannel />} />
               <Route path="thread" element={<Thread />} />
-              <Route path="management" element={<Management/>}>
-                <Route index element={<MangementChannel/>}/>
-                <Route path="approve" element={<Approve/>}/>
-                <Route path="managementmembers" element={<ManagementMembers/>}/>
+              <Route path="management" element={<Management />}>
+                <Route index element={<MangementChannel />} />
+                <Route path="approve" element={<Approve />} />
+                <Route
+                  path="managementmembers"
+                  element={<ManagementMembers />}
+                />
               </Route>
             </Route>
             <Route path="/Write" element={<BoardWrite />} />
             <Route path="/mypage/:id" element={<Mypage />} />
           </Routes>
           {!isAuthPage && <Footer />}
-        </div>
-        {!isAuthPage && (
-          <nav className="rightcontainer">
-            <RightSidebar />
-          </nav>
-        )}
+        </div> 
+          {!isAuthPage && (
+            <nav className="rightcontainer">
+            <RightSidebar isOverlay={ isOverlay } setIsOverlay={setIsOverlay} />
+            </nav>
+          )}        
       </div>
     </ToastProvider>
   );

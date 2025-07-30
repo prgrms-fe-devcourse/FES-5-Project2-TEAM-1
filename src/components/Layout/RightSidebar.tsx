@@ -5,7 +5,12 @@ import { useAuth } from '@/auth/AuthProvider';
 import supabase from '@/supabase/supabase';
 import { useEffect, useState } from 'react';
 
-function RightSidebar() {
+interface Props{
+  isOverlay: boolean
+  setIsOverlay: (value:boolean)=>void
+}
+
+function RightSidebar({isOverlay,setIsOverlay}:Props) {
   
   const [profileId, setProfileId] = useState('');
   const {user:currentUser}  = useAuth();
@@ -39,7 +44,7 @@ function RightSidebar() {
 
   const handleNotification = () => {
     setIsNotification(!isNotification)
-    
+    setIsOverlay(!isOverlay)
   }
 
   return (
@@ -77,7 +82,7 @@ function RightSidebar() {
                 fill="#222222"
               />
             </svg> */}
-            <p className={S.logout}>로그아웃</p>
+                <p className={S.logout}>로그아웃</p>
               </button>
             ) : (
               <>
@@ -96,9 +101,8 @@ function RightSidebar() {
           <ul className={S.navListWrap}>
             <li>My menu</li>
             <li className={S.navList} onClick={handleNotification}>
-              {isNotification ? (
+              {isNotification && isOverlay ? (
                 <>
-                  <div className={S.overlay}></div>
                   <svg
                     width="24"
                     height="24"
