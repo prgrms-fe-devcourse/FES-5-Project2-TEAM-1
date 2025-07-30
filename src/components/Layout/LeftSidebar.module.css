@@ -1,14 +1,15 @@
-
-
-.height{
-  height: 100vh;
+.container{
   width: 220px;
-  position: fixed;
+  background-color: #bbdada;
+  box-shadow: 8px 0px 20px rgba(0, 0, 0, 0.08);
+  min-height: 100vh;
+  height: auto;
+  position:fixed;
   top: 0;
   left: 0;
-  z-index: 9;
-  box-shadow: 8px 0px 20px rgba(0, 0, 0, 0.08);
 }
+
+
 
 .navListWrap{
   display: flex;

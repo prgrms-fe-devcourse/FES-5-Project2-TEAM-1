@@ -31,6 +31,7 @@ function App() {
   
   return (
     <ToastProvider>
+      
       <div className="container">
         {!isAuthPage && (
           <nav className="leftcontainer">
@@ -68,7 +69,7 @@ function App() {
         </div> 
           {!isAuthPage && (
             <nav className="rightcontainer">
-            <RightSidebar isOverlay={ isOverlay } setIsOverlay={setIsOverlay} />
+            <RightSidebar/>
             </nav>
           )}        
       </div>

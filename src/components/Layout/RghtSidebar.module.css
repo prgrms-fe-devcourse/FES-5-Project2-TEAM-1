@@ -1,22 +1,14 @@
 .container{
   width: 220px;
   background-color: #FFC0CB;
-  
-  flex-shrink: 0;
-  justify-content: space-between;
-  z-index: 9;
-  position: relative;
-}
-
-
-.height{
-  height: 100vh;
+  box-shadow: -8px 0px 20px rgba(0, 0, 0, 0.08);
+  min-height: 100vh;
   position: fixed;
   top: 0;
   right: 0;
-  box-shadow: -8px 0px 20px rgba(0, 0, 0, 0.08);
-  
 }
+
+
 .loginBox{
   display:flex;
   margin-top: 28px;
