@@ -14,6 +14,7 @@ import MypageScrap from './components/MypageScrap';
 import MoveToTop from './components/MoveToTop';
 import { useAuth } from '@/auth/AuthProvider';
 import { useNavigate, useParams } from 'react-router-dom';
+import type { UUID } from 'crypto';
 
 
 type UserProfileWithJoins = Tables<'user_profile'> & {
@@ -55,9 +56,9 @@ function Mypage() {
       
   },[isLoading])
 
-
   useEffect(() => {
     const fetchUser = async () => {
+      if( !currentUser.id ) return;
       const { data, error } = await supabase
         .from('user_base')
         .select(`

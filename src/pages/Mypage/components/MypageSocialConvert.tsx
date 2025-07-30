@@ -10,6 +10,10 @@ import Instagram from '@/assets/instagram.svg';
 import Github from '@/assets/github.svg';
 import Discord from '@/assets/discord.svg';
 import Slack from '@/assets/slack.svg';
+import Linkedin from '@/assets/linkedin.png';
+import Facebook from '@/assets/facebook.png';
+import Line from '@/assets/line.png';
+import Youtube from '@/assets/youtube.png';
 import DefaultIcon from '/images/너굴.png';
 
 type Social = Tables<'user_social'>;
@@ -52,7 +56,11 @@ function MypageSocialConvert({ user }: {user: User | null}) {
                 : social === 'github' ? <img src={Github} alt="github" />
                 : social === 'discord' ? <img src={Discord} alt="discord" /> 
                 : social === 'slack' ? <img src={Slack} alt="slack" /> 
-                : <img src={DefaultIcon} alt="Default 너구리 icon" /> 
+                : social === 'facebook' ? <img src={Facebook} alt="facebook" /> 
+                : social === 'line' ? <img src={Line} alt="line" /> 
+                : social === 'youtube' ? <img src={Youtube} alt="youtube" /> 
+                : social === 'linkedin' ? <img src={Linkedin} alt="linkedin" /> 
+                : <img src={DefaultIcon} alt="personal website" /> 
               }
             </button>
           </div>

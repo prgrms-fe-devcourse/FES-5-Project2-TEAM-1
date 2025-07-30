@@ -10,6 +10,10 @@ import Instagram from '@/assets/instagram.svg';
 import Github from '@/assets/github.svg';
 import Discord from '@/assets/discord.svg';
 import Slack from '@/assets/slack.svg';
+import Linkedin from '@/assets/linkedin.png';
+import Facebook from '@/assets/facebook.png';
+import Line from '@/assets/line.png';
+import Youtube from '@/assets/youtube.png';
 import DefaultIcon from '/images/너굴.png';
 import supabase from '@/supabase/supabase';
 import { useToast } from '@/utils/useToast';
@@ -76,6 +80,17 @@ useEffect(() => {
       newArr[index] = newInputValue;
       return newArr;
     })
+
+      setPendingIcon((prev) => {
+        const newArr = [...prev];
+        if( newInputValue.includes('instagram') ) newArr[index] = 'instagram';
+        else if( newInputValue.includes('github') ) newArr[index] = 'github';
+        else if( newInputValue.includes('facebook') ) newArr[index] = 'facebook';
+        else if( newInputValue.includes('youtube') ) newArr[index] = 'youtube';
+        else if( newInputValue.includes('linkedin') ) newArr[index] = 'linkedin';
+
+        return newArr;
+      })
     
   }
 
@@ -119,11 +134,15 @@ useEffect(() => {
     const { error: socialError } = await supabase
       .from('user_social')
       .update({ 
-        social: newSocial,
-        social_link: newSocialLink
+        'social': newSocial,
+        'social_link': newSocialLink
       })
-      .eq('profile_id', profile_id)
-      .eq('social_id', social_id )
+      .match({
+        'profile_id': profile_id,
+        'social_id': social_id
+      })
+
+    console.log( profile_id, social_id);
 
     if( socialError ) {
       error('업로드 실패');
@@ -158,6 +177,10 @@ useEffect(() => {
           icon === 'github'    ? Github :
           icon === 'discord'   ? Discord :
           icon === 'slack'     ? Slack :
+          icon === 'facebook'    ? Facebook :
+          icon === 'linkedin'   ? Linkedin :
+          icon === 'line'     ? Line :
+          icon === 'youtube'      ? Youtube :
           DefaultIcon;
   }
   
@@ -181,6 +204,11 @@ useEffect(() => {
                           <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Github} alt='github'  /></li>
                           <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Discord} alt='discord' /></li>
                           <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Slack} alt='slack'  /></li>
+                          <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Facebook} alt='facebook' /></li>
+                          <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Line} alt='line'  /></li>
+                          <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Linkedin} alt='linkedin' /></li>
+                          <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Youtube} alt='youtube'  /></li>
+                          <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={DefaultIcon} alt='personal website'  /></li>
                         </ul>
                       </div>
                     }
