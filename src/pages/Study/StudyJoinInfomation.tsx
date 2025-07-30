@@ -5,6 +5,7 @@ import Project from "./components/Project";
 import ChannelComment from "./components/ChannelComment";
 import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
+import MarkDownConvert from "@/components/MarkDownConvert";
 
 
 type Board = Tables<"board">;
@@ -107,7 +108,7 @@ function StudyJoinInfomation() {
             </div>
           </div>
         </div>
-        <article className={S.content}>{contents}</article>
+        <MarkDownConvert markdown={contents} addClass={S.contents}/>
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>

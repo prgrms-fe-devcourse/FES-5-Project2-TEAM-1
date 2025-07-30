@@ -98,6 +98,8 @@ function Card({ card }: Props) {
         return;
       }
     };
+    const replaceText = contents.replace(/[#*]/g, "");
+  
   
   return (
     <section className={S.container} onClick={(e) => handleRoute(e, card)}>
@@ -122,7 +124,7 @@ function Card({ card }: Props) {
         </div>
       </div>
       <span className={S.titleBox}>
-        <p>{contents}</p>
+        <p>{replaceText}</p>
       </span>
       <span className={S.tagBox}>
         {
