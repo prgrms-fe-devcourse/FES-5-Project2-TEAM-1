@@ -6,13 +6,19 @@ import { useCopyToClipboard } from '@uidotdev/usehooks'
 import { useToast } from "@/utils/useToast";
 import type { User } from "../Mypage";
 
+import Instagram from '@/assets/instagram.svg';
+import Github from '@/assets/github.svg';
+import Discord from '@/assets/discord.svg';
+import Slack from '@/assets/slack.svg';
+import DefaultIcon from '/images/너굴.png';
+
 type Social = Tables<'user_social'>;
 
 function MypageSocialConvert({ user }: {user: User | null}) {
 
   const [socialData, setSocialData] = useState<Social[]|null>(null);
   const [copiedText, setCopy] = useCopyToClipboard();
-  const { success } = useToast();
+  const { success, info } = useToast();
 
   const userSocial = user && user.profile[0].social[0];
 
@@ -28,7 +34,10 @@ function MypageSocialConvert({ user }: {user: User | null}) {
   // 유저가 바뀌면서 소셜 값도 바뀔때 useEffect가 계속 실행돼야하지 않을까?
 
   useEffect(()=>{
-    copiedText && success(`복사 완료! ${copiedText}`)
+    if( copiedText ) {
+      success('복사 완료!');
+      info(copiedText);
+    }
   },[copiedText])
 
   return ( 
@@ -39,10 +48,11 @@ function MypageSocialConvert({ user }: {user: User | null}) {
             
             <button type="button" onClick={()=>{setCopy(social_link)}} className={S.socialLink} title='복사하기' >
               {
-                social === 'instagram' ? <img src="src\assets\instagram.svg" alt="instagram"/>
-                : social === 'github' ? <img src="src\assets\github.svg" alt="github" />
-                : social === 'discord' ? <img src="src\assets\discord.svg" alt="discord" /> 
-                : <img src="src\assets\slack.svg" alt="slack" /> 
+                social === 'instagram' ? <img src={Instagram} alt="instagram"/>
+                : social === 'github' ? <img src={Github} alt="github" />
+                : social === 'discord' ? <img src={Discord} alt="discord" /> 
+                : social === 'slack' ? <img src={Slack} alt="slack" /> 
+                : <img src={DefaultIcon} alt="Default 너구리 icon" /> 
               }
             </button>
           </div>
