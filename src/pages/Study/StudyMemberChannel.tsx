@@ -35,7 +35,7 @@ function StudyMemberChannel() {
       if(error) console.error()
     }
     fetchAdmin()
-  })
+  },[])
 
   useEffect(() => {
     const fetchData = async () => {

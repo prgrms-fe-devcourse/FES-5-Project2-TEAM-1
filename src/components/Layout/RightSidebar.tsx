@@ -68,7 +68,7 @@ function RightSidebar() {
     <nav className={S.container}>
       <div className={S.height}>
         <div className={S.loginBox}>
-          <img className={S.profileImage} src={user ? currentUser.profileImage : '/public/images/여울.png'} alt="프로필" />
+          <img className={S.profileImage} src={currentUser ? currentUser.profileImage : '/public/images/여울.png'} alt="프로필" />
           {user ? (
             <Link to={`/mypage/${currentUser.profileId}`} className={S.loginBoxGreeting} title='마이페이지 이동'>
               <p>Hello🖐️</p>

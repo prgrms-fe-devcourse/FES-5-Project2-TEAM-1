@@ -10,6 +10,7 @@ import { useAdmin } from "./context/useAdmin";
 
 
 
+
 type Board = Tables<"board">;
 type CardProps = Board & 
 {
@@ -34,9 +35,6 @@ function StudyJoinInfomation() {
   if(!card) return 
   const { images, title, address, member, board_tag, contents} = card
  
-
-
-
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -118,9 +116,13 @@ function StudyJoinInfomation() {
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>
-            <Link to='management'>
-              <button type="button">프로젝트 생성</button>
-            </Link>
+            {
+              isAdmin && (
+                <Link to='management'>
+                  <button type="button">프로젝트 생성</button>
+                </Link>
+              )
+            }
           </div>
           <Project />
         </section>
