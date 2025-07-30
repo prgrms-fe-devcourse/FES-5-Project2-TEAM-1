@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import S from "./StudyJoinInfomation.module.css";
 import type { Tables } from "@/supabase/database.types";
 import Project from "./components/Project";
@@ -6,6 +6,8 @@ import ChannelComment from "./components/ChannelComment";
 import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
 import MarkDownConvert from "@/components/MarkDownConvert";
+import { useAdmin } from "./context/useAdmin";
+
 
 
 type Board = Tables<"board">;
@@ -15,6 +17,7 @@ type CardProps = Board &
 };
 
 function StudyJoinInfomation() {
+  const {isAdmin} = useAdmin()
   const { id } = useParams()
   const [card, setCard] = useState<CardProps|null>(null)
   
@@ -33,6 +36,7 @@ function StudyJoinInfomation() {
  
 
 
+
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -42,9 +46,11 @@ function StudyJoinInfomation() {
             <div className={S.title}>
               <div className={S.titleTop}>
                 <h2>{title}</h2>
-                <button type="button" className={S.setting}>
-                  <img src="/icons/edit.svg" alt="" />
-                </button>
+                {isAdmin && (
+                  <button type="button" className={S.setting}>
+                    <img src="/icons/edit.svg" alt="" />
+                  </button>
+                )}
               </div>
             </div>
             <div className={S.tagBox}>
@@ -108,11 +114,13 @@ function StudyJoinInfomation() {
             </div>
           </div>
         </div>
-        <MarkDownConvert markdown={contents} addClass={S.contents}/>
+        <MarkDownConvert markdown={contents} addClass={S.contents} />
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>
-            <button type="button">프로젝트 생성</button>
+            <Link to='management'>
+              <button type="button">프로젝트 생성</button>
+            </Link>
           </div>
           <Project />
         </section>

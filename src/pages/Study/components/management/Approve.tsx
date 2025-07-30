@@ -7,15 +7,14 @@ import type { Tables } from '@/supabase/database.types'
 import { useToast } from '@/utils/useToast'
 
 
-
-
 type User = Tables<"user_profile"> & {
     user_base: Tables<"user_base">;
   };
 
 function Approve() {
 
-  const {success,error} = useToast()
+  const { success, error } = useToast()
+
   const { id } = useParams()
   const [pendingMember,setPendingMember] = useState<User[]>([])
 

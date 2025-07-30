@@ -13,8 +13,7 @@ import MypagePost from './components/MypagePost';
 import MypageScrap from './components/MypageScrap';
 import MoveToTop from './components/MoveToTop';
 import { useAuth } from '@/auth/AuthProvider';
-import DeleteAccount from './components/DeleteAccount';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 type UserProfileWithJoins = Tables<'user_profile'> & {
@@ -24,32 +23,38 @@ type UserProfileWithJoins = Tables<'user_profile'> & {
 export type User = Tables<'user_base'> & {
   profile: UserProfileWithJoins[];
 };
+
+type CurrentUser = {
+  profileId:string;
+  email:string;
+  id:string;
+}
+
 function Mypage() {
   const [userData, setUserData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [profileId, setProfileId] = useState('');
-  const {user:currentUser}  = useAuth();
+  const {user, isLoading}  = useAuth();
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:''});
   const {id:urlProfileId} = useParams();
-
+  const navigate = useNavigate();
 
   useEffect(()=>{
-    const fetchUserProfile = async() => {
-      if(!currentUser) return;
-      const { data, error} = await supabase
-        .from("user_profile")
-        .select("profile_id")
-        .eq("user_id", currentUser.id)
-        .single(); 
-      if (error || !data) {
-        console.error("user_base 조회 실패", error);
-        return;
-      }
-      const {profile_id} = data;
-      // console.log(profile_id);
-      setProfileId(profile_id);
+    console.log(user);
+    if(!user) {
+      console.error('로그인이 필요합니다');
+      // 로그인 후 이용해달라는 alert 줄 지 고민
+      // navigate("/login");
+      return;
     }
-    fetchUserProfile();
-  },[currentUser])
+    setCurrentUser({
+      profileId: user.profileId, 
+      email: user.email, 
+      id: user.id
+    });
+    console.log(currentUser);
+      
+  },[isLoading])
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,7 +68,7 @@ function Mypage() {
           social: user_social(*)
           )
           `)
-        .eq('id', '9c6f18e9-a726-4c22-bc2d-137c62d0790f')
+        .eq('id', currentUser.id)
         .single();
         if( data ) {
           setUserData( data as unknown as User );
@@ -74,7 +79,7 @@ function Mypage() {
         }
     }
     fetchUser();
-  }, [ ])
+  }, [currentUser])
 
   const handleEditUserPage = () => {
     setEditMode( prev => !prev );
@@ -118,17 +123,13 @@ function Mypage() {
               setUserData={setUserData}
               />
          
-            <MypagePeerReview profileId={profileId}/>
-            <MypageChannel profileId={profileId}/>
+            <MypagePeerReview profileId={currentUser.profileId}/>
+            <MypageChannel profileId={currentUser.profileId}/>
             { // 현재 접속한 유저와 조회한 마이페이지 주인이 같을때만 렌더링
-              urlProfileId === profileId ? 
-              <MypageScrap profileId={profileId}/> : ''
+              urlProfileId === currentUser.profileId ? 
+              <MypageScrap profileId={currentUser.profileId}/> : ''
             }
-            <MypagePost profileId={profileId}/>
-            { // 현재 접속한 유저와 조회한 마이페이지 주인이 같을때만 렌더링
-              urlProfileId === profileId ? 
-              <DeleteAccount profileId={profileId}/> : ''
-            }
+            <MypagePost profileId={currentUser.profileId}/>
             <MoveToTop/>
 
         </div>

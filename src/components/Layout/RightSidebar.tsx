@@ -2,35 +2,55 @@ import S from './RghtSidebar.module.css'
 import '../../style/reset.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthProvider';
-import supabase from '@/supabase/supabase';
 import { useEffect, useState } from 'react';
+import supabase from '@/supabase/supabase';
 
-function RightSidebar() {
-  
-  const [profileId, setProfileId] = useState('');
-  const {user:currentUser}  = useAuth();
-  const {user, logout} = useAuth()
+
+type CurrentUser = {
+  profileId:string;
+  email:string;
+  id:string;
+  profileImage:string;
+}
+
+    const {user, isLoading, logout}  = useAuth();
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:'', profileImage:'',});
   const navigate = useNavigate()
   const [isNotification,setIsNotification] = useState(false)
 
   useEffect(()=>{
-    const fetchUserProfile = async() => {
-      if(!currentUser) return;
-      const { data, error} = await supabase
-        .from("user_profile")
-        .select("profile_id")
-        .eq("user_id", currentUser.id)
-        .single();
-      if (error || !data) {
-        console.error("user_base 조회 실패", error);
+    if(!user) {
+      console.log('로그인이 필요합니다')
+      return;
+    }
+    setCurrentUser({
+      profileId: user.profileId, 
+      email: user.email, 
+      id: user.id,
+      profileImage:'',
+    });
+    console.log(currentUser);
+      
+  },[isLoading])
+
+  useEffect(()=>{
+    const fetchUserProfileImage = async() => {
+      if(!currentUser.profileId) return;
+      const {data, error} = await supabase.from('user_profile').select('profile_images').eq('profile_id',currentUser.profileId).single();
+      if(!data || error) {
+        console.error('프로필 이미지 불러오기 실패', error.message)
         return;
       }
-      const {profile_id} = data;
-      // console.log(profile_id);
-      setProfileId(profile_id);
+      setCurrentUser( prev => ({
+        ...prev,
+        profileImage: data.profile_images
+      }))
     }
-    fetchUserProfile();
-  },[currentUser])
+    console.log('우측 사이드바 프로필 이미지 불러오기 성공')
+    fetchUserProfileImage();
+  },[currentUser.profileId])
+
+
 
   const handleLogout = async () => {
     await logout()
@@ -39,24 +59,22 @@ function RightSidebar() {
 
   const handleNotification = () => {
     setIsNotification(!isNotification)
-    
+    setIsOverlay(!isOverlay)
   }
 
   return (
     <nav className={S.container}>
       <div className={S.height}>
         <div className={S.loginBox}>
-          <div className={S.profileImage}></div>
-          {user ? (
-            <Link
-              to={`/mypage/${profileId}`}
-              className={S.loginBoxGreeting}
-              title="마이페이지 이동"
-            >
-              <p>Hello🖐️</p>
-              <h3>{user.email.split("@")[0]}</h3>
-            </Link>
-          ) : (
+          <div className={S.profileImage}>
+            <img src={user ? currentUser.profileImage : '/public/images/여울.png'} alt="프로필" />
+          </div>
+            {user ? (
+              <Link to={`/mypage/${currentUser.profileId}`} className={S.loginBoxGreeting} title='마이페이지 이동'>
+                <p>Hello🖐️</p>
+                <h3>{currentUser.email.split('@')[0]}</h3>
+              </Link>
+            ) : (
             <div className={S.loginBoxGreeting}>
               <p>Hello🖐️</p>
               <h3>Guest</h3>
@@ -77,7 +95,7 @@ function RightSidebar() {
                 fill="#222222"
               />
             </svg> */}
-            <p className={S.logout}>로그아웃</p>
+                <p className={S.logout}>로그아웃</p>
               </button>
             ) : (
               <>
@@ -96,9 +114,8 @@ function RightSidebar() {
           <ul className={S.navListWrap}>
             <li>My menu</li>
             <li className={S.navList} onClick={handleNotification}>
-              {isNotification ? (
+              {isNotification && isOverlay ? (
                 <>
-                  <div className={S.overlay}></div>
                   <svg
                     width="24"
                     height="24"
@@ -160,7 +177,7 @@ function RightSidebar() {
               </span>
             </li>
             <li className={S.navList}>
-              <a href="" className={S.navListText}>
+              <a href="#" className={S.navListText}>
                 <svg
                   width="24"
                   height="24"
@@ -181,7 +198,7 @@ function RightSidebar() {
               </a>
             </li>
             <li className={S.navList}>
-              <a href="" className={S.navListText}>
+              <a href="#" className={S.navListText}>
                 <svg
                   width="24"
                   height="25"
@@ -210,7 +227,7 @@ function RightSidebar() {
               </a>
             </li>
             <li className={S.navList}>
-              <a href="" className={S.navListText}>
+              <a href="#" className={S.navListText}>
                 <svg
                   width="24"
                   height="19"
