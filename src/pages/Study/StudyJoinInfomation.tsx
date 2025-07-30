@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import S from "./StudyJoinInfomation.module.css";
 import type { Tables } from "@/supabase/database.types";
 import Project from "./components/Project";
@@ -118,7 +118,9 @@ function StudyJoinInfomation() {
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>
-            <button type="button">프로젝트 생성</button>
+            <Link to='management'>
+              <button type="button">프로젝트 생성</button>
+            </Link>
           </div>
           <Project />
         </section>

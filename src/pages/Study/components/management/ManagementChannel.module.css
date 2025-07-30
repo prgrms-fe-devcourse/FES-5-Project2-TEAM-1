@@ -14,12 +14,13 @@
   line-height: normal;
 }
 
-form{
-  section{
-    margin-bottom: 58px;
-  }
 
-  h2{
+
+.projectDetailForm section{
+  margin-bottom: 58px;
+}
+
+.sectionHeader{
     margin-bottom: 26px;
 
     color: #000;
@@ -28,8 +29,6 @@ form{
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-
-  }
 }
 
 .category{
@@ -197,6 +196,8 @@ form{
   display: flex;
   flex-direction: row;
   gap: 70px;
+
+  margin-bottom: 83px;
 
   div{
     display: flex;
