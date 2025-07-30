@@ -40,12 +40,13 @@ function Mypage() {
 
   useEffect(()=>{
     console.log(user);
-    if(!user) {
-      console.error('로그인이 필요합니다');
-      // 로그인 후 이용해달라는 alert 줄 지 고민
-      // navigate("/login");
-      return;
-    }
+    if(!user) return;
+    // if(!user) {
+    //   console.error('로그인이 필요합니다');
+    //   // 로그인 후 이용해달라는 alert 줄 지 고민
+    //   // navigate("/login");
+    //   return;
+    // }
     setCurrentUser({
       profileId: user.profileId, 
       email: user.email, 

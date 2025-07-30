@@ -48,7 +48,7 @@ function RightSidebar() {
         profileImage: data.profile_images
       }))
     }
-    console.log('우측 사이드바 프로필 이미지 불러오기 성공')
+    // console.log('우측 사이드바 프로필 이미지 불러오기 성공')
     fetchUserProfileImage();
   }, [currentUser.profileId])
 
