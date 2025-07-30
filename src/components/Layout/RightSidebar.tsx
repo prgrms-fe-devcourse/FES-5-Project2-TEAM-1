@@ -98,7 +98,7 @@ function RightSidebar() {
             <li className={S.navList} onClick={handleNotification}>
               {isNotification ? (
                 <>
-                  <div className={S.overlay} onClick={handleNotification}></div>
+                  <div className={S.overlay}></div>
                   <svg
                     width="24"
                     height="24"
@@ -125,9 +125,7 @@ function RightSidebar() {
                       fill="#222222"
                     />
                   </svg>
-                  <div className={S.notifyPanel}>
-                    알림
-                  </div>
+                  <div className={S.notifyPanel}>알림</div>
                 </>
               ) : (
                 <svg
