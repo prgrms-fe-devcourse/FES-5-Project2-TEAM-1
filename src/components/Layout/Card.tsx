@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
 import { useNavigate } from 'react-router-dom';
 import type { Tables } from '@/supabase/database.types';
+import { chooseRegion } from '@/utils/chooseRegion';
 
 
 
@@ -103,18 +104,7 @@ function Card({ card }: Props) {
   
     const replaceText = contents.replace(/[#*]/g, "");
    
-    const chooseRegion = (address:string|null) => {
-      const region = address?.split(" ");
-      const regionDo = region?.[0];
-      const regionSi = region?.[1];
-      const studyRegion = `${regionDo} ${regionSi}`;
 
-      if (!regionDo || !regionSi) {
-        return null
-      } else {
-        return studyRegion
-      }
-    }
  
   
   return (

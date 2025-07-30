@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
 import MarkDownConvert from "@/components/MarkDownConvert";
 import { useAdmin } from "./context/useAdmin";
+import { chooseRegion } from "@/utils/chooseRegion";
 
 
 
@@ -71,7 +72,7 @@ function StudyJoinInfomation() {
                   />
                 </svg>
               </span>{" "}
-              {address}
+              {chooseRegion(address)}
               <span>
                 <svg
                   width="3"
