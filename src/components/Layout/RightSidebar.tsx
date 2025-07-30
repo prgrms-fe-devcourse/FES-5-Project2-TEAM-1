@@ -13,15 +13,7 @@ type CurrentUser = {
   profileImage:string;
 }
 
-
-interface Props{
-  isOverlay: boolean
-  setIsOverlay: (value:boolean)=>void
-}
-
-function RightSidebar({isOverlay,setIsOverlay}:Props) {
-  
-  const {user, isLoading, logout}  = useAuth();
+    const {user, isLoading, logout}  = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:'', profileImage:'',});
   const navigate = useNavigate()
   const [isNotification,setIsNotification] = useState(false)
@@ -179,7 +171,7 @@ function RightSidebar({isOverlay,setIsOverlay}:Props) {
                     fill="#222222"
                   />
                 </svg>
-              </a>
+              )}
               <span className={S.navListText}>
                 <h3>Notification</h3>
               </span>
