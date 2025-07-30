@@ -4,10 +4,6 @@ import supabase from "@/supabase/supabase";
 import { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
 
-// AdminContext.tsx 내부
-
-
-
 
 export const AdminProvider = ({ children }: { children:ReactNode }) => {
   const { user: currentUser } = useAuth();

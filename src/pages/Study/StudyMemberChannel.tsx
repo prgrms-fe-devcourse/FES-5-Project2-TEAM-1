@@ -6,18 +6,21 @@ import { useEffect, useState } from 'react';
 import type { Tables } from '@/supabase/database.types';
 import { useAuth } from '@/auth/AuthProvider';
 import { AdminProvider } from '@/components/context/useAdmin';
+import { useAdmin } from './context/useAdmin';
 
 
 type User = Tables<'approve_member'>
 
 function StudyMemberChannel() {
   const { id } = useParams()
-  const { user:currentUser} = useAuth()
-  const { success,error } = useToast()
+  const { user: currentUser } = useAuth()
+  const { success, error } = useToast()
   const [userData, setUserData] = useState<User[]>([])
   const [userProfile, setUserProfile] = useState<string>('')
-  const [adminId,setAdminId] = useState<string|null>(null)
-
+  // const [adminId,setAdminId] = useState<string|null>(null)
+  const {isAdmin } = useAdmin()
+  console.log(isAdmin)
+  
   useEffect(() => {
     const fetchProfile = async () => {
       if(!currentUser) return
@@ -28,14 +31,14 @@ function StudyMemberChannel() {
     fetchProfile()
   },[currentUser])
 
-  useEffect(() => {
-    const fetchAdmin = async () => {
-      const { data,error } = await supabase.from('board').select('profile_id').eq('board_id',id).single()
-      setAdminId(data?.profile_id)
-      if(error) console.error()
-    }
-    fetchAdmin()
-  },[id])
+  // useEffect(() => {
+  //   const fetchAdmin = async () => {
+  //     const { data,error } = await supabase.from('board').select('profile_id').eq('board_id',id).single()
+  //     setAdminId(data?.profile_id)
+  //     if(error) console.error()
+  //   }
+  //   fetchAdmin()
+  // },[id])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,9 +52,9 @@ function StudyMemberChannel() {
 
   const handleJoin = async () => {
    
-      const isJoin = userData.find(
-        (user) => user.profile_id === userProfile && user.board_id === id
-      );
+  const isJoin = userData.find(
+    (user) => user.profile_id === userProfile && user.board_id === id
+  );
 
     switch (isJoin?.status) {
       case '0': error('이미 가입신청을 요청하신 채널입니다');
@@ -68,7 +71,7 @@ function StudyMemberChannel() {
     }])
     if(memberError) console.error()
   }
-  const isAdmin = userProfile === adminId
+  // const isAdmin = userProfile === adminId
 
   return (
     <AdminProvider>

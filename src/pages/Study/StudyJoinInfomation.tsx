@@ -34,9 +34,6 @@ function StudyJoinInfomation() {
   if(!card) return 
   const { images, title, address, member, board_tag, contents,board_id} = card
  
-
-
-
   return (
     <main className={S.container}>
       <div className={S.layout}>

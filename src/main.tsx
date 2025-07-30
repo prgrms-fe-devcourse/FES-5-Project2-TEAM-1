@@ -10,13 +10,16 @@ import ToastProvider from './components/ToastProvider.tsx';
 
 
 import { AuthProvider } from './auth/AuthProvider.tsx'
+import { AdminProvider } from './components/context/useAdmin.tsx'
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ToastProvider>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <AdminProvider>
+            <App />
+          </AdminProvider>
         </AuthProvider>
       </BrowserRouter>
     </ToastProvider>
