@@ -9,8 +9,8 @@ function LeftSidebar() {
       <div className={S.height}>
         <nav>
             <ul className={S.navListWrap}>
-              <li className={S.navList}>
-                <a href="" className={S.navListText}>
+              <Link to='/' className={S.navList}>
+                <div className={S.navListText}>
                   <svg
                     width="25"
                     height="25"
@@ -24,8 +24,8 @@ function LeftSidebar() {
                     />
                   </svg>
                   <h2>Home</h2>
-                </a>
-              </li>
+                </div>
+              </Link>
               <Link to="/study" className={S.navList}>
                 <div className={S.navListText}>
                   <svg
