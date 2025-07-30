@@ -20,6 +20,7 @@ import ManagementMembers from "./pages/Study/components/management/ManagementMem
 import MangementChannel from "./pages/Study/components/management/ManagementChannel";
 import BoardWrite from "./pages/BoardForm/BoardWrite";
 import { useState } from "react";
+import { AdminProvider } from "./components/context/useAdmin";
 
 
 function App() {
@@ -34,10 +35,13 @@ function App() {
     <ToastProvider>
       <div className="container">
         {isOverlay && (
-          <div className="overlay" onClick={() => {
-            setIsNotification(!isNotification)
-            setIsOverlay(!isOverlay)
-          }}></div>
+          <div
+            className="overlay"
+            onClick={() => {
+              setIsNotification(!isNotification);
+              setIsOverlay(!isOverlay);
+            }}
+          ></div>
         )}
         {!isAuthPage && (
           <nav className="leftcontainer">
@@ -56,7 +60,14 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/study" element={<StudyChannel />} />
-            <Route path="/channel/:id" element={<StudyMemberChannel />}>
+            <Route
+              path="/channel/:id"
+              element={
+                <AdminProvider>
+                  <StudyMemberChannel />
+                </AdminProvider>
+              }
+            >
               <Route index element={<StudyJoinInfomation />} />
               <Route path="memberchannel" element={<StudyMemberChannel />} />
               <Route path="thread" element={<Thread />} />
@@ -77,7 +88,12 @@ function App() {
         </div>
         {!isAuthPage && (
           <nav className="rightcontainer">
-            <RightSidebar isOverlay={isOverlay} setIsOverlay={setIsOverlay} isNotification={isNotification} setIsNotification={setIsNotification} />
+            <RightSidebar
+              isOverlay={isOverlay}
+              setIsOverlay={setIsOverlay}
+              isNotification={isNotification}
+              setIsNotification={setIsNotification}
+            />
           </nav>
         )}
       </div>
