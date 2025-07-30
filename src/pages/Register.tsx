@@ -3,6 +3,9 @@ import { useId, useState } from "react";
 import S from "./Register.module.css";
 import supabase from "@/supabase/supabase";
 import { useNavigate } from "react-router-dom";
+import PasswordInput from "@/components/PasswordInput";
+import Swal from "sweetalert2";
+import { showErrorAlert, showInfoAlert, showSuccessAlert } from "@/utils/sweetAlert";
 
 function Register() {
     const nameId = useId();
@@ -16,9 +19,10 @@ function Register() {
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [certificateFile, setCertificateFile] = useState<File | null>(null);
-    const [certificatePreview, setCertificatePreview] = useState<string | null>(null);
+    // const [certificatePreview, setCertificatePreview] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [agree, setAgree] = useState(false);
+
 
     const navigate = useNavigate();
 
@@ -26,21 +30,26 @@ function Register() {
         e.preventDefault();
 
         setError(null);
+        
 
         if(password !== passwordConfirm){
-            setError('비밀번호가 일치하지 않습니다.');
-            return;
-        }
-
-        if(agree === false){
-            setError('모든 이용 약관에 동의해주세요.');
+            await showErrorAlert('비밀번호 불일치', '비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+            setError('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
             return;
         }
 
         if(!certificateFile){
+            await showInfoAlert('수료증 업로드 누락', '수료증 파일을 업로드해주세요.');
             setError('수료증 파일을 업로드해주세요.');
             return;
         }
+
+        if(agree === false){
+            await showInfoAlert('약관 동의 필요', '모든 이용 약관에 동의해주세요.');
+            setError('모든 이용 약관에 동의해주세요.');
+            return;
+        }
+
 
         const {data:{user}, error:signUpError} = await supabase.auth.signUp({
             email,
@@ -53,7 +62,8 @@ function Register() {
         });
 
         if(signUpError || !user){
-            console.error('회원가입 실패!');
+            console.error('회원가입 실패!', signUpError?.message);
+            showErrorAlert('회원가입 실패', '회원가입에 실패했습니다.');
             setError(signUpError?.message || '회원가입에 실패했습니다.');
             return;
         }
@@ -71,15 +81,23 @@ function Register() {
             return;
         }
 
-        alert('회원가입이 성공적으로 완료되었습니다!');
-        localStorage.clear();
-        navigate("/login");
+        await showSuccessAlert('회원가입 성공!', '프둥이숲에 오신 걸 환영합니다!🎉');
+        setTimeout(() => {
+            localStorage.clear();
+            navigate("/login");
+        }, 1600);
     }
 
 
   return (
     <div className={S.container}>
         <div className={S.registerBox}>
+
+            <img src="/images/nail.png" className={`${S.nail} ${S['top-left']}`} />
+            <img src="/images/nail.png" className={`${S.nail} ${S['top-right']}`} />
+            <img src="/images/nail.png" className={`${S.nail} ${S['bottom-left']}`} />
+            <img src="/images/nail.png" className={`${S.nail} ${S['bottom-right']}`} />
+
             <div className={S.leftSide}>
                 <img className={S.image} src="images/register.png" alt="회원가입 이미지" />
             </div>
@@ -102,11 +120,12 @@ function Register() {
                 id={emailId} 
                 name="email" 
                 required 
+                placeholder="이메일을 입력해주세요"
                 onChange={(e)=>setEmail(e.target.value)}
                 />
 
                 <label htmlFor={pwId}>비밀번호</label>
-                <input 
+                <PasswordInput 
                 type="password" 
                 id={pwId}
                 name="password" 
@@ -116,12 +135,12 @@ function Register() {
                 />
 
                 <label htmlFor={pwConfirmId}>비밀번호 확인</label>
-                <input 
-                type="password" 
-                id={pwConfirmId}
-                name="confirm" 
-                required 
-                onChange={(e)=>setPasswordConfirm(e.target.value)}
+                <PasswordInput 
+                    id={pwConfirmId}
+                    name="confirm"
+                    placeholder="비밀번호를 다시 입력해주세요"
+                    value={passwordConfirm}
+                    onChange={(e)=>setPasswordConfirm(e.target.value)}
                 />
 
                 <label htmlFor={fileId}>수료증 인증</label>
@@ -130,36 +149,12 @@ function Register() {
                 id={fileId} 
                 name="file" 
                 accept="image/*, .pdf" 
-                required 
+                // required 
                 onChange={(e)=>{
                     const file = e.target.files?.[0] ?? null;
-                    setCertificateFile(file);
-                    if(file){
-                        const reader = new FileReader();
-                        reader.onloadend = () =>{
-                            setCertificatePreview(reader.result as string);
-                        };
-
-                        reader.readAsDataURL(file);
-                    } else {
-                        setCertificatePreview(null);
-                    }
+                    setCertificateFile(file)
                 }} 
                 />
-
-                {certificatePreview && (
-                    <div className={S.preview}>
-                        {certificateFile?.type.startsWith('image/') ? (
-                            <img 
-                                src={certificatePreview} 
-                                alt="수료증 이미지" 
-                                style={{ maxWidth: '200px' }} 
-                            />
-                        ) : (
-                            <p>{''}</p>
-                        )}
-                    </div>
-                )}
 
                 <div className={S.checkbox}>
                     <input 
