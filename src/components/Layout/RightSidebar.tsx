@@ -15,18 +15,20 @@ type CurrentUser = {
 function RightSidebar() {
   
 
-  const { user, isLoading, logout } = useAuth();
+  const { user, isLoading, logout, profileId } = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser>({ profileId: '', email: '', id: '', profileImage: '', });
   const navigate = useNavigate()
   const [isNotification, setIsNotification] = useState(false)
 
   useEffect(() => {
+    if(isLoading) return;
     if (!user) {
       console.log('로그인이 필요합니다')
       return;
     }
+    if(!profileId) return;
     setCurrentUser({
-      profileId: user.profileId,
+      profileId: profileId,
       email: user.email,
       id: user.id,
       profileImage: '',
@@ -48,7 +50,6 @@ function RightSidebar() {
         profileImage: data.profile_images
       }))
     }
-    // console.log('우측 사이드바 프로필 이미지 불러오기 성공')
     fetchUserProfileImage();
   }, [currentUser.profileId])
 
@@ -67,9 +68,7 @@ function RightSidebar() {
     <nav className={S.container}>
       <div className={S.height}>
         <div className={S.loginBox}>
-          <div className={S.profileImage}>
-            <img src={user ? currentUser.profileImage : '/public/images/여울.png'} alt="프로필" />
-          </div>
+          <img className={S.profileImage} src={user ? currentUser.profileImage : '/public/images/여울.png'} alt="프로필" />
           {user ? (
             <Link to={`/mypage/${currentUser.profileId}`} className={S.loginBoxGreeting} title='마이페이지 이동'>
               <p>Hello🖐️</p>

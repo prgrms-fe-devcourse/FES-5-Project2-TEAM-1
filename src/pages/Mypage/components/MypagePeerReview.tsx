@@ -32,7 +32,6 @@ function MypagePeerReview({profileId}:Props) {
       setRawPeerReviews(data);
     }
     fetchPeerReviews();
-    // console.log('피어리뷰 패치 완료')
   },[profileId])
 
 
