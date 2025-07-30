@@ -2,7 +2,6 @@ import S from "./BoardForm.module.css";
 import BoardPreview from "./components/BoardPreview";
 import BoardEdit from "./components/BoardEdit";
 import { useEffect } from "react";
-import { format } from "date-fns";
 
 import supabase from "@/supabase/supabase";
 import { useBoardContext } from "@/components/context/useBoardContext";
@@ -21,82 +20,86 @@ interface boardData {
 }
 
 interface Props {
+  boardId?: string;
   userId: string;
 }
-function BoardForm({ userId }: Props) {
+function BoardUpdate({ boardId, userId }: Props) {
   const { postData, setPostData } = useBoardContext();
-  const { hashTagData } = useHashTagContext();
-  const { profileImage } = useProfileImageContext();
-  const { success, error: errorPop, info } = useToast();
+  const { hashTagData, sethashTagData } = useHashTagContext();
+  const { profileImage, setImageUrl } = useProfileImageContext();
+  const { error: errorPop } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userId === "") {
-      throw new Error("로그인이 필요합니다.");
-    }
-    const temporarySave = async () => {
-      const { data, error } = await supabase
-        .from("board_save")
-        .select("title, contents, update_at")
-        .eq("profile_id", userId);
-
-      const save = data?.[0];
-      if (save) {
-        if (save.title === "" && save.contents === "") return;
-
-        const updateTime = format(save.update_at, "yyyy-MM-dd HH:mm:ss");
-        const isConfirm = confirm(
-          `${updateTime} 작성하던 글이 있습니다 불러오시겠습니까?`
-        );
-        if (!isConfirm) return;
-        setPostData((prev) => {
-          return {
-            ...prev,
-            title: save.title ?? "",
-            contents: save.contents,
-          };
-        });
-      } else {
-        const { error } = await supabase
-          .from("board_save")
-          .insert({ profile_id: userId })
-          .select();
-        if (error) {
-          throw new Error("임시저장 데이터를 만드는 중 에러가 발생했습니다.");
+    if (boardId) {
+      const selectBoardData = async () => {
+        const { data: boardData, error: boardError } = await supabase
+          .from("board")
+          .select("*")
+          .eq("board_id", boardId)
+          .single();
+        if (boardError) {
+          throw new Error("Board 데이터를 불러오는데 실패하였습니다.");
         }
-      }
-      if (error) {
-        throw new Error("임시저장 데이터를 불러오는 중 오류가 발생했습니다.");
-      }
-    };
-    temporarySave();
+
+        if (boardData) {
+          setPostData((prev) => {
+            return {
+              ...prev,
+              title: boardData.title,
+              contents: boardData.contents,
+            };
+          });
+          setImageUrl(boardData.images);
+        }
+        const { data: boardTag, error: boardTagError } = await supabase
+          .from("board_tag")
+          .select("*")
+          .eq("board_id", boardId);
+
+        if (boardTagError) {
+          throw new Error("해시 태그를 불러오는 중 오류가 발생했습니다.");
+        }
+        const tag = boardTag.map((tags) => {
+          return { value: tags.hash_tag };
+        });
+        sethashTagData([...tag]);
+      };
+      selectBoardData();
+    }
   }, []);
 
-  const insertBoard = async (insertData: boardData) => {
+  const updateBoard = async (insertData: boardData) => {
     const { data, error } = await supabase
       .from("board")
-      .insert(insertData)
+      .update(insertData)
+      .eq("board_id", boardId)
       .select();
     if (error) {
       throw new Error("글게시에 실패하였습니다.");
     }
-    // success("글이 게시되었습니다!");
+
     if (data) {
-      insertHashTag(data[0].board_id);
+      updateHashTag(data[0].board_id);
       imageUpload(data[0].board_id);
-      deleteSaveData();
-      toast.success("글이 게시되었습니다.", {
+      toast.success("글이 수정되었습니다.", {
         onClose() {
-          navigate("/study");
+          navigate(`/channel/${boardId}`);
         },
         autoClose: 1500,
       });
     }
   };
 
-  const insertHashTag = async (board_id: string) => {
+  const updateHashTag = async (board_id: string) => {
     if (!hashTagData) return;
-
+    const { error: deleteError } = await supabase
+      .from("board_tag")
+      .delete()
+      .eq("board_id", board_id);
+    if (deleteError) {
+      throw new Error("hashTag 데이터 삭제 중 오류발생");
+    }
     const hashTag = hashTagData.map((tags) => {
       return {
         board_id: board_id,
@@ -128,8 +131,8 @@ function BoardForm({ userId }: Props) {
       title: postData.title,
       contents: postData.contents,
     };
-    console.log(insertData);
-    insertBoard(insertData);
+
+    updateBoard(insertData);
   };
   const imageUpload = async (board_id: string) => {
     let imageUrl = "";
@@ -161,34 +164,6 @@ function BoardForm({ userId }: Props) {
     }
   };
 
-  const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const { error } = await supabase
-      .from("board_save")
-      .update({
-        title: postData?.title ?? "",
-        contents: postData?.contents ?? "",
-      })
-      .eq("profile_id", userId)
-      .select();
-
-    if (error) {
-      throw new Error("임시저장중 오류가 발생하였습니다.");
-    }
-    success("저장되었습니다");
-    info("이미지와 해시태그는 저장되지 않습니다");
-  };
-
-  const deleteSaveData = async () => {
-    const { error } = await supabase
-      .from("board_save")
-      .delete()
-      .eq("profile_id", userId);
-    if (error) {
-      throw new Error("임시 저장 데이터 삭제를 실패했습니다.");
-    }
-  };
-
   return (
     <div>
       <div className={S.bContainer}>
@@ -197,13 +172,10 @@ function BoardForm({ userId }: Props) {
       </div>
       <div className={S.boardBottonArea}>
         <button id={S.boardWrite} type="button" onClick={handleBoardUpload}>
-          글 게시
-        </button>
-        <button type="button" onClick={handleSave}>
-          임시 저장
+          글 수정
         </button>
       </div>
     </div>
   );
 }
-export default BoardForm;
+export default BoardUpdate;

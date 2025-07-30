@@ -10,15 +10,12 @@
 .markdown h1 {
   font-size: 2em;
   font-weight: 700;
-
-  border-bottom: 2px solid #eaecef;
   padding-bottom: 0.3em;
 }
 
 .markdown h2 {
   font-size: 1.5em;
   font-weight: 600;
-  border-bottom: 1px solid #eaecef;
   padding-bottom: 0.2em;
 }
 
