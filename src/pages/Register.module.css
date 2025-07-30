@@ -1,7 +1,7 @@
 
 .container{
     width:100vw;
-    height:100vh;
+    min-height:100vh;
     background: url("/public/images/background.png");
     background-size:cover;
     background-position:center;
@@ -16,7 +16,7 @@
     flex-shrink: 0;
     border-radius: 16px;
     background: #AA6D2F;
-    box-shadow: 4px 6px 4px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 20px 20px 4px 0 rgba(0, 0, 0, 0.25);
     padding: 40px 32px;
     position:relative;
     gap:32px;
@@ -33,6 +33,7 @@
         /* max-width:300px; */
         max-height:fit-content;
         border-radius: 16px;
+        border: 5px solid #ffffff;
     }
 }
 
@@ -54,15 +55,33 @@
     label{
         color:#FFFFFF;
     }
+    
 
     input[type="text"],
     input[type="password"],
     input[type="file"]{
-        padding:5px;
+        padding:10px;
         border-radius: 16px;
         border:none;
         outline:none;
         font-size:16px;
+        border: 2px solid #b6d8a8;
+        background-color: #fffefa;
+        transition:0.3;
+        color:#4b3f2f;
+    }
+
+    input[type="file"]{
+        background-color: transparent;
+    }
+
+    input:focus{
+        border-color: rgba(166 179 125);
+        box-shadow: 0 0 0 4px rgba(136, 199, 150, 0.2);
+    }
+
+    input:-webkit-autofill {
+        -webkit-text-fill-color: #4b3f2f !important;
     }
 
     input[type="file"]::-webkit-file-upload-button {
@@ -76,7 +95,7 @@
     }
 
     input[type="file"]::-webkit-file-upload-button:hover {
-  background-color: #63a674;
+        background-color: #63a674;
 }
 
 }
@@ -98,9 +117,14 @@
     border-radius: 8px;
     cursor:pointer;
     font-weight:bold;
+    transition: background-color 0.5s;
 
     &:hover{
         background-color: rgba(137, 162, 55);
+    }
+
+    &:active{
+        transform: scale(0.97);
     }
 }
 
@@ -113,3 +137,28 @@
     text-align: center;
     color:#ff0000;
 }
+
+/* 나사 이미지 위치 */
+.nail {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+}
+
+.nail.top-left {
+  top: 12px;
+  left: 12px;
+}
+.nail.top-right {
+  top: 12px;
+  right: 12px;
+}
+.nail.bottom-left {
+  bottom: 12px;
+  left: 12px;
+}
+.nail.bottom-right {
+  bottom: 12px;
+  right: 12px;
+}
+

@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      approve_member: {
+        Row: {
+          board_id: string | null
+          id: string
+          profile_id: string | null
+          status: Database["public"]["Enums"]["membership_status"] | null
+        }
+        Insert: {
+          board_id?: string | null
+          id?: string
+          profile_id?: string | null
+          status?: Database["public"]["Enums"]["membership_status"] | null
+        }
+        Update: {
+          board_id?: string | null
+          id?: string
+          profile_id?: string | null
+          status?: Database["public"]["Enums"]["membership_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approve_member_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "board"
+            referencedColumns: ["board_id"]
+          },
+          {
+            foreignKeyName: "approve_member_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["profile_id"]
+          },
+        ]
+      }
       board: {
         Row: {
           active: boolean | null
@@ -613,6 +649,7 @@ export type Database = {
     Enums: {
       board_cls: "0" | "1"
       join_cls: "0" | "1"
+      membership_status: "0" | "1" | "2"
       status: "0" | "1" | "2" | "3"
     }
     CompositeTypes: {
@@ -743,6 +780,7 @@ export const Constants = {
     Enums: {
       board_cls: ["0", "1"],
       join_cls: ["0", "1"],
+      membership_status: ["0", "1", "2"],
       status: ["0", "1", "2", "3"],
     },
   },

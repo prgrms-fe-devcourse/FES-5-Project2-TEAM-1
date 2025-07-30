@@ -20,6 +20,7 @@ import ManagementMembers from "./pages/Study/components/management/ManagementMem
 import MangementChannel from "./pages/Study/components/management/ManagementChannel";
 import BoardWrite from "./pages/BoardForm/BoardWrite";
 
+
 function App() {
   const location = useLocation();
   const isAuthPage =
