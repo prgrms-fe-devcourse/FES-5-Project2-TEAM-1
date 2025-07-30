@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import S from './InterestDropdown.module.css';
 import back from '/icons/back.svg';
 import interestData from '@/components/data/interestData.json';
@@ -6,6 +6,7 @@ import type { User } from '../Mypage';
 import type { Tables } from '@/supabase/database.types';
 import { useToast } from '@/utils/useToast';
 import supabase from '@/supabase/supabase';
+import compareUserId from '@/utils/compareUserId';
 
 
 
@@ -14,12 +15,13 @@ interface Props {
     userInterest: Tables<'user_interest'>;
     setUserData: React.Dispatch<React.SetStateAction<User | null>>;
     user: User | null,
-    interests: string[] | undefined,
-    setInterests: React.Dispatch<React.SetStateAction<string[] | undefined>>;
+    interestArray: Interest[] | null;
+    setInterestArray: React.Dispatch<React.SetStateAction<Interest[] | null>>;
 }
 
+type Interest = Tables<'user_interest'>;
 
-function InterestDropdown({ setPlusClicked, userInterest, setUserData, interests, setInterests }: Props) {
+function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestArray, setInterestArray }: Props) {
 
     const [isTyping, setIsTyping] = useState(false);
     const [filteredInterest, setFilteredInterest] = useState<string[]>([]);
@@ -28,6 +30,16 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interests
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const { success, error } = useToast();
+
+    useEffect(() => {
+        const fetchInterest = async () => {
+            if( !userInterest ) return;
+            const result = await compareUserId(userInterest.profile_id, 'user_interest');
+            setInterestArray(result);
+        }
+
+        fetchInterest();
+    }, [userInterest])
 
     const filterInterest = ( value: string) => {
 
@@ -58,54 +70,50 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interests
     const handleInterestSave = async () => {
 
         if (!inputRef.current) return;
-        if( !interests ) return;
+        if( !interestArray ) return;
         const value = inputRef.current.value.trim();
+        const { profile_id } = userInterest;
 
-        const lowerInterest = interests.map(i => i.toLowerCase());
+        const lowerInterest = interestArray.map(i => i.interest.toLowerCase());
         if (lowerInterest.includes(value.toLowerCase())) {
             error('관심사 중복!');
             return;
         }
 
-        if (interests.length >= 5) {
+        if (interestArray.length >= 5) {
             error('관심사는 최대 5개까지 추가할 수 있어요!');
             return;
         }
 
-        // 여기서 새 배열을 먼저 계산
-        const updatedInterests = [...interests, value];
-
-        // 상태 업데이트
-        setInterests(updatedInterests);
-
-        const { profile_id } = userInterest;
-        const { error: addError } = await supabase
+        const { data, error: insertError } = await supabase
             .from('user_interest')
-            .update({interest: interests.join(',')})
-            .eq('profile_id', profile_id);
+            .insert([
+                {
+                    profile_id,
+                    interest: value
+                }
+            ])
+            .select()
+            .single();
         
-        if( addError ) {
-            error('업로드 실패');
-            console.error(addError);
+        if( insertError ) {
+            error('추가 실패');
             return;
         }
 
+        setInterestArray((prev) => (prev ? [...prev, data] : [data]));
         setUserData((prev) => {
             if( !prev ) return prev;
 
-            const prevInterest = prev.profile[0].interest?.[0] || {};
-
+            const newInterest = [...(prev.profile[0].interest || []), data];
             return {
                 ...prev,
                 profile: [{
-                     ...prev.profile[0],
-                     interest: [{
-                        ...prevInterest,
-                        interest: interests.join(',')
-                     }]
+                    ...prev.profile[0],
+                    interest: newInterest
                 }]
             }
-        })
+        });
 
         success('관심사 추가 성공!');
         if( inputRef.current ) {

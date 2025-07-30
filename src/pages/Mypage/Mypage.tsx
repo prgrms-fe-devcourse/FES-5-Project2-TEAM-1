@@ -34,26 +34,27 @@ type CurrentUser = {
 function Mypage() {
   const [userData, setUserData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const {user, isLoading}  = useAuth();
+  const {user, isLoading, profileId}  = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:''});
   const {id:urlProfileId} = useParams();
   const navigate = useNavigate();
 
   useEffect(()=>{
-    console.log(user);
-    if(!user) {
-      console.error('로그인이 필요합니다');
+     if(!isLoading){
+      console.log(user);
+      if(!user) {
+        console.error('로그인이 필요합니다');
       // 로그인 후 이용해달라는 alert 줄 지 고민
       // navigate("/login");
       return;
     }
     setCurrentUser({
-      profileId: user.profileId, 
+      profileId: profileId, 
       email: user.email, 
       id: user.id
     });
     console.log(currentUser);
-      
+  }
   },[isLoading])
 
   useEffect(() => {

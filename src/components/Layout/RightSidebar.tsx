@@ -15,23 +15,26 @@ type CurrentUser = {
 function RightSidebar() {
   
 
-  const { user, isLoading, logout } = useAuth();
+  const { user, isLoading, logout, profileId } = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser>({ profileId: '', email: '', id: '', profileImage: '', });
   const navigate = useNavigate()
   const [isNotification, setIsNotification] = useState(false)
 
-  useEffect(() => {
-    if (!user) {
-      console.log('로그인이 필요합니다')
-      return;
-    }
-    setCurrentUser({
-      profileId: user.profileId,
+useEffect(() => {
+    if(!isLoading){
+
+      if (!user) {
+        console.log('로그인이 필요합니다')
+        return;
+      }
+      setCurrentUser({
+      profileId: profileId,
       email: user.email,
       id: user.id,
       profileImage: '',
     });
     console.log(currentUser);
+  }
       
   }, [isLoading])
 
