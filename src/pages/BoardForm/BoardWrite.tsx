@@ -10,17 +10,19 @@ import { showErrorAlert } from "@/utils/sweetAlert";
 
 function BoardWrite() {
   const { id: boardId } = useParams();
-  const { user } = useAuth();
+  const { user, isLoading, profileId } = useAuth();
   const navigate = useNavigate();
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState<string | null>("");
 
   useEffect(() => {
-    if (!user) {
-      showErrorAlert("로그인 후 이용해주세요");
-      navigate("/login");
-      return;
-    } else if (user) {
-      setUserId(user.profileId);
+    if (!isLoading) {
+      if (!user) {
+        showErrorAlert("로그인 후 이용해주세요");
+        navigate("/login");
+        return;
+      } else if (user) {
+        setUserId(profileId);
+      }
     }
     // }
   }, [user]);
