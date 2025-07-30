@@ -1,8 +1,9 @@
 import S from "./BoardForm.module.css";
 import BoardPreview from "./components/BoardPreview";
 import BoardEdit from "./components/BoardEdit";
-import { useState } from "react";
-import MapSearchPopup from "@/components/MapSearchPopup";
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
+
 import supabase from "@/supabase/supabase";
 import { useBoardContext } from "@/components/context/useBoardContext";
 
@@ -10,6 +11,9 @@ import { useToast } from "@/utils/useToast";
 import { useHashTagContext } from "@/components/context/useHashTag";
 
 import { useProfileImageContext } from "@/components/context/useProfileImage";
+import { useAuth } from "@/auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface boardData {
   profile_id: string;
@@ -18,11 +22,64 @@ interface boardData {
 }
 
 function BoardForm() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { postData } = useBoardContext();
+  const { user, isLoading } = useAuth();
+  const [userId, setUserId] = useState("");
+  const { postData, setPostData } = useBoardContext();
   const { hashTagData } = useHashTagContext();
   const { profileImage } = useProfileImageContext();
-  const { success, error: errorPop } = useToast();
+  const { success, error: errorPop, info } = useToast();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (!user) {
+        // alert("로그인 후 이용해주세요!");
+        console.log("로그인 후 이용해주세요!");
+        navigate("/login");
+        return;
+      } else if (user) {
+        setUserId(user.profileId);
+      }
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    const temporarySave = async () => {
+      if (userId === "") return;
+      const { data, error } = await supabase
+        .from("board_save")
+        .select("*")
+        .eq("profile_id", userId);
+      if (data?.length !== 0 && data) {
+        if (data[0].title === "" && data[0].contents === "") return;
+
+        const updateTime = format(data[0].update_at, "yyyy-MM-dd HH:mm:ss");
+        const isConfirm = confirm(
+          `${updateTime} 작성하던 글이 있습니다 불러오시겠습니까?`
+        );
+        if (!isConfirm) return;
+        setPostData((prev) => {
+          return {
+            ...prev,
+            title: data[0].title ?? "",
+            contents: data[0].contents,
+          };
+        });
+      } else {
+        const { error } = await supabase
+          .from("board_save")
+          .insert({ profile_id: userId })
+          .select();
+        if (error) {
+          throw new Error("임시저장 데이터를 만드는 중 에러가 발생했습니다.");
+        }
+      }
+      if (error) {
+        throw new Error("임시저장 데이터를 불러오는 중 오류가 발생했습니다.");
+      }
+    };
+    temporarySave();
+  }, []);
 
   const insertBoard = async (insertData: boardData) => {
     const { data, error } = await supabase
@@ -32,10 +89,17 @@ function BoardForm() {
     if (error) {
       throw new Error("글게시에 실패하였습니다.");
     }
-    success("글이 게시되었습니다!");
+    // success("글이 게시되었습니다!");
     if (data) {
       insertHashTag(data[0].board_id);
       imageUpload(data[0].board_id);
+      deleteSaveData();
+      toast.success("글이 게시되었습니다.", {
+        onClose() {
+          navigate("/study");
+        },
+        autoClose: 1500,
+      });
     }
   };
 
@@ -69,7 +133,7 @@ function BoardForm() {
     }
 
     const insertData = {
-      profile_id: "4071d997-95f6-4630-bae5-5b69ea4d76d7",
+      profile_id: userId,
       title: postData.title,
       contents: postData.contents,
     };
@@ -88,6 +152,7 @@ function BoardForm() {
 
     if (error) {
       errorPop("이미지 업로드에 실패하였습니다.");
+
       throw new Error(error.message);
     }
 
@@ -97,13 +162,40 @@ function BoardForm() {
 
     imageUrl = publicUrlData.publicUrl;
 
-    const { data, error: updateError } = await supabase
+    const { error: updateError } = await supabase
       .from("board")
       .update({ images: imageUrl })
-      .eq("board_id", board_id)
+      .eq("board_id", board_id);
+    if (updateError) {
+      throw new Error("이미지 update 중 오류가 발생하였습니다.");
+    }
+  };
+
+  const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const { error } = await supabase
+      .from("board_save")
+      .update({
+        title: postData?.title ?? "",
+        contents: postData?.contents ?? "",
+      })
+      .eq("profile_id", userId)
       .select();
-    console.log(data);
-    console.log(updateError);
+
+    if (error) {
+      throw new Error("임시저장중 오류가 발생하였습니다.");
+    }
+    success("저장되었습니다");
+    info("이미지와 해시태그는 저장되지 않습니다");
+  };
+  const deleteSaveData = async () => {
+    const { error } = await supabase
+      .from("board_save")
+      .delete()
+      .eq("profile_id", userId);
+    if (error) {
+      throw new Error("임시 저장 데이터 삭제를 실패했습니다.");
+    }
   };
   return (
     <div>
@@ -112,20 +204,13 @@ function BoardForm() {
         <BoardPreview />
       </div>
       <div className={S.boardBottonArea}>
-        <button type="button" onClick={() => setIsOpen(true)}>
-          임시 저장
-        </button>
         <button id={S.boardWrite} type="button" onClick={handleBoardUpload}>
           글 게시
         </button>
+        <button type="button" onClick={handleSave}>
+          임시 저장
+        </button>
       </div>
-      {isOpen && (
-        <MapSearchPopup
-          onClose={() => {
-            setIsOpen(false);
-          }}
-        />
-      )}
     </div>
   );
 }
