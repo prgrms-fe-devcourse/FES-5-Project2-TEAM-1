@@ -55,23 +55,6 @@ function MypageChannel({profileId}:Props) {
     // console.log('가입 채널 패치 완료');
   },[profileId])
 
-  const adjustMargin = () => {
-    const screenWidth = window.innerWidth;
-
-    if(swiperWrappedRef.current){
-      swiperWrappedRef.current.style.marginLeft =
-      screenWidth <= 640 ? "0px" :
-      screenWidth <= 768 ? "-100px" :
-      screenWidth <= 1024 ? "-200px" : "-220px";
-    }
-  }
-
-  useEffect(()=>{
-    adjustMargin();
-    window.addEventListener("resize", adjustMargin);
-    return () => window.removeEventListener("resize", adjustMargin);
-  }, []);
-
   const handlePrev = () => {
     if(!swiper) return;
     swiper.slidePrev()
@@ -95,14 +78,17 @@ function MypageChannel({profileId}:Props) {
               className="team"
               modules={[Navigation]}
               initialSlide={0}
-              centeredSlides = {true}
+              spaceBetween={40}
               slidesPerView="auto"
               speed={900}
-              spaceBetween={32}
+              watchSlidesProgress={true}
+              style={{
+                boxSizing : 'border-box',
+              }}
               breakpoints={{
-                640: {spaceBetween: 20},
-                768: {spaceBetween: 30},
-                1024: {spaceBetween: 40},
+                640: {spaceBetween: 16},
+                768: {spaceBetween: 20},
+                1024: {spaceBetween: 24},
               }}
               onSwiper={(e) => {
                 swiperWrappedRef.current = e.wrapperEl;
@@ -112,7 +98,10 @@ function MypageChannel({profileId}:Props) {
 
               {
                 teams.map(({board, board_id})=>(
-                  <SwiperSlide key={board_id} className="team">
+                  <SwiperSlide 
+                    key={board_id} 
+                    className="team"
+                  >
                     <Link to={`/channel/${board_id}`}>
                       <div className={S.teamCard} title='팀으로 이동하기'>
                         <img className={S.teamImg} src={board.images ? board.images : 'defaultBackground.img'} alt="채널" />

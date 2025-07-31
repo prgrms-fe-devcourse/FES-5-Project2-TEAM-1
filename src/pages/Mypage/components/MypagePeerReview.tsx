@@ -51,38 +51,21 @@ function MypagePeerReview({profileId}:Props) {
   },[rawPeerReviews])
 
 
-
-
-  // swiper 화면 크기에 따른 여백 조절
-  const adjustMargin = () => {
-    const screenWidth = window.innerWidth;
-
-    if(swiperWrappedRef.current){
-      swiperWrappedRef.current.style.marginLeft =
-      screenWidth <= 640 ? "0px" :
-      screenWidth <= 768 ? "-100px" :
-      screenWidth <= 1024 ? "-180px" : "-200px";
-    }
-  }
-
-  useEffect(()=>{
-    adjustMargin();
-    window.addEventListener("resize", adjustMargin);
-    return () => window.removeEventListener("resize", adjustMargin);
-  }, []);
-
-
   // 네비게이션 swiper 외부로 빼기 위한 함수
   const handlePrev = () => {
     if(!swiper) return;
-    swiper.slidePrev()
-    console.log('이전')
+    const newIndex = Math.max(swiperIndex-1, 0);
+    setSwiperIndex(newIndex)
+    swiper.slideTo(newIndex)
+    // console.log('이전', newIndex)
   }
 
   const handleNext = () => {
-    if(!swiper) return;
-    swiper.slideNext()
-    console.log('이후')
+    if(!swiper || !peerReviews) return;
+    const newIndex = Math.min(swiperIndex+1, peerReviews.length-1);
+    setSwiperIndex(newIndex)
+    swiper.slideTo(newIndex)
+    // console.log('이후', newIndex)
   }
 
 
@@ -101,40 +84,50 @@ function MypagePeerReview({profileId}:Props) {
               modules={[Navigation]}
               grabCursor
               initialSlide={0}
-              centeredSlides = {false}
-              slidesPerView={"auto"}
+              slidesPerView="auto"
               speed={900}
-              slideToClickedSlide
+              slideToClickedSlide = {true}
               spaceBetween={40}
-                style={{
-                  padding: "0 6rem",
-                  boxSizing: "border-box"
-                }}
+              watchSlidesProgress={true}
+              style={{
+                    paddingLeft: 0,    // ✅ 이거 꼭 명시
+    paddingRight: 0,
+    marginLeft: 0,
+    marginRight: 0,
+                padding: "0",
+                boxSizing: "border-box"
+              }}
               breakpoints={{
-                640: {spaceBetween: 20},
-                768: {spaceBetween: 30},
-                1024: {spaceBetween: 40},
+                640: {spaceBetween: 16},
+                768: {spaceBetween: 24},
+                1024: {spaceBetween: 32},
               }}
               onSwiper={(e) => {
                 swiperWrappedRef.current = e.wrapperEl;
                 setSwiper(e);
               }}
-              onSlideChange={()=>{
-                setSwiperIndex(swiper!.realIndex);
+              onSlideChange={(swiper)=>{
+                setSwiperIndex(swiper.realIndex);
               }}
             >
               {
                 peerReviews.map(({writer_id, writerProfileImage, review_contents, review_score, review_contents_preview},index)=>(
-                  <SwiperSlide key={writer_id} className="peerReview">
-                    <div className={S.peerReviewCard}>
-                      <img className={S.peerReviewWriterImg} src={writerProfileImage} alt="피어리뷰 작성자 프로필" />
-                      <p className={S.review_score}>{review_score}</p>
-                      <p className={S.peerReviewContent}>
-                        {
-                          index === swiperIndex ? review_contents : review_contents_preview
-                        }
-                      </p>
-                    </div>
+                  <SwiperSlide 
+                    key={writer_id} 
+                    onClick={()=>{
+                      swiper?.slideTo(index);
+                      setSwiperIndex(index);
+                    }}
+                    className={`peerReview ${swiperIndex === index ? 'peerReviewActive' : ''}`}>
+                      <div className={S.peerReviewCard}>
+                        <img className={S.peerReviewWriterImg} src={writerProfileImage} alt="피어리뷰 작성자 프로필" />
+                        <p className={S.review_score}>{review_score}</p>
+                        <p className={S.peerReviewContent}>
+                          {
+                            index === swiperIndex ? review_contents : review_contents_preview
+                          }
+                        </p>
+                      </div>
                   </SwiperSlide>
                 ))
               }
