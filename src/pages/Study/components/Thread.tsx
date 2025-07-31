@@ -4,6 +4,7 @@ import ThreadList from './ThreadList';
 import { useEffect, useRef, useState } from 'react';
 import type { Tables } from '@/supabase/database.types';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '@/auth/AuthProvider';
 
 
 
@@ -13,7 +14,8 @@ type User = Tables<'user_profile'> & {
 }
 
 function Thread() {
-
+  const {profileId,user} = useAuth()
+  console.log(profileId,user)
   const { id } = useParams()
   const [threadData, setThreadData] = useState<Thread[]>([])
   const [updateContent, setUpdateContent] = useState('')
@@ -90,6 +92,7 @@ function Thread() {
     if (data) setThreadData(data)
   }
 
+  console.log(threadData)
   const handleDelete = (targetId:string) => {
     setThreadData(threadData.filter(item => item.thread_id !== targetId))
   }
@@ -114,7 +117,7 @@ function Thread() {
           <div className={S.writerBox}>
             <div className={S.profile}>
               <img src="/images/너굴.png" alt="" />
-              <p>이름</p>
+              <p></p>
             </div>
             <div className={S.inputContent} onClick={handleInputbarClick}>
               <div className={S.partition}></div>

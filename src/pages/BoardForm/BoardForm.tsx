@@ -13,7 +13,7 @@ import { useHashTagContext } from "@/components/context/useHashTag";
 import { useProfileImageContext } from "@/components/context/useProfileImage";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { createNotification } from "@/utils/createNotification";
+
 
 interface boardData {
   profile_id: string;
@@ -131,7 +131,6 @@ function BoardForm({ userId }: Props) {
     };
 
     insertBoard(insertData);
-    createNotification(userId,'channel','채널이 생성되었습니다')
   };
   const imageUpload = async (board_id: string) => {
     let imageUrl = "";
