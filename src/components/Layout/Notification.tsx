@@ -37,12 +37,12 @@ function Notification({ profileId }: {profileId:string|null}) {
         },
         (payload) => {
           console.log("알림 도착:", payload.new);
-            console.log("📡 알림 수신됨 (payload.new):", payload.new);
+          
              if (payload.new.user_profile_id !== profileId) {
                console.log("⛔ 수신된 알림은 내 것이 아님. 무시");
                return;
           }
-           console.log("✅ 내 알림 확인, 상태 업데이트!");
+          
           setAlarms((prev) => [...prev, payload.new as Notification])
           success('알림이 도착하였습니다')
         }

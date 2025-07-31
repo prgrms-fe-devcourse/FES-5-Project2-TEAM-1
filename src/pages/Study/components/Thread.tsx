@@ -8,35 +8,43 @@ import { useAuth } from '@/auth/AuthProvider';
 
 
 
+
 type Thread = Tables<'thread'>
 type User = Tables<'user_profile'> & {
   user_base:Tables<'user_base'>
 }
 
 function Thread() {
-  const {profileId,user} = useAuth()
-  console.log(profileId,user)
+  const {profileId} = useAuth()
+
   const { id } = useParams()
   const [threadData, setThreadData] = useState<Thread[]>([])
   const [updateContent, setUpdateContent] = useState('')
-  const [recentlyUser,setRecentlyUser] = useState<User[]>([])
+  const [recentlyUser, setRecentlyUser] = useState<User[]>([])
+  const [currentUser,setCurrentUser] = useState<User[]>([])
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
+
  
+
   useEffect(() => {
     if (!id) throw new Error('id가 없습니다')
     const fetchData = async () => {
-      const { data, error } = await supabase.from("thread").select("*").eq('board_id', id)
-      if (error) throw new Error('데이터가 들어오지 않아요')
-      setThreadData(data as Thread[]);
+      const [{ data: ThreadData ,error:ThreadError}, { data: user }] = await Promise.all([
+         supabase.from("thread").select("*").eq("board_id", id),
+         supabase.from('user_profile').select('*,user_base(*)').eq('profile_id',profileId)
+      ]); 
+      if (ThreadError) throw new Error('데이터가 들어오지 않아요')
+      setThreadData(ThreadData as Thread[]);
+      if(!user) return 
+      setCurrentUser(user)
     };
     fetchData()
   }, [id])
 
   const targetThread = threadData.find(thread => thread.board_id == id)
   const board_id = targetThread?.board_id
-  const profile_id = targetThread?.profile_id
+  const profile_id = profileId
   
-
   useEffect(() => {
     const profileId = threadData
       .map((t) => t.profile_id)
@@ -66,9 +74,6 @@ function Thread() {
   }, [threadData]);
 
 
-
-
-
   const handleInputbarClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const target = e.target as HTMLElement
     if (target.closest('button')) return 
@@ -80,7 +85,7 @@ function Thread() {
     if (!updateContent.trim()) return;
     
     const {error} =  await supabase.from('thread').insert([{
-      board_id,
+      board_id:id,
       profile_id,
       contents:updateContent,
       likes: 0,
@@ -91,8 +96,7 @@ function Thread() {
     const { data } = await supabase.from('thread').select('*').eq('board_id', board_id)
     if (data) setThreadData(data)
   }
-
-  console.log(threadData)
+  
   const handleDelete = (targetId:string) => {
     setThreadData(threadData.filter(item => item.thread_id !== targetId))
   }
@@ -117,7 +121,7 @@ function Thread() {
           <div className={S.writerBox}>
             <div className={S.profile}>
               <img src="/images/너굴.png" alt="" />
-              <p></p>
+              <p>{currentUser.}</p>
             </div>
             <div className={S.inputContent} onClick={handleInputbarClick}>
               <div className={S.partition}></div>
