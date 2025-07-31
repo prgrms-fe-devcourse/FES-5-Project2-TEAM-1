@@ -32,6 +32,8 @@ type Social = Tables<'user_social'>;
 
 function MypageSocial({user, editMode, setUserData}: Props) {
 
+  const profileId = user?.profile?.[0]?.profile_id;
+
   const [socialArray, setSocialArray] = useState<Social[] | null>(null);
   const [isClicked, setIsClicked] = useState<boolean[]>([]);
   const [inputValues, setInputValues] = useState<string[]>([]);
@@ -46,13 +48,13 @@ function MypageSocial({user, editMode, setUserData}: Props) {
 
   useEffect(() => {
     const fetchSocial = async () => {
-      if( !userSocial ) return;
-      const result = await compareUserId(userSocial.profile_id, 'user_social');
-      setSocialArray(result);
+      if( !profileId ) return;
+      const result = await compareUserId(profileId, 'user_social');
+      setSocialArray(result || []);
     }
 
     fetchSocial();
-  }, [userSocial])
+  }, [profileId])
 
 useEffect(() => {
     if (!socialArray) return;
@@ -80,13 +82,11 @@ useEffect(() => {
   }, [editMode]);
 
   useEffect(() => {
-    if( addClicked ) {
-      if( !userSocial ) return;
-      const { profile_id } = userSocial;
+    if( !addClicked || !profileId ) return;
 
       const newItem = {
         // Use empty string or a temporary unique value for social_id and create_at
-        profile_id,
+        profile_id: profileId,
         social: 'personal website',
         social_link: ''
       };
@@ -122,9 +122,8 @@ useEffect(() => {
           }
         }
       );
-    }
 
-  }, [addClicked])
+  }, [addClicked, profileId]);
 
   useEffect(() => {
     gsap.fromTo('#iconBox li', {
@@ -142,11 +141,9 @@ useEffect(() => {
         });
   }, [isClicked])
 
-  if( !userSocial ) {
+  if( !profileId ) {
       return <div className={S.mypageSocial}>Loading...</div>;
   }
-
-  // const { profile_id, social_id, social, social_link } = userSocial;
 
   const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement>, index: number) => {
 
@@ -191,9 +188,8 @@ useEffect(() => {
 
   const handleSocialUpdate = async (index: number) => {
 
-    if (!userSocial || !socialArray || !socialArray[index]) return;
+    if (!profileId || !socialArray || !socialArray[index]) return;
 
-    const { profile_id } = userSocial;
     const { social_id } = socialArray[index];
     const newSocial = pendingIcon[index];
     const newSocialLink = inputValues[index];
@@ -215,11 +211,9 @@ useEffect(() => {
         'social_link': newSocialLink
       })
       .match({
-        'profile_id': profile_id,
+        'profile_id': profileId,
         'social_id': social_id
       })
-
-    console.log( profile_id, social_id);
 
     if( socialError ) {
       error('업로드 실패');
@@ -262,8 +256,8 @@ useEffect(() => {
   }
 
   const handleSocialDelete = async ( index: number ) => {
-    if( !socialArray ) return;
-    const { profile_id } = userSocial;
+    if( !profileId || !socialArray ) return;
+
     const { social_id } = socialArray[index];
 
      setSocialArray((prev) => {
@@ -275,7 +269,7 @@ useEffect(() => {
         .from('user_social')
         .delete()
         .match({
-          'profile_id': profile_id,
+          'profile_id': profileId,
           'social_id': social_id,
         })
   

@@ -16,7 +16,7 @@ import gsap from 'gsap';
 interface Props {
     plusClicked: boolean,
     setPlusClicked: (value: boolean) => void;
-    userInterest: Tables<'user_interest'>;
+    userInterest: { profile_id: string } | null; 
     setUserData: React.Dispatch<React.SetStateAction<User | null>>;
     user: User | null,
     interestArray: Interest[] | null;
@@ -34,18 +34,17 @@ function InterestDropdown({ plusClicked, setPlusClicked, userInterest, setUserDa
     const ulRef = useRef<HTMLUListElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const navigate = useNavigate();
-
     const { error } = useToast();
 
     useEffect(() => {
         const fetchInterest = async () => {
-            if( !userInterest ) return;
+            if( !userInterest?.profile_id ) return;
             const result = await compareUserId(userInterest.profile_id, 'user_interest');
-            setInterestArray(result);
+            setInterestArray(result || []);
         }
 
         fetchInterest();
-    }, [userInterest])
+    }, [userInterest, setInterestArray])
 
     useEffect(() => {
         gsap.fromTo('#btnBox', 
@@ -89,8 +88,6 @@ function InterestDropdown({ plusClicked, setPlusClicked, userInterest, setUserDa
         const text = e.currentTarget.textContent;
         if (text && inputRef.current) {
             inputRef.current.value = text;
-            // handleAdd(text);
-            console.log( text.length);
 
             if(text.length > 15 ) {
                 setFontSize('0.7rem')
@@ -106,18 +103,29 @@ function InterestDropdown({ plusClicked, setPlusClicked, userInterest, setUserDa
     const handleInterestSave = async () => {
 
         if (!inputRef.current) return;
-        if( !interestArray ) return;
-        const value = inputRef.current.value.trim();
-        const { profile_id } = userInterest;
+        if (!userInterest?.profile_id) {
+            error('프로필 정보를 불러올 수 없습니다.');
+            return;
+        }
 
-        const lowerInterest = interestArray.map(i => i.interest.toLowerCase());
+        const value = inputRef.current.value.trim();
+        const profile_id = userInterest.profile_id;
+
+         const currentInterests = interestArray ?? [];
+
+        const lowerInterest = currentInterests.map(i => i.interest.toLowerCase());
         if (lowerInterest.includes(value.toLowerCase())) {
             error('관심사 중복!');
             return;
         }
 
-        if (interestArray.length >= 5) {
+        if (currentInterests.length >= 5) {
             error('관심사는 최대 5개까지 추가할 수 있어요!');
+            return;
+        }
+
+        if (value.length === 0) {
+            error('관심사를 입력해주세요!');
             return;
         }
 
