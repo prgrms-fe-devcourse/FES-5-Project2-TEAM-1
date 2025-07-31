@@ -8,6 +8,7 @@
   top: 0;
   left: 0;
   z-index: 9;
+  overflow-x: visible;
 }
 
 
@@ -55,20 +56,7 @@
   }
 }
 
-.recentEnterUserWrap{
-  display:flex;
-  padding-left: 12px;
-  position:absolute;
-  top: 70vh;
-
-
-  .recentEnterUser{
-    display:flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .recentEnterUserTop{
+.recentEnterUserTop{
     display: flex;
     font-size: 16px;
     width: 200px;
@@ -78,6 +66,7 @@
     span{
       cursor: pointer;
     }
+
   }
   .enterUser{
     display: flex;
@@ -107,4 +96,26 @@
       background-color: greenyellow;
     }
   }
+
+.recentEnterUserWrap{
+  display:flex;
+  padding-left: 12px;
+  position:absolute;
+  top: 70vh;
+  height: 20rem;
+  width: 13.5rem;
+  flex-direction: column;
 }
+
+  .recentEnterUser{
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: scroll;
+    height: 20rem;
+    padding-top: 1rem;
+    
+    p {
+      font-size: 1rem;
+    }
+  }

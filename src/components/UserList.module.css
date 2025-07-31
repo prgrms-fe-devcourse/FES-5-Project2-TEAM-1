@@ -1,0 +1,14 @@
+
+
+
+
+.popup {
+    width: 10rem;
+    background-color: white;
+
+    position: absolute;
+    top: 0rem;
+    left: 10rem;
+
+    z-index: 10001;
+}
