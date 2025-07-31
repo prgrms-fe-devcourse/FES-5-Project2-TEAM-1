@@ -30,12 +30,12 @@
 }
 
 .backgroundEditWrapper {
-    width: 76rem;
+    width: 100vw;
     height: 100vh;
     background-color: transparent;
     backdrop-filter: blur(4px);
 
-    position: absolute;
+    position: fixed;
     top: 0;
     z-index: 5;
 

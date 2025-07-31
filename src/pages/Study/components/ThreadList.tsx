@@ -4,18 +4,30 @@ import { commentTime } from './utills/commentTime';
 import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
 import ThreadReplyComponent from './ThreadReplyComponent';
+import { useAuth } from '@/auth/AuthProvider';
 
+type User = Tables<"user_profile"> & {
+  user_base: Tables<"user_base">;
+};
+
+type ReplyWithUser = ThreadReply & {
+  user_profile: User;
+}
 
 type Thread = Tables<"thread">;
 type ThreadReply = Tables<'thread_reply'>
-interface Props{
-  data: Thread,
-  onDelete : () => void
+interface Props {
+  data: Thread;
+  userName?: string | null
+  userImage?: string;
+  onDelete: () => void;
+
 }
 
-function ThreadList({ data,onDelete }: Props) {
+function ThreadList({ data,onDelete,userName,userImage, }: Props) {
 
-  const { contents, likes, create_at,thread_id,profile_id} = data
+  const {profileId} = useAuth()
+  const { contents, likes, create_at,thread_id} = data
   const [isPress,setIsPress] = useState(false)
   const [like, setLike] = useState(likes)
   const [isEditing, setIsEditing] = useState(false)
@@ -23,18 +35,33 @@ function ThreadList({ data,onDelete }: Props) {
   const [content, setContent] = useState(contents)
   const [editContent,setEditContent] = useState(contents)
   const [createReply, setCreateReply] = useState<string>('')
-  const [reply,setReply] = useState<ThreadReply[]>([])
+  const [reply,setReply] = useState<ReplyWithUser[]>([])
   const timeStamp = commentTime(create_at)
 
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase
+      const { data:replies, error } = await supabase
         .from("thread_reply")
-        .select("*")
+        .select("*,user_profile(*,user_base(*))")
         .eq("thread_id", thread_id);
       if (error) console.log(error.message);
-      if(data) setReply(data);
+
+      const profileIds = replies?.map(r => r.profile_id)
+      if (!profileIds || profileIds.length === 0) return;
+
+      const { data: users } = await supabase.from('user_profile').select('*,user_base(*)').in('profile_id', profileIds)
+      
+      if (!replies) return 
+      
+      const repliesWithUser:ReplyWithUser[] = replies.map(reply => {
+        const matchedUser = users?.find(user => user.profile_id === reply.profile_id)
+        return {
+          ...reply,
+          user:matchedUser!,
+        }
+      })
+      setReply(repliesWithUser)
     }
     fetchData()
   },[thread_id])
@@ -69,7 +96,6 @@ function ThreadList({ data,onDelete }: Props) {
      if (error) console.error();
   }
 
-
   const handleReplyDelete = (targetId: string) => {
     setReply(reply.filter((item) => item.reply_id !== targetId));
   };
@@ -100,7 +126,7 @@ function ThreadList({ data,onDelete }: Props) {
 
     const { error } = await supabase.from('thread_reply').insert([{
       thread_id,
-      profile_id,
+      profile_id:profileId,
       contents: createReply,
       likes: 0,
       created_at: new Date()
@@ -108,9 +134,9 @@ function ThreadList({ data,onDelete }: Props) {
     if (error) console.log(error.message)
     setCreateReply("");
     
-    const { data:threadData } = await supabase.from('thread_reply').select('*').eq('thread_id',thread_id)
-    if(threadData) setReply(threadData)
-      
+    const { data:replies } = await supabase.from('thread_reply').select('*,user_profile(*,user_base(*))').eq('thread_id',thread_id)
+        if(!replies) return 
+        setReply(replies);
   }; 
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -140,8 +166,8 @@ function ThreadList({ data,onDelete }: Props) {
       <div className={S.writerBox}>
         <div className={S.meta}>
           <div className={S.profile}>
-            <img src="/images/너굴.png" alt="" />
-            <p>이름</p>
+            <img src={userImage} alt="유저 프로필이미지" />
+            <p>{userName}</p>
           </div>
           <div className={S.timeStamp}>{timeStamp}</div>
         </div>
@@ -203,10 +229,7 @@ function ThreadList({ data,onDelete }: Props) {
       </div>
       {isReplyPress && (
         <div>
-          <form
-            className={S.replyInputBox}
-            onSubmit={handleSubmitReply}
-          >
+          <form className={S.replyInputBox} onSubmit={handleSubmitReply}>
             <textarea
               className={S.replyInput}
               value={createReply}
@@ -219,16 +242,19 @@ function ThreadList({ data,onDelete }: Props) {
             </button>
           </form>
 
-          {recentlyReply &&
-            recentlyReply.map((comment) => (
+          {recentlyReply.map((item) => {
+            
+            return (
               <ThreadReplyComponent
-                reply={comment}
-                key={comment.reply_id}
-                onDelete={() => {
-                  handleReplyDelete(comment.reply_id);
-                }}
+                key={item.reply_id}
+                reply={item}
+                userName={item.user_profile.user_base.nickname}
+                userImage={item.user_profile.profile_images}
+                onDelete={() => handleReplyDelete(item.reply_id)}
               />
-            ))}
+            );
+          }
+          )}
         </div>
       )}
     </li>

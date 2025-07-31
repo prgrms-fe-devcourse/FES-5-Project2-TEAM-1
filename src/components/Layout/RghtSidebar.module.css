@@ -113,6 +113,9 @@
     transition:  0.5s;
     padding: 2px;
     position: relative;
+    font-family: "Quicksand", sans-serif;
+
+
 
     .navListText{
       cursor: pointer;

@@ -4,8 +4,14 @@ import ThreadList from './ThreadList';
 import { useEffect, useRef, useState } from 'react';
 import type { Tables } from '@/supabase/database.types';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '@/auth/AuthProvider';
 
 
+type ThreadWithUser = Tables<"thread"> & {
+  user_profile: Tables<"user_profile"> & {
+    user_base: Tables<"user_base">;
+  };
+};
 
 type Thread = Tables<'thread'>
 type User = Tables<'user_profile'> & {
@@ -13,28 +19,39 @@ type User = Tables<'user_profile'> & {
 }
 
 function Thread() {
+  const {profileId} = useAuth()
+  const profile_id = profileId;
 
+  
   const { id } = useParams()
-  const [threadData, setThreadData] = useState<Thread[]>([])
+  const [threadData, setThreadData] = useState<ThreadWithUser[]>([])
   const [updateContent, setUpdateContent] = useState('')
-  const [recentlyUser,setRecentlyUser] = useState<User[]>([])
+  const [recentlyUser, setRecentlyUser] = useState<User[]>([])
+  const [currentUser,setCurrentUser] = useState<User[]>([])
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
- 
+
+
   useEffect(() => {
     if (!id) throw new Error('id가 없습니다')
+    if(!profileId) return 
     const fetchData = async () => {
-      const { data, error } = await supabase.from("thread").select("*").eq('board_id', id)
-      if (error) throw new Error('데이터가 들어오지 않아요')
-      setThreadData(data as Thread[]);
+      const [{ data: ThreadData ,error:ThreadError}, { data: user }] = await Promise.all([
+         supabase.from("thread").select("*,user_profile(*,user_base(*))").eq("board_id", id),
+         supabase.from('user_profile').select('*,user_base(*)').in('profile_id',[profileId])
+      ]); 
+      if (ThreadError) throw new Error('데이터가 들어오지 않아요')
+      setThreadData(ThreadData as ThreadWithUser[]);
+      if(!user) return 
+      setCurrentUser(user)
     };
     fetchData()
-  }, [id])
+  }, [id,profileId])
+
 
   const targetThread = threadData.find(thread => thread.board_id == id)
   const board_id = targetThread?.board_id
-  const profile_id = targetThread?.profile_id
-  
 
+  
   useEffect(() => {
     const profileId = threadData
       .map((t) => t.profile_id)
@@ -64,9 +81,6 @@ function Thread() {
   }, [threadData]);
 
 
-
-
-
   const handleInputbarClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const target = e.target as HTMLElement
     if (target.closest('button')) return 
@@ -78,7 +92,7 @@ function Thread() {
     if (!updateContent.trim()) return;
     
     const {error} =  await supabase.from('thread').insert([{
-      board_id,
+      board_id:id,
       profile_id,
       contents:updateContent,
       likes: 0,
@@ -86,10 +100,10 @@ function Thread() {
     }])
     if (error) console.log(error.message)
     setUpdateContent("");
-    const { data } = await supabase.from('thread').select('*').eq('board_id', board_id)
+    const { data } = await supabase.from('thread').select('*,user_profile(*,user_base(*))').eq('board_id', board_id)
     if (data) setThreadData(data)
   }
-
+  
   const handleDelete = (targetId:string) => {
     setThreadData(threadData.filter(item => item.thread_id !== targetId))
   }
@@ -113,8 +127,12 @@ function Thread() {
         <div className={S.container}>
           <div className={S.writerBox}>
             <div className={S.profile}>
-              <img src="/images/너굴.png" alt="" />
-              <p>이름</p>
+              {currentUser.map(({ profile_id, profile_images, user_base }) => (
+                <span className={S.profile} key={profile_id}>
+                  <img src={profile_images} alt="" />
+                  <p>{user_base.nickname}</p>
+                </span>
+              ))}
             </div>
             <div className={S.inputContent} onClick={handleInputbarClick}>
               <div className={S.partition}></div>
@@ -137,14 +155,17 @@ function Thread() {
             </div>
           </div>
           <ul className={S.threads}>
-            {recentlyThread &&
-              recentlyThread.map((reply) => (
+            {recentlyThread.map((reply) => 
                 <ThreadList
-                  data={reply}
                   key={reply.thread_id}
+                  data={reply}
+                  userName={reply.user_profile?.user_base.nickname}
+                  userImage={
+                    reply.user_profile?.profile_images
+                  }
                   onDelete={() => handleDelete(reply.thread_id)}
                 />
-              ))}
+            )}
           </ul>
         </div>
         <div className={S.member}>
@@ -152,10 +173,10 @@ function Thread() {
           <ul className={S.recentlyProfileWrap}>
             {recentlyUser.map((user) => {
               return (
-                <li>
+                <li key={user.user_id}>
                   <div className={S.recentlyProfile}>
                     <img src={user.profile_images} alt="" />
-                    <p>{user.user_base.name}</p>
+                    <p>{user.user_base.nickname}</p>
                   </div>
                 </li>
               );

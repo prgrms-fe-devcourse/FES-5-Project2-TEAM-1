@@ -139,7 +139,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
                 <div className={S.notifyPanel}>
                   <h4>Notification</h4>
                   <div className={S.notificationList}>
-                    <Notification />
+                    <Notification profileId={profileId} />
                   </div>
                 </div>
               )}
