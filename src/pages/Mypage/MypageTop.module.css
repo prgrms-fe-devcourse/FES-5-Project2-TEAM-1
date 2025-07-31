@@ -1,15 +1,15 @@
 .container {
     background-color: #F5F5F5;
-    margin: 104px 232px;
-    display: flex;
-    flex-direction: column;
+    margin: 0 auto;
+    /* display: flex; */
+    /* flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
     font-family: 'Pretendard Variable';
 }
 
 .wrapper {
-    width: 75rem;
+    max-width: 75rem;
     /* border: 0.5px solid black; */
     padding: 8% 1% 10% 1%;
 

@@ -88,6 +88,7 @@ function App() {
             </Routes>
             {!isAuthPage && <Footer />}
           </div>
+
           {!isAuthPage && (
             <nav className="rightcontainer">
               <RightSidebar

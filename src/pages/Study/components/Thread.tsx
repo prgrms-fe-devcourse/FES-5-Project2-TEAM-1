@@ -155,7 +155,8 @@ function Thread() {
             </div>
           </div>
           <ul className={S.threads}>
-            {recentlyThread.map((reply) => 
+            {
+              recentlyThread.map((reply) => 
                 <ThreadList
                   key={reply.thread_id}
                   data={reply}

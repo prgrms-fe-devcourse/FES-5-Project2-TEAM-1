@@ -20,9 +20,13 @@ function ChannelComment(card:Props) {
   
   useEffect(() => {
     const commentItem = async () => {
-      const { data } = await supabase.from("comment").select("*");
-      if (!data) return;
-      setComments(data);
+      const [{ data:commentData },{data:userData}] = await Promise.all([
+        supabase.from("comment").select("*").eq('board_id',board_id),
+        supabase.from('user_profile').select('*,(user_base(*))').eq('profile_id',profile_id)
+      ])
+      if (!commentData) return;
+      setComments(commentData);
+      setCurrentUser(userData)
     };
     commentItem();
   },[]);
