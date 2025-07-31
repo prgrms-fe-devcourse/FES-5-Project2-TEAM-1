@@ -110,7 +110,6 @@ function MypageInterest({user, editMode, setUserData}: Props) {
             if( !prev ) return prev;
 
             const filteredInterests = prev.profile[0].interest?.filter( i => i.interest !== interest) || [];
-            console.log( filteredInterests );
 
             return {
                 ...prev,

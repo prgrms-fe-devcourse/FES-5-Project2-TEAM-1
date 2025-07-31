@@ -16,11 +16,16 @@ import Line from '@/assets/line.png';
 import Youtube from '@/assets/youtube.png';
 import DefaultIcon from '/images/너굴.png';
 
+interface Props {
+  user: User | null,
+  socialData: Social[] | null;
+  setSocialData: React.Dispatch<React.SetStateAction<Social[] | null>>;
+}
+
 type Social = Tables<'user_social'>;
 
-function MypageSocialConvert({ user }: {user: User | null}) {
+function MypageSocialConvert({ user, socialData, setSocialData }: Props ) {
 
-  const [socialData, setSocialData] = useState<Social[]|null>(null);
   const [copiedText, setCopy] = useCopyToClipboard();
   const { success, info } = useToast();
 

@@ -41,7 +41,6 @@ function Mypage() {
 
   useEffect(()=>{
      if(!isLoading){
-      console.log(user);
       if(!user) {
         console.error('로그인이 필요합니다');
       // 로그인 후 이용해달라는 alert 줄 지 고민
@@ -53,7 +52,7 @@ function Mypage() {
       email: user.email, 
       id: user.id
     });
-    console.log(currentUser);
+
   }
   },[isLoading])
 

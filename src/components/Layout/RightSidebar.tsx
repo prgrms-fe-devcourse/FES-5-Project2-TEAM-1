@@ -33,7 +33,7 @@ useEffect(() => {
       id: user.id,
       profileImage: '',
     });
-    console.log(currentUser);
+
   }
       
   }, [isLoading])
