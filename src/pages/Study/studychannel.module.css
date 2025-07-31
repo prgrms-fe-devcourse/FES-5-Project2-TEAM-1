@@ -76,12 +76,11 @@
 
 .cardGrid{
   margin-top: 56px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap:wrap;
   gap: 24px;
 }
-
-
 
 .pagenation{
   display:flex;

@@ -26,21 +26,30 @@ function App() {
   const location = useLocation();
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
-  const [isOverlay,setIsOverlay] = useState(false)
+  const [isOverlay, setIsOverlay] = useState(false)
+  const [isNotification, setIsNotification] = useState(false)
   
   
   return (
     <ToastProvider>
       <div className="container">
+        {isOverlay && (
+          <div className="overlay" onClick={() => {
+            setIsNotification(!isNotification)
+            setIsOverlay(!isOverlay)
+          }}></div>
+        )}
         {!isAuthPage && (
           <nav className="leftcontainer">
+            {isOverlay && (
+              <div
+                className="overlay"
+                onClick={() => setIsOverlay(false)}
+              ></div>
+            )}
             <LeftSidebar />
           </nav>
         )}
-        {
-          isOverlay && 
-            <div className={`overlay ${isOverlay ? 'visible' : ''}`} onClick={()=>setIsOverlay(false)}></div> 
-        }
         <div className="mainWrapper">
           <Routes>
             <Route path="/" element={<MainContent />} />
@@ -65,12 +74,12 @@ function App() {
             <Route path="/mypage/:id" element={<Mypage />} />
           </Routes>
           {!isAuthPage && <Footer />}
-        </div> 
-          {!isAuthPage && (
-            <nav className="rightcontainer">
-            <RightSidebar isOverlay={ isOverlay } setIsOverlay={setIsOverlay} />
-            </nav>
-          )}        
+        </div>
+        {!isAuthPage && (
+          <nav className="rightcontainer">
+            <RightSidebar isOverlay={isOverlay} setIsOverlay={setIsOverlay} isNotification={isNotification} setIsNotification={setIsNotification} />
+          </nav>
+        )}
       </div>
     </ToastProvider>
   );

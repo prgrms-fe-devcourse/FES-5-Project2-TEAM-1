@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import S from "./StudyJoinInfomation.module.css";
 import type { Tables } from "@/supabase/database.types";
 import Project from "./components/Project";
@@ -33,8 +33,11 @@ function StudyJoinInfomation() {
   },[id])
 
   if(!card) return 
-  const { images, title, address, member, board_tag, contents} = card
+  const { images, title, address, member, board_tag, contents,board_id} = card
  
+
+
+
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -45,9 +48,11 @@ function StudyJoinInfomation() {
               <div className={S.titleTop}>
                 <h2>{title}</h2>
                 {isAdmin && (
-                  <button type="button" className={S.setting}>
-                    <img src="/icons/edit.svg" alt="" />
-                  </button>
+                  <NavLink to={`/Write/${board_id}`}>
+                    <button type="button" className={S.setting}>
+                      <img src="/icons/edit.svg" alt="" />
+                    </button>
+                  </NavLink>
                 )}
               </div>
             </div>

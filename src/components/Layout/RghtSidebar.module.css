@@ -1,22 +1,16 @@
 .container{
   width: 13.75rem;
   background-color: #FFC0CB;
+  box-shadow: -8px 0px 20px rgba(0, 0, 0, 0.08);
+  min-height: 100vh;
   
-  flex-shrink: 0;
-  justify-content: space-between;
-  z-index: 9;
-  position: relative;
-}
-
-
-.height{
-  height: 100vh;
   position: fixed;
   top: 0;
   right: 0;
-  box-shadow: -8px 0px 20px rgba(0, 0, 0, 0.08);
-  
+  z-index: 2000;
 }
+
+
 .loginBox{
   display:flex;
   margin-top: 28px;
@@ -90,6 +84,7 @@
     }
   }
 }
+
 .loginBox::after{
   content:"";
   position: absolute;
@@ -112,10 +107,12 @@
     font-size: 12px;
     padding-left: 20px;
   }
+
   .navList{
     display: flex;
     transition:  0.5s;
     padding: 2px;
+    position: relative;
 
     .navListText{
       cursor: pointer;
@@ -124,19 +121,48 @@
        padding-left: 12px;
       gap: 12px;
       align-items: center;
-  
+
+      .notifiIcon{
+        width: 24px;
+        height: 24px;
+      }
     }
+
   h3{
     font-weight: 600;
     font-size: 24px;
     padding: 0;
-  }
+    }
+
+.notifyPanel {
+  padding: 40px 18px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 560px;
+  height: 100vh;
+  background: #fff;
+  z-index: 3000;
+  padding: 1.5rem;
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+  transform: translateX(100%);
+  animation: slideIn 0.3s forwards;}
+
   &.navList:hover{
     background-color: #55555527;
       padding-bottom: 2px;
       border-radius: 4px;
-  }
-  }
+       }
+    }
+
+    h4{
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    .notificationList{
+      margin-top: 30px;
+    }
   }
   .membershipBox{
     margin-top: 104px;
@@ -189,24 +215,16 @@
 }
 
 
-.notifyPanel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 320px;
-  height: 100vh;
-  background: #fff;
-  z-index: 1001;
-  padding: 1.5rem;
-  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
-  transform: translateX(100%);
-  animation: slideIn 0.3s forwards;
-  z-index: 99;
-}
+
 
 
 @keyframes slideIn {
+  from {
+    transform: translateX(0%);
+    opacity: 0;
+  }
   to {
     transform: translateX(-220px);
+    opacity: 1;
   }
 }
