@@ -76,9 +76,8 @@
 
 .cardGrid{
   margin-top: 56px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap:wrap;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
   gap: 24px;
 }
 

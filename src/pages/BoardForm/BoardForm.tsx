@@ -14,6 +14,7 @@ import { useProfileImageContext } from "@/components/context/useProfileImage";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+
 interface boardData {
   profile_id: string;
   title: string;
