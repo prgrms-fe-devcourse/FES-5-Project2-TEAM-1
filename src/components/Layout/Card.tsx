@@ -32,6 +32,8 @@ function Card({ card }: Props) {
     profile_id,
     board_tag,
   } = card;
+
+  const [hash_tag] =board_tag
   
     const [cardLike, setCardLike] = useState(likes);
     const [isPressed, setIsPressed] = useState(false);
@@ -97,13 +99,27 @@ function Card({ card }: Props) {
       } else {
         return;
       }
-    };
-    const replaceText = contents.replace(/[#*]/g, "");
+   };
   
+    const replaceText = contents.replace(/[#*]/g, "");
+   
+    const chooseRegion = (address:string|null) => {
+      const region = address?.split(" ");
+      const regionDo = region?.[0];
+      const regionSi = region?.[1];
+      const studyRegion = `${regionDo} ${regionSi}`;
+
+      if (!regionDo || !regionSi) {
+        return null
+      } else {
+        return studyRegion
+      }
+    }
+ 
   
   return (
     <section className={S.container} onClick={(e) => handleRoute(e, card)}>
-      <div className={S.cardTop} >
+      <div className={S.cardTop}>
         <h4>{title}</h4>
         <div className={S.cardTopRight}>
           <button className={S.scrapBtn} onClick={handleScrap}>
@@ -127,12 +143,30 @@ function Card({ card }: Props) {
         <p>{replaceText}</p>
       </span>
       <span className={S.tagBox}>
+        {board_tag &&
+          board_tag.map((t) => <div key={t.tag_id}>{t.hash_tag}</div>)}
+
         {
-          board_tag&&
-          board_tag.map((t) => (
-          <div key={t.tag_id}>{t.hash_tag}</div>
-          ))
-        }
+          hash_tag && (
+          <span>
+            <svg
+              width="3"
+              height="3"
+              viewBox="0 0 3 3"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1.50935 2.55176C0.948598 2.55176 0.5 2.10316 0.5 1.5611C0.5 1.00036 0.948598 0.551758 1.50935 0.551758C2.0514 0.551758 2.5 1.00036 2.5 1.5611C2.5 2.10316 2.0514 2.55176 1.50935 2.55176Z"
+                fill="#555555"
+                fillOpacity="0.7"
+              />
+            </svg>
+          </span>
+        )}
+
+        {chooseRegion(address)} 
+        {/* 지역 필수사항 */}
         <span>
           <svg
             width="3"
@@ -148,22 +182,7 @@ function Card({ card }: Props) {
             />
           </svg>
         </span>
-        {address}
-        <span>
-          <svg
-            width="3"
-            height="3"
-            viewBox="0 0 3 3"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1.50935 2.55176C0.948598 2.55176 0.5 2.10316 0.5 1.5611C0.5 1.00036 0.948598 0.551758 1.50935 0.551758C2.0514 0.551758 2.5 1.00036 2.5 1.5611C2.5 2.10316 2.0514 2.55176 1.50935 2.55176Z"
-              fill="#555555"
-              fillOpacity="0.7"
-            />
-          </svg>
-        </span>
+
         <span>
           <svg
             width="12"

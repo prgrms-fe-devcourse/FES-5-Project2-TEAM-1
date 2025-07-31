@@ -1,6 +1,5 @@
 .container{
   margin: 58px 105px 0px;
-
 }
 
 .channelInfoBox{
@@ -76,4 +75,8 @@
   display: flex;
   justify-content: space-between;
   margin-top: 56px;
+}
+
+.setProjectDetails{
+  z-index: 9999;
 }

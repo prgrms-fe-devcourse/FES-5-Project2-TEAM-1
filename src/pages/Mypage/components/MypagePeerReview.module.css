@@ -13,6 +13,8 @@
 
 .peerReviewContainer{
   width: 100%;
+  overflow: visible; 
+  position: relative; 
   margin-bottom: 6.9rem;
 
   display: flex;

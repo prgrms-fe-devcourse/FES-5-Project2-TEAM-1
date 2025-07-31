@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import S from "./StudyJoinInfomation.module.css";
 import type { Tables } from "@/supabase/database.types";
 import Project from "./components/Project";
@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
 import MarkDownConvert from "@/components/MarkDownConvert";
 import { useAdmin } from "./context/useAdmin";
+
 
 
 
@@ -32,7 +33,7 @@ function StudyJoinInfomation() {
   },[id])
 
   if(!card) return 
-  const { images, title, address, member, board_tag, contents} = card
+  const { images, title, address, member, board_tag, contents,board_id} = card
  
 
 
@@ -47,9 +48,11 @@ function StudyJoinInfomation() {
               <div className={S.titleTop}>
                 <h2>{title}</h2>
                 {isAdmin && (
-                  <button type="button" className={S.setting}>
-                    <img src="/icons/edit.svg" alt="" />
-                  </button>
+                  <NavLink to={`/Write/${board_id}`}>
+                    <button type="button" className={S.setting}>
+                      <img src="/icons/edit.svg" alt="" />
+                    </button>
+                  </NavLink>
                 )}
               </div>
             </div>
@@ -118,9 +121,13 @@ function StudyJoinInfomation() {
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>
-            <Link to='management'>
-              <button type="button">프로젝트 생성</button>
-            </Link>
+            {
+              isAdmin && (
+                <Link to='management'>
+                  <button type="button">프로젝트 생성</button>
+                </Link>
+              )
+            }
           </div>
           <Project />
         </section>
