@@ -1,82 +1,94 @@
-import type { Tables } from '@/supabase/database.types';
-import S from './ThreadList.module.css'
-import { commentTime } from './utills/commentTime';
-import { useEffect, useState } from 'react';
-import supabase from '@/supabase/supabase';
-import ThreadReplyComponent from './ThreadReplyComponent';
+import type { Tables } from "@/supabase/database.types";
+import S from "./ThreadList.module.css";
+import { commentTime } from "./utills/commentTime";
+import { useEffect, useState } from "react";
+import supabase from "@/supabase/supabase";
+import ThreadReplyComponent from "./ThreadReplyComponent";
+import { useAuth } from "@/auth/AuthProvider";
 
+type User = Tables<"user_profile"> & {
+  user_base: Tables<"user_base">;
+};
+
+type ReplyWithUser = ThreadReply & {
+  user_profile: User;
+};
 
 type Thread = Tables<"thread">;
-type ThreadReply = Tables<'thread_reply'>
-interface Props{
-  data: Thread,
-  onDelete : () => void
+type ThreadReply = Tables<"thread_reply">;
+interface Props {
+  data: Thread;
+  userName?: string | null;
+  userImage?: string;
+  onDelete: () => void;
+  replyData?: ReplyWithUser[];
 }
 
-function ThreadList({ data,onDelete }: Props) {
-
-  const { contents, likes, create_at,thread_id,profile_id} = data
-  const [isPress,setIsPress] = useState(false)
-  const [like, setLike] = useState(likes)
-  const [isEditing, setIsEditing] = useState(false)
-  const [isReplyPress, setIsReplyPress] = useState(false)
-  const [content, setContent] = useState(contents)
-  const [editContent,setEditContent] = useState(contents)
-  const [createReply, setCreateReply] = useState<string>('')
-  const [reply,setReply] = useState<ThreadReply[]>([])
-  const timeStamp = commentTime(create_at)
-
+function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
+  const { profileId } = useAuth();
+  const { contents, likes, create_at, thread_id } = data;
+  const [isPress, setIsPress] = useState(false);
+  const [like, setLike] = useState(likes);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isReplyPress, setIsReplyPress] = useState(false);
+  const [content, setContent] = useState(contents);
+  const [editContent, setEditContent] = useState(contents);
+  const [createReply, setCreateReply] = useState<string>("");
+  const [reply, setReply] = useState<ReplyWithUser[]>([]);
+  const timeStamp = commentTime(create_at);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase
-        .from("thread_reply")
-        .select("*")
-        .eq("thread_id", thread_id);
-      if (error) console.log(error.message);
-      if(data) setReply(data);
+    if (!replyData) return;
+    setReply(replyData);
+  }, [replyData]);
+
+  const handleLike = async () => {
+    const likeState = isPress ? like - 1 : like + 1;
+    const nextState = !isPress;
+
+    setLike(likeState);
+    setIsPress(nextState);
+    localStorage.setItem(`like-${data.thread_id}`, JSON.stringify(nextState));
+
+    const { error } = await supabase
+      .from("thread_reply")
+      .update({
+        likes: likeState,
+      })
+      .eq("thread_id", thread_id)
+      .select()
+      .single();
+
+    if (error) console.log(error.message);
+  };
+
+  const handleSave = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent
+  ) => {
+    if (e && typeof e.preventDefault === "function") {
+      e.preventDefault();
     }
-    fetchData()
-  },[thread_id])
 
-  const handleLike = async() => {
-    const likeState = isPress ? like - 1 : like + 1
-    const nextState = !isPress
+    if (!editContent.trim()) return;
 
-    setLike(likeState)
-    setIsPress(nextState)
-    localStorage.setItem(`like-${data.thread_id}`, JSON.stringify(nextState))
-    
-    const { error } = await supabase.from('thread_reply').update({
-      likes:likeState
-    }).eq('thread_id', thread_id).select().single()
-    
-    if(error) console.log(error.message)
-  }
-
-  const handleSave = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent) => {
-      if (e && typeof e.preventDefault === "function") {
-        e.preventDefault();
-    }
-    
-      if (!editContent.trim()) return;
-
-    const { error } = await supabase.from('thread').update({
-      contents:editContent
-    }).eq('thread_id',thread_id)
-    setContent(editContent)
-    setIsEditing(!isEditing)
-     if (error) console.error();
-  }
-
+    const { error } = await supabase
+      .from("thread")
+      .update({
+        contents: editContent,
+      })
+      .eq("thread_id", thread_id);
+    setContent(editContent);
+    setIsEditing(!isEditing);
+    if (error) console.error();
+  };
 
   const handleReplyDelete = (targetId: string) => {
     setReply(reply.filter((item) => item.reply_id !== targetId));
   };
 
   const handleReply = () => {
-    setIsReplyPress(!isReplyPress)
-  }
+    setIsReplyPress(!isReplyPress);
+  };
 
   const handleDelete = async () => {
     const deleteComment = confirm("정말로 삭제하시겠습니까?");
@@ -95,26 +107,30 @@ function ThreadList({ data,onDelete }: Props) {
   };
 
   const handleSubmitReply = async (e?: React.FormEvent<HTMLFormElement>) => {
-    e?.preventDefault()
-      if (!createReply.trim()) return;
+    e?.preventDefault();
+    if (!createReply.trim()) return;
 
-    const { error } = await supabase.from('thread_reply').insert([{
-      thread_id,
-      profile_id,
-      contents: createReply,
-      likes: 0,
-      created_at: new Date()
-    }])
-    if (error) console.log(error.message)
+    const { error } = await supabase.from("thread_reply").insert([
+      {
+        thread_id,
+        profile_id: profileId,
+        contents: createReply,
+        likes: 0,
+        created_at: new Date(),
+      },
+    ]);
+    if (error) console.log(error.message);
     setCreateReply("");
-    
-    const { data:threadData } = await supabase.from('thread_reply').select('*').eq('thread_id',thread_id)
-    if(threadData) setReply(threadData)
-      
-  }; 
+
+    const { data: replies } = await supabase
+      .from("thread_reply")
+      .select("*,user_profile(*,user_base(*))")
+      .eq("thread_id", thread_id);
+    if (!replies) return;
+    setReply(replies);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       if (!createReply.trim()) return;
@@ -123,25 +139,25 @@ function ThreadList({ data,onDelete }: Props) {
   };
 
   const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    
     if (e.key === "Enter" && !e.shiftKey) {
-       e.preventDefault();
+      e.preventDefault();
       if (!editContent.trim()) return;
-      handleSave(e)
+      handleSave(e);
     }
   };
 
-  const recentlyReply = [...reply].sort((a, b) => (
-    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  ))
+  const recentlyReply = reply?.sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
 
   return (
     <li className={S.listContainer}>
       <div className={S.writerBox}>
         <div className={S.meta}>
           <div className={S.profile}>
-            <img src="/images/너굴.png" alt="" />
-            <p>이름</p>
+            <img src={userImage} alt="유저 프로필이미지" />
+            <p>{userName}</p>
           </div>
           <div className={S.timeStamp}>{timeStamp}</div>
         </div>
@@ -203,10 +219,7 @@ function ThreadList({ data,onDelete }: Props) {
       </div>
       {isReplyPress && (
         <div>
-          <form
-            className={S.replyInputBox}
-            onSubmit={handleSubmitReply}
-          >
+          <form className={S.replyInputBox} onSubmit={handleSubmitReply}>
             <textarea
               className={S.replyInput}
               value={createReply}
@@ -219,19 +232,20 @@ function ThreadList({ data,onDelete }: Props) {
             </button>
           </form>
 
-          {recentlyReply &&
-            recentlyReply.map((comment) => (
+          {recentlyReply.map((item) => {
+            return (
               <ThreadReplyComponent
-                reply={comment}
-                key={comment.reply_id}
-                onDelete={() => {
-                  handleReplyDelete(comment.reply_id);
-                }}
+                key={item.reply_id}
+                reply={item}
+                userName={item.user_profile.user_base.nickname}
+                userImage={item.user_profile.profile_images}
+                onDelete={() => handleReplyDelete(item.reply_id)}
               />
-            ))}
+            );
+          })}
         </div>
       )}
     </li>
   );
 }
-export default ThreadList
+export default ThreadList;

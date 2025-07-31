@@ -4,14 +4,18 @@ import supabase from '@/supabase/supabase';
 import type { Tables } from '@/supabase/database.types';
 import CommentItem from './CommentItem';
 
+
 type Props = Tables<'board'>
 type Comment = Tables<'comment'>
-
+type User = Tables<"user_profile"> & {
+  user_base: Tables<"user_base">;
+};
 function ChannelComment(card:Props) {
 
   const {board_id,profile_id} = card
   const [writeComment,setWriteComment] = useState('')
   const [comments, setComments] = useState<Comment[]>([])
+  const [currentUser,setCurrentUser] = useState<User[]>([])
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   
   useEffect(() => {
@@ -65,7 +69,7 @@ function ChannelComment(card:Props) {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-  e.preventDefault(); // 줄바꿈 방지만
+  e.preventDefault(); 
   const form = e.currentTarget.form;
   if (form) {
     form.requestSubmit(); 

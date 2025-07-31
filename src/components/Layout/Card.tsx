@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
 import { useNavigate } from 'react-router-dom';
 import type { Tables } from '@/supabase/database.types';
+import { chooseRegion } from '@/utils/chooseRegion';
 
 
 
@@ -94,7 +95,10 @@ function Card({ card }: Props) {
       card: CardProps
     ) => {
       e.preventDefault();
-      if ((e.target as HTMLButtonElement).closest("span")) {
+      if (
+        !(e.target as HTMLButtonElement).closest("img") ||
+        !(e.target as HTMLButtonElement).closest("button")
+      ) {
         navigate(`/channel/${board_id}`, { state: { card } });
       } else {
         return;
@@ -103,18 +107,7 @@ function Card({ card }: Props) {
   
     const replaceText = contents.replace(/[#*]/g, "");
    
-    const chooseRegion = (address:string|null) => {
-      const region = address?.split(" ");
-      const regionDo = region?.[0];
-      const regionSi = region?.[1];
-      const studyRegion = `${regionDo} ${regionSi}`;
 
-      if (!regionDo || !regionSi) {
-        return null
-      } else {
-        return studyRegion
-      }
-    }
  
   
   return (
@@ -139,10 +132,10 @@ function Card({ card }: Props) {
           </button>
         </div>
       </div>
-      <span className={S.titleBox}>
+      <div className={S.titleBox}>
         <p>{replaceText}</p>
-      </span>
-      <span className={S.tagBox}>
+      </div>
+      <div className={S.tagBox}>
         {board_tag &&
           board_tag.map((t) => <div key={t.tag_id}>{t.hash_tag}</div>)}
 
@@ -206,7 +199,7 @@ function Card({ card }: Props) {
           </svg>
         </span>
         {member}
-      </span>
+      </div>
     </section>
   );
 }

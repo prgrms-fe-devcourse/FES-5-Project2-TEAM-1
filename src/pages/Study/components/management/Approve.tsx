@@ -14,7 +14,6 @@ type User = Tables<"user_profile"> & {
 function Approve() {
 
   const { success, error } = useToast()
-
   const { id } = useParams()
   const [pendingMember,setPendingMember] = useState<User[]>([])
 

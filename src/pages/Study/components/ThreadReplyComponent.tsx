@@ -6,12 +6,14 @@ import supabase from '@/supabase/supabase';
 
 
 type ThreadReply = Tables<'thread_reply'>
-interface Prop{
-  reply: ThreadReply,
-  onDelete:()=>void
+interface Prop {
+  reply: ThreadReply;
+  onDelete: () => void;
+  userName: string | null
+  userImage?: string;
 }
 
-function ThreadReplyComponent({reply,onDelete}:Prop) {
+function ThreadReplyComponent({reply,onDelete,userName,userImage}:Prop) {
 
   const { created_at, contents, likes, reply_id } = reply
   
@@ -76,12 +78,12 @@ function ThreadReplyComponent({reply,onDelete}:Prop) {
   return (
     <div className={S.container}>
       <div className={S.profileImage}>
-        <img src="/images/여울.png" alt="프로필" />
+        <img src={userImage} alt="유저 프로필 이미지" />
       </div>
       <div className={S.contentBox}>
         <div className={S.meta}>
           <div className={S.userInfo}>
-            <span className={S.username}>User</span>
+            <span className={S.username}>{userName}</span>
             <span className={S.time}>{commentTimeCheck}</span>
           </div>
           <div className={S.edit}>

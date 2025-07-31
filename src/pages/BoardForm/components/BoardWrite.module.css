@@ -13,6 +13,7 @@
     border-radius: 8px;
     box-sizing: border-box;
     resize: none;
+    overflow-y: auto;
   }
   textarea:focus {
     outline: none !important;
