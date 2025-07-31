@@ -7,6 +7,8 @@ import type { Tables } from '@/supabase/database.types';
 import { useToast } from '@/utils/useToast';
 import supabase from '@/supabase/supabase';
 import compareUserId from '@/utils/compareUserId';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -25,11 +27,13 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
 
     const [isTyping, setIsTyping] = useState(false);
     const [filteredInterest, setFilteredInterest] = useState<string[]>([]);
+    const [ fontSize, setFontSize] = useState<string>('');
 
     const ulRef = useRef<HTMLUListElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const navigate = useNavigate();
 
-    const { success, error } = useToast();
+    const { error } = useToast();
 
     useEffect(() => {
         const fetchInterest = async () => {
@@ -51,6 +55,14 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
 
     const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement> ) => {
         const value = e.currentTarget.value.trim(); 
+        console.log( value.length );
+        if( value.length > 15 ) {
+            setFontSize('0.7rem')
+        } else if( value.length > 10) {
+            setFontSize('0.8rem')
+        } else {
+            setFontSize('');
+        }
 
         // setInterest([ value ]);
         setIsTyping(true);
@@ -63,6 +75,15 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
         if (text && inputRef.current) {
             inputRef.current.value = text;
             // handleAdd(text);
+            console.log( text.length);
+
+            if(text.length > 15 ) {
+                setFontSize('0.7rem')
+            } else if( text.length > 10 ) {
+                setFontSize('0.8rem')
+            } else {
+                setFontSize('')
+            }
             setIsTyping(false);
         }
     }
@@ -115,7 +136,10 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
             }
         });
 
-        success('관심사 추가 성공!');
+        toast.info('관심사가 추가되었습니다.', { onClose() {
+                  navigate(`/mypage/${userInterest?.profile_id}`)
+                }, autoClose: 1500});
+
         if( inputRef.current ) {
              inputRef.current.value = '';
         }
@@ -130,6 +154,7 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
             type='text' 
             className={S.interestInput}
             onChange={handleInputChange} 
+            style={fontSize ? {fontSize} : undefined}
         />
         <div className={S.interestBackSave}>
             <button 

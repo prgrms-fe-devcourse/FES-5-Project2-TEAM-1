@@ -1,6 +1,6 @@
 import type { Tables } from "@/supabase/database.types"
 import compareUserId from "@/utils/compareUserId";
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import S from './MypageSocialConvert.module.css'
 import { useCopyToClipboard } from '@uidotdev/usehooks'
 import type { User } from "../Mypage";
@@ -43,9 +43,20 @@ function MypageSocialConvert({ user, socialData, setSocialData }: Props ) {
   },[userSocial])
 
   useEffect(()=>{
-    copiedText && toast.success(`복사 완료! ${copiedText}`,{ onClose() {
-      navigate(`/mypage/${userSocial?.profile_id}`)
-    },autoClose:1500})
+    // copiedText && toast.success(`복사 완료! ${copiedText}`,{ onClose() {
+    //   navigate(`/mypage/${userSocial?.profile_id}`)
+    // },autoClose:1500})
+
+    if( copiedText ) {
+      toast.success(`복사 완료!`,{ onClose() {
+       navigate(`/mypage/${userSocial?.profile_id}`)
+      },autoClose:1500})
+      toast.info(copiedText, { onClose() {
+       navigate(`/mypage/${userSocial?.profile_id}`)
+      },autoClose:1500})
+    }
+
+
   },[copiedText])
 
   return ( 

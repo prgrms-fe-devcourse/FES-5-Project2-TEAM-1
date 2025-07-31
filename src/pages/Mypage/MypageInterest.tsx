@@ -10,6 +10,8 @@ import supabase from '@/supabase/supabase';
 import { useToast } from '@/utils/useToast';
 import compareUserId from '@/utils/compareUserId';
 import type { Tables } from '@/supabase/database.types';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify'
 
 interface Props {
   user: User | null;
@@ -24,6 +26,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
   const [interestArray, setInterestArray] = useState<Interest[] | null>(null);
   const [isFive, setIsFive] = useState(false);
   const [plusClicked, setPlusClicked] = useState(false);
+  const [fontSize, setFontSize] = useState<string>('');
 
   const minusRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const divRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -32,8 +35,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
   const userInterest = user && user.profile[0].interest[0];
   // const interestArray = userInterest.interest.split(',')
   const { success, error } = useToast();
-
-
+    const navigate = useNavigate();
 
   useEffect(() => {
     
@@ -120,7 +122,9 @@ function MypageInterest({user, editMode, setUserData}: Props) {
             }
         })
 
-        success('관심사 제거 성공!');
+        toast.info('관심사가 제거되었습니다.', { onClose() {
+          navigate(`/mypage/${userInterest?.profile_id}`)
+        }, autoClose: 1500});
 
     }
 
@@ -130,12 +134,18 @@ function MypageInterest({user, editMode, setUserData}: Props) {
           <h2>관심분야</h2>
           { editMode 
             ? <div className={S.InterestBlock}>
-              { interestArray && interestArray.map((interest, index) => (
+              { interestArray && interestArray.map((interest, index) => {
+                const fontSize =
+                interest.interest.length > 15 ? '0.8rem' :
+                interest.interest.length > 12 ? '0.9rem' :
+                '';
+              return(
                 <div key={interest.interest_id} className={E.editInterestBlockWrapper}>
                   <div
                     key={index}
                     ref={(el) => { divRefs.current[index] = el }}
                     className={S.InterestBlockEach}
+                    style={fontSize ? {fontSize} : undefined}
                   >
                       {interest.interest}
                   </div>
@@ -147,7 +157,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
                       <img src={minus} alt='마이너스 버튼 아이콘' />
                     </button>
                   </div>
-              ))}
+              )})}
                 { !isFive && 
                     <div ref={divRef} className={S.InterestBlockEach}>
                       { plusClicked 
@@ -174,11 +184,16 @@ function MypageInterest({user, editMode, setUserData}: Props) {
               </div>  
             : 
             <div className={S.InterestBlock}>
-                { interestArray && interestArray.map((i) => (
-                  <div key={i.interest_id}>
-                    <div className={S.InterestBlockEach}>{i.interest}</div>
-                  </div>
-                ))}
+                { interestArray && interestArray.map((i) => {
+                const fontSize =
+                  i.interest.length > 15 ? '0.8rem' :
+                  i.interest.length > 12 ? '0.9rem' :
+                  '';
+                return(
+                    <div key={i.interest_id}>
+                      <div className={S.InterestBlockEach}  style={fontSize ? {fontSize} : undefined}>{i.interest}</div>
+                    </div>
+                  )})}
             </div>  
           }
         </div>
