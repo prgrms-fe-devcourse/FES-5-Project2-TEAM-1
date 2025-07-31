@@ -22,6 +22,7 @@ interface Props {
 type Interest = Tables<'user_interest'>;
 
 function MypageInterest({user, editMode, setUserData}: Props) {
+   const profileId = user?.profile?.[0]?.profile_id;
 
   const [interestArray, setInterestArray] = useState<Interest[] | null>(null);
   const [isFive, setIsFive] = useState(false);
@@ -39,9 +40,9 @@ function MypageInterest({user, editMode, setUserData}: Props) {
   useEffect(() => {
     
     const fetchInterest = async () => {
-      if( !userInterest ) return;
-      const result = await compareUserId(userInterest.profile_id, 'user_interest');
-      setInterestArray(result);
+      if( !profileId ) return;
+      const result = await compareUserId(profileId, 'user_interest');
+      setInterestArray(result || []);
     }
 
     fetchInterest();
@@ -53,7 +54,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
       ease: 'power1.out',
     })
 
-  }, [userInterest])
+  }, [profileId])
 
     useEffect(() => {
       if( interestArray && interestArray.length >= 5 ) {
@@ -95,20 +96,14 @@ function MypageInterest({user, editMode, setUserData}: Props) {
     )
   }, [plusClicked])
 
-  if( !userInterest ) {
-    return <div className={S.mypageInterest}>Loading...</div>;
-  }
-
   const handlePlusInterest = () => {
     setPlusClicked(true);
   }
 
   const handleMinus = async ( index: number) => {
-
-      if( !interestArray) return;
+    if (!profileId) return;
 
       const text = divRefs.current[index]?.textContent;
-      const { profile_id } = userInterest;
       const { interest_id, interest } = interestArray[index];
 
       setInterestArray((prev) => {
@@ -120,7 +115,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
         .from('user_interest')
         .delete()
         .match({
-          'profile_id': profile_id,
+          'profile_id': profileId,
           'interest_id': interest_id,
         })
   
@@ -144,7 +139,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
         })
 
         toast.info('관심사가 제거되었습니다.', { onClose() {
-          navigate(`/mypage/${userInterest?.profile_id}`)
+          navigate(`/mypage/${profileId}`)
         }, autoClose: 1500});
 
     }
@@ -186,7 +181,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
                         <InterestDropdown
                             plusClicked={plusClicked}
                             setPlusClicked={setPlusClicked}
-                            userInterest={userInterest}
+                            userInterest={{ profile_id: profileId}}
                             setUserData={setUserData}
                             user={user}
                             interestArray={interestArray}
