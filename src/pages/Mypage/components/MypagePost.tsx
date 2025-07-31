@@ -80,20 +80,34 @@ function MypagePost({profileId}:Props) {
   return (
     <>
       <h2 className={S.sectionName}>포스트</h2>
-      <section className={S.postContainer}>
-        <ul className={S.postList}>
-          {
-            newBoards && newBoards.map(({board_id, title, contents})=>(
-              <li key={board_id} className={S.post}>
-                  <Link to={`/channel/${board_id}`}>
-                  <p className={S.postTitle}>{title}</p>
-                  <p className={S.postContent}>{contents}</p>
-                </Link>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
+      {
+        posts && posts.length > 0 && newBoards ? (
+          <section className={S.postContainer}>
+            <ul className={S.postList}>
+              {
+                newBoards && newBoards.map(({board_id, title, contents})=>(
+                  <li key={board_id} className={S.post}>
+                      <Link to={`/channel/${board_id}`}>
+                      <p className={S.postTitle}>{title}</p>
+                      <p className={S.postContent}>{contents}</p>
+                    </Link>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        ) : (
+          <div className={S.nothing}>
+            <img src="/images/서치이미지.png" alt="검색 결과 없음" />
+            <p>
+              아직 작성한 포스트가 없습니다 🍃🍃🍃<br />
+              스터디에서 모집 글을 작성해보세요!<br />
+              
+            </p>
+          </div>
+        )
+
+      }
     </>
   )
 }

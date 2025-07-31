@@ -49,7 +49,6 @@ function MypageChannel({profileId}:Props) {
           board: Array.isArray(row.board) ? row.board[0] : row.board
         }
       ))
-
       setTeams(refinedBoardIsNotArray);
     };
     fetchChannels();
@@ -86,45 +85,60 @@ function MypageChannel({profileId}:Props) {
   return (
     <>
       <h2 className={S.sectionName}>참여중인 스터디</h2>
-      <section className={S.teamContainer}>
-        <button type="button" className={S.prevButton} onClick={handlePrev}>
-          <img src="/src/assets/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
-        </button>
-        <Swiper 
-          className="team"
-          modules={[Navigation]}
-          initialSlide={0}
-          centeredSlides = {true}
-          slidesPerView="auto"
-          speed={900}
-          spaceBetween={32}
-          breakpoints={{
-            640: {spaceBetween: 20},
-            768: {spaceBetween: 30},
-            1024: {spaceBetween: 40},
-          }}
-          onSwiper={(e) => {
-            swiperWrappedRef.current = e.wrapperEl;
-            setSwiper(e);
-          }}
-        >
-          {
-            teams && teams.map(({board, board_id})=>(
-              <SwiperSlide key={board_id} className="team">
-                <Link to={`/channel/${board_id}`}>
-                  <div className={S.teamCard} title='팀으로 이동하기'>
-                    <img className={S.teamImg} src={board.images ? board.images : 'defaultBackground.img'} alt="채널" />
-                    <p className={S.teamTitle}>{board.title}</p>
-                  </div>
-                </Link>
-              </SwiperSlide>
-            ))
-          }
-        </Swiper>
-        <button type="button" className={S.nextButton} onClick={handleNext}>
-          <img src="/src/assets/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
-        </button>
-      </section>
+      {
+        teams && teams.length !== 0 ? (
+          <section className={S.teamContainer}>
+            <button type="button" className={S.prevButton} onClick={handlePrev}>
+              <img src="/src/assets/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
+            </button>
+            <Swiper 
+              className="team"
+              modules={[Navigation]}
+              initialSlide={0}
+              centeredSlides = {true}
+              slidesPerView="auto"
+              speed={900}
+              spaceBetween={32}
+              breakpoints={{
+                640: {spaceBetween: 20},
+                768: {spaceBetween: 30},
+                1024: {spaceBetween: 40},
+              }}
+              onSwiper={(e) => {
+                swiperWrappedRef.current = e.wrapperEl;
+                setSwiper(e);
+              }}
+            >
+
+              {
+                teams.map(({board, board_id})=>(
+                  <SwiperSlide key={board_id} className="team">
+                    <Link to={`/channel/${board_id}`}>
+                      <div className={S.teamCard} title='팀으로 이동하기'>
+                        <img className={S.teamImg} src={board.images ? board.images : 'defaultBackground.img'} alt="채널" />
+                        <p className={S.teamTitle}>{board.title}</p>
+                      </div>
+                    </Link>
+                  </SwiperSlide>
+                ))
+              }
+            </Swiper>
+            <button type="button" className={S.nextButton} onClick={handleNext}>
+              <img src="/src/assets/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
+            </button>
+          </section>
+          
+        ) : (
+          <div className={S.nothing}>
+            <img src="/images/서치이미지.png" alt="검색 결과 없음" />
+            <p>
+              아직 가입된 곳이 없습니다 🍃🍃🍃<br />
+              스터디, 프로젝트에 가입해보세요!<br />
+              
+            </p>
+          </div>
+        )
+      }
     </>
   )
 }
