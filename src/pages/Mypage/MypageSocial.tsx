@@ -127,14 +127,19 @@ useEffect(() => {
   }, [addClicked])
 
   useEffect(() => {
-    gsap.from('#iconBox li', {
-      opacity: 0,
-      y: -10,
-      scale: 0.8,
-      stagger: 0.05,
-      duration: 0.3,
-      ease: 'back.out(1.7)'
-    });
+    gsap.fromTo('#iconBox li', {
+          opacity: 0,
+          y: -8,
+          scale: 0.8
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.3,
+          stagger: 0.05,
+          ease: 'back.out(1.7)'
+        });
   }, [isClicked])
 
   if( !userSocial ) {
@@ -294,7 +299,7 @@ useEffect(() => {
             }
         })
 
-        success('소셜 링크 제거 성공!');
+        info('소셜 링크가 제거되었습니다.');
 
   }
   

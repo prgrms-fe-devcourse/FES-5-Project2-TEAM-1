@@ -7,10 +7,14 @@ import type { Tables } from '@/supabase/database.types';
 import { useToast } from '@/utils/useToast';
 import supabase from '@/supabase/supabase';
 import compareUserId from '@/utils/compareUserId';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
 
 
 
 interface Props {
+    plusClicked: boolean,
     setPlusClicked: (value: boolean) => void;
     userInterest: Tables<'user_interest'>;
     setUserData: React.Dispatch<React.SetStateAction<User | null>>;
@@ -21,15 +25,17 @@ interface Props {
 
 type Interest = Tables<'user_interest'>;
 
-function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestArray, setInterestArray }: Props) {
+function InterestDropdown({ plusClicked, setPlusClicked, userInterest, setUserData, interestArray, setInterestArray }: Props) {
 
     const [isTyping, setIsTyping] = useState(false);
     const [filteredInterest, setFilteredInterest] = useState<string[]>([]);
+    const [ fontSize, setFontSize] = useState<string>('');
 
     const ulRef = useRef<HTMLUListElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const navigate = useNavigate();
 
-    const { success, error } = useToast();
+    const { error } = useToast();
 
     useEffect(() => {
         const fetchInterest = async () => {
@@ -41,6 +47,19 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
         fetchInterest();
     }, [userInterest])
 
+    useEffect(() => {
+        gsap.fromTo('#btnBox', 
+            { x: 10, opacity: 0 },
+            {
+            x: 0,
+            opacity: 1,
+            duration: 0.3,
+            ease: 'power2.out',
+            clearProps: 'transform,opacity', // opacity도 지워줌
+            }
+        )   
+    }, [plusClicked])
+
     const filterInterest = ( value: string) => {
 
         if( value === '' ) setIsTyping(false);
@@ -51,6 +70,14 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
 
     const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement> ) => {
         const value = e.currentTarget.value.trim(); 
+        console.log( value.length );
+        if( value.length > 15 ) {
+            setFontSize('0.7rem')
+        } else if( value.length > 10) {
+            setFontSize('0.8rem')
+        } else {
+            setFontSize('');
+        }
 
         // setInterest([ value ]);
         setIsTyping(true);
@@ -63,6 +90,15 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
         if (text && inputRef.current) {
             inputRef.current.value = text;
             // handleAdd(text);
+            console.log( text.length);
+
+            if(text.length > 15 ) {
+                setFontSize('0.7rem')
+            } else if( text.length > 10 ) {
+                setFontSize('0.8rem')
+            } else {
+                setFontSize('')
+            }
             setIsTyping(false);
         }
     }
@@ -115,7 +151,10 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
             }
         });
 
-        success('관심사 추가 성공!');
+        toast.info('관심사가 추가되었습니다.', { onClose() {
+                  navigate(`/mypage/${userInterest?.profile_id}`)
+                }, autoClose: 1500});
+
         if( inputRef.current ) {
              inputRef.current.value = '';
         }
@@ -130,8 +169,9 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
             type='text' 
             className={S.interestInput}
             onChange={handleInputChange} 
+            style={fontSize ? {fontSize} : undefined}
         />
-        <div className={S.interestBackSave}>
+        <div className={S.interestBackSave} id='btnBox'>
             <button 
                 className={S.interestBackBtn}
                 onClick={() => setPlusClicked(false) }
