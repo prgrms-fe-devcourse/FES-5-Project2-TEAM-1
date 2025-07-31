@@ -14,6 +14,7 @@ import MypageScrap from './components/MypageScrap';
 import MoveToTop from './components/MoveToTop';
 import { useAuth } from '@/auth/AuthProvider';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 type UserProfileWithJoins = Tables<'user_profile'> & {
@@ -42,9 +43,14 @@ function Mypage() {
     if(isLoading) return;
     console.log(user);
     if(!user) {
-      console.error('로그인이 필요합니다');
-      // 로그인 후 이용해달라는 alert 줄 지 고민
-      // navigate("/login");
+      // console.error('로그인이 필요합니다');
+      toast.warning('로그인 후 이용해보세요',{        
+        onClose() {
+          navigate("/login");
+        },
+        autoClose: 1500,
+      })
+      navigate("/login");
       return;
     }
     if(!profileId) return;
@@ -53,7 +59,7 @@ function Mypage() {
       email: user.email, 
       id: user.id
     });
-    console.log(currentUser);
+    // console.log(currentUser);
       
   },[isLoading])
 

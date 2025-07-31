@@ -5,6 +5,7 @@ import S from './MypageSocialConvert.module.css'
 import { useCopyToClipboard } from '@uidotdev/usehooks'
 import type { User } from "../Mypage";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 type Social = Tables<'user_social'>;
 
@@ -12,6 +13,7 @@ function MypageSocialConvert({ user }: {user: User | null}) {
 
   const [socialData, setSocialData] = useState<Social[]|null>(null);
   const [copiedText, setCopy] = useCopyToClipboard();
+  const navigate = useNavigate();
 
   const userSocial = user && user.profile[0].social[0];
 
@@ -26,7 +28,9 @@ function MypageSocialConvert({ user }: {user: User | null}) {
   },[userSocial])
 
   useEffect(()=>{
-    copiedText && toast.success(`복사 완료! ${copiedText}`,{autoClose:1500})
+    copiedText && toast.success(`복사 완료! ${copiedText}`,{ onClose() {
+      navigate(`/mypage/${userSocial?.profile_id}`)
+    },autoClose:1500})
   },[copiedText])
 
   return ( 
