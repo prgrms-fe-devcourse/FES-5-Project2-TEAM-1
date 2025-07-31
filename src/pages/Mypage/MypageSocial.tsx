@@ -37,7 +37,8 @@ function MypageSocial({user, editMode, setUserData}: Props) {
   const [inputValues, setInputValues] = useState<string[]>([]);
   const [pendingIcon, setPendingIcon] = useState<string[]>([]);
   const [addClicked, setAddClicked] = useState(false);
-
+  
+  const liRef = useRef<HTMLDivElement | null>(null);
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
   const userSocial = user && user.profile[0].social[0];
@@ -127,14 +128,16 @@ useEffect(() => {
   }, [addClicked])
 
   useEffect(() => {
-    gsap.from('#iconBox li', {
-      opacity: 0,
-      y: -10,
-      scale: 0.8,
-      stagger: 0.05,
-      duration: 0.3,
-      ease: 'back.out(1.7)'
-    });
+    if(liRef.current){
+      gsap.from(liRef.current, {
+        opacity: 0,
+        y: -10,
+        scale: 0.8,
+        stagger: 0.05,
+        duration: 0.3,
+        ease: 'back.out(1.7)'
+      });
+    }
   }, [isClicked])
 
   if( !userSocial ) {
@@ -316,7 +319,7 @@ useEffect(() => {
                        />
                     </button>
                     { isClicked[i] &&
-                      <div id='iconBox' className={E.editIconList}>
+                      <div id='iconBox' ref={liRef} className={E.editIconList}>
                         <ul>
                           <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Instagram} alt='instagram' /></li>
                           <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Github} alt='github'  /></li>

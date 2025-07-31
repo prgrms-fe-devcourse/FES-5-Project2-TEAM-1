@@ -45,12 +45,14 @@ function MypageInterest({user, editMode, setUserData}: Props) {
 
     fetchInterest();
 
-    gsap.from(divRef.current, {
-      x: 10,
-      opacity: 0,
-      duration: 0.3,
-      ease: 'power1.out',
-    })
+    if(divRef.current){
+      gsap.from(divRef.current, {
+        x: 10,
+        opacity: 0,
+        duration: 0.3,
+        ease: 'power1.out',
+      })
+    };
 
   }, [userInterest])
 
