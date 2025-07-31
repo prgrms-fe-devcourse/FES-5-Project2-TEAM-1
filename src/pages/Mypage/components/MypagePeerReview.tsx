@@ -14,18 +14,6 @@ import supabase from "@/supabase/supabase"
 type PeerReview = Tables<'peer_review'>
 type PeerReviewsList = { writer_id: string; writerProfileImage:string; review_contents:string; review_score:number; review_contents_preview:string };
 
-/**
- * 현재 접속한 유저랑, 조회한 마이페이지 유저 params랑 같은지() 비교
- * 아이디로 비교하면 위험할거 같으니까,, 그 아이디 기준으로 nickname이 같은지 비교?
- * 
- * user_base의 nickname을 param으로 전달하고
- * 그것과 현재 접속한 userId가 일치하면
- * user_profile에서 그 아이디의 profile_id를 뽑아서
- * peer_review에서 profile_id가 일치하는 데이터 반환
- * 
- * param으로 받은 profileId와 현재접속한 유저 id -> profile_id 비교
- */
-
 interface Props {
   profileId : string;
 }
@@ -44,7 +32,6 @@ function MypagePeerReview({profileId}:Props) {
       setRawPeerReviews(data);
     }
     fetchPeerReviews();
-    console.log('피어리뷰 패치 완료')
   },[profileId])
 
 
@@ -112,10 +99,14 @@ function MypagePeerReview({profileId}:Props) {
           grabCursor
           initialSlide={0}
           centeredSlides = {true}
-          slidesPerView="auto"
+          slidesPerView={"auto"}
           speed={900}
           slideToClickedSlide
           spaceBetween={40}
+            style={{
+              padding: "0 6rem",
+              boxSizing: "border-box"
+            }}
           breakpoints={{
             640: {spaceBetween: 20},
             768: {spaceBetween: 30},

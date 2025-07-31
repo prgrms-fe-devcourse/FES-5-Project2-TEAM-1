@@ -22,46 +22,52 @@ interface Overlay{
 
 function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:Overlay) {
 
-  const { user, isLoading, logout } = useAuth();
-  const [currentUser, setCurrentUser] = useState<CurrentUser>({ profileId: '', email: '', id: '', profileImage: '', });
+  const { user, isLoading, logout, profileId } = useAuth();
+  const [currentUser, setCurrentUser] = useState<CurrentUser|null>(null);
+  // const [authState, setAuthState] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
+
   const navigate = useNavigate()
-  
+
+  // setAuthState('unauthenticated');
+
   useEffect(() => {
-    if (!user) {
-      console.log('로그인이 필요합니다')
-      return;
-    }
+  if (!isLoading && user && profileId) {
     setCurrentUser({
-      profileId: user.profileId,
+      profileId,
       email: user.email,
       id: user.id,
       profileImage: '',
     });
-    console.log(currentUser);
-      
-  }, [isLoading])
+  }
+  }, [isLoading, user, profileId]);
 
   useEffect(() => {
     const fetchUserProfileImage = async () => {
-      if (!currentUser.profileId) return;
+      if (!currentUser || !currentUser.profileId) return;
       const { data, error } = await supabase.from('user_profile').select('profile_images').eq('profile_id', currentUser.profileId).single();
       if (!data || error) {
         console.error('프로필 이미지 불러오기 실패', error.message)
         return;
       }
-      setCurrentUser(prev => ({
-        ...prev,
-        profileImage: data.profile_images
-      }))
+      setCurrentUser(prev => {
+        if(!prev) return prev;
+        return {
+          ...prev,
+          profileImage: data.profile_images
+        }
+      })
+      // setAuthState('authenticated');
+      console.log(currentUser);
     }
-    console.log('우측 사이드바 프로필 이미지 불러오기 성공')
     fetchUserProfileImage();
-  }, [currentUser.profileId])
+  }, [currentUser?.profileId])
 
+  // if (authState === 'loading') return null; // ✅ 깜빡임 방지
 
 
   const handleLogout = async () => {
     await logout()
+    setCurrentUser(null);
     navigate('/')
   }
 
@@ -70,58 +76,58 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
     setIsOverlay(!isOverlay)
   }
 
+
   return (
     <nav className={S.container}>
       <div className={S.height}>
         <div className={S.loginBox}>
-          <div className={S.profileImage}>
-            <img
-              src={user ? currentUser.profileImage : "/images/여울.png"}
-              alt="프로필"
-            />
-          </div>
-          {user ? (
-            <Link
-              to={`/mypage/${currentUser.profileId}`}
-              className={S.loginBoxGreeting}
-              title="마이페이지 이동"
-            >
-              <p>Hello🖐️</p>
-              <h3>{currentUser.email.split("@")[0]}</h3>
-            </Link>
-          ) : (
-            <div className={S.loginBoxGreeting}>
-              <p>Hello🖐️</p>
-              <h3>Guest</h3>
-            </div>
-          )}
-          <div className={S.loginLogout}>
-            {user ? (
-              <button onClick={handleLogout}>
-                {/* <svg
-              width="24"
-              height="22"
-              viewBox="0 0 20 19"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M14.375 4.80575L13.0238 6.157L15.4963 8.63908H5.75V10.5557H15.4963L13.0238 13.0282L14.375 14.3891L19.1667 9.59741L14.375 4.80575ZM1.91667 2.88908H9.58333V0.972412H1.91667C0.8625 0.972412 0 1.83491 0 2.88908V16.3057C0 17.3599 0.8625 18.2224 1.91667 18.2224H9.58333V16.3057H1.91667V2.88908Z"
-                fill="#222222"
-              />
-            </svg> */}
-                <p className={S.logout}>로그아웃</p>
-              </button>
+          <img 
+            className={S.profileImage} 
+            src={currentUser ? currentUser.profileImage : '/public/images/여울.png'} 
+            alt="프로필" 
+          />
+          {
+            currentUser?.profileId ? (
+              <Link to={`/mypage/${currentUser.profileId}`} className={S.loginBoxGreeting} title='마이페이지 이동'>
+                <p>Hello🖐️</p>
+                <h3>{currentUser.email.split("@")[0]}</h3>
+              </Link>
             ) : (
-              <>
-                <Link to="/login" className={S.linkButton}>
-                  로그인
-                </Link>
-                <Link to="/register" className={S.linkButton}>
-                  회원가입
-                </Link>
-              </>
-            )}
+              <div className={S.loginBoxGreeting}>
+              <p >Hello🖐️</p>
+                <h3>Guest</h3>
+              </div>
+            )
+          }
+          <div className={S.loginLogout}>
+            {
+              currentUser ? (
+                <button onClick={handleLogout}>
+                  {/* <svg
+                    width="24"
+                    height="22"
+                    viewBox="0 0 20 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14.375 4.80575L13.0238 6.157L15.4963 8.63908H5.75V10.5557H15.4963L13.0238 13.0282L14.375 14.3891L19.1667 9.59741L14.375 4.80575ZM1.91667 2.88908H9.58333V0.972412H1.91667C0.8625 0.972412 0 1.83491 0 2.88908V16.3057C0 17.3599 0.8625 18.2224 1.91667 18.2224H9.58333V16.3057H1.91667V2.88908Z"
+                      fill="#222222"
+                    />
+                  </svg> */}
+                  <p className={S.logout}>로그아웃</p>
+                </button>
+              ) : (
+                <>
+                  <Link to="/login" className={S.linkButton}>
+                    로그인
+                  </Link>
+                  <Link to="/register" className={S.linkButton}>
+                    회원가입
+                  </Link>
+                </>
+              )
+            }
           </div>
         </div>
 

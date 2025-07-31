@@ -4,24 +4,9 @@ import DaumPostcodeEmbed from 'react-daum-postcode'
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Tables } from '@/supabase/database.types';
 import supabase from '@/supabase/supabase';
-import { useToast } from '@/utils/useToast';
 import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
-/**
- * 
- * 오프라인 선택 후 장소(address)가 값이 없다면 저장할때 확인 받기
- * form 태그 submit 할때 현재값들 데이터로 반환하면 될듯
- * form 태그 내에 변동사항이 생길때만 저장되도록,
- * => 아니면 저장 버튼 없애고 change 생길때마다 업데이트??
- * 기록된 값이 있다면 가져오기
- * 
- * 모집 활성화 여부 따로 업데이트하기(onClick 하자마자 업데이트 시키면 될듯)
- * 
- * db에 board에 업데이트 하기
- * board_id는 주소 params
- * 
- * 모임장소 온라인/ 오프라인 데이터 불러왔을때 선택이 반영되도록 해야함
- */
 
 type Board = Tables<'board'>;
 type PickBoard = Pick<Board,'member'|'board_cls'|'address'|'meeting_time'|'active'>;
@@ -37,7 +22,6 @@ function MangementChannel() {
   const [isActive, setIsActive] = useState<boolean>(true);
   const [projectData, setProjectData] = useState<PickBoard|null>(null);
   const {id:board_id} = useParams();
-  const { success, error } = useToast();
   const navigate = useNavigate();
 
   // console.log('파라미터', board_id);
@@ -108,7 +92,7 @@ function MangementChannel() {
     e.preventDefault();
     
     if(isOffline && !address){
-      error('모임 장소를 선택해주세요')
+      toast.error('모임 장소를 선택해주세요',{autoClose:1500})
       return;
     }
     const convertAddress = address ? address : null
@@ -128,15 +112,17 @@ function MangementChannel() {
       .eq('board_id',board_id)
     }
     updateProjectDetails();
-    success('저장됐습니다')
+    toast.success('저장되었습니다',{autoClose:1500})
   }
 
-  const handleActive = () => {
+  const handleActive = (e:React.ChangeEvent<HTMLInputElement>) => {
+    e.target.id === 'active' 
+    ? toast.success('채널이 활성화되었습니다.',{autoClose:1500}) 
+    : toast.success('채널이 비활성화되었습니다.',{autoClose:1500});
     setIsActive(prev => !prev)
   }
 
   useEffect(()=>{
-    // console.log(isActive);
     const updateActive = async() => {
       const {error} = await supabase
       .from('board')
@@ -144,6 +130,7 @@ function MangementChannel() {
       .eq('board_id',board_id)  
     }
     updateActive();
+
   },[isActive])
 
 
@@ -239,24 +226,29 @@ function MangementChannel() {
             )
           }
         </section>
-
         <button className={S.saveButton} type="submit">저장</button>
       </form>
 
-      <h2 className={S.sectionHeader}>모집 활성화</h2>
-      <section className={S.isActive}>
-        <div className={S.active}>
-          <input type="radio" name="isActive" id="active" defaultChecked onChange={handleActive}/>
-          <label htmlFor="active">활성화</label>
-        </div>
-        <div className={S.inactive}>
-          <input type="radio" name="isActive" id="inactive" onChange={handleActive}/>
-          <label htmlFor="inactive">비활성화</label>
-        </div>
-      </section>
+      <hr className={S.hr}/>
+      <div className={S.activeSection}>
+        <h2 className={S.sectionHeader}>모집 활성화</h2>
+        <section className={S.isActive}>
+          <div className={S.active}>
+            <input type="radio" name="isActive" id="active" defaultChecked onChange={handleActive}/>
+            <label htmlFor="active">활성화</label>
+          </div>
+          <div className={S.inactive}>
+            <input type="radio" name="isActive" id="inactive" onChange={handleActive}/>
+            <label htmlFor="inactive">비활성화</label>
+          </div>
+        </section>
+      </div>
 
-      <h2 className={S.sectionHeader}>채널 제거</h2>
-      <button className={S.deleteButton} type="button" onClick={handleDeleteChannel}>채널 삭제하기</button>
+      <hr className={S.hr}/>
+      <div className={S.deleteSection}>
+        <h2 className={S.sectionHeader}>채널 제거</h2>
+        <button className={S.deleteButton} type="button" onClick={handleDeleteChannel}>채널 삭제하기</button>
+      </div>
     </main>
   )
 }

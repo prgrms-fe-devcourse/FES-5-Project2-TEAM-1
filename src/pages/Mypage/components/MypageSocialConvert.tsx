@@ -3,8 +3,9 @@ import compareUserId from "@/utils/compareUserId";
 import { useEffect, useState } from "react"
 import S from './MypageSocialConvert.module.css'
 import { useCopyToClipboard } from '@uidotdev/usehooks'
-import { useToast } from "@/utils/useToast";
 import type { User } from "../Mypage";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 type Social = Tables<'user_social'>;
 
@@ -12,7 +13,7 @@ function MypageSocialConvert({ user }: {user: User | null}) {
 
   const [socialData, setSocialData] = useState<Social[]|null>(null);
   const [copiedText, setCopy] = useCopyToClipboard();
-  const { success } = useToast();
+  const navigate = useNavigate();
 
   const userSocial = user && user.profile[0].social[0];
 
@@ -25,10 +26,11 @@ function MypageSocialConvert({ user }: {user: User | null}) {
     }
     fetchSocial();
   },[userSocial])
-  // 유저가 바뀌면서 소셜 값도 바뀔때 useEffect가 계속 실행돼야하지 않을까?
 
   useEffect(()=>{
-    copiedText && success(`복사 완료! ${copiedText}`)
+    copiedText && toast.success(`복사 완료! ${copiedText}`,{ onClose() {
+      navigate(`/mypage/${userSocial?.profile_id}`)
+    },autoClose:1500})
   },[copiedText])
 
   return ( 

@@ -9,15 +9,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import supabase from "@/supabase/supabase";
-/**
- * - 참여중 스터디 확인
-    - 현재 접속한 유저 id와 board_member 테이블의 profile_id가 같은게 있는지 확인하고,
-    - board_member의 board_id를 기준으로 다시 board에서 board의 title, images 가져와서 카드로 뿌리기
-
-  - 채널 링크 생성되면 채널 카드 클릭시 해당 채널 페이지로 이동하게 연결하기
-  - 유저 별로 다른 데이터 불러와지도록 연결하기
- */
-
+import { Link } from "react-router-dom";
 
 type Board = Tables<'board'>
 type PickBoard = Pick<Board,'title'|'images'>;
@@ -119,10 +111,12 @@ function MypageChannel({profileId}:Props) {
           {
             teams && teams.map(({board, board_id})=>(
               <SwiperSlide key={board_id} className="team">
-                <div className={S.teamCard}>
-                  <img className={S.teamImg} src={board.images ? board.images : 'defaultBackground.img'} alt="채널" />
-                  <p className={S.teamTitle}>{board.title}</p>
-                </div>
+                <Link to={`/channel/${board_id}`}>
+                  <div className={S.teamCard} title='팀으로 이동하기'>
+                    <img className={S.teamImg} src={board.images ? board.images : 'defaultBackground.img'} alt="채널" />
+                    <p className={S.teamTitle}>{board.title}</p>
+                  </div>
+                </Link>
               </SwiperSlide>
             ))
           }
