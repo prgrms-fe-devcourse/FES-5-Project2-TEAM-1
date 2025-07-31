@@ -114,6 +114,7 @@
     overflow-y: scroll;
     height: 20rem;
     padding-top: 1rem;
+    overflow-x: hidden;
     
     p {
       font-size: 1rem;

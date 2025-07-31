@@ -25,6 +25,9 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
   const { user, isLoading, logout, profileId } = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser|null>(null);
   // const [authState, setAuthState] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
+  const [status, setStatus] = useState<'온라인' | '오프라인' | '자리비움' | '방해금지'>('오프라인');
+  const [isStatusClicked, setIsStatusClicked] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   const navigate = useNavigate()
 
@@ -76,6 +79,9 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
     setIsOverlay(!isOverlay)
   }
 
+  const handleStatus = (e: React.MouseEvent<HTMLLIElement>) => {
+    if()
+  }
 
   return (
     <nav className={S.container}>
@@ -85,7 +91,18 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
             className={S.profileImage} 
             src={currentUser ? currentUser.profileImage : '/public/images/여울.png'} 
             alt="프로필" 
+            onClick={() => setIsStatusClicked(prev => !prev)}
           />
+          { isStatusClicked && 
+            <div className={S.statusPopup}>
+              <ul>
+                <li onClick={handleStatus}><div className={S.online}></div>온라인</li>
+                <li><div className={S.leave}></div>자리 비움</li>
+                <li><div className={S.disturb}></div>방해 금지</li>
+                <li><div className={S.offline}></div>오프라인 표시</li>
+              </ul>
+            </div>
+          }
           {
             currentUser?.profileId ? (
               <Link to={`/mypage/${currentUser.profileId}`} className={S.loginBoxGreeting} title='마이페이지 이동'>

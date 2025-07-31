@@ -10,6 +10,9 @@
   z-index: 2000;
 }
 
+.profileImage {
+  cursor: pointer;
+}
 
 .loginBox{
   display:flex;
@@ -214,6 +217,64 @@
   }
 }
 
+.statusPopup {
+  background-color: #AA8A90;
+  padding: 1rem;
+  border-radius: 15px;
+  font-family: 'pretendard variable';
+
+  position: absolute;
+  top: 0;
+  left: -9.5rem;
+
+  z-index: 2;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    li {
+      padding: 0.5rem;
+      border-radius: 10px;
+      color: white;
+
+      cursor: pointer;
+
+      display: flex;
+      gap: 1rem;
+
+      transition: background-color 0.2s;
+
+      div {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+      }
+
+      .online {
+        background-color: greenyellow;
+      }
+      .leave {
+        background-color: yellow;
+      }
+      .disturb {
+        background-color: red;
+      }
+      .offline {
+        background-color: lightgray;
+      }
+
+      &:hover {
+        background-color: #c5babc;
+      }
+
+      .clicked {
+        background-color: #c5babc;
+      }
+    }
+  }
+}
 
 
 

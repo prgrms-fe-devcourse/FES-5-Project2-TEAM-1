@@ -24,7 +24,8 @@ function UserList() {
         const fetchUser = async () => {
             const { data: fetchData, error: fetchError} = await supabase
                 .from('user_base')
-                .select(`*`)
+                .select(` *,
+                profile: user_profile(*)`)
 
             if( fetchData ) {
                 setUserData( fetchData );
@@ -40,7 +41,6 @@ function UserList() {
         setOpenPopupIndex(prev => (prev === index ? null : index ));
     }
 
-
   return (
     <>
      <ul className={S.recentEnterUser}>
@@ -48,7 +48,7 @@ function UserList() {
             <li className={S.enterUser} key={user.id} style={{ position: 'relative'}}>
                 <button className={S.enterUser} onClick={() => handlePopupToggle(i)}>
                     <div className={S.profileImage}>
-                        <img src='/images/너굴.png' alt='' />
+                        <img src={user.profile[0]?.profile_images } alt='' />
                     </div>
                     <p>{user.nickname}</p>
                 </button>
