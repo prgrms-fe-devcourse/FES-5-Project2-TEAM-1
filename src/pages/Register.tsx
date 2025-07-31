@@ -2,7 +2,7 @@
 import { useId, useState } from "react";
 import S from "./Register.module.css";
 import supabase from "@/supabase/supabase";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "@/components/PasswordInput";
 import Swal from "sweetalert2";
 import { showErrorAlert, showInfoAlert, showSuccessAlert } from "@/utils/sweetAlert";
@@ -100,6 +100,12 @@ function Register() {
 
             <div className={S.leftSide}>
                 <img className={S.image} src="images/register.png" alt="회원가입 이미지" />
+                <Link to="/" className={S.toMain}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                    </svg>
+                    메인으로 돌아가기
+                </Link>
             </div>
             <form onSubmit={handleRegister} className={S.form}>
 

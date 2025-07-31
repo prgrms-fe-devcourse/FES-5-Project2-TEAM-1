@@ -50,6 +50,14 @@ function Login() {
                 <img src="/images/nail.png" className={`${S.nail} ${S['bottom-right']}`} />
 
                 <form className={S.form} onSubmit={handleLogin}>
+
+                    <Link to="/" className={S.toMain}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                        </svg>
+                        메인으로 돌아가기
+                    </Link>
+
                     <label htmlFor="username">이메일</label>
                     <input 
                     type="text" 
@@ -74,6 +82,7 @@ function Login() {
                     </div>
 
                     <button className={S.login} type="submit">로그인하기</button>
+                    
                     
                     {error && (
                         <p className={S.p}>
