@@ -7,30 +7,31 @@ import CommentItem from './CommentItem';
 
 type Props = Tables<'board'>
 type Comment = Tables<'comment'>
-type User = Tables<"user_profile"> & {
-  user_base: Tables<"user_base">;
+
+type ReplyWithUser = Comment & {
+  user_profile: Tables<"user_profile"> & {
+    user_base: Tables<"user_base">;
+  };
 };
+
 function ChannelComment(card:Props) {
 
   const {board_id,profile_id} = card
   const [writeComment,setWriteComment] = useState('')
-  const [comments, setComments] = useState<Comment[]>([])
-  const [currentUser,setCurrentUser] = useState<User[]>([])
+  const [commentedUser,setCommentedUser] = useState<ReplyWithUser[]>([])
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   
+
+  // CurrentUser작업해야함 댓글 마다 아이디 바꿔서 테스트하고 대닷글도 작업해야함 위에 컴포넌트 관련컴포넌트 띄워둔거임 바꾸지말것
   useEffect(() => {
     const commentItem = async () => {
-      const [{ data:commentData },{data:userData}] = await Promise.all([
-        supabase.from("comment").select("*").eq('board_id',board_id),
-        supabase.from('user_profile').select('*,(user_base(*))').eq('profile_id',profile_id)
-      ])
-      if (!commentData) return;
-      setComments(commentData);
-      setCurrentUser(userData)
+      const { data:userData } = await supabase.from('comment').select('*,user_profile(*,user_base(*))')
+      if (!userData) return
+      setCommentedUser(userData)
     };
     commentItem();
-  },[]);
- 
+  }, []);
+  
   const handleClickInputBox = (e:React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement
     if(target.closest('button'))return
@@ -61,14 +62,14 @@ function ChannelComment(card:Props) {
 
     const { data: commentData } = await supabase
       .from("comment")
-      .select("*")
+      .select("*,user_profile(*,user_base(*))")
       .eq("board_id", board_id)
 
-    if (commentData) setComments(commentData);
+    if (commentData) setCommentedUser(commentData);
   };
 
   const handleDeleteComment = (targetId: string) => {
-    setComments(prev =>prev.filter(c => c.comment_id !== targetId))
+    setCommentedUser(prev =>prev.filter(c => c.comment_id !== targetId))
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -77,11 +78,11 @@ function ChannelComment(card:Props) {
   const form = e.currentTarget.form;
   if (form) {
     form.requestSubmit(); 
-  }
-}
+      }
+    }   
   };
 
-  const matchComment = comments.filter(comment => comment.board_id === board_id).sort((a,b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
+  const matchComment = commentedUser.filter(comment => comment.board_id === board_id).sort((a,b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
 
   return (
     <div className={S.container}>
@@ -106,7 +107,11 @@ function ChannelComment(card:Props) {
         </div>
         <ul className={S.commentList}>
           {matchComment.map((comment) => (
-            <CommentItem comment={comment} key={comment.comment_id} onDelete={()=>handleDeleteComment(comment.comment_id) } />
+            <CommentItem
+              comment={comment} key={comment.comment_id} onDelete={() => handleDeleteComment(comment.comment_id)}
+              userName={comment.user_profile.user_base.nickname}
+              userImage={comment.user_profile.profile_images}
+            />
           ))}
         </ul>
       </div>

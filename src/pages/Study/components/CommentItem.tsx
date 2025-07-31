@@ -8,12 +8,14 @@ import { commentTime } from './utills/commentTime';
 
 interface Props{
   comment: Tables<'comment'>,
-  onDelete: () =>void
+  onDelete: () => void
+  userName:string|null
+  userImage?: string
 }
 type Reply = Tables<'comment_reply'>
 
 
-function CommentItem({comment,onDelete}: Props) {
+function CommentItem({comment,onDelete,userName,userImage}: Props) {
   const { contents, likes, create_at, comment_id, profile_id } = comment;
   const [like, setLike] = useState(likes);
   const [isPress, setIsPress] = useState(false);
@@ -129,28 +131,35 @@ function CommentItem({comment,onDelete}: Props) {
   return (
     <li className={S.container} key={comment_id}>
       <div className={S.profileImage}>
-        <img src="/images/너굴.png" alt="프로필" />
+        <img src={userImage} alt="유저 프로필 이미지" />
       </div>
       <div className={S.contentBox}>
         <div className={S.meta}>
           <div className={S.userInfo}>
-            <span className={S.username}>User</span>
+            <span className={S.username}>{userName}</span>
             <span className={S.time}>{commentTimeCheck}</span>
           </div>
           <div className={S.edit}>
             {isEditing ? (
               <>
-                <button type="submit" onClick={handleSave}>저장</button>
-                <button type="button" onClick={()=>setIsEditing(!isEditing)}>취소</button>
+                <button type="submit" onClick={handleSave}>
+                  저장
+                </button>
+                <button type="button" onClick={() => setIsEditing(!isEditing)}>
+                  취소
+                </button>
               </>
             ) : (
-              <button type="button" onClick={()=>setIsEditing(!isEditing)}>수정</button>
+              <button type="button" onClick={() => setIsEditing(!isEditing)}>
+                수정
+              </button>
             )}
-            <button type="submit" onClick={handleDelete}>삭제</button>
+            <button type="submit" onClick={handleDelete}>
+              삭제
+            </button>
           </div>
         </div>
-        {
-          isEditing ? (
+        {isEditing ? (
           <input
             type="text"
             value={editContent}
@@ -198,7 +207,13 @@ function CommentItem({comment,onDelete}: Props) {
 
             {recentlyReply &&
               recentlyReply.map((comment) => (
-                <Recomment reply={comment} key={comment.reply_id} onDelete={() => { handleReplyDelete(comment.reply_id) }} />
+                <Recomment
+                  reply={comment}
+                  key={comment.reply_id}
+                  onDelete={() => {
+                    handleReplyDelete(comment.reply_id);
+                  }}
+                />
               ))}
           </div>
         )}

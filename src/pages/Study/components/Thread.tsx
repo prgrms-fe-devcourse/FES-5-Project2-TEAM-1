@@ -20,9 +20,7 @@ type User = Tables<'user_profile'> & {
 
 function Thread() {
   const {profileId} = useAuth()
-  const profile_id = profileId;
-
-  
+ 
   const { id } = useParams()
   const [threadData, setThreadData] = useState<ThreadWithUser[]>([])
   const [updateContent, setUpdateContent] = useState('')
@@ -47,11 +45,6 @@ function Thread() {
     fetchData()
   }, [id,profileId])
 
-
-  const targetThread = threadData.find(thread => thread.board_id == id)
-  const board_id = targetThread?.board_id
-
-  
   useEffect(() => {
     const profileId = threadData
       .map((t) => t.profile_id)
@@ -87,20 +80,21 @@ function Thread() {
     inputRef.current?.focus()
   }
 
-  
   const handleSubmit = async () => { 
+  
     if (!updateContent.trim()) return;
     
     const {error} =  await supabase.from('thread').insert([{
       board_id:id,
-      profile_id,
+      profile_id:profileId,
       contents:updateContent,
       likes: 0,
       create_at:new Date()
     }])
     if (error) console.log(error.message)
-    setUpdateContent("");
-    const { data } = await supabase.from('thread').select('*,user_profile(*,user_base(*))').eq('board_id', board_id)
+    setUpdateContent('');
+    
+    const { data } = await supabase.from('thread').select('*,user_profile(*,user_base(*))').eq('board_id', id)
     if (data) setThreadData(data)
   }
   
