@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 type Board = Tables<"board">;
 type CardProps = Board & 
 {
-  board_tag: Tables<"board_tag">[];
+  board_tag: Tables<"board_tag">[] 
 };
 
 
@@ -20,6 +20,7 @@ function StudyChannel() {
   const cardPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1)
   const [cardData, setCardData] = useState<CardProps[]>([])
+  const [originData, setOriginData] = useState<CardProps[]>([])
   const filterTab = ["최신순", "좋아요순"]
   const filterRef = useRef<(HTMLButtonElement | null)[]>([])
   
@@ -28,14 +29,13 @@ function StudyChannel() {
         const { data } = await supabase
           .from("board")
           .select(" *, board_tag(*)")
-        if(data) setCardData(data);
+        if (data) {
+          setCardData(data);
+          setOriginData(data);
+        } 
     };
       boardTable();
   },[])
-
-  // useEffect(() => {
-  //   setCardData(cardData)
-  // },[cardData])
 
   function handleFilter(e:React.MouseEvent) {
     if (filterRef.current == null) return
@@ -53,12 +53,14 @@ function StudyChannel() {
 
   const debouncedSearch = debounce((value: string) => {
     const lowerValue = value.toLowerCase()
-    const filtered = cardData.filter(
+    const filtered = [...originData].filter(
       (card) =>
         card.title.toLowerCase().includes(lowerValue) ||
         card.contents.toLowerCase().includes(lowerValue) ||
-        card.address?.toLowerCase().includes(lowerValue) ||
-        card.board_tag.hash_tag?.toLowerCase().includes(lowerValue)
+        card.address?.toLowerCase().includes(lowerValue) || 
+        card.board_tag.some((tag) =>
+          tag.hash_tag?.toLowerCase().includes(lowerValue)
+        )
     );
     setCardData(filtered)
     setCurrentPage(1)

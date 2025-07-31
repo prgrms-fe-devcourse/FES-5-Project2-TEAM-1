@@ -51,6 +51,7 @@ interface Props {
                   <BackgroundEdit 
                     prevImage={prevImage} 
                     setPrevImage={setPrevImage} 
+                    showDropdown={showDropdown}
                     setShowDropdown={setShowDropdown}
                     profileData={profileData}
                     setUserData={setUserData}  
@@ -77,7 +78,8 @@ interface Props {
                     setPrevProfileImage={setPrevProfileImage} 
                     setShowProfileDrop={setShowProfileDrop}
                     profileData={profileData}
-                    setUserData={setUserData}  
+                    setUserData={setUserData}
+                    showProfileDrop={showProfileDrop}  
                   />
                 }
               </> 

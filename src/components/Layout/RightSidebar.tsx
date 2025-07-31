@@ -4,7 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthProvider';
 import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
-import Notification from './Notification';
+import Notification from './Notification'
+
 
 type CurrentUser = {
   profileId:string;

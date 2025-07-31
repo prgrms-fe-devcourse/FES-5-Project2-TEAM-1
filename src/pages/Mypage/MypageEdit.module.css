@@ -30,12 +30,12 @@
 }
 
 .backgroundEditWrapper {
-    width: 76rem;
+    width: 100vw;
     height: 100vh;
     background-color: transparent;
     backdrop-filter: blur(4px);
 
-    position: absolute;
+    position: fixed;
     top: 0;
     z-index: 5;
 
@@ -288,6 +288,7 @@
     padding-right: 5rem;
 
     position: relative;
+    z-index: 1;
 
     div {
         display: flex;
@@ -331,10 +332,31 @@
     position: absolute;
     top: -1.4rem;
     right: 0.5rem;
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: scale(1.05) rotate(-5deg);
+        box-shadow: 0 3px 6px rgba(166, 179, 125, 0.3);
+        background-color: #b2b99d;
+        border-radius: 50%;
+    }
+
 }
 
 .editInterestPlusBtn {
     width: 2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        transform: scale(1.05) translateY(-2px);
+        box-shadow: 0 4px 10px rgba(166, 179, 125, 0.2);
+        background-color: #b2b99d;
+        border-radius: 50%;
+    }
 }
 
 .editSocialWrapper {
@@ -399,7 +421,7 @@
 
         top: 2.6rem;
         left: -1.5rem;
-        z-index: 3;
+        z-index: 10;
 
          &::after {
            content: '';

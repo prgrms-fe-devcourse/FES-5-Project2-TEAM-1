@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
 import MarkDownConvert from "@/components/MarkDownConvert";
 import { useAdmin } from "./context/useAdmin";
+import { chooseRegion } from "@/utils/chooseRegion";
 
 
 
@@ -35,9 +36,6 @@ function StudyJoinInfomation() {
   if(!card) return 
   const { images, title, address, member, board_tag, contents,board_id} = card
  
-
-
-
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -75,7 +73,7 @@ function StudyJoinInfomation() {
                   />
                 </svg>
               </span>{" "}
-              {address}
+              {chooseRegion(address)}
               <span>
                 <svg
                   width="3"

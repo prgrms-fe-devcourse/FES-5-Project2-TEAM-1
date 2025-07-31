@@ -34,7 +34,8 @@
   padding: 4px;
   transition:0.3s;
   width: 200px;
-
+  font-family: "Quicksand", sans-serif;
+  
   .navListText{
     display: flex;
     gap: 12px;
