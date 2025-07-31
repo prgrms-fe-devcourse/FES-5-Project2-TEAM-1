@@ -13,6 +13,7 @@ import { useHashTagContext } from "@/components/context/useHashTag";
 import { useProfileImageContext } from "@/components/context/useProfileImage";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { showConfirmAlert } from "@/utils/sweetAlert";
 
 
 interface boardData {
@@ -44,18 +45,22 @@ function BoardForm({ userId }: Props) {
       const save = data?.[0];
       if (save) {
         if (save.title === "" && save.contents === "") return;
+        if (!save.title && !save.contents) return;
 
         const updateTime = format(save.update_at, "yyyy-MM-dd HH:mm:ss");
-        const isConfirm = confirm(
-          `${updateTime} 작성하던 글이 있습니다 불러오시겠습니까?`
-        );
-        if (!isConfirm) return;
-        setPostData((prev) => {
-          return {
-            ...prev,
-            title: save.title ?? "",
-            contents: save.contents,
-          };
+        showConfirmAlert(
+          updateTime,
+          "작성하던 글이 있습니다 불러오시겠습니까?"
+        ).then((result) => {
+          if (result.isConfirmed) {
+            setPostData((prev) => {
+              return {
+                ...prev,
+                title: save.title ?? "",
+                contents: save.contents,
+              };
+            });
+          }
         });
       } else {
         const { error } = await supabase
