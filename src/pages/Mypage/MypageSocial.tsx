@@ -18,6 +18,7 @@ import DefaultIcon from '/images/너굴.png';
 import AddIcon from '/icons/add.svg';
 import supabase from '@/supabase/supabase';
 import { useToast } from '@/utils/useToast';
+import gsap from 'gsap';
 
 
 
@@ -106,7 +107,23 @@ useEffect(() => {
         info('새 링크를 추가할 수 있습니다.');
       }
       fetchNewSocial();
+
+      gsap.fromTo(
+        '#newDiv',
+        { opacity: 0, y: -10 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power1.out',
+          onComplete: () => {
+            // 필요한 경우 position이나 zIndex 재설정
+            gsap.set('#newDiv', { clearProps: 'all' }); // ← gsap이 설정한 속성 초기화
+          }
+        }
+      );
     }
+
   }, [addClicked])
 
   if( !userSocial ) {
@@ -280,7 +297,7 @@ useEffect(() => {
           <h2>소셜링크</h2>
           { editMode
             ? ( socialArray && socialArray.map((s, i) => (
-                <div key={s.social_id} className={E.editSocialWrapper} ref={el => {if (el) divRefs.current[i] = el; }}>
+                <div key={s.social_id} className={E.editSocialWrapper} ref={el => {if (el) divRefs.current[i] = el; }} id='newDiv'>
                   <div>
                     <button type='button' onClick={()  => handleIconList(i)}>
                       <img key={i} src={iconSrc(i) }

@@ -399,7 +399,7 @@
 
         top: 2.6rem;
         left: -1.5rem;
-        z-index: 2;
+        z-index: 3;
 
          &::after {
            content: '';
