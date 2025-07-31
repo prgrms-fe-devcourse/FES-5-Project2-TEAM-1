@@ -11,7 +11,16 @@
 }
 
 .Toastify__toast--info {
+    background: #F1FBEA; 
+    border-left: 6px solid #B99470; 
+    color: #4C4C4C; 
+    font-weight: 500;
+    font-size: 0.95rem;
 
+     .Toastify__toast-icon svg{
+        fill: #B99470;
+        color: black;
+    }
 }
 
 .Toastify__toast--warning {

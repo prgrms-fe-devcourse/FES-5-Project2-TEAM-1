@@ -8,6 +8,9 @@ import Closed from '/icons/closed_eye.svg';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import supabase from '@/supabase/supabase';
 import { useToast } from '@/utils/useToast';
+import gsap from 'gsap';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 interface Props {
@@ -40,13 +43,14 @@ type Visibility = {
 
 function MypageDetails({ user, editMode, setUserData}: Props) {
 
-    const { success, error } = useToast();
+    const { error } = useToast();
 
     const [showEdit, setShowEdit] = useState(false);
     const [hide, setHide] = useState<Visibility>(user.profile[0].visibility);
     const [address, setAddress] = useState(user?.profile[0].address);
     const [gender, setGender] = useState('');
     const [isClicked, setIsClicked] = useState(false);
+    const navigate = useNavigate();
 
     const today = new Date();
     const yearNow = today.getFullYear();
@@ -60,6 +64,15 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
             setShowEdit(false);
         }
     }, [editMode])
+
+    useEffect(() => {
+        if (showEdit) {
+            gsap.fromTo('#ulBox',
+            { opacity: 0, y: -20 },
+            { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+            );
+        }
+    }, [showEdit]);
 
     const userData = user && user.profile[0];
     if( !userData ) {
@@ -120,7 +133,9 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
             }
         })
 
-        success('업로드 성공!');
+        toast.info('성공적으로 저장되었습니다.',  { onClose() {
+          navigate(`/mypage/${user.profile[0]?.profile_id}`)
+        }, autoClose: 1500});
         setShowEdit(false);
         setIsClicked(false);
     }
@@ -181,13 +196,12 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
         width: '40rem',
         border: '2px solid #A6B37D',
         top: '2.2rem',
-        zIndex: '2'
     } as React.CSSProperties
 
   return (
     <div className={S.mypageDetailsContainer}>
         { showEdit ?
-        <ul>
+        <ul id='ulBox' style={{zIndex: '4'}}>
             <li>
                 <h3>주소</h3>
                 <div className={E.editDetailAddress}>
