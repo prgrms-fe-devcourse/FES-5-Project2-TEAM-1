@@ -1,9 +1,10 @@
 .swiper {
-  width: 100%;
+  width: 90%;
+  min-width: 1027px;
 }
 
 .swiper-container{
-  width: 100%;
+  width: 90%;
   overflow: visible;
 }
 
@@ -13,27 +14,27 @@
 }
 
 .swiper.peerReview>.swiper-wrapper{
-  left: -15.2rem;
+  /* left: -15.2rem; */
 }
 
 .swiper.team>.swiper-wrapper{
-  left: -9.6rem;
+  /* left: -9.6rem; */
 }
 
 
 .swiper-slide.peerReview {
   position: relative;
-  width: 10.8rem !important;
-  height: 10.6rem !important;
+  width: 10.8rem ;
+  height: 10.6rem ;
   transition: 1s;
-  gap:1.4rem !important;
+  gap:1.4rem ;
   user-select: none;
 }
 
 .swiper-slide-active.peerReview {
-  width: 21.8rem !important;
-  height: 10.6rem !important;
-  transition: 1s ease-in-out;
+  width: 21.8rem ;
+  height: 10.6rem ;
+  /* transition: 1s ease-in-out; */
 }
 
 .swiper-slide.team {

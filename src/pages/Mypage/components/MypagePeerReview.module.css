@@ -13,8 +13,8 @@
 
 .peerReviewContainer{
   width: 100%;
-  overflow: visible; 
-  position: relative; 
+  /* overflow: visible; 
+  position: relative;  */
   margin-bottom: 6.9rem;
 
   display: flex;
@@ -33,13 +33,14 @@
 }
 
 .prevButton {
-  position: relative;
+  /* position: relative; */
   left:-4.4rem;
 }
 
 .nextButton {
-  position: relative;
+  /* position: relative; */
   right:-4.4rem;
+  background-color: yellowgreen;
 }
 
 /* .content */

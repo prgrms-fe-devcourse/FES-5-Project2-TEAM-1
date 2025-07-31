@@ -31,12 +31,12 @@
 }
 
 .prevButton {
-  position: relative;
+  /* position: relative; */
   left:-4.4rem;
 }
 
 .nextButton {
-  position: relative;
+  /* position: relative; */
   right:-4.4rem;
 }
 

@@ -76,11 +76,13 @@ function MypagePeerReview({profileId}:Props) {
   const handlePrev = () => {
     if(!swiper) return;
     swiper.slidePrev()
+    console.log('이전')
   }
 
   const handleNext = () => {
     if(!swiper) return;
     swiper.slideNext()
+    console.log('이후')
   }
 
 
@@ -99,7 +101,7 @@ function MypagePeerReview({profileId}:Props) {
               modules={[Navigation]}
               grabCursor
               initialSlide={0}
-              centeredSlides = {true}
+              centeredSlides = {false}
               slidesPerView={"auto"}
               speed={900}
               slideToClickedSlide
