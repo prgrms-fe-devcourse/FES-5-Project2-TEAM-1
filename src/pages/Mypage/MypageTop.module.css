@@ -268,17 +268,25 @@
 
 .mypageSocial {
     width: 100%;
-    height: 12%;
+    height: object-fit;
     margin-top: 2.5rem;
     padding: 0 0.5rem;
     font-weight: 700;
     margin-bottom: 3rem;
 
+    position: relative;
+    z-index: 0;
+
     h2 {
         font-size: 2rem;
         margin-bottom: 2rem;
     }
+}
 
+@media (max-width: 1024px) {
 
+}
+
+@media (max-width: 600px) {
 
 }
