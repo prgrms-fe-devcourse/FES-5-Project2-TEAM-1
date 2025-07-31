@@ -63,9 +63,9 @@ function Mypage() {
       
   },[isLoading])
 
-
   useEffect(() => {
     const fetchUser = async () => {
+      if( !currentUser.id ) return;
       const { data, error } = await supabase
         .from('user_base')
         .select(`
