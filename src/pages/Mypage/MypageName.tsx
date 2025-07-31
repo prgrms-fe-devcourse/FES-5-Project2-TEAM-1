@@ -16,7 +16,7 @@ function MypageName({ user, editMode, setUserData}: Props) {
 
   const { success, error } = useToast();
 
-  const [userName, setUserName] = useState<string>(user?.name ?? '');
+  const [userName, setUserName] = useState<string>(user?.nickname ?? '');
   const [role, setRole] = useState<string>(user?.role ?? '');
   const [showEdit, setShowEdit] = useState(false);
 
@@ -25,7 +25,6 @@ function MypageName({ user, editMode, setUserData}: Props) {
         setShowEdit(false);
       }
   }, [editMode]);
-
 
     const handleEditName = () => {
       setShowEdit(true);
@@ -49,7 +48,7 @@ function MypageName({ user, editMode, setUserData}: Props) {
 
       const { error: nameError } = await supabase
         .from('user_base')
-        .update({name: userName})
+        .update({nickname: userName})
         .eq('id', id);
 
       if( nameError ) {
@@ -75,7 +74,7 @@ function MypageName({ user, editMode, setUserData}: Props) {
 
             return {
                 ...prev,
-                name: userName,
+                nickname: userName,
                 role: role
             }
         })

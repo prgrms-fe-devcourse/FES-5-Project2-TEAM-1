@@ -32,13 +32,35 @@
 }
 
 .interestBackBtn {
-    width: 1.6rem;
+    width: 2.4rem;
 
+    img {
+        width: 1.6rem;
+    }
+
+    &:hover {
+        background-color: #d8cabd;
+        border-radius: 5px;
+        svg {
+            path {
+                fill: white;
+            }
+        }
+    }
 }
 
 .interestSaveBtn {
+    width: 2.4rem;
+    height: 1.5rem;
+
     font-size: 1.1rem;
-    color: #A6B37D;
+    color: #B99470;
+
+    &:hover {
+        background-color: #d8cabd;
+        color: white;
+        border-radius: 5px;
+    }
 }
 
 .dropdown {

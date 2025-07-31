@@ -9,10 +9,12 @@ import supabase from '@/supabase/supabase';
 import compareUserId from '@/utils/compareUserId';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
 
 
 
 interface Props {
+    plusClicked: boolean,
     setPlusClicked: (value: boolean) => void;
     userInterest: Tables<'user_interest'>;
     setUserData: React.Dispatch<React.SetStateAction<User | null>>;
@@ -23,7 +25,7 @@ interface Props {
 
 type Interest = Tables<'user_interest'>;
 
-function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestArray, setInterestArray }: Props) {
+function InterestDropdown({ plusClicked, setPlusClicked, userInterest, setUserData, interestArray, setInterestArray }: Props) {
 
     const [isTyping, setIsTyping] = useState(false);
     const [filteredInterest, setFilteredInterest] = useState<string[]>([]);
@@ -44,6 +46,19 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
 
         fetchInterest();
     }, [userInterest])
+
+    useEffect(() => {
+        gsap.fromTo('#btnBox', 
+            { x: 10, opacity: 0 },
+            {
+            x: 0,
+            opacity: 1,
+            duration: 0.3,
+            ease: 'power2.out',
+            clearProps: 'transform,opacity', // opacity도 지워줌
+            }
+        )   
+    }, [plusClicked])
 
     const filterInterest = ( value: string) => {
 
@@ -156,7 +171,7 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interestA
             onChange={handleInputChange} 
             style={fontSize ? {fontSize} : undefined}
         />
-        <div className={S.interestBackSave}>
+        <div className={S.interestBackSave} id='btnBox'>
             <button 
                 className={S.interestBackBtn}
                 onClick={() => setPlusClicked(false) }

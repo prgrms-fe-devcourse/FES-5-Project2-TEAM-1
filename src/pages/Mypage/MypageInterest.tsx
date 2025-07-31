@@ -26,7 +26,6 @@ function MypageInterest({user, editMode, setUserData}: Props) {
   const [interestArray, setInterestArray] = useState<Interest[] | null>(null);
   const [isFive, setIsFive] = useState(false);
   const [plusClicked, setPlusClicked] = useState(false);
-  const [fontSize, setFontSize] = useState<string>('');
 
   const minusRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const divRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -34,7 +33,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
  
   const userInterest = user && user.profile[0].interest[0];
   // const interestArray = userInterest.interest.split(',')
-  const { success, error } = useToast();
+  const { error } = useToast();
     const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,9 +69,31 @@ function MypageInterest({user, editMode, setUserData}: Props) {
       gsap.from(validElements, {
         y: -10,
         opacity: 0,
+        duration: 0.3,
+        onComplete: () => {
+          gsap.set(validElements, { clearProps: 'all' });
+        }
       });
     }
+
+    if( editMode ) {
+      setPlusClicked(false);
+    }
   }, [editMode])
+
+  useEffect(() => {
+    gsap.fromTo('#plusBox', 
+      { opacity: 0, scale: 0.8, y: -10 },
+    {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      duration: 0.3,
+      ease: 'power2.out',
+      clearProps: 'transform,opacity', // transform 전체 제거
+    }
+    )
+  }, [plusClicked])
 
   if( !userInterest ) {
     return <div className={S.mypageInterest}>Loading...</div>;
@@ -152,7 +173,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
                     <button 
                       ref={(el) => {minusRefs.current[index] = el}}
                       className={E.editInterestMinusBtn}
-                      onClick={() => handleMinus( index)}
+                      onClick={() => handleMinus(index)}
                     >
                       <img src={minus} alt='마이너스 버튼 아이콘' />
                     </button>
@@ -163,6 +184,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
                       { plusClicked 
                         ? 
                         <InterestDropdown
+                            plusClicked={plusClicked}
                             setPlusClicked={setPlusClicked}
                             userInterest={userInterest}
                             setUserData={setUserData}
@@ -174,6 +196,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
                             <button
                               className={E.editInterestPlusBtn}
                               onClick={handlePlusInterest}
+                              id='plusBox'
                             >
                               <img src={plus} alt='플러스 버튼 아이콘' />
                             </button>
