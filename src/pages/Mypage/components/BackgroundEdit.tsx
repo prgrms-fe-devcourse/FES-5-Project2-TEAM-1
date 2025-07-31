@@ -1,10 +1,12 @@
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import E from '../MypageEdit.module.css';
 import type { Tables } from 'src/supabase/database.types';
 import supabase from '../../../supabase/supabase';
 import type { User } from '../Mypage';
 import CloseIcon  from '/icons/edit_close.svg';
-import { useToast } from '@/utils/useToast';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
 
 interface Props {
   prevImage: string;
@@ -12,17 +14,36 @@ interface Props {
   setShowDropdown: (value: boolean) => void;
   profileData: Tables<'user_profile'>;
   setUserData: React.Dispatch<React.SetStateAction<User | null>>;
+  showDropdown: boolean;
 }
 
-function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData, setUserData }: Props) {
-
-    const { success } = useToast();
+function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, showDropdown, profileData, setUserData }: Props) {
 
     const [file, setFile] = useState<File | null>(null);
     // const [showAlert, setShowAlert] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+    if (showDropdown && popupRef.current) {
+        gsap.fromTo(
+        popupRef.current,
+        { opacity: 0, y: -20, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power3.out' }
+        );
+    } else if (!showDropdown && popupRef.current) {
+        gsap.to(popupRef.current, {
+        opacity: 0,
+        y: -10,
+        scale: 0.95,
+        duration: 0.3,
+        ease: 'power2.in',
+        });
+    }
+    }, [showDropdown])
 
     const handleFileUpload = ( ) => {
         // const fileInput = document.getElementById('fileInput') as HTMLInputElement; 
@@ -50,24 +71,31 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
         //누르면 저장되고 서버에 올라가기
         //알람으로 저장됐음을 알려주기
         
-        if( !file || !profileData ) return;
+        if( !profileData ) return;
 
         const { profile_id } = profileData;
 
-        const fileName = `${profile_id}-${Date.now()}.jpg`;
+        const default_image =  'https://zugionbtbljfyuybihxk.supabase.co/storage/v1/object/public/backgroundimages/profile-backgrounds/e564cf92-7719-43db-9803-100bd6cf23f6-1753344498261.jpg'
+        let imageUrl: string | null = null;
 
-        // supabase storage 에 업로드
-        const { error: uploadError } = await supabase.storage
-            .from('backgroundimages')
-            .upload(`profile-backgrounds/${fileName}`, file);
+        if( !file ) {
+            imageUrl = default_image;
+        } else {
+            const fileName = `${profile_id}-${Date.now()}.jpg`;
 
-        if( uploadError ) {
-            console.log( '파일 업로드 실패', uploadError);
-            return;
+            // supabase storage 에 업로드
+            const { error: uploadError } = await supabase.storage
+                .from('backgroundimages')
+                .upload(`profile-backgrounds/${fileName}`, file);
+
+            if( uploadError ) {
+                console.log( '파일 업로드 실패', uploadError);
+                return;
+            }
+
+            // 파일 URL 생성
+            imageUrl = `https://zugionbtbljfyuybihxk.supabase.co/storage/v1/object/public/backgroundimages/profile-backgrounds/${fileName}`;
         }
-
-        // 파일 URL 생성
-        const imageUrl = `https://zugionbtbljfyuybihxk.supabase.co/storage/v1/object/public/backgroundimages/profile-backgrounds/${fileName}`;
 
         // 업로드된 이미지 URL을 DB에 저장
         const { error: bgImageError } = await supabase
@@ -95,7 +123,12 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
             })
 
             // alert('성공적으로 업로드가 완료되었습니다~!');
-            success('업로드 성공!')
+            toast.info( '배경이미지가 적용되었습니다.', {
+                    onClose() {
+                        navigate(`/mypage/${profileData.profile_id}`)
+                    }, 
+                    autoClose: 1500
+            })
             setShowDropdown(false);
     
     }
@@ -103,6 +136,10 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
 
     const handleDeleteFile = () => {
         setPrevImage('/images/default_cover.png');
+
+        toast.info('삭제 후 적용버튼을 꼭 눌러주세요.',  {onClose() {
+                navigate(`/mypage/${profileData.profile_id}`)
+            }, autoClose: 1500});
     }
 
     const handleClosePopup = () => {
