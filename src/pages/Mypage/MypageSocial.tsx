@@ -39,7 +39,7 @@ function MypageSocial({user, editMode, setUserData}: Props) {
   const [addClicked, setAddClicked] = useState(false);
 
   const inputRefs = useRef<HTMLInputElement[]>([]);
-  const divRefs = useRef<HTMLDivElement[]>([]);
+
   const userSocial = user && user.profile[0].social[0];
 
   const { info, success, error } = useToast();
@@ -125,6 +125,17 @@ useEffect(() => {
     }
 
   }, [addClicked])
+
+  useEffect(() => {
+    gsap.from('#iconBox li', {
+      opacity: 0,
+      y: -10,
+      scale: 0.8,
+      stagger: 0.05,
+      duration: 0.3,
+      ease: 'back.out(1.7)'
+    });
+  }, [isClicked])
 
   if( !userSocial ) {
       return <div className={S.mypageSocial}>Loading...</div>;
@@ -297,7 +308,7 @@ useEffect(() => {
           <h2>소셜링크</h2>
           { editMode
             ? ( socialArray && socialArray.map((s, i) => (
-                <div key={s.social_id} className={E.editSocialWrapper} ref={el => {if (el) divRefs.current[i] = el; }} id='newDiv'>
+                <div key={s.social_id} className={E.editSocialWrapper} id='newDiv'>
                   <div>
                     <button type='button' onClick={()  => handleIconList(i)}>
                       <img key={i} src={iconSrc(i) }
@@ -305,7 +316,7 @@ useEffect(() => {
                        />
                     </button>
                     { isClicked[i] &&
-                      <div className={E.editIconList}>
+                      <div id='iconBox' className={E.editIconList}>
                         <ul>
                           <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Instagram} alt='instagram' /></li>
                           <li><img onClick={(e) => {handleClickedIcon(e, i)}} src={Github} alt='github'  /></li>
