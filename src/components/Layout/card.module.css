@@ -7,15 +7,15 @@
   padding: 12px 16px; 
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  cursor:pointer;
+
 }
 
 .cardTop{
   height: auto;
   display: flex;
   justify-content: space-between;
-
 
     h4 {
       display: -webkit-box;
@@ -41,9 +41,8 @@
 }
 
 .titleBox {
-  display: inline-flex;                 
+  display: flex;                 
   flex-direction: column;
-  cursor: pointer;
   height: auto;
 
   p {
@@ -63,8 +62,6 @@
     
 
 .tagBox{
-  height: 100%;
- cursor: pointer;
   display: flex;
   align-items: center;
   gap: 4px;

@@ -76,7 +76,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
         <div className={S.loginBox}>
           <div className={S.profileImage}>
             <img
-              src={user ? currentUser.profileImage : "/public/images/여울.png"}
+              src={user ? currentUser.profileImage : "/images/여울.png"}
               alt="프로필"
             />
           </div>

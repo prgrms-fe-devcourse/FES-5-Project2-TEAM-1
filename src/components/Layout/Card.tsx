@@ -95,7 +95,10 @@ function Card({ card }: Props) {
       card: CardProps
     ) => {
       e.preventDefault();
-      if ((e.target as HTMLButtonElement).closest("span")) {
+      if (
+        !(e.target as HTMLButtonElement).closest("img") ||
+        !(e.target as HTMLButtonElement).closest("button")
+      ) {
         navigate(`/channel/${board_id}`, { state: { card } });
       } else {
         return;
@@ -129,10 +132,10 @@ function Card({ card }: Props) {
           </button>
         </div>
       </div>
-      <span className={S.titleBox}>
+      <div className={S.titleBox}>
         <p>{replaceText}</p>
-      </span>
-      <span className={S.tagBox}>
+      </div>
+      <div className={S.tagBox}>
         {board_tag &&
           board_tag.map((t) => <div key={t.tag_id}>{t.hash_tag}</div>)}
 
@@ -196,7 +199,7 @@ function Card({ card }: Props) {
           </svg>
         </span>
         {member}
-      </span>
+      </div>
     </section>
   );
 }

@@ -1,9 +1,17 @@
 
+import { useEffect } from 'react';
 import S from './Notification.module.css'
+import supabase from '@/supabase/supabase';
 
 function Notification() {
 
-
+  useEffect(() => {
+    const fetchData = async () => {
+       const { data ,error} =  await supabase.from('notification').select('*').eq('user_id')
+       if(error) console.error()
+    }
+     fetchData()
+  },[])
 
   return (
     <div className={S.container}>
@@ -41,3 +49,4 @@ function Notification() {
   );
 }
 export default Notification
+

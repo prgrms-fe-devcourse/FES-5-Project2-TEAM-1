@@ -312,6 +312,41 @@ export type Database = {
         }
         Relationships: []
       }
+      notification: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          is_read: boolean | null
+          type: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at: string
+          id?: string
+          is_read?: boolean | null
+          type?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          type?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_base"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peer_review: {
         Row: {
           create_at: string
