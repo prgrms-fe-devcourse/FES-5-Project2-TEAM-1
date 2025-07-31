@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import E from '../MypageEdit.module.css';
 import type { Tables } from 'src/supabase/database.types';
 import supabase from '../../../supabase/supabase';
@@ -6,6 +6,7 @@ import type { User } from '../Mypage';
 import CloseIcon  from '/icons/edit_close.svg';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
 
 interface Props {
   prevImage: string;
@@ -13,9 +14,10 @@ interface Props {
   setShowDropdown: (value: boolean) => void;
   profileData: Tables<'user_profile'>;
   setUserData: React.Dispatch<React.SetStateAction<User | null>>;
+  showDropdown: boolean;
 }
 
-function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData, setUserData }: Props) {
+function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, showDropdown, profileData, setUserData }: Props) {
 
     const [file, setFile] = useState<File | null>(null);
     // const [showAlert, setShowAlert] = useState(false);
@@ -24,6 +26,24 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
     const popupRef = useRef<HTMLDivElement>(null);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+    if (showDropdown && popupRef.current) {
+        gsap.fromTo(
+        popupRef.current,
+        { opacity: 0, y: -20, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power3.out' }
+        );
+    } else if (!showDropdown && popupRef.current) {
+        gsap.to(popupRef.current, {
+        opacity: 0,
+        y: -10,
+        scale: 0.95,
+        duration: 0.3,
+        ease: 'power2.in',
+        });
+    }
+    }, [showDropdown])
 
     const handleFileUpload = ( ) => {
         // const fileInput = document.getElementById('fileInput') as HTMLInputElement; 
@@ -103,10 +123,7 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, profileData,
             })
 
             // alert('성공적으로 업로드가 완료되었습니다~!');
-            toast.info(
-                imageUrl
-                ? '배경이미지가 적용되었습니다.'
-                : '배경이미지가 삭제되었습니다.', {
+            toast.info( '배경이미지가 적용되었습니다.', {
                     onClose() {
                         navigate(`/mypage/${profileData.profile_id}`)
                     }, 
