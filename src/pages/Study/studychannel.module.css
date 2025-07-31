@@ -1,5 +1,5 @@
 .container{
-  margin: 44px 105px 0px;
+  margin: 44px 100px 0px;
   flex: 1;
 }
 
@@ -75,13 +75,12 @@
 }
 
 .cardGrid{
-  margin-top: 100px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  margin-top: 56px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap:wrap;
+  gap: 24px;
 }
-
-
 
 .pagenation{
   display:flex;

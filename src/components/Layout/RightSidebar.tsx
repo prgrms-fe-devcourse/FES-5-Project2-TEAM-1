@@ -2,56 +2,99 @@ import S from './RghtSidebar.module.css'
 import '../../style/reset.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthProvider';
-import supabase from '@/supabase/supabase';
 import { useEffect, useState } from 'react';
+import supabase from '@/supabase/supabase';
+import Notification from './Notification';
 
-function RightSidebar() {
-  
-  const [profileId, setProfileId] = useState('');
-  const {user:currentUser}  = useAuth();
-  const {user, logout} = useAuth()
+type CurrentUser = {
+  profileId:string;
+  email:string;
+  id:string;
+  profileImage:string;
+}
+
+interface Overlay{
+  isOverlay: boolean;
+  setIsOverlay: (value: boolean) => void
+  isNotification: boolean;
+  setIsNotification: (value: boolean) => void;
+}
+
+function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:Overlay) {
+
+  const { user, isLoading, logout } = useAuth();
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({ profileId: '', email: '', id: '', profileImage: '', });
   const navigate = useNavigate()
+  
+  useEffect(() => {
+    if (!user) {
+      console.log('로그인이 필요합니다')
+      return;
+    }
+    setCurrentUser({
+      profileId: user.profileId,
+      email: user.email,
+      id: user.id,
+      profileImage: '',
+    });
+    console.log(currentUser);
+      
+  }, [isLoading])
 
-  useEffect(()=>{
-    const fetchUserProfile = async() => {
-      if(!currentUser) return;
-      const { data, error} = await supabase
-        .from("user_profile")
-        .select("profile_id")
-        .eq("user_id", currentUser.id)
-        .single();
-      if (error || !data) {
-        console.error("user_base 조회 실패", error);
+  useEffect(() => {
+    const fetchUserProfileImage = async () => {
+      if (!currentUser.profileId) return;
+      const { data, error } = await supabase.from('user_profile').select('profile_images').eq('profile_id', currentUser.profileId).single();
+      if (!data || error) {
+        console.error('프로필 이미지 불러오기 실패', error.message)
         return;
       }
-      const {profile_id} = data;
-      // console.log(profile_id);
-      setProfileId(profile_id);
+      setCurrentUser(prev => ({
+        ...prev,
+        profileImage: data.profile_images
+      }))
     }
-    fetchUserProfile();
-  },[currentUser])
+    console.log('우측 사이드바 프로필 이미지 불러오기 성공')
+    fetchUserProfileImage();
+  }, [currentUser.profileId])
+
+
 
   const handleLogout = async () => {
     await logout()
     navigate('/')
   }
 
+  const handleNotification = () => {
+    setIsNotification(!isNotification)
+    setIsOverlay(!isOverlay)
+  }
+
   return (
     <nav className={S.container}>
       <div className={S.height}>
         <div className={S.loginBox}>
-          <div className={S.profileImage}></div>
-            {user ? (
-            <Link to={`/mypage/${profileId}`} className={S.loginBoxGreeting} title='마이페이지 이동'>
+          <div className={S.profileImage}>
+            <img
+              src={user ? currentUser.profileImage : "/public/images/여울.png"}
+              alt="프로필"
+            />
+          </div>
+          {user ? (
+            <Link
+              to={`/mypage/${currentUser.profileId}`}
+              className={S.loginBoxGreeting}
+              title="마이페이지 이동"
+            >
               <p>Hello🖐️</p>
-              <h3>{user.email.split('@')[0]}</h3>
+              <h3>{currentUser.email.split("@")[0]}</h3>
             </Link>
-            ) : (
+          ) : (
             <div className={S.loginBoxGreeting}>
               <p>Hello🖐️</p>
               <h3>Guest</h3>
             </div>
-            )}
+          )}
           <div className={S.loginLogout}>
             {user ? (
               <button onClick={handleLogout}>
@@ -67,12 +110,16 @@ function RightSidebar() {
                 fill="#222222"
               />
             </svg> */}
-            <p className={S.logout}>로그아웃</p>
+                <p className={S.logout}>로그아웃</p>
               </button>
             ) : (
               <>
-                <Link to="/login"  className={S.linkButton}>로그인</Link>
-                <Link to="/register"  className={S.linkButton}>회원가입</Link>
+                <Link to="/login" className={S.linkButton}>
+                  로그인
+                </Link>
+                <Link to="/register" className={S.linkButton}>
+                  회원가입
+                </Link>
               </>
             )}
           </div>
@@ -82,38 +129,25 @@ function RightSidebar() {
           <ul className={S.navListWrap}>
             <li>My menu</li>
             <li className={S.navList}>
-              <a href="" className={S.navListText}>
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="2 0 16 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M6.54568 14.606C6.40929 14.8848 6.33496 15.1954 6.33496 15.5167C6.33496 16.2666 6.73995 16.9581 7.39405 17.3249L7.44094 17.3512C8.09879 17.7202 8.90125 17.7202 9.55911 17.3512L9.606 17.3249C10.2601 16.9581 10.6651 16.2666 10.6651 15.5167C10.6651 15.1954 10.5908 14.8848 10.4544 14.606H6.54568Z"
-                    fill="#222222"
-                  />
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M8.36078 2.46313C6.99247 2.46313 5.67803 2.99646 4.69657 3.94989C3.67723 4.94011 3.10205 6.30073 3.10205 7.72186V8.3646C3.10205 10.0259 2.42965 11.6165 1.23802 12.7741C1.03123 12.9749 0.914551 13.251 0.914551 13.5392C0.914551 14.1284 1.39216 14.606 1.98131 14.606L14.8478 14.606C15.4369 14.606 15.9146 14.1284 15.9146 13.5392C15.9146 13.251 15.7979 12.9749 15.5911 12.7741C14.3994 11.6165 13.7271 10.0259 13.7271 8.3646L13.7271 7.72186C13.7271 6.30073 13.1519 4.94011 12.1325 3.94989C11.1511 2.99647 9.83664 2.46313 8.46832 2.46313H8.36078Z"
-                    fill="#222222"
-                  />
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M9.125 2.50428V1.57031C9.125 1.22513 8.84518 0.945313 8.5 0.945313C8.15482 0.945312 7.875 1.22513 7.875 1.57031V2.48566C8.03592 2.47073 8.19808 2.46317 8.36101 2.46317H8.46855C8.68916 2.46317 8.90836 2.47703 9.125 2.50428Z"
-                    fill="#222222"
-                  />
-                </svg>
+              {isNotification && (
+                <div className={S.notifyPanel}>
+                  <h4>Notification</h4>
+                  <div className={S.notificationList}>
+                    <Notification />
+                  </div>
+                </div>
+              )}
+              <span className={S.navListText} onClick={handleNotification}>
+                <img
+                  src="/icons/notification.svg"
+                  className={S.notifiIcon}
+                  alt="알림아이콘"
+                />
                 <h3>Notification</h3>
-              </a>
+              </span>
             </li>
             <li className={S.navList}>
-              <a href="" className={S.navListText}>
+              <a href="#" className={S.navListText}>
                 <svg
                   width="24"
                   height="24"
@@ -134,7 +168,7 @@ function RightSidebar() {
               </a>
             </li>
             <li className={S.navList}>
-              <a href="" className={S.navListText}>
+              <a href="#" className={S.navListText}>
                 <svg
                   width="24"
                   height="25"
@@ -163,7 +197,7 @@ function RightSidebar() {
               </a>
             </li>
             <li className={S.navList}>
-              <a href="" className={S.navListText}>
+              <a href="#" className={S.navListText}>
                 <svg
                   width="24"
                   height="19"

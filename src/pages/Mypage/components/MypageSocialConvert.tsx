@@ -4,22 +4,27 @@ import { useEffect, useState } from "react"
 import S from './MypageSocialConvert.module.css'
 import { useCopyToClipboard } from '@uidotdev/usehooks'
 import { useToast } from "@/utils/useToast";
+import type { User } from "../Mypage";
 
 type Social = Tables<'user_social'>;
 
-function MypageSocialConvert() {
+function MypageSocialConvert({ user }: {user: User | null}) {
+
   const [socialData, setSocialData] = useState<Social[]|null>(null);
   const [copiedText, setCopy] = useCopyToClipboard();
   const { success } = useToast();
 
+  const userSocial = user && user.profile[0].social[0];
+
   useEffect(()=>{
     const fetchSocial = async() => {
-      const result = await compareUserId('11e880fd-65ca-4778-b8e9-1888c1e65233','user_social');
+      if( !userSocial ) return;
+      const result = await compareUserId(userSocial.profile_id, 'user_social');
       setSocialData(result);
       // console.log(result)
     }
     fetchSocial();
-  },[])
+  },[userSocial])
   // 유저가 바뀌면서 소셜 값도 바뀔때 useEffect가 계속 실행돼야하지 않을까?
 
   useEffect(()=>{

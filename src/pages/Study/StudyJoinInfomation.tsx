@@ -1,10 +1,13 @@
-import { useParams } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import S from "./StudyJoinInfomation.module.css";
 import type { Tables } from "@/supabase/database.types";
 import Project from "./components/Project";
 import ChannelComment from "./components/ChannelComment";
 import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
+import MarkDownConvert from "@/components/MarkDownConvert";
+import { useAdmin } from "./context/useAdmin";
+
 
 
 type Board = Tables<"board">;
@@ -14,6 +17,7 @@ type CardProps = Board &
 };
 
 function StudyJoinInfomation() {
+  const {isAdmin} = useAdmin()
   const { id } = useParams()
   const [card, setCard] = useState<CardProps|null>(null)
   
@@ -28,8 +32,11 @@ function StudyJoinInfomation() {
   },[id])
 
   if(!card) return 
-  const { images, title, address, member, board_tag, contents} = card
+  const { images, title, address, member, board_tag, contents,board_id} = card
  
+
+
+
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -37,7 +44,16 @@ function StudyJoinInfomation() {
           {images && <img src={images} alt="스터디 이미지" />}
           <div className={S.textInfo}>
             <div className={S.title}>
-              <h2>{title}</h2>
+              <div className={S.titleTop}>
+                <h2>{title}</h2>
+                {isAdmin && (
+                  <NavLink to={`/Write/${board_id}`}>
+                    <button type="button" className={S.setting}>
+                      <img src="/icons/edit.svg" alt="" />
+                    </button>
+                  </NavLink>
+                )}
+              </div>
             </div>
             <div className={S.tagBox}>
               {(board_tag as Tables<"board_tag">[]).map((t) => (
@@ -100,11 +116,13 @@ function StudyJoinInfomation() {
             </div>
           </div>
         </div>
-        <article className={S.content}>{contents}</article>
+        <MarkDownConvert markdown={contents} addClass={S.contents} />
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>
-            <button type="button">프로젝트 생성</button>
+            <Link to="management">
+              <button type="button">프로젝트 생성</button>
+            </Link>
           </div>
           <Project />
         </section>

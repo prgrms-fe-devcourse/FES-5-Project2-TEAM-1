@@ -12,13 +12,20 @@ interface BaseTagData {
 }
 
 function BoardOption() {
-  const { setProfileImage } = useProfileImageContext();
+  const { setProfileImage, setImageUrl } = useProfileImageContext();
   const { postData, setPostData } = useBoardContext();
-  const { sethashTagData } = useHashTagContext();
+  const { hashTagData, sethashTagData } = useHashTagContext();
   const titleId = useId();
 
   const handleFileSelect = (file: File) => {
-    setProfileImage(file);
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleHashTag = (values: BaseTagData[]) => {
@@ -48,7 +55,13 @@ function BoardOption() {
             placeholder="제목을 입력해주세요"
           />
         </div>
-        <HashTag callBack={handleHashTag} />
+        {hashTagData && (
+          <HashTag
+            callBack={handleHashTag}
+            defaultList={[...hashTagData.map((tagData) => tagData.value)]}
+          />
+        )}
+        {!hashTagData && <HashTag callBack={handleHashTag} />}
         <BoardButtonArea />
       </div>
     </div>

@@ -9,6 +9,8 @@ import {
 interface ProfileImageType {
   profileImage: File | null;
   setProfileImage: Dispatch<SetStateAction<File | null>>;
+  imageUrl: string;
+  setImageUrl: Dispatch<SetStateAction<string>>;
 }
 // eslint-disable-next-line react-refresh/only-export-components
 export const ProfileImageContext = createContext<ProfileImageType | null>(null);
@@ -19,9 +21,11 @@ export function ProfileImageProvider({
   children: React.ReactNode;
 }) {
   const [profileImage, setProfileImage] = useState<File | null>(null);
-
+  const [imageUrl, setImageUrl] = useState("");
   return (
-    <ProfileImageContext.Provider value={{ profileImage, setProfileImage }}>
+    <ProfileImageContext.Provider
+      value={{ profileImage, setProfileImage, imageUrl, setImageUrl }}
+    >
       {children}
     </ProfileImageContext.Provider>
   );

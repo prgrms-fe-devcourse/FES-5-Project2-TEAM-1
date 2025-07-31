@@ -14,9 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      approve_member: {
+        Row: {
+          board_id: string | null
+          id: string
+          profile_id: string | null
+          status: Database["public"]["Enums"]["membership_status"] | null
+        }
+        Insert: {
+          board_id?: string | null
+          id?: string
+          profile_id?: string | null
+          status?: Database["public"]["Enums"]["membership_status"] | null
+        }
+        Update: {
+          board_id?: string | null
+          id?: string
+          profile_id?: string | null
+          status?: Database["public"]["Enums"]["membership_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approve_member_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "board"
+            referencedColumns: ["board_id"]
+          },
+          {
+            foreignKeyName: "approve_member_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["profile_id"]
+          },
+        ]
+      }
       board: {
         Row: {
-          active: boolean | null
+          active: boolean
           address: string | null
           board_cls: Database["public"]["Enums"]["board_cls"] | null
           board_id: string
@@ -25,12 +61,12 @@ export type Database = {
           images: string | null
           likes: number
           meeting_time: string | null
-          member: string | null
+          member: number
           profile_id: string
           title: string
         }
         Insert: {
-          active?: boolean | null
+          active?: boolean
           address?: string | null
           board_cls?: Database["public"]["Enums"]["board_cls"] | null
           board_id?: string
@@ -39,12 +75,12 @@ export type Database = {
           images?: string | null
           likes?: number
           meeting_time?: string | null
-          member?: string | null
+          member?: number
           profile_id?: string
           title: string
         }
         Update: {
-          active?: boolean | null
+          active?: boolean
           address?: string | null
           board_cls?: Database["public"]["Enums"]["board_cls"] | null
           board_id?: string
@@ -53,7 +89,7 @@ export type Database = {
           images?: string | null
           likes?: number
           meeting_time?: string | null
-          member?: string | null
+          member?: number
           profile_id?: string
           title?: string
         }
@@ -85,7 +121,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "channel_member_board_id_fkey"
+            foreignKeyName: "board_member_board_id_fkey"
             columns: ["board_id"]
             isOneToOne: false
             referencedRelation: "board"
@@ -145,7 +181,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_board_to_board_tag"
+            foreignKeyName: "board_tag_board_id_fkey"
             columns: ["board_id"]
             isOneToOne: false
             referencedRelation: "board"
@@ -187,7 +223,7 @@ export type Database = {
             referencedColumns: ["board_id"]
           },
           {
-            foreignKeyName: "fk_board_to_comment"
+            foreignKeyName: "comment_board_id_fkey1"
             columns: ["board_id"]
             isOneToOne: false
             referencedRelation: "board"
@@ -339,18 +375,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_board_to_post"
-            columns: ["board_id"]
-            isOneToOne: false
-            referencedRelation: "board"
-            referencedColumns: ["board_id"]
-          },
-          {
             foreignKeyName: "fk_user_profile_to_post"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
             referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "post_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "board"
+            referencedColumns: ["board_id"]
           },
         ]
       }
@@ -372,7 +408,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_board_to_scrap"
+            foreignKeyName: "scrap_board_id_fkey"
             columns: ["board_id"]
             isOneToOne: false
             referencedRelation: "board"
@@ -613,6 +649,7 @@ export type Database = {
     Enums: {
       board_cls: "0" | "1"
       join_cls: "0" | "1"
+      membership_status: "0" | "1" | "2"
       status: "0" | "1" | "2" | "3"
     }
     CompositeTypes: {
@@ -743,6 +780,7 @@ export const Constants = {
     Enums: {
       board_cls: ["0", "1"],
       join_cls: ["0", "1"],
+      membership_status: ["0", "1", "2"],
       status: ["0", "1", "2", "3"],
     },
   },
