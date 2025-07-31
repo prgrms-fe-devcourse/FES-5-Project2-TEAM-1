@@ -44,7 +44,6 @@ export function NotificationProvider({
           (payload) => {
             if (payload.new.user_profile_id !== profileId) return;
             const newAlarm = payload.new as Notification;
-
             setAlarms((prev) => [...prev, newAlarm]);
             success(`${newAlarm.content}`)
           }

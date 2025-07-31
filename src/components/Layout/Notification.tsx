@@ -11,10 +11,7 @@ function Notification() {
 
  const {alarms,deleteAlarm} = useNotification()
   
-  
-  if (alarms.length == 0) return null;
-  const sortedAlarm = [...alarms].sort((a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-  
+ const sortedAlarm = [...alarms].sort((a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
   
   return (
       <>

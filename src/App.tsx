@@ -23,13 +23,36 @@ import { AdminProvider } from "./components/context/useAdmin";
 import { NotificationProvider } from "./components/context/NotificationContext";
 import { useAuth } from "./auth/AuthProvider";
 
+
 function App() {
   const location = useLocation();
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
   const [isOverlay, setIsOverlay] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
-  const {profileId} = useAuth()
+  const { profileId } = useAuth()
+  // useEffect(() => {
+  //   if (!profileId) return;
+  //   const channel = supabase
+  //     .channel("notify-channel")
+  //     .on(
+  //       "postgres_changes",
+  //       {
+  //         event: "INSERT",
+  //         schema: "public",
+  //         table: "notification",
+  //         filter: `recipient_id=eq.${profileId}`,
+  //       },
+  //       (payload) => {
+  //         console.log("알림 도착:", payload.new);
+  //       }
+  //     )
+  //     .subscribe();
+  //   return () => {
+  //     supabase.removeChannel(channel);
+  //   };
+  // }, [profileId]);
+
   return (
     <ToastProvider>
       <NotificationProvider profileId={profileId}>
