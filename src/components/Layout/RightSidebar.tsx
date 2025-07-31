@@ -57,7 +57,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
         }
       })
       // setAuthState('authenticated');
-      console.log(currentUser);
+      // console.log(currentUser);
     }
     fetchUserProfileImage();
   }, [currentUser?.profileId])
