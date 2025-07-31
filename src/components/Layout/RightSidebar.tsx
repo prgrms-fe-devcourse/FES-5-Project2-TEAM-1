@@ -4,7 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthProvider';
 import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
-import Notification from './Notification';
+import Notification from './Notification'
+
 
 type CurrentUser = {
   profileId:string;
@@ -139,7 +140,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
                 <div className={S.notifyPanel}>
                   <h4>Notification</h4>
                   <div className={S.notificationList}>
-                    <Notification profileId={profileId} />
+                    <Notification />
                   </div>
                 </div>
               )}
