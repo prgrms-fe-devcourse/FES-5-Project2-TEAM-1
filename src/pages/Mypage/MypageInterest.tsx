@@ -31,9 +31,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
   const minusRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const divRefs = useRef<(HTMLDivElement | null)[]>([]);
   const divRef = useRef<HTMLDivElement | null>(null);
- 
-  const userInterest = user && user.profile[0].interest[0];
-  // const interestArray = userInterest.interest.split(',')
+
   const { error } = useToast();
     const navigate = useNavigate();
 
@@ -181,7 +179,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
                         <InterestDropdown
                             plusClicked={plusClicked}
                             setPlusClicked={setPlusClicked}
-                            userInterest={{ profile_id: profileId}}
+                            userInterest={{ profile_id: profileId ?? ''}}
                             setUserData={setUserData}
                             user={user}
                             interestArray={interestArray}
