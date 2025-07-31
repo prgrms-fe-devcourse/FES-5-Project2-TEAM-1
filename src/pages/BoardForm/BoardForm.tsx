@@ -134,7 +134,8 @@ function BoardForm({ userId }: Props) {
   const imageUpload = async (board_id: string) => {
     let imageUrl = "";
     if (!profileImage) return;
-    const fileName = `${board_id}-${profileImage.name}`; // 중복 방지를 위한 이름
+    const fileExt = profileImage.name.split(".").pop(); // 확장자 추출
+    const fileName = `${board_id}.${fileExt}`; // 중복 방지를 위한 이름
 
     const { error } = await supabase.storage
       .from("boardimage")
