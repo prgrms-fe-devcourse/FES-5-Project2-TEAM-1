@@ -31,6 +31,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
   const minusRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const divRefs = useRef<(HTMLDivElement | null)[]>([]);
   const divRef = useRef<HTMLDivElement | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
 
   const { error } = useToast();
     const navigate = useNavigate();
@@ -83,17 +84,19 @@ function MypageInterest({user, editMode, setUserData}: Props) {
   }, [editMode])
 
   useEffect(() => {
-    gsap.fromTo('#plusBox', 
-      { opacity: 0, scale: 0.8, y: -10 },
-    {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      duration: 0.3,
-      ease: 'power2.out',
-      clearProps: 'transform,opacity', // transform 전체 제거
+    if(imgRef.current) {
+      gsap.fromTo('#plusBox', 
+        { opacity: 0, scale: 0.8, y: -10 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 0.3,
+        ease: 'power2.out',
+        clearProps: 'transform,opacity', // transform 전체 제거
+      }
+      )
     }
-    )
   }, [plusClicked])
 
   const handlePlusInterest = () => {
@@ -102,6 +105,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
 
   const handleMinus = async ( index: number) => {
     if (!profileId) return;
+    if(!interestArray) return;
 
       const text = divRefs.current[index]?.textContent;
       const { interest_id, interest } = interestArray[index];
@@ -193,7 +197,7 @@ function MypageInterest({user, editMode, setUserData}: Props) {
                               onClick={handlePlusInterest}
                               id='plusBox'
                             >
-                              <img src={plus} alt='플러스 버튼 아이콘' />
+                              <img src={plus} ref={imgRef} alt='플러스 버튼 아이콘' />
                             </button>
                           </>
                         }
