@@ -1,9 +1,11 @@
 .markdown {
+  height: 540px;
   line-height: 1.6;
   font-size: 1rem;
   color: #333;
   font-family: system-ui, sans-serif;
   padding: 1rem;
+  overflow-y: auto;
 }
 
 /* 제목 */
@@ -111,6 +113,13 @@
 .markdown th {
   background-color: #f6f8fa;
   font-weight: bold;
+}
+
+.markdown img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
 }
 .boardPreviewDefaultText {
   display: flex;
