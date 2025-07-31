@@ -1,5 +1,8 @@
 import { useBoardContext } from "@/components/context/useBoardContext";
 import S from "./BoardButtonArea.module.css";
+import supabase from "@/supabase/supabase";
+import { useToast } from "@/utils/useToast";
+
 const BUTTON_LIST = [
   { tag: "h1", text: "\n# " },
   { tag: "h2", text: "\n## " },
@@ -18,6 +21,7 @@ interface MarkdownOption {
 }
 function BoardButtonArea() {
   const { setPostData } = useBoardContext();
+  const { error: errorPop } = useToast();
 
   const handleMarkdownMenu = (icons: MarkdownOption) => {
     setPostData((prev) => {
@@ -25,22 +29,31 @@ function BoardButtonArea() {
     });
   };
 
-  const handleChange = (file: File) => {
-    // const reader = new FileReader();
-    // reader.onloadend = () => {
-    //   setPostData((prev) => {
-    //     return {
-    //       ...prev,
-    //       contents: prev.contents + `\n![TEXT](${file.nma})`,
-    //     };
-    //   });
-    // };
-    // reader.readAsDataURL(file);
-    const blobUrl = URL.createObjectURL(file);
+  const handleChange = async (file: File) => {
+    console.log(file);
+    const fileExt = file.name.split(".").pop(); // 확장자 추출
+    const fileName = `${Date.now()}.${fileExt}`; // 중복 방지를 위한 이름
+
+    const { error } = await supabase.storage
+      .from("boardimage")
+      .upload(`markdownImage/${fileName}`, file);
+
+    if (error) {
+      errorPop("이미지 업로드에 실패하였습니다.");
+
+      throw new Error(error.message);
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("boardimage")
+      .getPublicUrl(`markdownImage/${fileName}`);
+
+    const imageUrl = publicUrlData.publicUrl;
+
     setPostData((prev) => {
       return {
         ...prev,
-        contents: prev.contents + `\n![${file.name}](${blobUrl})`,
+        contents: prev.contents + `\n![${file.name}](${imageUrl})`,
       };
     });
   };

@@ -25,7 +25,7 @@ function BoardWrite() {
       }
     }
     // }
-  }, [user]);
+  }, [user, profileId, isLoading]);
 
   return (
     <ProfileImageProvider>
