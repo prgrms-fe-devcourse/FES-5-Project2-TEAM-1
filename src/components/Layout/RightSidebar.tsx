@@ -80,7 +80,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
   }
 
   const handleStatus = (e: React.MouseEvent<HTMLLIElement>) => {
-    if()
+    
   }
 
   return (
