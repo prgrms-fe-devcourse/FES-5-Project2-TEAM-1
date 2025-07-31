@@ -39,29 +39,39 @@ function Mypage() {
   const {id:urlProfileId} = useParams();
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    if(isLoading) return;
-    console.log(user);
-    if(!user) {
-      // console.error('로그인이 필요합니다');
-      toast.warning('로그인 후 이용해보세요',{        
-        onClose() {
-          navigate("/login");
-        },
-        autoClose: 1500,
-      })
-      navigate("/login");
-      return;
-    }
-    if(!profileId) return;
-    setCurrentUser({
-      profileId: profileId, 
-      email: user.email, 
-      id: user.id
-    });
-    // console.log(currentUser);
+  // 아래 방식은 새로고침하면 데이터를 불러오지 못해서 수정함
+  // useEffect(()=>{
+  //   if(isLoading) return;
+  //   console.log(user);
+  //   if(!user) {
+  //     toast.warning('로그인 후 이용해보세요',{        
+  //       onClose() {
+  //         navigate("/login");
+  //       },
+  //       autoClose: 1500,
+  //     })
+  //     navigate("/login");
+  //     return;
+  //   }
+  //   if(!profileId) return;
+  //   setCurrentUser({
+  //     profileId: profileId, 
+  //     email: user.email, 
+  //     id: user.id
+  //   });
+  //   // console.log(currentUser);
       
-  },[isLoading])
+  // },[isLoading])
+
+  useEffect(() => {
+  if (!isLoading && user && profileId) {
+    setCurrentUser({
+      profileId,
+      email: user.email,
+      id: user.id,
+    });
+  }
+  }, [isLoading, user, profileId]);
 
   useEffect(() => {
     const fetchUser = async () => {

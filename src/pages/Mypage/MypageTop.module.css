@@ -1,6 +1,9 @@
 .container {
     background-color: #F5F5F5;
-    margin: 104px 232px;
+    margin: 0 auto;
+    flex: 1;
+    overflow-x: hidden;
+    padding: 8% 1% 10% 1%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,9 +12,8 @@
 }
 
 .wrapper {
-    width: 75rem;
-    /* border: 0.5px solid black; */
-    padding: 8% 1% 10% 1%;
+    width: 100%;
+    
 
     position: relative;
 
