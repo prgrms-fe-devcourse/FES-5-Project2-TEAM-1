@@ -30,8 +30,7 @@ function ChannelComment(card:Props) {
   
   // MarckDownconverter높이수정
   // 글쓰기 이미지크기 유동적조정
-  // 스레드채널 => 멤버전체목록
-  
+
   useEffect(() => {
     const commentItem = async () => {
       const { data: TableData } = await 
