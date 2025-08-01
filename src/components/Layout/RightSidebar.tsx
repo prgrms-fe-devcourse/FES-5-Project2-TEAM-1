@@ -12,6 +12,7 @@ type CurrentUser = {
   email:string;
   id:string;
   profileImage:string;
+  status?: string;
 }
 
 interface Overlay{
@@ -21,13 +22,13 @@ interface Overlay{
   setIsNotification: (value: boolean) => void;
 }
 
-type StatusCode = 1 | 2 | 3 | 4 | null;
+type StatusCode = 0 | 1 | 2 | 3 | null;
 
 const statusLabelMap: Record<Exclude<StatusCode, null>, string> = {
-  1: '온라인',
-  2: '자리비움',
-  3: '방해금지',
-  4: '오프라인',
+  0: '온라인',
+  3: '자리비움',
+  2: '방해금지',
+  1: '오프라인',
 };
 
 function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:Overlay) {
@@ -95,33 +96,24 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
     }, [isStatusClicked, popupRef]);
 
 useEffect(() => {
-  if( !isLoading && user && profileId) {
-    if( currentUser ) {
-        const channel = supabase
-        .channel('status')
-        .on(
-          'postgres_changes',
-          {
-            event: 'UPDATE',
-            schema: 'public',
-            table: 'user_base',
-            filter: `id=eq.${currentUser.id}`,
-          },
-          (payload) => {
-            const newStatus = payload.new.status as StatusCode;
-            setStatus( newStatus );
-            console.log('상태 변경', payload.new);
-            // 여기서 토스트 보여주거나 상태 업데이트
-            
-          }
-        )
-        .subscribe();
-      return () => {
-        supabase.removeChannel(channel);
-      };
-    }
+  const fetchStatus = async () => {
+    if( !currentUser || !currentUser.id ) return;
+      const { data, error } = await supabase.from('user_base').select('status').eq('id', currentUser.id).single();
+      if( !data || error ) {
+        console.log('상태 불러오기 실패', error.message)
+        return;
+      }
+      setCurrentUser(prev => {
+        if( !prev ) return prev;
+        return {
+          ...prev,
+          status: data.status
+        }
+      });
+      setStatus(data.status);
   }
-}, [currentUser, isLoading, user, profileId]);
+  fetchStatus();
+}, [currentUser?.id]);
 
   const handleLogout = async () => {
     await logout()
@@ -152,8 +144,6 @@ useEffect(() => {
     setIsClicked(prev => !prev);
   }
 
-  console.log( status );
-
   return (
     <nav className={S.container}>
       <div className={S.height}>
@@ -171,19 +161,19 @@ useEffect(() => {
           { isStatusClicked && 
             <div className={S.statusPopup}>
               <ul  ref={popupRef}>
-                <li onClick={() => handleStatus(1)} className={status === 1 ? S.clicked : ''}>
+                <li onClick={() => handleStatus(0)} className={status === 0 ? S.clicked : ''}>
                   <div className={S.online}></div>
                   온라인
                   </li>
-                <li onClick={() => handleStatus(2)} className={status === 2 ? S.clicked : ''}>
+                <li onClick={() => handleStatus(3)} className={status === 3 ? S.clicked : ''}>
                   <div className={S.leave}></div>
                   자리 비움
                   </li>
-                <li onClick={() => handleStatus(3)} className={status === 3 ? S.clicked : ''}>
+                <li onClick={() => handleStatus(2)} className={status === 2 ? S.clicked : ''}>
                   <div className={S.disturb}></div>
                   방해 금지
                   </li>
-                <li onClick={() => handleStatus(4)} className={status === 4 ? S.clicked : ''}>
+                <li onClick={() => handleStatus(1)} className={status === 1 ? S.clicked : ''}>
                   <div className={S.offline}></div>
                   오프라인 표시
                   </li>
