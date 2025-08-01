@@ -3,6 +3,8 @@ import S from './ChannelComment.module.css'
 import supabase from '@/supabase/supabase';
 import type { Tables } from '@/supabase/database.types';
 import CommentItem from './CommentItem';
+import { useAuth } from '@/auth/AuthProvider';
+
 
 
 type Props = Tables<'board'>
@@ -16,22 +18,36 @@ type ReplyWithUser = Comment & {
 
 function ChannelComment(card:Props) {
 
-  const {board_id,profile_id} = card
+  const {profileId}= useAuth()
+  const { board_id } = card
   const [writeComment,setWriteComment] = useState('')
-  const [commentedUser,setCommentedUser] = useState<ReplyWithUser[]>([])
+  const [commentedUser, setCommentedUser] = useState<ReplyWithUser[]>([])
+
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   
 
   // CurrentUser작업해야함 댓글 마다 아이디 바꿔서 테스트하고 대닷글도 작업해야함 위에 컴포넌트 관련컴포넌트 띄워둔거임 바꾸지말것
+  // MarckDownconverter높이수정
+  // 글쓰기 이미지크기 유동적조정
+  // 스레드채널 => 멤버전체목록
+  // 수정 삭제도 본인만 보이게
+  // 좋아요아이콘 이상해짐
+  
   useEffect(() => {
     const commentItem = async () => {
-      const { data:userData } = await supabase.from('comment').select('*,user_profile(*,user_base(*))')
-      if (!userData) return
-      setCommentedUser(userData)
+      const { data: TableData } = await 
+        supabase
+          .from("comment")
+          .select("*,user_profile(*,user_base(*))")
+          .eq("board_id", board_id)
+   
+      if (!TableData) return
+      setCommentedUser(TableData)
+      
     };
     commentItem();
-  }, []);
-  
+  }, [board_id]);
+ 
   const handleClickInputBox = (e:React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement
     if(target.closest('button'))return
@@ -46,7 +62,7 @@ function ChannelComment(card:Props) {
     const { error } = await supabase.from("comment").insert([
       {
         board_id,
-        profile_id,
+        profile_id: profileId,
         contents: writeComment,
         likes: 0,
         create_at: new Date(),
@@ -109,8 +125,9 @@ function ChannelComment(card:Props) {
           {matchComment.map((comment) => (
             <CommentItem
               comment={comment} key={comment.comment_id} onDelete={() => handleDeleteComment(comment.comment_id)}
-              userName={comment.user_profile.user_base.nickname}
+              userName={comment.user_profile.user_base.nickname} 
               userImage={comment.user_profile.profile_images}
+              profileId={profileId}
             />
           ))}
         </ul>

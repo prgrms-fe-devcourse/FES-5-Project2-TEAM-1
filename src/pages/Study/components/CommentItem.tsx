@@ -6,17 +6,24 @@ import Recomment from './Recomment';
 import { commentTime } from './utills/commentTime';
 
 
-interface Props{
+
+
+interface Props {
   comment: Tables<'comment'>,
-  onDelete: () => void
-  userName:string|null
+  onDelete: () => void,
+  userName: string|null
   userImage?: string
+  profileId:string | null
 }
-type Reply = Tables<'comment_reply'>
+type Reply = Tables<"comment_reply"> & {
+  user_profile: Tables<"user_profile"> & {
+    user_base: Tables<"user_base">;
+  };
+};
 
 
-function CommentItem({comment,onDelete,userName,userImage}: Props) {
-  const { contents, likes, create_at, comment_id, profile_id } = comment;
+function CommentItem({comment,onDelete,userImage,userName,profileId}: Props) {
+  const { contents, likes, create_at, comment_id } = comment;
   const [like, setLike] = useState(likes);
   const [isPress, setIsPress] = useState(false);
   const [isReplyPress, setIsReplyPrss] = useState(false)
@@ -35,7 +42,7 @@ function CommentItem({comment,onDelete,userName,userImage}: Props) {
   
   useEffect(() => {
       const comment_reply = async () => {
-        const { data } = await supabase.from("comment_reply").select("*").eq('comment_id', comment_id)
+        const { data } = await supabase.from("comment_reply").select("*,user_profile(*,user_base(*))").eq('comment_id', comment_id)
         if(data) setReply(data);
       };
       comment_reply();
@@ -68,18 +75,18 @@ function CommentItem({comment,onDelete,userName,userImage}: Props) {
     
     const {error} = await supabase.from('comment_reply').insert([{
       comment_id,
-      profile_id,
+      profile_id:profileId,
       contents:createReply,
       likes:0,
       created_at:new Date()
-    }]).select().single()
+    }]).select()
 
     if(error) console.log(error.message)
     setCreateReply('')
     
     const { data:replyData } = await supabase
       .from("comment_reply")
-      .select("*")
+      .select("*,user_profile(*,user_base(*))")
       .eq('comment_id', comment_id)
       if(!replyData) return
       setReply(replyData);
@@ -96,7 +103,7 @@ function CommentItem({comment,onDelete,userName,userImage}: Props) {
     const deleteComment = confirm('정말로 삭제하시겠습니까?')
     if (deleteComment) {
        const { error } = await supabase
-         .from("comment_reply")
+         .from("comment")
          .delete()
         .eq("comment_id", comment_id);
       if (error) console.error();
@@ -205,16 +212,18 @@ function CommentItem({comment,onDelete,userName,userImage}: Props) {
               </button>
             </form>
 
-            {recentlyReply &&
-              recentlyReply.map((comment) => (
+            {recentlyReply.map((comment) => {
+
+              return (
                 <Recomment
-                  reply={comment}
                   key={comment.reply_id}
-                  onDelete={() => {
-                    handleReplyDelete(comment.reply_id);
-                  }}
+                  reply={comment}
+                  onDelete={() => handleReplyDelete(comment.reply_id)}
+                  userName={comment.user_profile.user_base.nickname}
+                  userImage={comment.user_profile.profile_images}
                 />
-              ))}
+              );
+            })}
           </div>
         )}
       </div>

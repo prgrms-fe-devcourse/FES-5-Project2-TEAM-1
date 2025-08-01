@@ -6,9 +6,11 @@ import supabase from '@/supabase/supabase'
 
 type Props = {
   reply: Tables<'comment_reply'>
-  onDelete:() =>void
+  onDelete: () => void,
+  userName: string | null,
+  userImage?:string
 }
-function Recomment({ reply,onDelete }: Props) {
+function Recomment({ reply,onDelete,userName,userImage }: Props) {
   const { reply_id, contents , created_at,likes } = reply
   const [isPress, setIsPress] = useState(false)
   const [like, setLike] = useState(likes)
@@ -70,12 +72,12 @@ function Recomment({ reply,onDelete }: Props) {
   return (
     <div className={S.container} key={reply_id}>
       <div className={S.profileImage}>
-        <img src="/images/여울.png" alt="프로필" />
+        <img src={ userImage } alt="프로필" />
       </div>
       <div className={S.contentBox}>
         <div className={S.meta}>
           <div className={S.userInfo}>
-            <span className={S.username}>User</span>
+            <span className={S.username}>{userName}</span>
             <span className={S.time}>{commentTimeCheck}</span>
           </div>
           <div className={S.edit}>
