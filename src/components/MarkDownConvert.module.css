@@ -1,5 +1,5 @@
 .markdown {
-  height: 540px;
+  max-height: 540px;
   line-height: 1.6;
   font-size: 1rem;
   color: #333;
@@ -116,11 +116,14 @@
 }
 
 .markdown img {
-  max-width: 100%;
+  display: block;
+  width: auto;
   height: auto;
   display: block;
   margin: 1em 0;
+  object-fit: contain;
 }
+
 .boardPreviewDefaultText {
   display: flex;
   justify-content: center;

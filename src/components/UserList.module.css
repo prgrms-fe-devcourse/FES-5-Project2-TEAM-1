@@ -1,0 +1,22 @@
+
+
+
+
+.popup {
+    width: 9rem;
+    background-color: white;
+
+    position: absolute;
+    top: 1rem;
+    left: 3rem;
+    z-index: 10001;
+    border-radius: 15px;
+    padding: 1rem;
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+}

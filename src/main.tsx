@@ -13,8 +13,8 @@ createRoot(document.getElementById("root")!).render(
     <ToastProvider>
       <BrowserRouter>
         <AuthProvider>
-          <KakaoLoaderProvider>     
-              <App />     
+          <KakaoLoaderProvider> 
+              <App />
           </KakaoLoaderProvider>
         </AuthProvider>
       </BrowserRouter>

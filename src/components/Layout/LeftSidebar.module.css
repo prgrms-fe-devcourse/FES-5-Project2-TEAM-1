@@ -8,6 +8,7 @@
   top: 0;
   left: 0;
   z-index: 9;
+  overflow-x: visible;
 }
 
 
@@ -56,35 +57,26 @@
   }
 }
 
-.recentEnterUserWrap{
-  display:flex;
-  padding-left: 12px;
-  position:absolute;
-  top: 70vh;
-
-
-  .recentEnterUser{
-    display:flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .recentEnterUserTop{
+.recentEnterUserTop{
     display: flex;
-    font-size: 16px;
+    font-size: 20px;
     width: 200px;
     font-weight: 600;
     justify-content: space-between;
+    font-family: 'pretendard variable';
+    margin-bottom: 0.5rem;
 
     span{
       cursor: pointer;
     }
+
   }
   .enterUser{
     display: flex;
     gap: 4px;
     align-items: center;
     transition: 0.3s;
+
     .profileImage{
       width: 24px;
       height: 24px;
@@ -94,18 +86,59 @@
       .enterUser:hover{
         background-color: #55555518;
         width: 204px;
-      border-radius: 4px;
+        border-radius: 4px;
       }
 
-    .profileImage::after{
-      content:'';
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 8px;
-      height: 8px;
-      border-radius: 50px;
-      background-color: greenyellow;
+    .profileImage {
+      .statusDot {
+        position: absolute;
+        bottom: -3px;
+        right: -5px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 1px solid white; 
+
+        &.online {
+          background-color: greenyellow;
+        }
+
+        &.offline {
+          background-color: gray;
+        }
+
+        &.dnd {
+          background-color: red;
+        }
+
+        &.away {
+          background-color: yellow;
+        }
+      }
     }
   }
+
+.recentEnterUserWrap{
+  display:flex;
+  padding-left: 12px;
+  position:absolute;
+  top: 70vh;
+  height: 20rem;
+  width: 13.5rem;
+  flex-direction: column;
 }
+
+  .recentEnterUser{
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: scroll;
+    height: 20rem;
+    padding-top: 1rem;
+    overflow-x: hidden;
+    margin-bottom: 1.2rem;
+    
+    p {
+      font-size: 1.2rem;
+    }
+  }

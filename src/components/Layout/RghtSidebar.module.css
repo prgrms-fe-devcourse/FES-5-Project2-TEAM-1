@@ -3,59 +3,70 @@
   background-color: #FFC0CB;
   box-shadow: -8px 0px 20px rgba(0, 0, 0, 0.08);
   min-height: 100vh;
-  
   position: fixed;
   top: 0;
   right: 0;
   z-index: 2000;
 }
 
+.profileImage {
+  cursor: pointer;
+}
 
-.loginBox{
-  display:flex;
-  margin-top: 28px;
-  width: 220px;
-  justify-content: center;
+.loginBox {
+  display: flex;
   align-items: center;
-  padding-right: 24px;
-  padding-left: 24px;
-  gap: 8px;
-  position: relative;
-  .profileImage{
-    width: 44px;
-    height: 44px;
-    aspect-ratio: 1;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25) ;
+  gap: 12px;
+  margin-top: 28px;
+  width: 95%;
+  margin: 0 auto;
+  padding: 16px 24px;
+  border-radius: 12px;
+  background-color: transparent;
+
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.3s ease;
+  font-family: 'Pretendard Variable', sans-serif;
+
+  &:hover {
+    background-color: #f0f0f0;
+
   }
-  .loginBoxGreeting{
+
+  .profileImage {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .loginBoxGreeting {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 4px;
-    p{
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.5);
+    gap: 2px;
+
+    p {
+      font-size: 14px;
+      color: #888;
+      margin: 0;
     }
-    h3{
-      font-size: 12px;
-      font-weight: 600;
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #222;
+      margin: 0;
+      letter-spacing: -0.2px;
     }
   }
-  .loginLogout{
-    display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-    justify-content: flex-start;
-    text-align: center;
-    cursor: pointer;
-    gap:5px;
-    font-size: 12px;
-    /* padding-left: 30px; */
-    > svg{
-      transition:0.3s;
-    }
    
    
     &:hover > svg{
@@ -68,23 +79,42 @@
       color: #AA8A90;
     }
     
+  }
 
-    .linkButton,
+  .linkButton,
     .logout{
       background-color: #A6B37D;
       opacity: 0.8;
       padding:10px 8px;
-      border-radius: 21px;
+      border-radius: 11px;
       color:#FFFFFF;
       transition: background-color 0.3s;
+      width: 100%;
+
+      flex: 1;
 
       &:hover{
         background-color: rgba(137, 162, 55);
     }
     }
-  }
-}
 
+  .loginLogout{
+    display: flex;
+    /* align-items: center; */
+    justify-content: end;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    gap: 5px;
+    
+    font-size: 12px;
+    /* padding-left: 30px; */
+    margin: 1rem 1rem;
+
+    > svg{
+      transition:0.3s;
+    }
+}
 .loginBox::after{
   content:"";
   position: absolute;
@@ -107,7 +137,6 @@
     font-size: 12px;
     padding-left: 20px;
   }
-
   .navList{
     display: flex;
     transition:  0.5s;
@@ -124,19 +153,16 @@
        padding-left: 12px;
       gap: 12px;
       align-items: center;
-
       .notifiIcon{
         width: 24px;
         height: 24px;
       }
     }
-
   h3{
     font-weight: 600;
     font-size: 24px;
     padding: 0;
     }
-
 .notifyPanel {
   padding: 40px 18px;
   position: fixed;
@@ -150,19 +176,16 @@
   box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
   transform: translateX(100%);
   animation: slideIn 0.3s forwards;}
-
   &.navList:hover{
     background-color: #55555527;
       padding-bottom: 2px;
       border-radius: 4px;
        }
     }
-
     h4{
       font-size: 32px;
       font-weight: 600;
     }
-
     .notificationList{
       margin-top: 30px;
     }
@@ -174,7 +197,6 @@
     justify-content: center;
     align-items: center;
     width: 200px;
- 
     padding: 10px;
     margin-left: 10px;
     border-radius: 16px;
@@ -186,7 +208,6 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
-   
    h4{
       font-size: 16px;
       font-weight: 600;
@@ -217,6 +238,51 @@
   }
 }
 
+.statusPopup {
+  background-color: #AA8A90;
+  padding: 1rem;
+  border-radius: 15px;
+  font-family: 'pretendard variable';
+
+  position: absolute;
+  top: 4rem;
+  left: -10rem;
+
+  z-index: 2;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    li {
+      padding: 0.5rem;
+      border-radius: 10px;
+      color: white;
+
+      cursor: pointer;
+
+      display: flex;
+      gap: 1rem;
+
+      transition: background-color 0.1s;
+
+      div {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+      }
+
+      &:hover {
+        background-color: #c5babc;
+      }
+    }
+
+    .clicked {
+        background-color: #8B9669;
+      }
+  }
+}
 
 
 

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Tables } from "@/supabase/database.types";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/auth/AuthProvider";
+import { IsMineProvider } from "@/components/context/isMine";
 
 type ThreadWithUser = Tables<"thread"> & {
   user_profile: Tables<"user_profile"> & {
@@ -263,6 +264,7 @@ function Thread() {
           <ul className={S.threads}>
             {recentlyThread.map((reply) => {
               return (
+                <IsMineProvider writerProfileId={reply.user_profile.profile_id}>
                 <ThreadList
                   key={reply.thread_id}
                   data={reply}
@@ -270,7 +272,8 @@ function Thread() {
                   userName={reply.user_profile?.user_base.nickname}
                   userImage={reply.user_profile?.profile_images}
                   onDelete={() => handleDelete(reply.thread_id)}
-                />
+                  />
+                </IsMineProvider>
               );
             })}
           </ul>
