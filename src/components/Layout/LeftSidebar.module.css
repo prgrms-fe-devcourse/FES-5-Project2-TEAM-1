@@ -86,7 +86,7 @@
       border-radius: 4px;
       }
 
-    .profileImage::after{
+    /* .profileImage::after{
       content:'';
       position: absolute;
       bottom: 0;
@@ -95,6 +95,34 @@
       height: 8px;
       border-radius: 50px;
       background-color: greenyellow;
+    } */
+
+    .profileImage {
+      .statusDot {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 1px solid white; 
+
+        &.online {
+          background-color: greenyellow;
+        }
+
+        &.offline {
+          background-color: gray;
+        }
+
+        &.dnd {
+          background-color: red;
+        }
+
+        &.away {
+          background-color: yellow;
+        }
+      }
     }
   }
 

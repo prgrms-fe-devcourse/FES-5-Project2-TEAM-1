@@ -8,11 +8,11 @@ import Notification from './Notification'
 
 
 type CurrentUser = {
-  profileId:string;
-  email:string;
-  id:string;
-  profileImage:string;
-  status?: string;
+  profileId: string;
+  email: string;
+  id: string;
+  profileImage: string;
+  status?: StatusCode;
 }
 
 interface Overlay{
@@ -22,7 +22,7 @@ interface Overlay{
   setIsNotification: (value: boolean) => void;
 }
 
-type StatusCode = 0 | 1 | 2 | 3 | null;
+export type StatusCode = 0 | 1 | 2 | 3 | null;
 
 const statusLabelMap: Record<Exclude<StatusCode, null>, string> = {
   0: '온라인',
@@ -55,6 +55,17 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
       profileImage: '',
     });
   }
+  
+   const setStatusOnline = async () => {
+    if (!isLoading && user && profileId) {
+      await supabase
+        .from('user_base')
+        .update({ status: 0 }) // 0: 온라인
+        .eq('id', user.id);
+      setStatus(0);
+      }
+    };
+    setStatusOnline();
   }, [isLoading, user, profileId]);
 
   useEffect(() => {
@@ -103,19 +114,23 @@ useEffect(() => {
         console.log('상태 불러오기 실패', error.message)
         return;
       }
-      setCurrentUser(prev => {
-        if( !prev ) return prev;
-        return {
-          ...prev,
-          status: data.status
-        }
-      });
-      setStatus(data.status);
+
+      const statusFromDB = data.status as StatusCode;
+
+      setCurrentUser(prev => prev ? { ...prev, status: statusFromDB } : prev);
+      setStatus(statusFromDB);
   }
   fetchStatus();
 }, [currentUser?.id]);
 
   const handleLogout = async () => {
+    if (currentUser) {
+    await supabase
+      .from('user_base')
+      .update({ status: 1 }) // 1: 오프라인
+      .eq('id', currentUser.id);
+  }
+
     await logout()
     setCurrentUser(null);
     navigate('/')
@@ -166,11 +181,11 @@ useEffect(() => {
                   온라인
                   </li>
                 <li onClick={() => handleStatus(3)} className={status === 3 ? S.clicked : ''}>
-                  <div className={S.leave}></div>
+                  <div className={S.away}></div>
                   자리 비움
                   </li>
                 <li onClick={() => handleStatus(2)} className={status === 2 ? S.clicked : ''}>
-                  <div className={S.disturb}></div>
+                  <div className={S.dnd}></div>
                   방해 금지
                   </li>
                 <li onClick={() => handleStatus(1)} className={status === 1 ? S.clicked : ''}>

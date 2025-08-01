@@ -258,10 +258,10 @@
       .online {
         background-color: greenyellow;
       }
-      .leave {
+      .away {
         background-color: yellow;
       }
-      .disturb {
+      .dnd {
         background-color: red;
       }
       .offline {
