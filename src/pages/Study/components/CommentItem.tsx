@@ -4,17 +4,29 @@ import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
 import Recomment from './Recomment';
 import { commentTime } from './utills/commentTime';
+import { useIsMine } from '@/components/context/useIsMine';
+import { IsMineProvider } from '@/components/context/isMine';
 
 
-interface Props{
+
+
+interface Props {
   comment: Tables<'comment'>,
-  onDelete: () =>void
+  onDelete: () => void,
+  userName: string|null
+  userImage?: string
+  profileId:string | null
 }
-type Reply = Tables<'comment_reply'>
+type Reply = Tables<"comment_reply"> & {
+  user_profile: Tables<"user_profile"> & {
+    user_base: Tables<"user_base">;
+  };
+};
 
 
-function CommentItem({comment,onDelete}: Props) {
-  const { contents, likes, create_at, comment_id, profile_id } = comment;
+function CommentItem({ comment, onDelete, userImage, userName, profileId }: Props) {
+  const { isMine } = useIsMine();
+  const { contents, likes, create_at, comment_id } = comment;
   const [like, setLike] = useState(likes);
   const [isPress, setIsPress] = useState(false);
   const [isReplyPress, setIsReplyPrss] = useState(false)
@@ -33,7 +45,7 @@ function CommentItem({comment,onDelete}: Props) {
   
   useEffect(() => {
       const comment_reply = async () => {
-        const { data } = await supabase.from("comment_reply").select("*").eq('comment_id', comment_id)
+        const { data } = await supabase.from("comment_reply").select("*,user_profile(*,user_base(*))").eq('comment_id', comment_id)
         if(data) setReply(data);
       };
       comment_reply();
@@ -66,18 +78,18 @@ function CommentItem({comment,onDelete}: Props) {
     
     const {error} = await supabase.from('comment_reply').insert([{
       comment_id,
-      profile_id,
+      profile_id:profileId,
       contents:createReply,
       likes:0,
       created_at:new Date()
-    }]).select().single()
+    }]).select()
 
     if(error) console.log(error.message)
     setCreateReply('')
     
     const { data:replyData } = await supabase
       .from("comment_reply")
-      .select("*")
+      .select("*,user_profile(*,user_base(*))")
       .eq('comment_id', comment_id)
       if(!replyData) return
       setReply(replyData);
@@ -94,7 +106,7 @@ function CommentItem({comment,onDelete}: Props) {
     const deleteComment = confirm('정말로 삭제하시겠습니까?')
     if (deleteComment) {
        const { error } = await supabase
-         .from("comment_reply")
+         .from("comment")
          .delete()
         .eq("comment_id", comment_id);
       if (error) console.error();
@@ -129,28 +141,40 @@ function CommentItem({comment,onDelete}: Props) {
   return (
     <li className={S.container} key={comment_id}>
       <div className={S.profileImage}>
-        <img src="/images/너굴.png" alt="프로필" />
+        <img src={userImage} alt="유저 프로필 이미지" />
       </div>
       <div className={S.contentBox}>
         <div className={S.meta}>
           <div className={S.userInfo}>
-            <span className={S.username}>User</span>
+            <span className={S.username}>{userName}</span>
             <span className={S.time}>{commentTimeCheck}</span>
           </div>
-          <div className={S.edit}>
-            {isEditing ? (
-              <>
-                <button type="submit" onClick={handleSave}>저장</button>
-                <button type="button" onClick={()=>setIsEditing(!isEditing)}>취소</button>
-              </>
-            ) : (
-              <button type="button" onClick={()=>setIsEditing(!isEditing)}>수정</button>
-            )}
-            <button type="submit" onClick={handleDelete}>삭제</button>
-          </div>
+          {isMine && (
+            <div className={S.edit}>
+              {isEditing ? (
+                <>
+                  <button type="submit" onClick={handleSave}>
+                    저장
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(!isEditing)}
+                  >
+                    취소
+                  </button>
+                </>
+              ) : (
+                <button type="button" onClick={() => setIsEditing(!isEditing)}>
+                  수정
+                </button>
+              )}
+              <button type="submit" onClick={handleDelete}>
+                삭제
+              </button>
+            </div>
+          )}
         </div>
-        {
-          isEditing ? (
+        {isEditing ? (
           <input
             type="text"
             value={editContent}
@@ -196,10 +220,21 @@ function CommentItem({comment,onDelete}: Props) {
               </button>
             </form>
 
-            {recentlyReply &&
-              recentlyReply.map((comment) => (
-                <Recomment reply={comment} key={comment.reply_id} onDelete={() => { handleReplyDelete(comment.reply_id) }} />
-              ))}
+            {recentlyReply.map((comment) => {
+              return (
+                <IsMineProvider
+                  writerProfileId={comment.user_profile.profile_id}
+                  key={comment.reply_id}
+                >
+                  <Recomment
+                    reply={comment}
+                    onDelete={() => handleReplyDelete(comment.reply_id)}
+                    userName={comment.user_profile.user_base.nickname}
+                    userImage={comment.user_profile.profile_images}
+                  />
+                </IsMineProvider>
+              );
+            })}
           </div>
         )}
       </div>

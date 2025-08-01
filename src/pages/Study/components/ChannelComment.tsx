@@ -3,30 +3,48 @@ import S from './ChannelComment.module.css'
 import supabase from '@/supabase/supabase';
 import type { Tables } from '@/supabase/database.types';
 import CommentItem from './CommentItem';
+import { useAuth } from '@/auth/AuthProvider';
+import { IsMineProvider } from '@/components/context/isMine';
+
+
 
 
 type Props = Tables<'board'>
 type Comment = Tables<'comment'>
-type User = Tables<"user_profile"> & {
-  user_base: Tables<"user_base">;
-};
-function ChannelComment(card:Props) {
 
-  const {board_id,profile_id} = card
+type ReplyWithUser = Comment & {
+  user_profile: Tables<"user_profile"> & {
+    user_base: Tables<"user_base">;
+  };
+};
+
+function ChannelComment(card:Props) {
+ 
+  const {profileId}= useAuth()
+  const { board_id } = card
   const [writeComment,setWriteComment] = useState('')
-  const [comments, setComments] = useState<Comment[]>([])
-  const [currentUser,setCurrentUser] = useState<User[]>([])
+  const [commentedUser, setCommentedUser] = useState<ReplyWithUser[]>([])
+
+
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   
+  // MarckDownconverter높이수정
+  // 글쓰기 이미지크기 유동적조정
+
   useEffect(() => {
     const commentItem = async () => {
-      const { data } = await supabase.from("comment").select("*");
-      if (!data) return;
-      setComments(data);
+      const { data: TableData } = await 
+        supabase
+          .from("comment")
+          .select("*,user_profile(*,user_base(*))")
+          .eq("board_id", board_id)
+   
+      if (!TableData) return
+      setCommentedUser(TableData)
     };
     commentItem();
-  },[]);
- 
+  }, [board_id]);
+
   const handleClickInputBox = (e:React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement
     if(target.closest('button'))return
@@ -41,7 +59,7 @@ function ChannelComment(card:Props) {
     const { error } = await supabase.from("comment").insert([
       {
         board_id,
-        profile_id,
+        profile_id: profileId,
         contents: writeComment,
         likes: 0,
         create_at: new Date(),
@@ -57,14 +75,14 @@ function ChannelComment(card:Props) {
 
     const { data: commentData } = await supabase
       .from("comment")
-      .select("*")
+      .select("*,user_profile(*,user_base(*))")
       .eq("board_id", board_id)
 
-    if (commentData) setComments(commentData);
+    if (commentData) setCommentedUser(commentData);
   };
 
   const handleDeleteComment = (targetId: string) => {
-    setComments(prev =>prev.filter(c => c.comment_id !== targetId))
+    setCommentedUser(prev =>prev.filter(c => c.comment_id !== targetId))
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -73,11 +91,11 @@ function ChannelComment(card:Props) {
   const form = e.currentTarget.form;
   if (form) {
     form.requestSubmit(); 
-  }
-}
+      }
+    }   
   };
 
-  const matchComment = comments.filter(comment => comment.board_id === board_id).sort((a,b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
+  const matchComment = commentedUser.filter(comment => comment.board_id === board_id).sort((a,b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
 
   return (
     <div className={S.container}>
@@ -102,7 +120,18 @@ function ChannelComment(card:Props) {
         </div>
         <ul className={S.commentList}>
           {matchComment.map((comment) => (
-            <CommentItem comment={comment} key={comment.comment_id} onDelete={()=>handleDeleteComment(comment.comment_id) } />
+            <IsMineProvider
+              writerProfileId={comment.user_profile.profile_id}
+              key={comment.comment_id}
+            >
+              <CommentItem
+                comment={comment}
+                onDelete={() => handleDeleteComment(comment.comment_id)}
+                userName={comment.user_profile.user_base.nickname}
+                userImage={comment.user_profile.profile_images}
+                profileId={profileId}
+              />
+            </IsMineProvider>
           ))}
         </ul>
       </div>
