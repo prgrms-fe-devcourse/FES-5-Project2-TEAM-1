@@ -4,34 +4,61 @@ import supabase from '@/supabase/supabase';
 import { useToast } from '@/utils/useToast';
 import { useAuth } from '@/auth/AuthProvider';
 import { useAdmin } from './context/useAdmin';
-
-
-
+import { useEffect, useState } from 'react';
 
 function StudyMemberChannel() {
   const { id } = useParams()
   const { success, error } = useToast()
   const{ profileId } = useAuth()
   const {isAdmin}= useAdmin()
+  const[isMember,setIsMember] = useState(false)
+
+  useEffect(() => {
+    const checkIsMember = async () => {
+      if (!id || !profileId) return;
+
+      const { data, error } = await supabase
+        .from("approve_member")
+        .select("status::text")
+        .match({
+          board_id: id,
+          profile_id: profileId,
+        })
+        .maybeSingle();
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      if (data?.status === "1") {
+        setIsMember(true); 
+      }
+    };
+
+    checkIsMember();
+  }, [id, profileId]);
 
 
-  // 추방 후 재 신청막아두기
   const handleJoin = async () => {
     const {data,error:fetchError } = await supabase.from('approve_member').select('status::text').match({
       'board_id': id,
       'profile_id': profileId
     }).maybeSingle()
 
-    if (fetchError) console.error()
+    if (fetchError) return console.error() 
     switch (data?.status) {
       case '0': error('이미 가입신청을 요청하신 채널입니다');
-        break
+        return
       case '1': error('이미 채널멤버입니다')
-        break
+        setIsMember(true);
+        return
       case '2': error('가입신청이 거절되었습니다')
-        break;
+        setIsMember(false);
+        return
       default: success("가입 신청을 요청하셨습니다");
     }
+
   
     const { error:memberError } = await supabase.from('approve_member').insert([{
       profile_id:profileId,
@@ -42,7 +69,6 @@ function StudyMemberChannel() {
   }
 
   return (
-    
       <main className={S.container}>
         <nav className={S.header}>
           <div className={S.headerinner}>
@@ -68,7 +94,7 @@ function StudyMemberChannel() {
               </NavLink>
             )}
           </div>
-          {!isAdmin && (
+          {(!isAdmin && !isMember) && (
             <button className={S.joinBtn} type="submit" onClick={handleJoin}>
               가입하기
             </button>
