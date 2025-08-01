@@ -15,6 +15,8 @@ function UserList() {
     const [openPopupIndex, setOpenPopupIndex] = useState<number | null>(null);
     const [userData, setUserData] = useState<User[] | null>(null);
 
+    console.log( user);
+
     useEffect(() => {
         if (!isLoading || !user || !profileId) return;
         setIsUser(true);
@@ -25,8 +27,7 @@ function UserList() {
         const fetchUser = async () => {
             const { data: fetchData, error: fetchError} = await supabase
                 .from('user_base')
-                .select(` *,
-                profile: user_profile(*)`)
+                .select(` *, profile: user_profile(*)`)
 
             if( fetchData ) {
                 console.log( fetchData );
@@ -68,8 +69,28 @@ function UserList() {
 
     }, []);
 
-    const handlePopupToggle = (index: number) => {
-        setOpenPopupIndex(prev => (prev === index ? null : index ));
+    useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+        // 현재 열려있는 팝업이 있고, 클릭한 요소가 팝업이나 버튼이 아니라면 닫기
+        const target = e.target as HTMLElement;
+        const isInsidePopupOrButton = target.closest(`.${S.enterUser}`);
+        
+        if (!isInsidePopupOrButton) {
+        setOpenPopupIndex(null);
+        }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+        document.removeEventListener('click', handleClickOutside);
+    };
+    }, []);
+
+    const handlePopupToggle = ( e, index: number) => {
+        e.stopPropagation();
+        setTimeout(() => {
+            setOpenPopupIndex(prev => (prev === index ? null : index ));
+        }, 0)
     }
 
 const statusClassName = (status: StatusCode) => {
@@ -93,7 +114,7 @@ const statusClassName = (status: StatusCode) => {
      <ul className={S.recentEnterUser}>
             { userData && userData.map((user, i) => (
             <li className={S.enterUser} key={user.id} style={{ position: 'relative'}}>
-                <button className={S.enterUser} onClick={() => handlePopupToggle(i)}>
+                <button className={S.enterUser} onClick={(e) => handlePopupToggle(e, i)}>
                     <div className={S.profileImage}>
                         <img src={user.profile[0]?.profile_images } alt='' />
                         <div className={`${S.statusDot} ${statusClassName(user.status)}`}></div>

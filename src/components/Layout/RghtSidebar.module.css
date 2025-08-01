@@ -255,19 +255,6 @@
         border-radius: 50%;
       }
 
-      .online {
-        background-color: greenyellow;
-      }
-      .away {
-        background-color: yellow;
-      }
-      .dnd {
-        background-color: red;
-      }
-      .offline {
-        background-color: lightgray;
-      }
-
       &:hover {
         background-color: #c5babc;
       }

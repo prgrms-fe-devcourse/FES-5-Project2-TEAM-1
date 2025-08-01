@@ -6,6 +6,11 @@ import { useEffect, useRef, useState } from 'react';
 import supabase from '@/supabase/supabase';
 import Notification from './Notification'
 
+import Online from '/icons/online.svg';
+import Offline from '/icons/offline.svg';
+import Away from '/icons/away.svg';
+import Dnd from '/icons/dnd.svg';
+
 
 type CurrentUser = {
   profileId: string;
@@ -107,18 +112,23 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
     }, [isStatusClicked, popupRef]);
 
 useEffect(() => {
-  const fetchStatus = async () => {
     if( !currentUser || !currentUser.id ) return;
+    if (status !== null) return;
+
+  const fetchStatus = async () => {
       const { data, error } = await supabase.from('user_base').select('status').eq('id', currentUser.id).single();
       if( !data || error ) {
         console.log('상태 불러오기 실패', error.message)
         return;
       }
+      if( data ) {
+        setStatus(data.status);
+      }
 
-      const statusFromDB = data.status as StatusCode;
+      // const statusFromDB = data.status as StatusCode;
 
-      setCurrentUser(prev => prev ? { ...prev, status: statusFromDB } : prev);
-      setStatus(statusFromDB);
+      // setCurrentUser(prev => prev ? { ...prev, status: statusFromDB } : prev);
+      // setStatus(statusFromDB);
   }
   fetchStatus();
 }, [currentUser?.id]);
@@ -136,15 +146,20 @@ useEffect(() => {
     navigate('/')
   }
 
-  const updateStatusInDB = async (newStatus: StatusCode) => {
-    if( !currentUser ) return;
-    console.log( newStatus );
+  const updateStatusInDB = async (newStatus: StatusCode): Promise<boolean> => {
+    if( !currentUser ) return false;
+
     const { error } = await supabase
       .from('user_base')
       .update({ status: newStatus })
       .eq('id', currentUser.id);
 
-    if (error) console.error('상태 업데이트 실패', error);
+    if (error) {
+      console.error('상태 업데이트 실패', error)
+      return false;
+    };
+
+    return true;
 };
 
   const handleNotification = () => {
@@ -152,10 +167,13 @@ useEffect(() => {
     setIsOverlay(!isOverlay)
   }
 
-  const handleStatus = (selected: StatusCode) => {
+  const handleStatus = async (selected: StatusCode) => {
     const newStatus = status === selected ? null : selected;
-    setStatus(newStatus);
-    updateStatusInDB(newStatus);
+    const success = await updateStatusInDB(newStatus);
+    if( success ) {
+        setStatus(newStatus);
+        setCurrentUser(prev => prev ? { ...prev, status: newStatus } : prev);
+    };
     setIsClicked(prev => !prev);
   }
 
@@ -177,19 +195,19 @@ useEffect(() => {
             <div className={S.statusPopup}>
               <ul  ref={popupRef}>
                 <li onClick={() => handleStatus(0)} className={status === 0 ? S.clicked : ''}>
-                  <div className={S.online}></div>
+                  <div className={S.online}><img src={Online} /></div>
                   온라인
                   </li>
                 <li onClick={() => handleStatus(3)} className={status === 3 ? S.clicked : ''}>
-                  <div className={S.away}></div>
+                  <div className={S.away}><img src={Away} /></div>
                   자리 비움
                   </li>
                 <li onClick={() => handleStatus(2)} className={status === 2 ? S.clicked : ''}>
-                  <div className={S.dnd}></div>
+                  <div className={S.dnd}><img src={Dnd} /></div>
                   방해 금지
                   </li>
                 <li onClick={() => handleStatus(1)} className={status === 1 ? S.clicked : ''}>
-                  <div className={S.offline}></div>
+                  <div className={S.offline}><img src={Offline} /></div>
                   오프라인 표시
                   </li>
               </ul>
