@@ -1,43 +1,58 @@
 .swiper {
   width: 100%;
+  max-width: 100%;
+  padding: 0 !important;
 }
 
-.swiper-container{
-  width: 100%;
-  overflow: visible;
+.swiper-wrapper {
+  margin: 0 !important;
+  padding: 0 !important;
 }
+
+.swiper-slide:last-child {
+  margin-right: 0 !important;
+}
+
+
+
 
 .swiper.peerReview{
-  padding: 0 6rem;
+    padding: 0 !important;
+  margin: 0 !important;
   box-sizing: border-box;
 }
 
-.swiper.peerReview>.swiper-wrapper{
-  left: -15.2rem;
-}
-
-.swiper.team>.swiper-wrapper{
-  left: -9.6rem;
-}
-
-
 .swiper-slide.peerReview {
-  position: relative;
-  width: 10.8rem !important;
-  height: 10.6rem !important;
-  transition: 1s;
-  gap:1.4rem !important;
+  width: 12.8rem;
+  height: 10.6rem ;
   user-select: none;
+  height: 10.6rem;
+  transition: width 1s ease;
+}  
+
+.peerReview.peerReviewActive {
+  width: 21.8rem ;
+  height: 10.6rem ;
 }
 
-.swiper-slide-active.peerReview {
-  width: 21.8rem !important;
-  height: 10.6rem !important;
-  transition: 1s ease-in-out;
-}
 
+.swiper.team{
+  padding: 0 1rem; /* 필요 시 명시적으로 추가 */
+}  
+
+/* .teamCard의 부모 엘리먼트 */
 .swiper-slide.team {
-  position: relative;
-  width: 19.4rem;
+  width: 21rem;
   height: 14.6rem;
+  flex-shrink: 0;
+}  
+
+@media screen and (max-width: 768px) {
+  .swiper-slide.peerReview {
+    width: 30vw;
+  }
+
+  .swiper-slide-active.peerReview {
+    width: 40vw;
+  }
 }
