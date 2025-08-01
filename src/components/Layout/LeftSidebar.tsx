@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import S from './LeftSidebar.module.css'
+import UserList from '../UserList';
 
 function LeftSidebar() {
 
@@ -133,19 +134,8 @@ function LeftSidebar() {
         </nav>
 
         <div className={S.recentEnterUserWrap}>
-          <ul className={S.recentEnterUser}>
-            <li className={S.recentEnterUserTop}>
-              가입한 사용자<span>+</span>
-            </li>
-            <li className={S.enterUser}>
-              <a href="" className={S.enterUser}>
-                <div className={S.profileImage}>
-                  <img src="/images/너굴.png" alt="" />
-                </div>
-                <p>이름</p>
-              </a>
-            </li>
-          </ul>
+          <h3 className={S.recentEnterUserTop}>가입한 사용자</h3>
+          <UserList />
         </div>
       </div>
     </div>

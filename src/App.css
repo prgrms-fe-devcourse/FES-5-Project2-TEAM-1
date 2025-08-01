@@ -15,6 +15,7 @@
   width: 13.75rem;
   flex-shrink: 0;
   z-index: 9;
+  overflow-x: visible;
 }
 .rightcontainer{
   position:relative;
