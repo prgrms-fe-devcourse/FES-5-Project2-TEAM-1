@@ -10,6 +10,7 @@ import Online from '/icons/online.svg';
 import Offline from '/icons/offline.svg';
 import Away from '/icons/away.svg';
 import Dnd from '/icons/dnd.svg';
+import gsap from 'gsap';
 
 
 type CurrentUser = {
@@ -52,14 +53,34 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
   // setAuthState('unauthenticated');
 
   useEffect(() => {
-  if (!isLoading && user && profileId) {
-    setCurrentUser({
-      profileId,
-      email: user.email,
-      id: user.id,
-      profileImage: '',
-    });
-  }
+  const initUser = async () => {
+    if (!isLoading && user && profileId) {
+      // 1. 상태를 0으로 설정
+      const { error } = await supabase
+        .from('user_base')
+        .update({ status: 0 })
+        .eq('id', user.id);
+
+      if (error) {
+        console.error('상태 업데이트 실패:', error.message);
+        return;
+      }
+
+      // 2. currentUser에 status 포함시켜 초기화
+      setCurrentUser({
+        profileId,
+        email: user.email,
+        id: user.id,
+        profileImage: '',
+        status: 0,
+      });
+
+      // 3. 별도 status 상태도 동기화
+      setStatus(0);
+    }
+  };
+
+  initUser();
   
    const setStatusOnline = async () => {
     if (!isLoading && user && profileId) {
@@ -93,7 +114,22 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
     }
 
     fetchUserProfileImage();
-  }, [currentUser?.profileId])
+  }, [currentUser?.profileId]);
+
+  useEffect(() => {
+
+      gsap.fromTo('#popupBox',
+        { opacity: 0, y: -10, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.35,
+          ease: 'power3.out',
+          pointerEvents: 'auto',
+        })
+      
+  }, [isStatusClicked]);
 
   // if (authState === 'loading') return null; // ✅ 깜빡임 방지
 
@@ -110,28 +146,6 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
         document.removeEventListener('click', outSideClick);
       };
     }, [isStatusClicked, popupRef]);
-
-useEffect(() => {
-    if( !currentUser || !currentUser.id ) return;
-    if (status !== null) return;
-
-  const fetchStatus = async () => {
-      const { data, error } = await supabase.from('user_base').select('status').eq('id', currentUser.id).single();
-      if( !data || error ) {
-        console.log('상태 불러오기 실패', error.message)
-        return;
-      }
-      if( data ) {
-        setStatus(data.status);
-      }
-
-      // const statusFromDB = data.status as StatusCode;
-
-      // setCurrentUser(prev => prev ? { ...prev, status: statusFromDB } : prev);
-      // setStatus(statusFromDB);
-  }
-  fetchStatus();
-}, [currentUser?.id]);
 
   const handleLogout = async () => {
     if (currentUser) {
@@ -223,7 +237,7 @@ useEffect(() => {
                 }, 0) })}
             />
             { isStatusClicked && 
-              <div className={S.statusPopup}>
+              <div className={S.statusPopup} id='popupBox'>
                 <ul  ref={popupRef}>
                   <li onClick={() => handleStatus(0)} className={status === 0 ? S.clicked : ''}>
                     <div className={S.online}><img src={Online} /></div>
