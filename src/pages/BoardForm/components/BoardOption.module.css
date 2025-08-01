@@ -16,7 +16,7 @@
 .boardTitle {
   padding-top: 28px;
   input {
-    width: 400px;
+    width: 90%;
     background-color: #f5f2eb;
     border-style: none;
     border-bottom: 0.5px solid #b99470;
@@ -25,5 +25,18 @@
   }
   input:focus {
     outline: none !important;
+  }
+}
+
+/* 반응형 (모바일) */
+@media (max-width: 1000px) {
+  .boardOptionImage {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .boardOptionImage {
+    display: block;
   }
 }

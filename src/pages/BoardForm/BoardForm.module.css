@@ -31,3 +31,9 @@
     background-color: #a6b37d;
   }
 }
+/* 반응형 (모바일) */
+@media (max-width: 1400px) {
+  .bContainer {
+    gap: 0;
+  }
+}
