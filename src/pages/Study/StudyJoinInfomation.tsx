@@ -39,7 +39,6 @@ function StudyJoinInfomation() {
   useEffect(() => {
     if (!card) return;
     if (card.board_tag) {
-      console.log(card.board_tag);
       const tagList = card.board_tag
         .filter((tag) => typeof tag.hash_tag === "string")
         .map((tag) => tag.hash_tag as string);

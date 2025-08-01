@@ -74,9 +74,7 @@ function Card({ card }: Props) {
       .select("*")
       .eq("profile_id", profileId)
       .eq("board_id", board_id);
-    console.log(profileId);
 
-    console.log(board_id);
     if (data && data[0]) {
       await supabase.from("scrap").delete().eq("scrap_id", data[0].scrap_id);
     } else {
