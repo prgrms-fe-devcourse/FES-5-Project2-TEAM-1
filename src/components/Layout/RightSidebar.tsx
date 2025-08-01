@@ -2,7 +2,7 @@ import S from './RghtSidebar.module.css'
 import '../../style/reset.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthProvider';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import supabase from '@/supabase/supabase';
 import Notification from './Notification'
 
@@ -21,16 +21,27 @@ interface Overlay{
   setIsNotification: (value: boolean) => void;
 }
 
+type StatusCode = 1 | 2 | 3 | 4 | null;
+
+const statusLabelMap: Record<Exclude<StatusCode, null>, string> = {
+  1: '온라인',
+  2: '자리비움',
+  3: '방해금지',
+  4: '오프라인',
+};
+
 function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:Overlay) {
 
   const { user, isLoading, logout, profileId } = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser|null>(null);
   // const [authState, setAuthState] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
-  const [status, setStatus] = useState<'온라인' | '오프라인' | '자리비움' | '방해금지'>('오프라인');
+  const [status, setStatus] = useState<StatusCode>(null);
   const [isStatusClicked, setIsStatusClicked] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
-  const navigate = useNavigate()
+  const popupRef = useRef<HTMLUListElement | null>(null);
+
+  const navigate = useNavigate();
 
   // setAuthState('unauthenticated');
 
@@ -63,11 +74,54 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
       // setAuthState('authenticated');
       // console.log(currentUser);
     }
+
     fetchUserProfileImage();
   }, [currentUser?.profileId])
 
   // if (authState === 'loading') return null; // ✅ 깜빡임 방지
 
+  useEffect(() => {
+      const outSideClick = ( e ) => {
+        const { target } = e;
+
+        if( isStatusClicked && popupRef.current && !popupRef.current.contains(target) ) {
+          setIsStatusClicked(false);
+        }
+      };
+      document.addEventListener('click', outSideClick);
+      return () => {
+        document.removeEventListener('click', outSideClick);
+      };
+    }, [isStatusClicked, popupRef]);
+
+useEffect(() => {
+  if( !isLoading && user && profileId) {
+    if( currentUser ) {
+        const channel = supabase
+        .channel('status')
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'user_base',
+            filter: `id=eq.${currentUser.id}`,
+          },
+          (payload) => {
+            const newStatus = payload.new.status as StatusCode;
+            setStatus( newStatus );
+            console.log('상태 변경', payload.new);
+            // 여기서 토스트 보여주거나 상태 업데이트
+            
+          }
+        )
+        .subscribe();
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }
+}, [currentUser, isLoading, user, profileId]);
 
   const handleLogout = async () => {
     await logout()
@@ -75,14 +129,30 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
     navigate('/')
   }
 
+  const updateStatusInDB = async (newStatus: StatusCode) => {
+    if( !currentUser ) return;
+    console.log( newStatus );
+    const { error } = await supabase
+      .from('user_base')
+      .update({ status: newStatus })
+      .eq('id', currentUser.id);
+
+    if (error) console.error('상태 업데이트 실패', error);
+};
+
   const handleNotification = () => {
     setIsNotification(!isNotification)
     setIsOverlay(!isOverlay)
   }
 
-  const handleStatus = (e: React.MouseEvent<HTMLLIElement>) => {
-    
+  const handleStatus = (selected: StatusCode) => {
+    const newStatus = status === selected ? null : selected;
+    setStatus(newStatus);
+    updateStatusInDB(newStatus);
+    setIsClicked(prev => !prev);
   }
+
+  console.log( status );
 
   return (
     <nav className={S.container}>
@@ -92,15 +162,31 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
             className={S.profileImage} 
             src={currentUser ? currentUser.profileImage : '/public/images/여울.png'} 
             alt="프로필" 
-            onClick={() => setIsStatusClicked(prev => !prev)}
+            onClick={((e) => {
+              e.stopPropagation();
+              setTimeout(() => {
+                setIsStatusClicked(prev => !prev);
+              }, 0) })}
           />
           { isStatusClicked && 
             <div className={S.statusPopup}>
-              <ul>
-                <li onClick={handleStatus}><div className={S.online}></div>온라인</li>
-                <li><div className={S.leave}></div>자리 비움</li>
-                <li><div className={S.disturb}></div>방해 금지</li>
-                <li><div className={S.offline}></div>오프라인 표시</li>
+              <ul  ref={popupRef}>
+                <li onClick={() => handleStatus(1)} className={status === 1 ? S.clicked : ''}>
+                  <div className={S.online}></div>
+                  온라인
+                  </li>
+                <li onClick={() => handleStatus(2)} className={status === 2 ? S.clicked : ''}>
+                  <div className={S.leave}></div>
+                  자리 비움
+                  </li>
+                <li onClick={() => handleStatus(3)} className={status === 3 ? S.clicked : ''}>
+                  <div className={S.disturb}></div>
+                  방해 금지
+                  </li>
+                <li onClick={() => handleStatus(4)} className={status === 4 ? S.clicked : ''}>
+                  <div className={S.offline}></div>
+                  오프라인 표시
+                  </li>
               </ul>
             </div>
           }

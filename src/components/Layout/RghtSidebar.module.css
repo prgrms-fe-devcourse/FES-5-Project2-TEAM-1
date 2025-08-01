@@ -247,7 +247,7 @@
       display: flex;
       gap: 1rem;
 
-      transition: background-color 0.2s;
+      transition: background-color 0.1s;
 
       div {
         width: 1rem;
@@ -271,11 +271,11 @@
       &:hover {
         background-color: #c5babc;
       }
-
-      .clicked {
-        background-color: #c5babc;
-      }
     }
+
+    .clicked {
+        background-color: #8B9669;
+      }
   }
 }
 
