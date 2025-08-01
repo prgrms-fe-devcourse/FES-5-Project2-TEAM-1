@@ -19,6 +19,7 @@ type CurrentUser = {
   id: string;
   profileImage: string;
   status?: StatusCode;
+  name: string;
 }
 
 interface Overlay{
@@ -56,15 +57,27 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
   const initUser = async () => {
     if (!isLoading && user && profileId) {
       // 1. 상태를 0으로 설정
-      const { error } = await supabase
+      const { error: statusError } = await supabase
         .from('user_base')
         .update({ status: 0 })
         .eq('id', user.id);
 
-      if (error) {
-        console.error('상태 업데이트 실패:', error.message);
+      if (statusError) {
+        console.error('상태 업데이트 실패:', statusError.message);
         return;
       }
+
+      const { data: nickname, error: nameError } = await supabase
+        .from('user_base')
+        .select('nickname')
+        .eq('id', user.id )
+        .single();
+
+      if( nameError ) {
+        console.error('정보 불러오기 실패:', nameError?.message);
+        return;
+      }
+
 
       // 2. currentUser에 status 포함시켜 초기화
       setCurrentUser({
@@ -73,6 +86,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
         id: user.id,
         profileImage: '',
         status: 0,
+        name: nickname.nickname
       });
 
       // 3. 별도 status 상태도 동기화
@@ -81,17 +95,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
   };
 
   initUser();
-  
-   const setStatusOnline = async () => {
-    if (!isLoading && user && profileId) {
-      await supabase
-        .from('user_base')
-        .update({ status: 0 }) // 0: 온라인
-        .eq('id', user.id);
-      setStatus(0);
-      }
-    };
-    setStatusOnline();
+
   }, [isLoading, user, profileId]);
 
   useEffect(() => {
@@ -262,7 +266,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
               currentUser?.profileId ? (
                 <Link to={`/mypage/${currentUser.profileId}`} className={S.loginBoxGreeting} title='마이페이지 이동'>
                   <p>Hello</p>
-                  <h3>{currentUser.email.split("@")[0]}</h3>
+                  <h3>{currentUser.name}</h3>
                 </Link>
               ) : (
                 <div className={S.loginBoxGreeting}>
