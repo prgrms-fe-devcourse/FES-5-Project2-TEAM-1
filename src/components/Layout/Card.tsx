@@ -1,128 +1,160 @@
-import S from './card.module.css'
+import S from "./card.module.css";
 
-import { useEffect, useState } from 'react';
-import supabase from '@/supabase/supabase';
-import { useNavigate } from 'react-router-dom';
-import type { Tables } from '@/supabase/database.types';
-import { chooseRegion } from '@/utils/chooseRegion';
-
-
-
+import { useEffect, useRef, useState } from "react";
+import supabase from "@/supabase/supabase";
+import { useNavigate } from "react-router-dom";
+import type { Tables } from "@/supabase/database.types";
+import HashTag from "../HashTag";
+import gsap from "gsap";
+import { useAuth } from "@/auth/AuthProvider";
+import { showErrorAlert } from "@/utils/sweetAlert";
 
 type Board = Tables<"board">;
-type CardProps = Board & 
-{
+type CardProps = Board & {
   board_tag: Tables<"board_tag">[];
 };
 
-
-interface Props{
-  card: CardProps
+interface Props {
+  card: CardProps;
 }
 
 function Card({ card }: Props) {
-  
-  
-  const {
-    address,
-    contents,
-    title,
-    likes,
-    board_id,
-    member,
-    profile_id,
-    board_tag,
-  } = card;
+  const { contents, title, likes, board_id, member, board_tag } = card;
+  const [tagList, setTagList] = useState<string[]>([]);
 
-  const [hash_tag] =board_tag
-  
-    const [cardLike, setCardLike] = useState(likes);
-    const [isPressed, setIsPressed] = useState(false);
-    const [isScrap, setIsScrap] = useState(false);
-    const navigate = useNavigate()
+  const [cardLike, setCardLike] = useState(likes);
+  const [isPressed, setIsPressed] = useState(false);
+  const [isScrap, setIsScrap] = useState(false);
+  const navigate = useNavigate();
+  const likeBtnRef = useRef<HTMLButtonElement>(null);
+  const scrapBtnRef = useRef<HTMLButtonElement>(null);
+  const { isLoading, user, profileId } = useAuth();
 
-    useEffect(() => {
-      const storedLike = JSON.parse(localStorage.getItem(`like-${board_id}`) ?? "false")  
-      const storedScrap = JSON.parse(localStorage.getItem(`scrap-${board_id}`) ?? "false")  
-      setIsPressed(storedLike)
-      setIsScrap(storedScrap)
-    }, [board_id]);
-
-    const handleScrap = async () => {
-    const nextScrapState = !isScrap
-    setIsScrap(nextScrapState)
-    localStorage.setItem(`scrap-${board_id}`, JSON.stringify(nextScrapState));
-    
-    const { data, error } = await supabase
-      .from("scrap")
-      .select("*").eq('profile_id',profile_id).eq('board_id',board_id).single()
-    
-      if (data?.scrap_id) {
-        await supabase.from('scrap').delete().eq('scrap_id',data.scrap_id)  
-      } else {
-        await supabase.from('scrap').insert([{
-          scrap_id: `scrap${Date.now()}`,
-          profile_id,
-          board_id,
-        }])
-      }
-    
-    if (error) {
-      console.error("데이터를 제대로 불러오지 못하였습니다");
-      setIsScrap(!isScrap)
-    }
-    }
-      
-    const handleLike = async () => {
-      const pressState = isPressed ? cardLike - 1 : cardLike + 1;
-      const nextState = !isPressed;
-
-      setCardLike(pressState);
-      setIsPressed(!isPressed)
-      localStorage.setItem(`like-${board_id}`,JSON.stringify(nextState))
-      const { error } = await supabase.from('board').update({ likes: pressState}).eq('board_id', board_id)
-      
-      if (error) {
-        console.error('좋아요 업데이트 실패', error.message)
-        setCardLike(isPressed ? cardLike - 1 : cardLike + 1)
-        setIsPressed(!isPressed)
-        localStorage.setItem(`like-${board_id}`, JSON.stringify(nextState));
-      }
-    }
-
-    const handleRoute = (
-      e: React.MouseEvent<HTMLElement, MouseEvent>,
-      card: CardProps
-    ) => {
-      e.preventDefault();
-      if (
-        !(e.target as HTMLButtonElement).closest("img") ||
-        !(e.target as HTMLButtonElement).closest("button")
-      ) {
-        navigate(`/channel/${board_id}`, { state: { card } });
-      } else {
+  useEffect(() => {
+    if (!isLoading) {
+      if (!user) {
+        showErrorAlert("로그인 후 이용해주세요");
+        navigate("/login");
         return;
       }
-   };
-  
-    const replaceText = contents.replace(/[#*]/g, "");
-   
+    }
+    // }
+  }, [user, profileId, isLoading]);
 
- 
-  
+  useEffect(() => {
+    const storedLike = JSON.parse(
+      localStorage.getItem(`like-${board_id}`) ?? "false"
+    );
+    const storedScrap = JSON.parse(
+      localStorage.getItem(`scrap-${board_id}`) ?? "false"
+    );
+    setIsPressed(storedLike);
+    setIsScrap(storedScrap);
+
+    const tagList = board_tag
+      .filter((tag) => typeof tag.hash_tag === "string")
+      .map((tag) => tag.hash_tag as string);
+    setTagList(tagList);
+  }, [board_id]);
+
+  const handleScrap = async () => {
+    if (scrapBtnRef.current) {
+      gsap.fromTo(
+        scrapBtnRef.current,
+        { scale: 1 },
+        { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.out" }
+      );
+    }
+    const nextScrapState = !isScrap;
+    setIsScrap(nextScrapState);
+    localStorage.setItem(`scrap-${board_id}`, JSON.stringify(nextScrapState));
+
+    const { data, error } = await supabase
+      .from("scrap")
+      .select("*")
+      .eq("profile_id", profileId)
+      .eq("board_id", board_id);
+    console.log(profileId);
+
+    console.log(board_id);
+    if (data && data[0]) {
+      await supabase.from("scrap").delete().eq("scrap_id", data[0].scrap_id);
+    } else {
+      await supabase.from("scrap").insert([
+        {
+          profile_id: profileId,
+          board_id,
+        },
+      ]);
+    }
+
+    if (error) {
+      console.error("데이터를 제대로 불러오지 못하였습니다");
+      setIsScrap(!isScrap);
+    }
+  };
+
+  const handleLike = async () => {
+    if (likeBtnRef.current) {
+      gsap.fromTo(
+        likeBtnRef.current,
+        { scale: 1 },
+        { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.out" }
+      );
+    }
+    const pressState = isPressed ? cardLike - 1 : cardLike + 1;
+    const nextState = !isPressed;
+
+    setCardLike(pressState);
+    setIsPressed(!isPressed);
+    localStorage.setItem(`like-${board_id}`, JSON.stringify(nextState));
+    const { error } = await supabase
+      .from("board")
+      .update({ likes: pressState })
+      .eq("board_id", board_id);
+
+    if (error) {
+      console.error("좋아요 업데이트 실패", error.message);
+      setCardLike(isPressed ? cardLike - 1 : cardLike + 1);
+      setIsPressed(!isPressed);
+      localStorage.setItem(`like-${board_id}`, JSON.stringify(nextState));
+    }
+  };
+
+  const handleRoute = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    card: CardProps
+  ) => {
+    e.preventDefault();
+    if (
+      !(e.target as HTMLButtonElement).closest("img") ||
+      !(e.target as HTMLButtonElement).closest("button")
+    ) {
+      navigate(`/channel/${board_id}`, { state: { card } });
+    } else {
+      return;
+    }
+  };
+
+  const replaceText = contents.replace(/[#*]/g, "");
+
   return (
     <section className={S.container} onClick={(e) => handleRoute(e, card)}>
       <div className={S.cardTop}>
         <h4>{title}</h4>
         <div className={S.cardTopRight}>
-          <button className={S.scrapBtn} onClick={handleScrap}>
+          <button
+            className={S.scrapBtn}
+            onClick={handleScrap}
+            ref={scrapBtnRef}
+          >
             {isScrap ? (
               <img src="/icons/scraplittleActive.png" alt="스크랩 활성화" />
             ) : (
               <img src="/icons/scraplittle.svg" alt="스크랩 비 활성화" />
             )}
           </button>
-          <button className={S.likeBtn} onClick={handleLike}>
+          <button className={S.likeBtn} onClick={handleLike} ref={likeBtnRef}>
             {isPressed ? (
               <img src="/icons/likeActive.png" alt="" />
             ) : (
@@ -136,46 +168,6 @@ function Card({ card }: Props) {
         <p>{replaceText}</p>
       </div>
       <div className={S.tagBox}>
-        {board_tag &&
-          board_tag.map((t) => <div key={t.tag_id}>{t.hash_tag}</div>)}
-
-        {
-          hash_tag && (
-          <span>
-            <svg
-              width="3"
-              height="3"
-              viewBox="0 0 3 3"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1.50935 2.55176C0.948598 2.55176 0.5 2.10316 0.5 1.5611C0.5 1.00036 0.948598 0.551758 1.50935 0.551758C2.0514 0.551758 2.5 1.00036 2.5 1.5611C2.5 2.10316 2.0514 2.55176 1.50935 2.55176Z"
-                fill="#555555"
-                fillOpacity="0.7"
-              />
-            </svg>
-          </span>
-        )}
-
-        {chooseRegion(address)} 
-        {/* 지역 필수사항 */}
-        <span>
-          <svg
-            width="3"
-            height="3"
-            viewBox="0 0 3 3"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1.50935 2.55176C0.948598 2.55176 0.5 2.10316 0.5 1.5611C0.5 1.00036 0.948598 0.551758 1.50935 0.551758C2.0514 0.551758 2.5 1.00036 2.5 1.5611C2.5 2.10316 2.0514 2.55176 1.50935 2.55176Z"
-              fill="#555555"
-              fillOpacity="0.7"
-            />
-          </svg>
-        </span>
-
         <span>
           <svg
             width="12"
@@ -199,9 +191,11 @@ function Card({ card }: Props) {
           </svg>
         </span>
         {member}
+        {tagList && (
+          <HashTag taglist={tagList} defaultList={tagList} editable={false} />
+        )}
       </div>
     </section>
   );
 }
-export default Card
-
+export default Card;

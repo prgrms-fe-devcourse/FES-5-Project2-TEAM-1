@@ -1,10 +1,11 @@
 import type { Tables } from "@/supabase/database.types";
 import S from "./ThreadList.module.css";
 import { commentTime } from "./utills/commentTime";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import supabase from "@/supabase/supabase";
 import ThreadReplyComponent from "./ThreadReplyComponent";
 import { useAuth } from "@/auth/AuthProvider";
+import gsap from "gsap";
 
 type User = Tables<"user_profile"> & {
   user_base: Tables<"user_base">;
@@ -37,6 +38,17 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
   const [reply, setReply] = useState<ReplyWithUser[]>([]);
   const timeStamp = commentTime(create_at);
 
+  const threadRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    if (threadRef.current) {
+      gsap.fromTo(
+        threadRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+      );
+    }
+  }, []);
   useEffect(() => {
     if (!replyData) return;
     setReply(replyData);
@@ -152,7 +164,7 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
   );
 
   return (
-    <li className={S.listContainer}>
+    <li className={S.listContainer} ref={threadRef}>
       <div className={S.writerBox}>
         <div className={S.meta}>
           <div className={S.profile}>
