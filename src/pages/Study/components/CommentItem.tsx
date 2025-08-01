@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
 import Recomment from './Recomment';
 import { commentTime } from './utills/commentTime';
+import { useIsMine } from '@/components/context/useIsMine';
+import { IsMineProvider } from '@/components/context/isMine';
 
 
 
@@ -22,7 +24,8 @@ type Reply = Tables<"comment_reply"> & {
 };
 
 
-function CommentItem({comment,onDelete,userImage,userName,profileId}: Props) {
+function CommentItem({ comment, onDelete, userImage, userName, profileId }: Props) {
+  const { isMine } = useIsMine();
   const { contents, likes, create_at, comment_id } = comment;
   const [like, setLike] = useState(likes);
   const [isPress, setIsPress] = useState(false);
@@ -146,25 +149,30 @@ function CommentItem({comment,onDelete,userImage,userName,profileId}: Props) {
             <span className={S.username}>{userName}</span>
             <span className={S.time}>{commentTimeCheck}</span>
           </div>
-          <div className={S.edit}>
-            {isEditing ? (
-              <>
-                <button type="submit" onClick={handleSave}>
-                  저장
-                </button>
+          {isMine && (
+            <div className={S.edit}>
+              {isEditing ? (
+                <>
+                  <button type="submit" onClick={handleSave}>
+                    저장
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(!isEditing)}
+                  >
+                    취소
+                  </button>
+                </>
+              ) : (
                 <button type="button" onClick={() => setIsEditing(!isEditing)}>
-                  취소
+                  수정
                 </button>
-              </>
-            ) : (
-              <button type="button" onClick={() => setIsEditing(!isEditing)}>
-                수정
+              )}
+              <button type="submit" onClick={handleDelete}>
+                삭제
               </button>
-            )}
-            <button type="submit" onClick={handleDelete}>
-              삭제
-            </button>
-          </div>
+            </div>
+          )}
         </div>
         {isEditing ? (
           <input
@@ -213,15 +221,18 @@ function CommentItem({comment,onDelete,userImage,userName,profileId}: Props) {
             </form>
 
             {recentlyReply.map((comment) => {
-
               return (
-                <Recomment
+                <IsMineProvider
+                  writerProfileId={comment.user_profile.profile_id}
                   key={comment.reply_id}
-                  reply={comment}
-                  onDelete={() => handleReplyDelete(comment.reply_id)}
-                  userName={comment.user_profile.user_base.nickname}
-                  userImage={comment.user_profile.profile_images}
-                />
+                >
+                  <Recomment
+                    reply={comment}
+                    onDelete={() => handleReplyDelete(comment.reply_id)}
+                    userName={comment.user_profile.user_base.nickname}
+                    userImage={comment.user_profile.profile_images}
+                  />
+                </IsMineProvider>
               );
             })}
           </div>

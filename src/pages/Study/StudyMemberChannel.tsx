@@ -7,12 +7,15 @@ import { useAdmin } from './context/useAdmin';
 
 
 
+
 function StudyMemberChannel() {
   const { id } = useParams()
   const { success, error } = useToast()
   const{ profileId } = useAuth()
   const {isAdmin}= useAdmin()
- 
+
+
+  // 추방 후 재 신청막아두기
   const handleJoin = async () => {
     const {data,error:fetchError } = await supabase.from('approve_member').select('status::text').match({
       'board_id': id,
@@ -20,12 +23,13 @@ function StudyMemberChannel() {
     }).maybeSingle()
 
     if (fetchError) console.error()
-
     switch (data?.status) {
       case '0': error('이미 가입신청을 요청하신 채널입니다');
         break
-      case '1': error('가입 신청이 거절되셨습니다')
+      case '1': error('이미 채널멤버입니다')
         break
+      case '2': error('가입신청이 거절되었습니다')
+        break;
       default: success("가입 신청을 요청하셨습니다");
     }
   
@@ -38,6 +42,7 @@ function StudyMemberChannel() {
   }
 
   return (
+    
       <main className={S.container}>
         <nav className={S.header}>
           <div className={S.headerinner}>
@@ -72,7 +77,7 @@ function StudyMemberChannel() {
 
         <Outlet />
       </main>
-    
+   
   );
 }
 export default StudyMemberChannel

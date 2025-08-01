@@ -23,7 +23,10 @@ import { AdminProvider } from "./components/context/useAdmin";
 import { NotificationProvider } from "./components/context/NotificationContext";
 import { useAuth } from "./auth/AuthProvider";
 
+
+
 function App() {
+
   const location = useLocation();
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
@@ -63,9 +66,9 @@ function App() {
             <Route
               path="/channel/:id"
               element={
-                <AdminProvider>
-                  <StudyMemberChannel />
-                </AdminProvider>
+                  <AdminProvider>
+                    <StudyMemberChannel />
+                  </AdminProvider>
               }
             >
               <Route index element={<StudyJoinInfomation />} />
