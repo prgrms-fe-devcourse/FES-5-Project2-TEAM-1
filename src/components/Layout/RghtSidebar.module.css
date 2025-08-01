@@ -3,7 +3,6 @@
   background-color: #FFC0CB;
   box-shadow: -8px 0px 20px rgba(0, 0, 0, 0.08);
   min-height: 100vh;
-  
   position: fixed;
   top: 0;
   right: 0;
@@ -116,7 +115,6 @@
       transition:0.3s;
     }
 }
-
 .loginBox::after{
   content:"";
   position: absolute;
@@ -139,7 +137,6 @@
     font-size: 12px;
     padding-left: 20px;
   }
-
   .navList{
     display: flex;
     transition:  0.5s;
@@ -156,19 +153,16 @@
        padding-left: 12px;
       gap: 12px;
       align-items: center;
-
       .notifiIcon{
         width: 24px;
         height: 24px;
       }
     }
-
   h3{
     font-weight: 600;
     font-size: 24px;
     padding: 0;
     }
-
 .notifyPanel {
   padding: 40px 18px;
   position: fixed;
@@ -182,19 +176,16 @@
   box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
   transform: translateX(100%);
   animation: slideIn 0.3s forwards;}
-
   &.navList:hover{
     background-color: #55555527;
       padding-bottom: 2px;
       border-radius: 4px;
        }
     }
-
     h4{
       font-size: 32px;
       font-weight: 600;
     }
-
     .notificationList{
       margin-top: 30px;
     }
@@ -206,7 +197,6 @@
     justify-content: center;
     align-items: center;
     width: 200px;
- 
     padding: 10px;
     margin-left: 10px;
     border-radius: 16px;
@@ -218,7 +208,6 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
-   
    h4{
       font-size: 16px;
       font-weight: 600;

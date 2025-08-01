@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
 import ThreadReplyComponent from "./ThreadReplyComponent";
 import { useAuth } from "@/auth/AuthProvider";
+import { useIsMine } from "@/components/context/useIsMine";
+import { IsMineProvider } from "@/components/context/isMine";
 
 type User = Tables<"user_profile"> & {
   user_base: Tables<"user_base">;
@@ -25,6 +27,7 @@ interface Props {
 }
 
 function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
+  const {isMine} =useIsMine()
   const { profileId } = useAuth();
   const { contents, likes, create_at, thread_id } = data;
   const [isPress, setIsPress] = useState(false);
@@ -161,25 +164,27 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
           </div>
           <div className={S.timeStamp}>{timeStamp}</div>
         </div>
-        <div className={S.edit}>
-          {isEditing ? (
-            <>
-              <button type="submit" onClick={handleSave}>
-                저장
-              </button>
+        {isMine && (
+          <div className={S.edit}>
+            {isEditing ? (
+              <>
+                <button type="submit" onClick={handleSave}>
+                  저장
+                </button>
+                <button type="button" onClick={() => setIsEditing(!isEditing)}>
+                  취소
+                </button>
+              </>
+            ) : (
               <button type="button" onClick={() => setIsEditing(!isEditing)}>
-                취소
+                수정
               </button>
-            </>
-          ) : (
-            <button type="button" onClick={() => setIsEditing(!isEditing)}>
-              수정
+            )}
+            <button type="submit" onClick={handleDelete}>
+              삭제
             </button>
-          )}
-          <button type="submit" onClick={handleDelete}>
-            삭제
-          </button>
-        </div>
+          </div>
+        )}
       </div>
 
       <div className={S.content}>
@@ -234,13 +239,15 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
 
           {recentlyReply.map((item) => {
             return (
-              <ThreadReplyComponent
-                key={item.reply_id}
-                reply={item}
-                userName={item.user_profile.user_base.nickname}
-                userImage={item.user_profile.profile_images}
-                onDelete={() => handleReplyDelete(item.reply_id)}
-              />
+              <IsMineProvider writerProfileId={item.user_profile.profile_id}>
+                <ThreadReplyComponent
+                  key={item.reply_id}
+                  reply={item}
+                  userName={item.user_profile.user_base.nickname}
+                  userImage={item.user_profile.profile_images}
+                  onDelete={() => handleReplyDelete(item.reply_id)}
+                />
+              </IsMineProvider>
             );
           })}
         </div>

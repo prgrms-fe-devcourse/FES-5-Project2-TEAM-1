@@ -22,7 +22,6 @@ function MypageScrap({profileId}:Props) {
     const fetchScrapsAndBoards = async() => {
       const {data, error} = await supabase.from('scrap').select('*').eq('profile_id',profileId);
       if(error) return console.error('스크랩 불러오기 실패')
-      // console.log(data);
       setScraps(data);
     }
     fetchScrapsAndBoards();
@@ -75,20 +74,33 @@ function MypageScrap({profileId}:Props) {
   return (
     <>
       <h2 className={S.sectionName}>스크랩</h2>
-      <section className={S.scrapContainer}>
-        <ul className={S.scrapList}>
-          {
-            newBoards && newBoards.map(({board_id, title, contents})=>(
-              <li key={board_id} className={S.scrap}>
-                <Link to={`/channel/${board_id}`}>
-                  <p className={S.scrapTitle}>{title}</p>
-                  <p className={S.scrapContent}>{contents}</p>
-                </Link>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
+      {
+        scraps && scraps.length > 0 && newBoards ? (
+          <section className={S.scrapContainer}>
+            <ul className={S.scrapList}>
+              {
+                newBoards && newBoards.map(({board_id, title, contents})=>(
+                  <li key={board_id} className={S.scrap}>
+                    <Link to={`/channel/${board_id}`}>
+                      <p className={S.scrapTitle}>{title}</p>
+                      <p className={S.scrapContent}>{contents}</p>
+                    </Link>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        ) : (
+          <div className={S.nothing}>
+            <img src="/images/서치이미지.png" alt="검색 결과 없음" />
+            <p>
+              아직 스크랩된 글이 없습니다 🍃🍃🍃<br />
+              스터디에서 글을 스크랩해서 한 눈에 확인해보세요!<br />
+              
+            </p>
+          </div>
+        )
+      }
     </>
   )
 }

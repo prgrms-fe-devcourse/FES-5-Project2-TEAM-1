@@ -68,3 +68,20 @@
   }
 }
 
+.nothing{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  img{
+    width: 5rem;
+    margin-bottom: 1rem;
+  }
+  p{
+    text-align: center;
+    line-height: 3rem;
+  }
+}
+
