@@ -109,7 +109,12 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
         const calculatedAge = calculateAge();
 
         if( gender === '선택' ) {
-            toast.error('성별을 선택해주세요!');
+            toast.error('성별을 선택해주세요!', {autoClose: 1500});
+            return;
+        }
+
+        if( year >= yearNow ) {
+            toast.error('정확한 출생연도를 입력해주세요.', {autoClose: 1500});
             return;
         }
 
