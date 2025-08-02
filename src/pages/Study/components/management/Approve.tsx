@@ -45,7 +45,17 @@ function Approve() {
     })
     
     if (error) console.error()
-    setPendingMember(prev => prev.filter(user => user.profile_id !== profile_id))
+   
+    
+    const { error: memberError } = await supabase.from('board_member').insert([{
+      profile_id,
+      board_id:id
+    }])
+    if (memberError) console.error(error)
+    
+     setPendingMember((prev) =>
+       prev.filter((user) => user.profile_id !== profile_id)
+     );
   }
   
   const handleReject = async (profile_id: string) => {

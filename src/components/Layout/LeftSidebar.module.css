@@ -36,6 +36,7 @@
   transition:0.3s;
   width: 200px;
   font-family: "Quicksand", sans-serif;
+  cursor: pointer;
   
   .navListText{
     display: flex;
@@ -46,8 +47,8 @@
 
   &.navList:hover{
     background-color: #5555551a;
-    width: 100%;
-    padding-right: 2px; 
+    padding-right: 2px;
+    padding-bottom: 4px; 
     border-radius: 4px;
   }
 

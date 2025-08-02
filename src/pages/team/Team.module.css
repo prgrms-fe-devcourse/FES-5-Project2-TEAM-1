@@ -1,0 +1,89 @@
+.container{
+  min-height: 80%;
+  margin: 48px 220px 0 ;
+
+  h2{
+    font-size: 36px;
+    font-weight: 600;
+  }
+}
+
+.teamList{
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+
+.teamWrap{
+  background-color: #fff;
+  padding: 30px 32px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+.teaminfoWrap{
+  display: flex;
+  gap: 20px;
+    > img{
+    width: 150px;
+    height: 150px;
+  }
+
+
+  .teaminfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    p{
+      font-size: 16px;
+    }
+    h3{
+      font-weight: 600;
+      font-size: 20px;
+    }
+  }
+}
+
+.deadline{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 32px;
+}
+
+.moveBtn{
+  border-radius: 4px;
+  background-color: rgba(166, 179, 125, 0.2);
+  width: 120px;
+  height: 28px;
+  color:#a6b37d;
+    border: 1px solid #a6b37d;
+    font-weight: bold;
+  transition:0.3s;
+
+  &:hover{
+  background-color: rgba(166, 179, 125, 0.4);
+  }
+}
+
+
+.peerReviewBtn{
+    width: 120px;
+   height: 28px;
+    background-color: rgba(185, 148, 112, 0.2);
+    border: 1px solid #b99470;
+   border-radius: 4px;
+    font-weight: bold;
+    color: #b99470;
+    transition: 0.3s;
+
+    &:hover{
+    background-color: rgba(185, 148, 112, 0.4);
+    }
+}
+}

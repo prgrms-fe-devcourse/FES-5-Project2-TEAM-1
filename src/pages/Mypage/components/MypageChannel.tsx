@@ -25,6 +25,7 @@ interface Props {
 function MypageChannel({profileId}:Props) {
   const [teams, setTeams] = useState<Team[]|null>(null);
   const [swiper, setSwiper] = useState<SwiperClass>();
+  const [swiperIndex, setSwiperIndex] = useState<number>(0);
   const swiperWrappedRef = useRef<HTMLElement|null>(null);
 
 
@@ -56,13 +57,17 @@ function MypageChannel({profileId}:Props) {
   },[profileId])
 
   const handlePrev = () => {
-    if(!swiper) return;
-    swiper.slidePrev()
+    if(!swiper || !teams) return;
+    const newIndex = swiperIndex-1 < 0 ? teams.length-1 : swiperIndex-1;
+    setSwiperIndex(newIndex)
+    swiper.slideTo(newIndex)
   }
 
   const handleNext = () => {
-    if(!swiper) return;
-    swiper.slideNext()
+    if(!swiper || !teams) return;
+    const newIndex = swiperIndex+1 > teams.length-1 ? 0 : swiperIndex+1;
+    setSwiperIndex(newIndex)
+    swiper.slideTo(newIndex)
   }
 
   return (
@@ -72,16 +77,18 @@ function MypageChannel({profileId}:Props) {
         teams && teams.length !== 0 ? (
           <section className={S.teamContainer}>
             <button type="button" className={S.prevButton} onClick={handlePrev}>
-              <img src="/src/assets/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
+              <img src="/public/icons/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
             </button>
             <Swiper 
               className="team"
               modules={[Navigation]}
+              grabCursor
               initialSlide={0}
               spaceBetween={40}
               slidesPerView="auto"
               speed={900}
-              watchSlidesProgress={true}
+              // watchSlidesProgress={true}
+              // rewind={true}
               style={{
                 boxSizing : 'border-box',
               }}
@@ -94,18 +101,23 @@ function MypageChannel({profileId}:Props) {
                 swiperWrappedRef.current = e.wrapperEl;
                 setSwiper(e);
               }}
+              onSlideChange={(swiper)=>{
+                setSwiperIndex(swiper.realIndex);
+              }}
             >
 
               {
-                teams.map(({board, board_id})=>(
+                teams.map(({board, board_id},index)=>(
                   <SwiperSlide 
                     key={board_id} 
-                    className="team"
+                    className={`team ${swiperIndex === index ? 'teamActive' : ''}`}
                   >
                     <Link to={`/channel/${board_id}`}>
-                      <div className={S.teamCard} title='팀으로 이동하기'>
+                      <div className={S.teamCard} title={`${board.title} 페이지로 이동하기`}>
                         <img className={S.teamImg} src={board.images ? board.images : 'defaultBackground.img'} alt="채널" />
-                        <p className={S.teamTitle}>{board.title}</p>
+                        <div className={S.teamTitle}>
+                          {board.title}
+                        </div>
                       </div>
                     </Link>
                   </SwiperSlide>
@@ -113,15 +125,15 @@ function MypageChannel({profileId}:Props) {
               }
             </Swiper>
             <button type="button" className={S.nextButton} onClick={handleNext}>
-              <img src="/src/assets/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
+              <img src="/public/icons/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
             </button>
           </section>
           
         ) : (
           <div className={S.nothing}>
-            <img src="/images/서치이미지.png" alt="검색 결과 없음" />
+            <img src="/images/emptyContents.png" alt="참여중인 스터디 없음" />
             <p>
-              아직 가입된 곳이 없습니다 🍃🍃🍃<br />
+              아직 가입된 곳이 없습니다<br />
               스터디, 프로젝트에 가입해보세요!<br />
               
             </p>

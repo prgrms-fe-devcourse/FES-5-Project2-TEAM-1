@@ -6,6 +6,9 @@ import type { Tables } from '@/supabase/database.types';
 import supabase from '@/supabase/supabase';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import Calender from '@/components/Calender';
+
+
 
 
 type Board = Tables<'board'>;
@@ -13,16 +16,17 @@ type PickBoard = Pick<Board,'member'|'board_cls'|'address'|'meeting_time'|'activ
 
 function MangementChannel() {
 
-  const [category, setCategory] = useState<'0'|'1'|null>('0');
+  const [category, setCategory] = useState<'0'|'1'|null>("0");
   const [meetingTime, setMeetingTime] = useState<string|null>(null);
   const [members, setMembers] = useState<number>(1);
   const [address, setAddress] = useState<string|null>(null);
   const [isOffline, setIsOffline] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(true);
-  const [projectData, setProjectData] = useState<PickBoard|null>(null);
+  const [projectData, setProjectData] = useState<PickBoard | null>(null);
   const {id:board_id} = useParams();
   const navigate = useNavigate();
+ 
 
   // console.log('파라미터', board_id);
 
@@ -54,6 +58,9 @@ function MangementChannel() {
 
   },[projectData])
 
+  useEffect(() => {
+    console.log("현재 category:", category);
+  }, [category]);
   const handleCheckedOnline = () => {
     // address가 null일때
     // 얘를 클릭했을때
@@ -109,16 +116,21 @@ function MangementChannel() {
       const {error} = await supabase
       .from('board')
       .update(modifiedContents)
-      .eq('board_id',board_id)
+        .eq('board_id', board_id)
+      
+       if (error) console.error(error);
     }
+   
     updateProjectDetails();
     toast.success('저장되었습니다',{autoClose:1500})
   }
 
   const handleActive = (e:React.ChangeEvent<HTMLInputElement>) => {
-    e.target.id === 'active' 
-    ? toast.success('채널이 활성화되었습니다.',{autoClose:1500}) 
-    : toast.success('채널이 비활성화되었습니다.',{autoClose:1500});
+    if (e.target.id === 'active') {
+     toast.success('채널이 활성화되었습니다.',{autoClose:1500}) 
+      } else {
+       toast.success('채널이 비활성화되었습니다.',{autoClose:1500});
+      }
     setIsActive(prev => !prev)
   }
 
@@ -127,12 +139,12 @@ function MangementChannel() {
       const {error} = await supabase
       .from('board')
       .update({active:isActive})
-      .eq('board_id',board_id)  
+        .eq('board_id', board_id)  
+      
+      if(error) console.error(error)
     }
     updateActive();
-
   },[isActive])
-
 
   const handleDeleteChannel = () => {
     // 정말 삭제할것인지 여부 묻기
@@ -173,30 +185,86 @@ function MangementChannel() {
     <main className={S.mangementChannelContainer}>
       <h1 className={S.contentHeader}>프로젝트 생성</h1>
       <form className={S.projectDetailForm} onSubmit={handleSubmit}>
-        <h2 className={S.sectionHeader}>모집 타입</h2>
-        <section className={S.category}>
-            <div className={S.study}>
-              <input type="radio" name="category" id="study" defaultChecked onChange={()=>setCategory('0')}/>
-              <label htmlFor="study">스터디</label>
+        <div className={S.categoryWrap}>
+          <section className={S.category}>
+            <h2 className={S.sectionHeader}>모집 타입</h2>
+            <div className={S.categoryRadio}>
+              <div className={S.study}>
+                <input
+                  type="radio"
+                  name="category"
+                  id="study"
+                  defaultChecked
+                  onChange={() => setCategory("0")}
+                />
+                <label htmlFor="study">스터디</label>
+              </div>
+              <div className={S.project}>
+                <input
+                  type="radio"
+                  name="category"
+                  id="project"
+                  onChange={() => setCategory("1")}
+                />
+                <label htmlFor="project">프로젝트</label>
+              </div>
             </div>
-            <div className={S.project}>
-              <input type="radio" name="category" id="project" onChange={()=>setCategory('1')}/>
-              <label htmlFor="project">프로젝트</label>
-            </div>
-        </section>
+          </section>
+          <section className={S.deadline}>
+            <h2 className={S.sectionHeader}>마감 기한</h2>
 
+            {
+              category == null ?
+              (<button type="button" className={S.calendarBtn}>
+                날짜선택
+              </button>
+              ):(
+              category == "0" ? (
+              <button type="button" className={S.calendarBtn}>
+                날짜선택
+              </button>
+            ):(
+            <Calender isHidden={true} callBack={() => {}} />
+             )
+            )
+          }
+            
+       
+          </section>
+        </div>
         <div className={S.dateContributors}>
           <section className={S.time}>
             <h2 className={S.sectionHeader}>모임 시간</h2>
-            <input type="text" name="" id="" value={meetingTime ? meetingTime : ''} placeholder='매주 월요일 저녁 9시' onChange={(e)=>{setMeetingTime(e.target.value)}}/>
+            <input
+              type="text"
+              name=""
+              id=""
+              value={meetingTime ? meetingTime : ""}
+              placeholder="매주 월요일 저녁 9시"
+              onChange={(e) => {
+                setMeetingTime(e.target.value);
+              }}
+            />
           </section>
 
           <section className={S.contributors}>
             <h2 className={S.sectionHeader}>모집 인원</h2>
             <div className={S.countButton}>
-              <button className={S.upButton} type="button" onClick={handleUpButton}>∧</button>
+              <button
+                className={S.upButton}
+                type="button"
+                onClick={handleDownButton}
+              >
+                -
+              </button>
               <p>{members}</p>
-              <button className={S.downButton} type="button" onClick={handleDownButton}>∨</button>
+              <button
+                className={S.downButton}
+                type="button"
+                onClick={handleUpButton}
+              >
+                +
+              </button>
             </div>
           </section>
         </div>
@@ -205,51 +273,98 @@ function MangementChannel() {
         <section className={S.location}>
           <div className={S.locationRadio}>
             <div className={S.online}>
-              <input type="radio" name="location" id="online" checked={handleCheckedOnline()} onChange={()=>{setIsOffline(false); setAddress(null)}}/>
+              <input
+                type="radio"
+                name="location"
+                id="online"
+                checked={handleCheckedOnline()}
+                onChange={() => {
+                  setIsOffline(false);
+                  setAddress(null);
+                }}
+              />
               <label htmlFor="online">온라인</label>
             </div>
             <div className={S.offline}>
-              <input type="radio" name="location" id="offline" checked={handleCheckedOffline()} onChange={()=>{setIsOffline(true)}}/>
+              <input
+                type="radio"
+                name="location"
+                id="offline"
+                checked={handleCheckedOffline()}
+                onChange={() => {
+                  setIsOffline(true);
+                }}
+              />
               <label htmlFor="offline">오프라인</label>
             </div>
           </div>
-          {
-            isOffline && (
-              <>
-                <button className={S.locationButton} type="button" onClick={()=>{setIsOpen(prev => !prev)}}>
-                  { address ? <p className={S.address}>{address}</p> : <p>Location</p>}
-                </button>
-                {
-                  isOpen && (<DaumPostcodeEmbed onComplete={handleAddAdress} style={addressStyle}/>)
-                }
-              </>
-            )
-          }
+          {isOffline && (
+            <>
+              <button
+                className={S.locationButton}
+                type="button"
+                onClick={() => {
+                  setIsOpen((prev) => !prev);
+                }}
+              >
+                {address ? (
+                  <p className={S.address}>{address}</p>
+                ) : (
+                  <p>Location</p>
+                )}
+              </button>
+              {isOpen && (
+                <DaumPostcodeEmbed
+                  onComplete={handleAddAdress}
+                  style={addressStyle}
+                />
+              )}
+            </>
+          )}
         </section>
-        <button className={S.saveButton} type="submit">저장</button>
+        <button className={S.saveButton} type="submit">
+          저장
+        </button>
       </form>
 
-      <hr className={S.hr}/>
+      <hr className={S.hr} />
       <div className={S.activeSection}>
         <h2 className={S.sectionHeader}>모집 활성화</h2>
         <section className={S.isActive}>
           <div className={S.active}>
-            <input type="radio" name="isActive" id="active" defaultChecked onChange={handleActive}/>
+            <input
+              type="radio"
+              name="isActive"
+              id="active"
+              defaultChecked
+              onChange={handleActive}
+            />
             <label htmlFor="active">활성화</label>
           </div>
           <div className={S.inactive}>
-            <input type="radio" name="isActive" id="inactive" onChange={handleActive}/>
+            <input
+              type="radio"
+              name="isActive"
+              id="inactive"
+              onChange={handleActive}
+            />
             <label htmlFor="inactive">비활성화</label>
           </div>
         </section>
       </div>
 
-      <hr className={S.hr}/>
+      <hr className={S.hr} />
       <div className={S.deleteSection}>
         <h2 className={S.sectionHeader}>채널 제거</h2>
-        <button className={S.deleteButton} type="button" onClick={handleDeleteChannel}>채널 삭제하기</button>
+        <button
+          className={S.deleteButton}
+          type="button"
+          onClick={handleDeleteChannel}
+        >
+          채널 삭제하기
+        </button>
       </div>
     </main>
-  )
+  );
 }
 export default MangementChannel

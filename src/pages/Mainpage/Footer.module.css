@@ -1,6 +1,7 @@
 
 
 .footer{
+    margin-top: 80px;
     background-color: #F5F5F5;
     padding:30px;
     display: flex;
@@ -9,5 +10,14 @@
     opacity: 0.6;
     border-top: 1px solid rgba(0,0,0,0.3);
     font-size:16px;
+    flex-wrap: wrap;
+    text-align: center;
     
+}
+
+@media screen and (max-width:786px){
+    .footer{
+        font-size:14px;
+        padding:20px 16px;
+    }
 }

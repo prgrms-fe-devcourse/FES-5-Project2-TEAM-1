@@ -44,6 +44,12 @@ useEffect(() => {
       board_id:id
     })
     if (error) console.error()
+    
+    const { error: memberError } = await supabase.from('board_member').delete().match({
+      profile_id,
+      board_id:id
+    })
+    if(memberError) console.error(error)
     setMembers((prev) => prev.filter(user => user.profile_id !== profile_id))
   }
   return (

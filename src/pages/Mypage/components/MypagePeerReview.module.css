@@ -1,6 +1,5 @@
 .sectionName{
-
-  padding-left: 1rem;
+  position: inherit;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 32px;
@@ -20,26 +19,32 @@
   gap: 0;
 }
 
-.prevButton>img,
-.nextButton>img{
-  width: 3rem;
-  height: 3rem;
-  stroke-width: 1px;
-  fill: #D4D4D4;
-  stroke-width: 1px;
-  stroke: #D4D4D4;
-  cursor: pointer;
-}
-
-.prevButton {
+.prevButton { 
   position: relative;
   left:-4.4rem;
 }
+
 
 .nextButton {
   position: relative;
   right:-4.4rem;
 }
+
+.prevButton>img,
+.nextButton>img{
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.prevButton:active,
+.nextButton:active{
+  img{
+    transform: scale(.7);
+  }
+}
+
 
 /* .content */
 .peerReviewCard{
@@ -75,9 +80,30 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  margin-bottom: 4px;
 }
 
 .peerReviewContent{
+  display: block;
+  width: 90%;
+
+  color: #000;
+  text-align: center;
+  font-family: "Pretendard Variable";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.peerReviewContentPreview{
+  display: block;
+  width: 90%;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
   color: #000;
   text-align: center;
   font-family: "Pretendard Variable";
@@ -93,13 +119,36 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 0.7s ease-in-out;
   
   img{
-    width: 5rem;
+    width: 8rem;
     margin-bottom: 1rem;
   }
   p{
     text-align: center;
-    line-height: 3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.6;
+    
+    padding: 0.5rem 1.5rem;
+    border: 2px solid #A6B37D; 
+    border-radius: 32px;
+    
+    box-shadow: 0 4px 12px rgba(166, 179, 125, 0.4); 
+    color: #A6B37D; 
+    background-color: #F0F8E0; 
+
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
