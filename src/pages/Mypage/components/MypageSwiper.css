@@ -4,6 +4,13 @@
   padding: 0 !important;
 }
 
+.swiper.swiper-initialized.swiper-horizontal.swiper-backface-hidden.peerReview, 
+.swiper.swiper-initialized.swiper-horizontal.swiper-backface-hidden {
+  margin-left: -42px !important;
+  margin-right: -42px !important;
+
+}
+
 .swiper-wrapper {
   margin: 0 !important;
   padding: 0 !important;
@@ -13,17 +20,14 @@
   margin-right: 0 !important;
 }
 
-
-
-
 .swiper.peerReview{
-    padding: 0 !important;
+  padding: 0 !important;
   margin: 0 !important;
   box-sizing: border-box;
 }
 
 .swiper-slide.peerReview {
-  width: 12.8rem;
+  width: 11.8rem;
   height: 10.6rem ;
   user-select: none;
   height: 10.6rem;
@@ -31,28 +35,33 @@
 }  
 
 .peerReview.peerReviewActive {
-  width: 21.8rem ;
+  width: 19.8rem ;
   height: 10.6rem ;
 }
 
 
-.swiper.team{
-  padding: 0 1rem; /* 필요 시 명시적으로 추가 */
-}  
+/* .swiper.team{
+  padding: 0 1rem;
+}   */
 
 /* .teamCard의 부모 엘리먼트 */
-.swiper-slide.team {
-  width: 21rem;
-  height: 14.6rem;
+.swiper-slide.team{
+  width: 19.4rem;
   flex-shrink: 0;
+  transition: 0.2s ease
 }  
 
-@media screen and (max-width: 768px) {
+/* .team.teamActive{
+  border-radius: 10px;
+  box-shadow: 5px 8px 13px rgba(102, 102, 102, 0.3);
+} */
+
+/* @media screen and (max-width: 1660px) {
   .swiper-slide.peerReview {
-    width: 30vw;
+    width: 8.8rem;
   }
 
   .swiper-slide-active.peerReview {
-    width: 40vw;
+    width: 11.8rem;
   }
-}
+} */

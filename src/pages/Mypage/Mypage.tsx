@@ -41,8 +41,6 @@ function Mypage() {
   const {id:urlProfileId} = useParams();
   const navigate = useNavigate();
 
-  // urlProfileId를 기준으로 데이터를 렌더링해줘야한다!!!!
-
   useEffect(() => {
   if (!isLoading && user && profileId) {
     setCurrentUser({
