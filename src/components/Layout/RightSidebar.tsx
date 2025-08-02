@@ -26,7 +26,8 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
   const { user, isLoading, logout, profileId } = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser|null>(null);
   // const [authState, setAuthState] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
-
+  const [messageReady, setMessageReady] = useState(false)
+  const [membershipReady,setMembershipReady] = useState(false)
   const navigate = useNavigate()
 
   // setAuthState('unauthenticated');
@@ -78,33 +79,39 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
   }
 
 
+
   return (
     <nav className={S.container}>
       <div className={S.height}>
         <div className={S.loginBox}>
-          <img 
-            className={S.profileImage} 
-            src={currentUser?.profileImage ? currentUser.profileImage : '/public/images/여울.png'} 
-            alt="프로필" 
+          <img
+            className={S.profileImage}
+            src={
+              currentUser?.profileImage
+                ? currentUser.profileImage
+                : "/public/images/여울.png"
+            }
+            alt="프로필"
           />
-          {
-            currentUser?.profileId ? (
-              <Link to={`/mypage/${currentUser.profileId}`} className={S.loginBoxGreeting} title='마이페이지 이동'>
-                <p>Hello🖐️</p>
-                <h3>{currentUser.email.split("@")[0]}</h3>
-              </Link>
-            ) : (
-              <div className={S.loginBoxGreeting}>
-              <p >Hello🖐️</p>
-                <h3>Guest</h3>
-              </div>
-            )
-          }
+          {currentUser?.profileId ? (
+            <Link
+              to={`/mypage/${currentUser.profileId}`}
+              className={S.loginBoxGreeting}
+              title="마이페이지 이동"
+            >
+              <p>Hello🖐️</p>
+              <h3>{currentUser.email.split("@")[0]}</h3>
+            </Link>
+          ) : (
+            <div className={S.loginBoxGreeting}>
+              <p>Hello🖐️</p>
+              <h3>Guest</h3>
+            </div>
+          )}
           <div className={S.loginLogout}>
-            {
-              currentUser ? (
-                <button onClick={handleLogout}>
-                  {/* <svg
+            {currentUser ? (
+              <button onClick={handleLogout}>
+                {/* <svg
                     width="24"
                     height="22"
                     viewBox="0 0 20 19"
@@ -116,19 +123,18 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
                       fill="#222222"
                     />
                   </svg> */}
-                  <p className={S.logout}>로그아웃</p>
-                </button>
-              ) : (
-                <>
-                  <Link to="/login" className={S.linkButton}>
-                    로그인
-                  </Link>
-                  <Link to="/register" className={S.linkButton}>
-                    회원가입
-                  </Link>
-                </>
-              )
-            }
+                <p className={S.logout}>로그아웃</p>
+              </button>
+            ) : (
+              <>
+                <Link to="/login" className={S.linkButton}>
+                  로그인
+                </Link>
+                <Link to="/register" className={S.linkButton}>
+                  회원가입
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -153,7 +159,11 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
                 <h3>Notification</h3>
               </span>
             </li>
-            <li className={S.navList}>
+            <li
+              className={S.navList}
+              onMouseEnter={()=>setMessageReady(true)}
+              onMouseLeave={() => setMessageReady(false)}
+            >
               <a href="#" className={S.navListText}>
                 <svg
                   width="24"
@@ -171,11 +181,13 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
                     fill="#222222"
                   />
                 </svg>
-                <h3>Message</h3>
+                <h3 className={`${S.fadeText} ${messageReady ? S.visible : S.hidden}`}>
+                  {messageReady ? "In Progress" : "Message"}
+                </h3>
               </a>
             </li>
             <li className={S.navList}>
-              <Link to='/team' className={S.navListText}>
+              <Link to="/team" className={S.navListText}>
                 <svg
                   width="24"
                   height="25"
@@ -230,8 +242,10 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
               <p>
                 월 1만원으로 <br /> 더 많은 기능을 이용할 수 있어요
               </p>
-              <button type="button" className={S.membershipButton}>
-                가입하기
+              <button type="button" className={S.membershipButton}
+                onMouseEnter={()=>setMembershipReady(true) }
+                onMouseLeave={()=>setMembershipReady(false)}>
+                  {membershipReady ? "In Progress" : "가입하기"}
               </button>
             </div>
           </div>
