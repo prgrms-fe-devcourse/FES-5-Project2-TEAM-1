@@ -31,13 +31,6 @@ interface Overlay{
 
 export type StatusCode = 0 | 1 | 2 | 3 | null;
 
-const statusLabelMap: Record<Exclude<StatusCode, null>, string> = {
-  0: '온라인',
-  3: '자리비움',
-  2: '방해금지',
-  1: '오프라인',
-};
-
 function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:Overlay) {
 
   const { user, isLoading, logout, profileId } = useAuth();
@@ -126,10 +119,10 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
 
 
   useEffect(() => {
-      const outSideClick = ( e ) => {
+      const outSideClick = (e: MouseEvent) => {
         const { target } = e;
 
-        if( isStatusClicked && popupRef.current && !popupRef.current.contains(target) ) {
+        if( isStatusClicked && popupRef.current && !popupRef.current.contains(target as Node) ) {
           setIsStatusClicked(false);
         }
       };
@@ -181,8 +174,8 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
         setCurrentUser(prev => prev ? { ...prev, status: newStatus } : prev);
     };
     setIsClicked(prev => !prev);
+    console.log( isClicked );
   }
-  console.log( status );
 
   return (
     <nav className={S.container}>
