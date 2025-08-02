@@ -22,6 +22,8 @@ import { useState } from "react";
 import { AdminProvider } from "./components/context/useAdmin";
 import { NotificationProvider } from "./components/context/NotificationContext";
 import { useAuth } from "./auth/AuthProvider";
+import PeerReiview from "./pages/PeerReview/PeerReiview";
+import Team from "./pages/team/Team";
 
 import NotFound from "./pages/NotFound";
 
@@ -73,6 +75,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/study" element={<StudyChannel />} />
+            <Route path='/team' element={<Team/>}/>
             <Route
               path="/channel/:id"
               element={
@@ -84,6 +87,7 @@ function App() {
               <Route index element={<StudyJoinInfomation />} />
               <Route path="memberchannel" element={<StudyMemberChannel />} />
               <Route path="thread" element={<Thread />} />
+              <Route path='peerReview/:id' element={<PeerReiview/>}/>
               <Route path="management" element={<Management />}>
                 <Route index element={<MangementChannel />} />
                 <Route path="approve" element={<Approve />} />

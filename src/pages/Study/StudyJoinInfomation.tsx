@@ -1,4 +1,4 @@
-import { Link, NavLink, useParams } from "react-router-dom";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import S from "./StudyJoinInfomation.module.css";
 import type { Tables } from "@/supabase/database.types";
 import Project from "./components/Project";
@@ -142,7 +142,26 @@ function StudyJoinInfomation() {
               </Link>
             )}
           </div>
-          <Project />
+          <div style={{ position: "relative" }}>
+            <Project />
+            {board_cls == null ? (
+              <div className={S.overlay}>
+                <p>아직 스터디가 없습니다</p>
+              </div>
+            ) : board_cls == '1' && (
+              isFinish && (
+                <div className={S.overlay}>
+                  <button
+                    type="button"
+                    className={S.peerReviewBtn}
+                    onClick={() => navigate(`/channel/${id}/peerReview/${id}`)}
+                  >
+                    피어리뷰 작성하기
+                  </button>
+                </div>
+              )
+            )}
+          </div>
         </section>
         <section>
           <ChannelComment {...card} />
