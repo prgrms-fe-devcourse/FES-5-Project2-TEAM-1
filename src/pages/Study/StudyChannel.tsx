@@ -1,86 +1,86 @@
-import { useEffect, useRef, useState } from 'react';
-import Card from '@/components/Layout/Card';
-import S from './studychannel.module.css'
-import supabase from '@/supabase/supabase';
-import { debounce } from '@/utils/debounce';
-import type { Tables } from '@/supabase/database.types';
-import { Link } from 'react-router-dom';
-
-
+import { useEffect, useRef, useState } from "react";
+import Card from "@/components/Layout/Card";
+import S from "./studychannel.module.css";
+import supabase from "@/supabase/supabase";
+import { debounce } from "@/utils/debounce";
+import type { Tables } from "@/supabase/database.types";
+import { Link } from "react-router-dom";
 
 type Board = Tables<"board">;
-type CardProps = Board & 
-{
-  board_tag: Tables<"board_tag">[] 
+type CardProps = Board & {
+  board_tag: Tables<"board_tag">[];
 };
 
-
 function StudyChannel() {
-
   const cardPerPage = 9;
-  const [currentPage, setCurrentPage] = useState(1)
-  const [cardData, setCardData] = useState<CardProps[]>([])
-  const [originData, setOriginData] = useState<CardProps[]>([])
-  const filterTab = ["최신순", "좋아요순"]
-  const filterRef = useRef<(HTMLButtonElement | null)[]>([])
-  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [cardData, setCardData] = useState<CardProps[]>([]);
+  const [originData, setOriginData] = useState<CardProps[]>([]);
+  const filterTab = ["최신순", "좋아요순"];
+  const filterRef = useRef<(HTMLButtonElement | null)[]>([]);
+  const [recentlyCardData, setrecentlyCardData] = useState<CardProps[]>([]);
   useEffect(() => {
-      const boardTable = async () => {
-        const { data } = await supabase
-          .from("board")
-          .select(" *, board_tag(*)")
-        if (data) {
-          setCardData(data);
-          setOriginData(data);
-        } 
+    const boardTable = async () => {
+      const { data } = await supabase
+        .from("board")
+        .select(" *, board_tag(*)")
+        .order("create_at", { ascending: false });
+      if (data) {
+        setCardData(data);
+        setOriginData(data);
+      }
     };
-      boardTable();
-  },[])
+    boardTable();
+  }, []);
+  useEffect(() => {
+    setrecentlyCardData([...cardData]);
+  }, [cardData]);
 
-  function handleFilter(e:React.MouseEvent) {
-    if (filterRef.current == null) return
+  function handleFilter(e: React.MouseEvent) {
+    if (filterRef.current == null) return;
     if (e.currentTarget === filterRef.current[0]) {
-     const sorted = [...cardData].sort(
-       (a, b) =>
-         new Date(b.create_at).getTime() - new Date (a.create_at).getTime()
-      )
-      setCardData(sorted)
+      const sorted = [...cardData].sort(
+        (a, b) =>
+          new Date(b.create_at).getTime() - new Date(a.create_at).getTime()
+      );
+
+      setCardData(sorted);
     } else if (e.currentTarget === filterRef.current[1]) {
-      const sorted = [...cardData].sort((a, b) => b.likes - a.likes)
-      setCardData(sorted)
+      const sorted = [...cardData].sort((a, b) => b.likes - a.likes);
+
+      setCardData(sorted);
     }
   }
 
   const debouncedSearch = debounce((value: string) => {
-    const lowerValue = value.toLowerCase()
+    const lowerValue = value.toLowerCase();
     const filtered = [...originData].filter(
       (card) =>
         card.title.toLowerCase().includes(lowerValue) ||
         card.contents.toLowerCase().includes(lowerValue) ||
-        card.address?.toLowerCase().includes(lowerValue) || 
+        card.address?.toLowerCase().includes(lowerValue) ||
         card.board_tag.some((tag) =>
           tag.hash_tag?.toLowerCase().includes(lowerValue)
         )
     );
-    setCardData(filtered)
-    setCurrentPage(1)
-  }, 400)
+    setCardData(filtered);
+    setCurrentPage(1);
+  }, 400);
 
-  const recentlyCardData = [...cardData].sort(
-    (a, b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime()
-  );
-  
-  const startIdx = (currentPage - 1) * cardPerPage
-  const endIdx = startIdx + cardPerPage
+  const startIdx = (currentPage - 1) * cardPerPage;
+  const endIdx = startIdx + cardPerPage;
   const paginatedCards = recentlyCardData.slice(startIdx, endIdx);
 
   const totalPages = Math.ceil(cardData.length / cardPerPage);
   const maxVisible = 5;
-  const startPage = Math.max(1, currentPage - 2)
-  const endPage = Math.min(totalPages, startPage + maxVisible - 1)
+  const startPage = Math.max(1, currentPage - 2);
+  const endPage = Math.min(totalPages, startPage + maxVisible - 1);
   const adjustedStartPage = Math.max(1, endPage - maxVisible + 1);
-  const visiblePage = Array.from({ length: endPage - adjustedStartPage + 1 }, (_, i) => adjustedStartPage + i)
-  
+  const visiblePage = Array.from(
+    { length: endPage - adjustedStartPage + 1 },
+    (_, i) => adjustedStartPage + i
+  );
+
   return (
     <main className={S.container}>
       <div className={S.channelHeader}>
@@ -131,7 +131,7 @@ function StudyChannel() {
             </svg>
           </button>
         </form>
-        <Link to='/Write'>
+        <Link to="/Write">
           <button type="button" className={S.postBtn}>
             글쓰기
           </button>
@@ -185,4 +185,4 @@ function StudyChannel() {
     </main>
   );
 }
-export default StudyChannel
+export default StudyChannel;
