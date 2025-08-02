@@ -23,6 +23,7 @@ import { AdminProvider } from "./components/context/useAdmin";
 import { NotificationProvider } from "./components/context/NotificationContext";
 import { useAuth } from "./auth/AuthProvider";
 import PeerReiview from "./pages/PeerReview/PeerReiview";
+import Team from "./pages/team/Team";
 
 
 
@@ -64,6 +65,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/study" element={<StudyChannel />} />
+            <Route path='/team' element={<Team/>}/>
             <Route
               path="/channel/:id"
               element={

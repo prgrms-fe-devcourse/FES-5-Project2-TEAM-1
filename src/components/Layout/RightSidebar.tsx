@@ -175,7 +175,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
               </a>
             </li>
             <li className={S.navList}>
-              <a href="#" className={S.navListText}>
+              <Link to='/team' className={S.navListText}>
                 <svg
                   width="24"
                   height="25"
@@ -201,7 +201,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
                   />
                 </svg>
                 <h3>Team</h3>
-              </a>
+              </Link>
             </li>
             <li className={S.navList}>
               <a href="#" className={S.navListText}>
