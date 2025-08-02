@@ -14,6 +14,7 @@ import MypageScrap from './components/MypageScrap';
 import MoveToTop from './components/MoveToTop';
 import { useAuth } from '@/auth/AuthProvider';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 type UserProfileWithJoins = Tables<'user_profile'> & {
@@ -33,31 +34,48 @@ type CurrentUser = {
 function Mypage() {
   const [userData, setUserData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const {user, isLoading}  = useAuth();
+  const {user, isLoading, profileId}  = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:''});
   const {id:urlProfileId} = useParams();
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    console.log(user);
-    if(!user) {
-      console.error('로그인이 필요합니다');
-      // 로그인 후 이용해달라는 alert 줄 지 고민
-      // navigate("/login");
-      return;
-    }
-    setCurrentUser({
-      profileId: user.profileId, 
-      email: user.email, 
-      id: user.id
-    });
-    console.log(currentUser);
+  // 아래 방식은 새로고침하면 데이터를 불러오지 못해서 수정함
+  // useEffect(()=>{
+  //   if(isLoading) return;
+  //   console.log(user);
+  //   if(!user) {
+  //     toast.warning('로그인 후 이용해보세요',{        
+  //       onClose() {
+  //         navigate("/login");
+  //       },
+  //       autoClose: 1500,
+  //     })
+  //     navigate("/login");
+  //     return;
+  //   }
+  //   if(!profileId) return;
+  //   setCurrentUser({
+  //     profileId: profileId, 
+  //     email: user.email, 
+  //     id: user.id
+  //   });
+  //   // console.log(currentUser);
       
-  },[isLoading])
+  // },[isLoading])
 
+  useEffect(() => {
+  if (!isLoading && user && profileId) {
+    setCurrentUser({
+      profileId,
+      email: user.email,
+      id: user.id,
+    });
+  }
+  }, [isLoading, user, profileId]);
 
   useEffect(() => {
     const fetchUser = async () => {
+      if( !currentUser.id ) return;
       const { data, error } = await supabase
         .from('user_base')
         .select(`

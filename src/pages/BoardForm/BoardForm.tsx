@@ -13,6 +13,7 @@ import { useHashTagContext } from "@/components/context/useHashTag";
 import { useProfileImageContext } from "@/components/context/useProfileImage";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { showConfirmAlert } from "@/utils/sweetAlert";
 
 interface boardData {
   profile_id: string;
@@ -43,18 +44,22 @@ function BoardForm({ userId }: Props) {
       const save = data?.[0];
       if (save) {
         if (save.title === "" && save.contents === "") return;
+        if (!save.title && !save.contents) return;
 
         const updateTime = format(save.update_at, "yyyy-MM-dd HH:mm:ss");
-        const isConfirm = confirm(
-          `${updateTime} 작성하던 글이 있습니다 불러오시겠습니까?`
-        );
-        if (!isConfirm) return;
-        setPostData((prev) => {
-          return {
-            ...prev,
-            title: save.title ?? "",
-            contents: save.contents,
-          };
+        showConfirmAlert(
+          updateTime,
+          "작성하던 글이 있습니다 불러오시겠습니까?"
+        ).then((result) => {
+          if (result.isConfirmed) {
+            setPostData((prev) => {
+              return {
+                ...prev,
+                title: save.title ?? "",
+                contents: save.contents,
+              };
+            });
+          }
         });
       } else {
         const { error } = await supabase
@@ -134,7 +139,8 @@ function BoardForm({ userId }: Props) {
   const imageUpload = async (board_id: string) => {
     let imageUrl = "";
     if (!profileImage) return;
-    const fileName = `${board_id}-${profileImage.name}`; // 중복 방지를 위한 이름
+    const fileExt = profileImage.name.split(".").pop(); // 확장자 추출
+    const fileName = `${board_id}.${fileExt}`; // 중복 방지를 위한 이름
 
     const { error } = await supabase.storage
       .from("boardimage")

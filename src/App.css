@@ -1,15 +1,25 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 @import "./style/sweetAlert.css";
-
 .container{
  /* display: flex; */
   position: relative;
   width: 100%;
+  display: flex;
+  height: auto;
+  justify-content: space-between;
+  background-color: #F5F5F5;
+  container > *{
+    min-width: 0;
+    flex-shrink: 1;
+  }
   height: 100vh;
   /* overflow: hidden; */
 }
-
 .leftcontainer{
+  width: 13.75rem;
+  flex-shrink: 0;
+  z-index: 9;
+  overflow-x: visible;
   width: 220px;
   position: fixed;
   top: 0;
@@ -17,7 +27,6 @@
   bottom: 0;
   z-index: 10;
 }
-
 .rightcontainer{
   width: 220px;
   position: fixed;
@@ -26,7 +35,6 @@
   bottom: 0;
   z-index: 2000;
 }
-
 .mainWrapper{
   display: flex;
   flex-direction: column;
@@ -42,18 +50,35 @@
   margin-right: 0;
   width: 100%;
 }
-
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  min-height: 100vh;
+  height: auto;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.2);
   height: 100%;
   backdrop-filter: blur(10px);  
   background: rgba(0, 0, 0, 0.2); 
   z-index: 99;
   pointer-events: auto;
-
+}
+/* @media screen and (max-width: 1024px) {
+  .leftcontainer,
+  .rightcontainer {
+    width: 160px;
+  }
+} */
+@media screen and (max-width: 768px) {
+  .leftcontainer,
+  .rightcontainer {
+    display: none; /* :흰색_확인_표시: 모바일에서는 숨김 */
+  }
+  .container {
+    justify-content: center;
+  }
 }
 
 

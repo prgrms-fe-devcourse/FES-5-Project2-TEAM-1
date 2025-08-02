@@ -37,11 +37,11 @@
 
 .nextButton {
   position: relative;
-  right:-4.4rem;
+  right:-1.4rem;
 }
 
 .teamCard{
-  width: 19.4rem;
+  width: 20.4rem;
   height: 14.5rem;
 
   display: flex;
@@ -57,9 +57,11 @@
 }
 
 .teamImg{
-  margin: 10px;
-  width: 18rem;
+  width: 19rem;
   height: 10.4rem;
+  
+  margin: 10px;
+  border-radius: 5px;
 
 }
 
@@ -70,4 +72,21 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.nothing{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  img{
+    width: 5rem;
+    margin-bottom: 1rem;
+  }
+  p{
+    text-align: center;
+    line-height: 3rem;
+  }
 }

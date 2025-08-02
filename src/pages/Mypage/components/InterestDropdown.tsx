@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import S from './InterestDropdown.module.css';
 import back from '/icons/back.svg';
 import interestData from '@/components/data/interestData.json';
@@ -6,28 +6,58 @@ import type { User } from '../Mypage';
 import type { Tables } from '@/supabase/database.types';
 import { useToast } from '@/utils/useToast';
 import supabase from '@/supabase/supabase';
+import compareUserId from '@/utils/compareUserId';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
 
 
 
 interface Props {
+    plusClicked: boolean,
     setPlusClicked: (value: boolean) => void;
-    userInterest: Tables<'user_interest'>;
+    userInterest: { profile_id: string } | null; 
     setUserData: React.Dispatch<React.SetStateAction<User | null>>;
     user: User | null,
-    interests: string[] | undefined,
-    setInterests: React.Dispatch<React.SetStateAction<string[] | undefined>>;
+    interestArray: Interest[] | null;
+    setInterestArray: React.Dispatch<React.SetStateAction<Interest[] | null>>;
 }
 
+type Interest = Tables<'user_interest'>;
 
-function InterestDropdown({ setPlusClicked, userInterest, setUserData, interests, setInterests }: Props) {
+function InterestDropdown({ plusClicked, setPlusClicked, userInterest, setUserData, interestArray, setInterestArray }: Props) {
 
     const [isTyping, setIsTyping] = useState(false);
     const [filteredInterest, setFilteredInterest] = useState<string[]>([]);
+    const [ fontSize, setFontSize] = useState<string>('');
 
     const ulRef = useRef<HTMLUListElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const navigate = useNavigate();
+    const { error } = useToast();
 
-    const { success, error } = useToast();
+    useEffect(() => {
+        const fetchInterest = async () => {
+            if( !userInterest?.profile_id ) return;
+            const result = await compareUserId(userInterest.profile_id, 'user_interest');
+            setInterestArray(result || []);
+        }
+
+        fetchInterest();
+    }, [userInterest, setInterestArray])
+
+    useEffect(() => {
+        gsap.fromTo('#btnBox', 
+            { x: 10, opacity: 0 },
+            {
+            x: 0,
+            opacity: 1,
+            duration: 0.3,
+            ease: 'power2.out',
+            clearProps: 'transform,opacity', // opacity도 지워줌
+            }
+        )   
+    }, [plusClicked])
 
     const filterInterest = ( value: string) => {
 
@@ -39,6 +69,14 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interests
 
     const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement> ) => {
         const value = e.currentTarget.value.trim(); 
+        console.log( value.length );
+        if( value.length > 15 ) {
+            setFontSize('0.7rem')
+        } else if( value.length > 10) {
+            setFontSize('0.8rem')
+        } else {
+            setFontSize('');
+        }
 
         // setInterest([ value ]);
         setIsTyping(true);
@@ -50,7 +88,14 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interests
         const text = e.currentTarget.textContent;
         if (text && inputRef.current) {
             inputRef.current.value = text;
-            // handleAdd(text);
+
+            if(text.length > 15 ) {
+                setFontSize('0.7rem')
+            } else if( text.length > 10 ) {
+                setFontSize('0.8rem')
+            } else {
+                setFontSize('')
+            }
             setIsTyping(false);
         }
     }
@@ -58,56 +103,66 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interests
     const handleInterestSave = async () => {
 
         if (!inputRef.current) return;
-        if( !interests ) return;
-        const value = inputRef.current.value.trim();
+        if (!userInterest?.profile_id) {
+            error('프로필 정보를 불러올 수 없습니다.');
+            return;
+        }
 
-        const lowerInterest = interests.map(i => i.toLowerCase());
+        const value = inputRef.current.value.trim();
+        const profile_id = userInterest.profile_id;
+
+         const currentInterests = interestArray ?? [];
+
+        const lowerInterest = currentInterests.map(i => i.interest.toLowerCase());
         if (lowerInterest.includes(value.toLowerCase())) {
             error('관심사 중복!');
             return;
         }
 
-        if (interests.length >= 5) {
+        if (currentInterests.length >= 5) {
             error('관심사는 최대 5개까지 추가할 수 있어요!');
             return;
         }
 
-        // 여기서 새 배열을 먼저 계산
-        const updatedInterests = [...interests, value];
-
-        // 상태 업데이트
-        setInterests(updatedInterests);
-
-        const { profile_id } = userInterest;
-        const { error: addError } = await supabase
-            .from('user_interest')
-            .update({interest: interests.join(',')})
-            .eq('profile_id', profile_id);
-        
-        if( addError ) {
-            error('업로드 실패');
-            console.error(addError);
+        if (value.length === 0) {
+            error('관심사를 입력해주세요!');
             return;
         }
 
+        const { data, error: insertError } = await supabase
+            .from('user_interest')
+            .insert([
+                {
+                    profile_id,
+                    interest: value
+                }
+            ])
+            .select()
+            .single();
+        
+        if( insertError ) {
+            error('추가 실패');
+            return;
+        }
+
+        setInterestArray((prev) => (prev ? [...prev, data] : [data]));
         setUserData((prev) => {
             if( !prev ) return prev;
 
-            const prevInterest = prev.profile[0].interest?.[0] || {};
-
+            const newInterest = [...(prev.profile[0].interest || []), data];
             return {
                 ...prev,
                 profile: [{
-                     ...prev.profile[0],
-                     interest: [{
-                        ...prevInterest,
-                        interest: interests.join(',')
-                     }]
+                    ...prev.profile[0],
+                    interest: newInterest
                 }]
             }
-        })
+        });
 
-        success('관심사 추가 성공!');
+        toast.info('관심사가 추가되었습니다.', { onClose() {
+                  navigate(`/mypage/${userInterest?.profile_id}`)
+                }, autoClose: 1500});
+
         if( inputRef.current ) {
              inputRef.current.value = '';
         }
@@ -122,8 +177,9 @@ function InterestDropdown({ setPlusClicked, userInterest, setUserData, interests
             type='text' 
             className={S.interestInput}
             onChange={handleInputChange} 
+            style={fontSize ? {fontSize} : undefined}
         />
-        <div className={S.interestBackSave}>
+        <div className={S.interestBackSave} id='btnBox'>
             <button 
                 className={S.interestBackBtn}
                 onClick={() => setPlusClicked(false) }

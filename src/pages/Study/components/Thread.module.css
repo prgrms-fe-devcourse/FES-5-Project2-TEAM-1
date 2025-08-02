@@ -35,14 +35,15 @@
 }
 
 .profile{
-  font-size: 24px;
+  font-size: 20px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 
   img{
     width: 36px;
     height: 36px;
+    border-radius: 50px;
   }
 }
 

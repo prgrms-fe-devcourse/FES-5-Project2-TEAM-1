@@ -2,13 +2,8 @@ import { useEffect, useState } from "react";
 import type { Tables } from "src/supabase/database.types";
 import S from './MypageScrap.module.css'
 import supabase from "@/supabase/supabase";
-/**
- * - 스크랩 모아보기
-    - 현재 접속한 id와 scrap 테이블에 같은 profile_id인지 확인(본인 여부 확인) 하고, 그때의 board_id들 가져와서 해당 title ,contents 뿌리기
+import { Link } from "react-router-dom";
 
-    - 보드 contents 일정 글자 이하로만 보이게 설정해야함
- 
-    */
 type Scrap = Tables<'scrap'>
 type Board = Tables<'board'>
 type NewBoard = Pick<Board,'board_id'|'title'|'contents'>;
@@ -24,18 +19,14 @@ function MypageScrap({profileId}:Props) {
 
   useEffect(()=>{
     if(!profileId) return;
-    // console.log('스크랩에서 프로필 아이디: ',profileId);
     const fetchScrapsAndBoards = async() => {
       const {data, error} = await supabase.from('scrap').select('*').eq('profile_id',profileId);
       if(error) return console.error('스크랩 불러오기 실패')
-      // console.log(data);
       setScraps(data);
     }
     fetchScrapsAndBoards();
   },[profileId])
-  // 아래 이유때문이라도 이 컴포넌트 내부에서 db조회를 하는게 훨씬 최신화가 되지 않나? 싶은 생각
-  // 스크랩이 추가되거나 삭제됐을때 실행돼야함 -> 작업이 다른 페이지에서 이뤄지니까 마이페이지에 오면 다시 렌더링되지 않을까..? 종속성 배열 넣지 않아도?
-  // 글쓴이가 글을 삭제한경우는 어떻게 보일지 처리해야할듯? -> 보드 아이디가 사라지니까 애초에 셀렉트가 안될듯?
+
 
   
   
@@ -83,18 +74,33 @@ function MypageScrap({profileId}:Props) {
   return (
     <>
       <h2 className={S.sectionName}>스크랩</h2>
-      <section className={S.scrapContainer}>
-        <ul className={S.scrapList}>
-          {
-            newBoards && newBoards.map(({board_id, title, contents})=>(
-              <li key={board_id} className={S.scrap}>
-                <p className={S.scrapTitle}>{title}</p>
-                <p className={S.scrapContent}>{contents}</p>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
+      {
+        scraps && scraps.length > 0 && newBoards ? (
+          <section className={S.scrapContainer}>
+            <ul className={S.scrapList}>
+              {
+                newBoards && newBoards.map(({board_id, title, contents})=>(
+                  <li key={board_id} className={S.scrap}>
+                    <Link to={`/channel/${board_id}`}>
+                      <p className={S.scrapTitle}>{title}</p>
+                      <p className={S.scrapContent}>{contents}</p>
+                    </Link>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        ) : (
+          <div className={S.nothing}>
+            <img src="/images/서치이미지.png" alt="검색 결과 없음" />
+            <p>
+              아직 스크랩된 글이 없습니다 🍃🍃🍃<br />
+              스터디에서 글을 스크랩해서 한 눈에 확인해보세요!<br />
+              
+            </p>
+          </div>
+        )
+      }
     </>
   )
 }

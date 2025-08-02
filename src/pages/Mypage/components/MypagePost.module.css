@@ -31,7 +31,7 @@
   flex-direction: column;
 }
 
-.post{
+.post a{
   min-height: 45px;
   padding: 0 1rem;
 
@@ -40,15 +40,11 @@
   align-items: center;
   justify-content: space-between; 
   border-bottom: 1px solid #868686;
-   
-  div {
-    color: black;
-  }
 
   &:last-child{
     margin-bottom: 1rem;
   }
-
+  
   .postTitle{
     width: 35%;
     color: #000;
@@ -58,7 +54,7 @@
     font-weight: 500;
     line-height: normal;
   }
-
+  
   .postContent{
     width: 65%;
     color: rgba(85, 85, 85, 0.60);
@@ -67,6 +63,23 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+  }
+}
+
+.nothing{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  img{
+    width: 5rem;
+    margin-bottom: 1rem;
+  }
+  p{
+    text-align: center;
+    line-height: 3rem;
   }
 }
 

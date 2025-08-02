@@ -13,7 +13,7 @@ function ManagementMembers() {
 
   const {success} = useToast()
   const {id} = useParams()
-const [members, setMembers] = useState<User[]>([]);
+  const [members, setMembers] = useState<User[]>([]);
 
 useEffect(() => {
   const fetchData = async () => {

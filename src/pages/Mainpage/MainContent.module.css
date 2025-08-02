@@ -22,7 +22,7 @@
 
 .mainContent > * {
   width: 100%;
-  max-width: 960px;
+  /* max-width: 960px; */
 }
 
 .mainContent::-webkit-scrollbar{

@@ -1,18 +1,34 @@
 import type { Tables } from "@/supabase/database.types"
 import compareUserId from "@/utils/compareUserId";
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import S from './MypageSocialConvert.module.css'
 import { useCopyToClipboard } from '@uidotdev/usehooks'
-import { useToast } from "@/utils/useToast";
 import type { User } from "../Mypage";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+import Instagram from '@/assets/instagram.svg';
+import Github from '@/assets/github.svg';
+import Discord from '@/assets/discord.svg';
+import Slack from '@/assets/slack.svg';
+import Linkedin from '@/assets/linkedin.png';
+import Facebook from '@/assets/facebook.png';
+import Line from '@/assets/line.png';
+import Youtube from '@/assets/youtube.png';
+import DefaultIcon from '/images/너굴.png';
+
+interface Props {
+  user: User | null,
+  socialData: Social[] | null;
+  setSocialData: React.Dispatch<React.SetStateAction<Social[] | null>>;
+}
 
 type Social = Tables<'user_social'>;
 
-function MypageSocialConvert({ user }: {user: User | null}) {
+function MypageSocialConvert({ user, socialData, setSocialData }: Props ) {
 
-  const [socialData, setSocialData] = useState<Social[]|null>(null);
   const [copiedText, setCopy] = useCopyToClipboard();
-  const { success } = useToast();
+  const navigate = useNavigate();
 
   const userSocial = user && user.profile[0].social[0];
 
@@ -25,10 +41,22 @@ function MypageSocialConvert({ user }: {user: User | null}) {
     }
     fetchSocial();
   },[userSocial])
-  // 유저가 바뀌면서 소셜 값도 바뀔때 useEffect가 계속 실행돼야하지 않을까?
 
   useEffect(()=>{
-    copiedText && success(`복사 완료! ${copiedText}`)
+    // copiedText && toast.success(`복사 완료! ${copiedText}`,{ onClose() {
+    //   navigate(`/mypage/${userSocial?.profile_id}`)
+    // },autoClose:1500})
+
+    if( copiedText ) {
+      toast.success(`복사 완료!`,{ onClose() {
+       navigate(`/mypage/${userSocial?.profile_id}`)
+      },autoClose:1500})
+      toast.info(copiedText, { onClose() {
+       navigate(`/mypage/${userSocial?.profile_id}`)
+      },autoClose:1500})
+    }
+
+
   },[copiedText])
 
   return ( 
@@ -39,10 +67,15 @@ function MypageSocialConvert({ user }: {user: User | null}) {
             
             <button type="button" onClick={()=>{setCopy(social_link)}} className={S.socialLink} title='복사하기' >
               {
-                social === 'instagram' ? <img src="src\assets\instagram.svg" alt="instagram"/>
-                : social === 'github' ? <img src="src\assets\github.svg" alt="github" />
-                : social === 'discord' ? <img src="src\assets\discord.svg" alt="discord" /> 
-                : <img src="src\assets\slack.svg" alt="slack" /> 
+                social === 'instagram' ? <img src={Instagram} alt="instagram"/>
+                : social === 'github' ? <img src={Github} alt="github" />
+                : social === 'discord' ? <img src={Discord} alt="discord" /> 
+                : social === 'slack' ? <img src={Slack} alt="slack" /> 
+                : social === 'facebook' ? <img src={Facebook} alt="facebook" /> 
+                : social === 'line' ? <img src={Line} alt="line" /> 
+                : social === 'youtube' ? <img src={Youtube} alt="youtube" /> 
+                : social === 'linkedin' ? <img src={Linkedin} alt="linkedin" /> 
+                : <img src={DefaultIcon} alt="personal website" /> 
               }
             </button>
           </div>

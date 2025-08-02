@@ -4,6 +4,8 @@ import S from './MypageTop.module.css';
 import E from './MypageEdit.module.css';
 import supabase from '../../supabase/supabase';
 import { useToast } from '@/utils/useToast';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 interface Props {
@@ -14,18 +16,18 @@ interface Props {
 
 function MypageName({ user, editMode, setUserData}: Props) {
 
-  const { success, error } = useToast();
+  const { error } = useToast();
 
-  const [userName, setUserName] = useState<string>(user?.name ?? '');
+  const [userName, setUserName] = useState<string>(user?.nickname ?? '');
   const [role, setRole] = useState<string>(user?.role ?? '');
   const [showEdit, setShowEdit] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
       if( !editMode ) {
         setShowEdit(false);
       }
   }, [editMode]);
-
 
     const handleEditName = () => {
       setShowEdit(true);
@@ -38,18 +40,16 @@ function MypageName({ user, editMode, setUserData}: Props) {
         return;
       }
 
-      // const validRoles = ['프론트엔드', '백엔드', '데이터 엔지니어', '생성형 AI 백엔드', '데이터 분석'];
-
-      // if( !validRoles.includes(role) ) {
-      //   alert('올바른 직무를 선택해주세요.');
-      //   return;
-      // }
+      if( userName.length > 5 ) {
+        error('5글자 이하로 적어주세요.')
+        return;
+      }
 
       const { id } = user;
 
       const { error: nameError } = await supabase
         .from('user_base')
-        .update({name: userName})
+        .update({nickname: userName})
         .eq('id', id);
 
       if( nameError ) {
@@ -75,12 +75,14 @@ function MypageName({ user, editMode, setUserData}: Props) {
 
             return {
                 ...prev,
-                name: userName,
+                nickname: userName,
                 role: role
             }
         })
       
-      success('저장 성공!');
+      toast.info('성공적으로 저장되었습니다.', { onClose() {
+          navigate(`/mypage/${user.profile[0]?.profile_id}`)
+        }, autoClose: 1500})
       setShowEdit(false);
     }
 
