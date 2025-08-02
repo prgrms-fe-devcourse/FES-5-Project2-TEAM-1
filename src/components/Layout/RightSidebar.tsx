@@ -140,6 +140,8 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
       .eq('id', currentUser.id);
   }
 
+  setStatus(1);
+
     await logout()
     setCurrentUser(null);
     navigate('/')
