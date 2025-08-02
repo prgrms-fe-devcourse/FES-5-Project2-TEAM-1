@@ -114,6 +114,8 @@
     border: 1px solid #A6B37D;
     border-radius: 10px;
     padding: 0 1rem;
+    background-color: white;
+    transition: all 0.3s;
 
     display: flex;
     align-items: center;
@@ -137,6 +139,11 @@
         display: flex;
         justify-content: end;
         align-items: center;
+
+        &:focus {
+            outline: 2px solid #B99470;
+            border-radius: 10px;
+        }
 
         &::placeholder {
             width: 100%;

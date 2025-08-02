@@ -40,6 +40,11 @@ function MypageName({ user, editMode, setUserData}: Props) {
         return;
       }
 
+      if( userName.length > 5 ) {
+        error('5글자 이하로 적어주세요.')
+        return;
+      }
+
       const { id } = user;
 
       const { error: nameError } = await supabase
