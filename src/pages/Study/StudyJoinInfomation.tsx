@@ -8,48 +8,47 @@ import supabase from "@/supabase/supabase";
 import MarkDownConvert from "@/components/MarkDownConvert";
 import { useAdmin } from "./context/useAdmin";
 import { chooseRegion } from "@/utils/chooseRegion";
-
-
-
+import HashTag from "@/components/HashTag";
 
 type Board = Tables<"board">;
-type CardProps = Board & 
-{
+type CardProps = Board & {
   board_tag: Tables<"board_tag">[];
 };
 
 function StudyJoinInfomation() {
-  const navigate = useNavigate()
-  const {isAdmin} = useAdmin()
-  const { id } = useParams()
-  const [card, setCard] = useState<CardProps|null>(null)
-  const [isFinish,setIsFinish] = useState<boolean>(false)
-  useEffect(() => {
-    if (!id) throw new Error('id가없습니다')  
-    const fetchData = async () => {
-      const { data, error } = await supabase.from('board').select('*,board_tag(*)').eq('board_id', id).single()
-      if(error) throw new Error('데이터가 들어오지않아요')
-      setCard(data as CardProps)
-    }
-      fetchData()
-  }, [id])
-  
-  useEffect(() => {
-    const finishProject = async () => {
-      const { data } = await supabase.from('board').select('deadline').eq('board_id', id).single()
-      
-      if (!data) return
-      const deadLine = new Date(data.deadline).getTime()
-      if (deadLine <= Date.now()) {
-        setIsFinish(true)
-      }
-    } 
-    finishProject()
-  },[id])
+  const { isAdmin } = useAdmin();
+  const { id } = useParams();
+  const [card, setCard] = useState<CardProps | null>(null);
+  const [tagList, setTagList] = useState<string[]>([]);
 
-  if(!card) return 
-  const { images, title, address, member, board_tag, contents ,board_id,board_cls} = card
- 
+  useEffect(() => {
+    if (!id) throw new Error("id가없습니다");
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from("board")
+        .select("*,board_tag(*)")
+        .eq("board_id", id)
+        .single();
+      if (error) throw new Error("데이터가 들어오지않아요");
+      setCard(data as CardProps);
+    };
+
+    fetchData();
+  }, [id]);
+
+  useEffect(() => {
+    if (!card) return;
+    if (card.board_tag) {
+      const tagList = card.board_tag
+        .filter((tag) => typeof tag.hash_tag === "string")
+        .map((tag) => tag.hash_tag as string);
+      setTagList(tagList);
+    }
+  }, [card?.board_tag]);
+
+  if (!card) return;
+  const { images, title, address, member, contents, board_id } = card;
+
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -69,9 +68,13 @@ function StudyJoinInfomation() {
               </div>
             </div>
             <div className={S.tagBox}>
-              {(board_tag as Tables<"board_tag">[]).map((t) => (
-                <div key={t.tag_id}>{t.hash_tag}</div>
-              ))}
+              {tagList && (
+                <HashTag
+                  taglist={tagList}
+                  defaultList={tagList}
+                  editable={false}
+                />
+              )}
               <span>
                 <svg
                   width="3"

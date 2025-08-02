@@ -19,14 +19,7 @@ function BoardOptionPreview() {
         )}
       </div>
       <div className={S.previewOption}>
-        <div>
-          <input
-            type="text"
-            className={S.titlePreview}
-            value={postData?.title}
-            readOnly
-          />
-        </div>
+        <h1>{postData?.title}</h1>
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ function BoardOption() {
   };
   return (
     <div className={S.boardOption}>
-      <div>
+      <div className={S.boardOptionImage}>
         <DragDropFile onChangeFile={handleFileSelect} />
       </div>
       <div className={S.boardOptionDetail}>
