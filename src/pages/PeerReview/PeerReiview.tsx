@@ -203,8 +203,9 @@ const q3 = Number(
               적어주세요
             </p>
             <textarea
-              placeholder="내용을 적어주세요"
+              placeholder="50글자 이내로 간략히 작성해주세요"
               className={S.etc}
+              maxLength={50}
               onChange={(e) => setReviewContent(e.target.value)}
             ></textarea>
           </li>
