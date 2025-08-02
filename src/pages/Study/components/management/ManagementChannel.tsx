@@ -16,7 +16,7 @@ type PickBoard = Pick<Board,'member'|'board_cls'|'address'|'meeting_time'|'activ
 
 function MangementChannel() {
 
-  const [category, setCategory] = useState<'0'|'1'|null>('0');
+  const [category, setCategory] = useState<'0'|'1'|null>("0");
   const [meetingTime, setMeetingTime] = useState<string|null>(null);
   const [members, setMembers] = useState<number>(1);
   const [address, setAddress] = useState<string|null>(null);
@@ -58,6 +58,9 @@ function MangementChannel() {
 
   },[projectData])
 
+  useEffect(() => {
+    console.log("현재 category:", category);
+  }, [category]);
   const handleCheckedOnline = () => {
     // address가 null일때
     // 얘를 클릭했을때
@@ -130,8 +133,6 @@ function MangementChannel() {
       }
     setIsActive(prev => !prev)
   }
-
-  
 
   useEffect(()=>{
     const updateActive = async() => {
@@ -212,16 +213,23 @@ function MangementChannel() {
           <section className={S.deadline}>
             <h2 className={S.sectionHeader}>마감 기한</h2>
 
-            {category == "0" ? (
-              <button
-                type="button"
-                className={S.calendarBtn}
-              >
+            {
+              category == null ?
+              (<button type="button" className={S.calendarBtn}>
                 날짜선택
               </button>
-            ) : (
-              <Calender isHidden={true} callBack={() => {}} />
-            )}
+              ):(
+              category == "0" ? (
+              <button type="button" className={S.calendarBtn}>
+                날짜선택
+              </button>
+            ):(
+            <Calender isHidden={true} callBack={() => {}} />
+             )
+            )
+          }
+            
+       
           </section>
         </div>
         <div className={S.dateContributors}>

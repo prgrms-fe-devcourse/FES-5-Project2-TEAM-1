@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import S from './PeerReveiw.module.css'
 import supabase from '@/supabase/supabase';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import type { Tables } from '@/supabase/database.types';
 import { useToast } from '@/utils/useToast';
 import { useAuth } from '@/auth/AuthProvider';
@@ -16,7 +16,7 @@ type User = Tables<"board"> & {
 
 function PeerReiview() {
 
-
+  const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
   const {profileId} = useAuth()
   const {success} = useToast()
@@ -32,7 +32,7 @@ function PeerReiview() {
 
   useEffect(() => {
     const userData = async () => {
-      const { data,error } = await supabase.from('board').select('*,user_profile(*,user_base(*))').eq('board_id', id)
+      const { data,error } = await supabase.from('board_member').select('*,user_profile(*,user_base(*))').eq('board_id', id)
       if (error) console.error(error.message)
       if (!data) return
       
@@ -40,10 +40,8 @@ function PeerReiview() {
       setUsers(filterMine)
     }  
     userData()
-  },[id,profileId])
+  }, [id, profileId])
   
-
-
   useEffect(() => {
     if(!targetProfileId) return
     const scoreData = async() => {
@@ -115,17 +113,18 @@ const q3 = Number(
   const handleSubmit = async () => {
     
     const avgScore = getAverageScore()
-    const contentPreview = reviewContent.length >= 20 && reviewContent.slice(0,19)
+    const contentPreview = reviewContent.length >= 20 ? reviewContent.slice(0, 19) : reviewContent
     const { error } = await supabase.from('peer_review').insert([{
       profile_id:targetProfileId,
       writer_id:profileId,
       review_contents:reviewContent,
       create_at: new Date(),
       review_score:avgScore,
-      review_content_preview:contentPreview
+      review_contents_preview:contentPreview
     }]) 
     if (error) console.error()
-    success('제출에 성공하셨습니다')
+    await success('제출에 성공하셨습니다')
+    await setTimeout(() => navigate(`/channel/${id}`),2000); 
   }
  
   return (

@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { showConfirmAlert } from "@/utils/sweetAlert";
 
 
+
 interface boardData {
   profile_id: string;
   title: string;

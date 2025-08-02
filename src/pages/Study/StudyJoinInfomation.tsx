@@ -48,7 +48,7 @@ function StudyJoinInfomation() {
   },[id])
 
   if(!card) return 
-  const { images, title, address, member, board_tag, contents ,board_id} = card
+  const { images, title, address, member, board_tag, contents ,board_id,board_cls} = card
  
   return (
     <main className={S.container}>
@@ -141,12 +141,22 @@ function StudyJoinInfomation() {
           </div>
           <div style={{ position: "relative" }}>
             <Project />
-            {isFinish && (
+            {board_cls == null ? (
               <div className={S.overlay}>
-                <button type="button" className={S.peerReviewBtn} onClick={()=>navigate(`/channel/${id}/peerReview/${id}`)}>
-                  피어리뷰 작성하기
-                </button>
+                <p>아직 스터디가 없습니다</p>
               </div>
+            ) : board_cls == '1' && (
+              isFinish && (
+                <div className={S.overlay}>
+                  <button
+                    type="button"
+                    className={S.peerReviewBtn}
+                    onClick={() => navigate(`/channel/${id}/peerReview/${id}`)}
+                  >
+                    피어리뷰 작성하기
+                  </button>
+                </div>
+              )
             )}
           </div>
         </section>
