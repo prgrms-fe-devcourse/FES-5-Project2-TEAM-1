@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 
 type Scrap = Tables<'scrap'>
 type Board = Tables<'board'>
-type NewBoard = Pick<Board,'board_id'|'title'|'contents'>;
 
 interface Props {
   profileId : string;
@@ -15,7 +14,6 @@ interface Props {
 function MypageScrap({profileId}:Props) {
   const [scraps, setScraps] = useState<Scrap[]|null>(null);
   const [boards, setBoards] = useState<Board[]|null>(null);
-  const [newBoards, setNewBoards] = useState<NewBoard[]|null>(null);
 
   useEffect(()=>{
     if(!profileId) return;
@@ -52,38 +50,19 @@ function MypageScrap({profileId}:Props) {
     fetchBoards();
   },[scraps])
 
-
-  
-  useEffect(()=>{
-    if(!boards) return;
-    const copyBoardContentsList:string[] = boards.map(({contents})=>contents);
-    const copyBoardtitleList:string[] = boards.map(({title})=>title);
-
-    setNewBoards(
-      boards.map(({board_id},idx)=>{
-        return {board_id, title:copyBoardtitleList[idx].slice(0,20), contents : copyBoardContentsList[idx].slice(0,50)}
-          }
-        )
-      )
-
-  },[boards])
-
-
-
-
   return (
     <>
       <h2 className={S.sectionName}>스크랩</h2>
       {
-        scraps && scraps.length > 0 && newBoards ? (
+        scraps && scraps.length > 0 && boards ? (
           <section className={S.scrapContainer}>
             <ul className={S.scrapList}>
               {
-                newBoards && newBoards.map(({board_id, title, contents})=>(
+                boards && boards.map(({board_id, title, contents})=>(
                   <li key={board_id} className={S.scrap}>
                     <Link to={`/channel/${board_id}`}>
-                      <p className={S.scrapTitle}>{title}</p>
-                      <p className={S.scrapContent}>{contents}</p>
+                      <div className={S.scrapTitle}>{title}</div>
+                      <div className={S.scrapContent}>{contents}</div>
                     </Link>
                   </li>
                 ))
@@ -92,9 +71,9 @@ function MypageScrap({profileId}:Props) {
           </section>
         ) : (
           <div className={S.nothing}>
-            <img src="/images/서치이미지.png" alt="검색 결과 없음" />
+            <img src="/images/noScraps.png" alt="스크랩 없음" />
             <p>
-              아직 스크랩된 글이 없습니다 🍃🍃🍃<br />
+              아직 스크랩된 글이 없습니다 <br />
               스터디에서 글을 스크랩해서 한 눈에 확인해보세요!<br />
               
             </p>
