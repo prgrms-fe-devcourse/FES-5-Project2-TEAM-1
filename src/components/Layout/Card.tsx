@@ -7,7 +7,6 @@ import type { Tables } from "@/supabase/database.types";
 import HashTag from "../HashTag";
 import gsap from "gsap";
 import { useAuth } from "@/auth/AuthProvider";
-import { showErrorAlert } from "@/utils/sweetAlert";
 
 type Board = Tables<"board">;
 type CardProps = Board & {
@@ -28,18 +27,7 @@ function Card({ card }: Props) {
   const navigate = useNavigate();
   const likeBtnRef = useRef<HTMLButtonElement>(null);
   const scrapBtnRef = useRef<HTMLButtonElement>(null);
-  const { isLoading, user, profileId } = useAuth();
-
-  useEffect(() => {
-    if (!isLoading) {
-      if (!user) {
-        showErrorAlert("로그인 후 이용해주세요");
-        navigate("/login");
-        return;
-      }
-    }
-    // }
-  }, [user, profileId, isLoading]);
+  const { profileId } = useAuth();
 
   useEffect(() => {
     const storedLike = JSON.parse(
