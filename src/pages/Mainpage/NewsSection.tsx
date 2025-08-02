@@ -14,6 +14,7 @@ function NewsSection() {
   const [startIndex, setStartIndex] = useState(0);
   const timerRef = useRef<number | null>(null);
   const cardListRef = useRef<HTMLDivElement>(null);
+  const [visibleCount, setVisibleCount] = useState(VISIBLE_COUNT);
 
   const fetchCards = async () => {
     const { data, error } = await supabase
@@ -29,6 +30,20 @@ function NewsSection() {
   useEffect(() => {
     fetchCards();
   }, []);
+
+  useEffect(()=>{
+    const updateVisiblecount = () => {
+      if(window.innerWidth <= 1024){
+        setVisibleCount(2);
+      } else {
+        setVisibleCount(3);
+      }
+    };
+
+    updateVisiblecount();
+    window.addEventListener('resize', updateVisiblecount);
+    return ()=>window.removeEventListener('resize', updateVisiblecount);
+  },[]);
 
   useEffect(() => {
     if (cards.length < VISIBLE_COUNT) return;
