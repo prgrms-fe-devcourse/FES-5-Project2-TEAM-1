@@ -7,19 +7,18 @@ import gsap from 'gsap';
 type NewsCard = Tables<'news_cards'>;
 
 const ITEM_PER_PAGE = 2;
-const VISIBLE_COUNT = 3;
 
 function NewsSection() {
   const [cards, setCards] = useState<NewsCard[]>([]);
   const [startIndex, setStartIndex] = useState(0);
   const timerRef = useRef<number | null>(null);
   const cardListRef = useRef<HTMLDivElement>(null);
-  const [visibleCount, setVisibleCount] = useState(VISIBLE_COUNT);
+
+  // 화면 크기에 따라 보여줄 카드 개수 계산
+  const getVisibleCount = () => (window.innerWidth <= 1024 ? 2 : 3);
 
   const fetchCards = async () => {
-    const { data, error } = await supabase
-      .from('news_cards')
-      .select("*");
+    const { data } = await supabase.from('news_cards').select("*");
 
     if (data) {
       const shuffled = [...data].sort(() => Math.random() - 0.5);
@@ -31,22 +30,8 @@ function NewsSection() {
     fetchCards();
   }, []);
 
-  useEffect(()=>{
-    const updateVisiblecount = () => {
-      if(window.innerWidth <= 1024){
-        setVisibleCount(2);
-      } else {
-        setVisibleCount(3);
-      }
-    };
-
-    updateVisiblecount();
-    window.addEventListener('resize', updateVisiblecount);
-    return ()=>window.removeEventListener('resize', updateVisiblecount);
-  },[]);
-
   useEffect(() => {
-    if (cards.length < VISIBLE_COUNT) return;
+    if (cards.length < getVisibleCount()) return;
 
     timerRef.current = window.setInterval(() => {
       setStartIndex((prev) => (prev + ITEM_PER_PAGE) % cards.length);
@@ -55,22 +40,22 @@ function NewsSection() {
     return () => clearInterval(timerRef.current!);
   }, [cards.length]);
 
-useLayoutEffect(() => {
-  if (!cardListRef.current) return;
+  useLayoutEffect(() => {
+    if (!cardListRef.current) return;
 
-  const targets = cardListRef.current.querySelectorAll(".card");
-  if (!targets.length) return;
+    const targets = cardListRef.current.querySelectorAll(".card");
+    if (!targets.length) return;
 
-  const ctx = gsap.context(() => {
-    gsap.fromTo(
-      targets,
-      { x: 100, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" }
-    );
-  }, cardListRef.current);
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        targets,
+        { x: 100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" }
+      );
+    }, cardListRef.current);
 
-  return () => ctx.revert();
-}, [startIndex]);
+    return () => ctx.revert();
+  }, [startIndex]);
 
   const handlePrev = () => {
     setStartIndex((prev) => (prev - ITEM_PER_PAGE + cards.length) % cards.length);
@@ -80,10 +65,11 @@ useLayoutEffect(() => {
     setStartIndex((prev) => (prev + ITEM_PER_PAGE) % cards.length);
   };
 
-  if (cards.length < VISIBLE_COUNT) return null;
+  const visibleCount = getVisibleCount();
+  if (cards.length < visibleCount) return null;
 
   const visibleCards = [];
-  for (let i = 0; i < VISIBLE_COUNT; i++) {
+  for (let i = 0; i < visibleCount; i++) {
     const index = (startIndex + i) % cards.length;
     visibleCards.push(cards[index]);
   }
@@ -98,7 +84,6 @@ useLayoutEffect(() => {
       </div>
       <hr />
       <div className={S.cardListWrapper}>
-
         <button className={S.arrowLeft} onClick={handlePrev}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />

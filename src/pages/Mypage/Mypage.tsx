@@ -13,8 +13,7 @@ import MypagePost from './components/MypagePost';
 import MypageScrap from './components/MypageScrap';
 import MoveToTop from './components/MoveToTop';
 import { useAuth } from '@/auth/AuthProvider';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 
 
 type UserProfileWithJoins = Tables<'user_profile'> & {
@@ -39,7 +38,6 @@ function Mypage() {
   const {user, isLoading, profileId}  = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:''});
   const {id:urlProfileId} = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
   if (!isLoading && user && profileId) {

@@ -7,7 +7,6 @@ import Eye from '/icons/eye.svg';
 import Closed from '/icons/closed_eye.svg';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import supabase from '@/supabase/supabase';
-import { useToast } from '@/utils/useToast';
 import gsap from 'gsap';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -43,10 +42,12 @@ type Visibility = {
 
 function MypageDetails({ user, editMode, setUserData}: Props) {
 
-    const { error } = useToast();
-
     const [showEdit, setShowEdit] = useState(false);
-    const [hide, setHide] = useState<Visibility>(user.profile[0].visibility);
+    const [hide, setHide] = useState<Visibility>({
+        address: false,
+        age: false,
+        gender: false,
+    });
     const [address, setAddress] = useState(user?.profile[0].address);
     const [gender, setGender] = useState('');
     const [isClicked, setIsClicked] = useState(false);
@@ -62,8 +63,18 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
     useEffect(() => {
         if( !editMode ) {
             setShowEdit(false);
-        }
+        } 
     }, [editMode])
+
+    useEffect(() => {
+        if(!user) return;
+        const visibilityValue = user.profile[0].visibility;
+        setHide(
+            typeof visibilityValue === 'string'
+                ? JSON.parse(visibilityValue)
+                : visibilityValue
+        ); 
+    }, [user]);
 
     useEffect(() => {
         if (showEdit) {
@@ -98,7 +109,7 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
         const calculatedAge = calculateAge();
 
         if( gender === '선택' ) {
-            error('성별을 선택해주세요!');
+            toast.error('성별을 선택해주세요!');
             return;
         }
 
@@ -114,7 +125,7 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
             .eq('profile_id', profile_id);
 
         if( detailError ) {
-            error('업데이트 실패!');
+            toast.error('업데이트 실패!');
             return;
         }
 
@@ -161,7 +172,6 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
 
     const addDayOption = () => {
         const lastDay = new Date(year, month, 0).getDate();
-
         return Array.from({ length: lastDay }, (_, i) => i + 1);
     }
 
@@ -322,5 +332,6 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
     </div>
   )
 }
+
 
 export default MypageDetails
