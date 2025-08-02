@@ -224,9 +224,13 @@ function Thread() {
     }));
   };
 
-  const recentlyThread = [...threadData].sort(
-    (a, b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime()
-  );
+  const recentlyThread = [...threadData].sort((a, b) => {
+    const timeDiff =
+      new Date(b.create_at).getTime() - new Date(a.create_at).getTime();
+    if (timeDiff !== 0) return timeDiff;
+
+  return b.thread_id.localeCompare(a.thread_id);
+});
 
   return (
     <>

@@ -153,7 +153,7 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
     }
   };
 
-  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       if (!editContent.trim()) return;
@@ -203,16 +203,17 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
         <div className={S.partition}></div>
         <div className={S.textContainer}>
           {isEditing ? (
-            <input
+            <textarea
               className={S.editContent}
-              type="text"
               value={editContent}
               onKeyDown={handleEditKeyDown}
               onChange={(e) => setEditContent(e.target.value)}
               autoFocus
+              rows={4}
+            
             />
           ) : (
-            <p>{content}</p>
+            <p className={S.text}>{content}</p>
           )}
         </div>
       </div>

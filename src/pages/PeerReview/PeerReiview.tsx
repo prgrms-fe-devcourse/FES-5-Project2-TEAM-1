@@ -27,7 +27,10 @@ function PeerReiview() {
 
   useEffect(() => {
     const userData = async () => {
-      const { data, error } = await supabase.from('board_member').select('*,user_profile(*,user_base(*))').eq('board_id', id)
+      const { data, error } = await supabase.from('approve_member').select('*,user_profile(*,user_base(*))').match({
+        'board_id': id,
+        'status':'1'
+      })
       if (error) console.error(error.message)
       if (!data) return
       

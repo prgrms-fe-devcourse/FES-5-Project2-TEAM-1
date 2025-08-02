@@ -40,6 +40,7 @@ function StudyMemberChannel() {
   }, [id, profileId]);
 
   const handleJoin = async () => {
+    if (!profileId) error('로그인을 해주세요')
     const { data, error: fetchError } = await supabase
       .from("approve_member")
       .select("status::text")

@@ -69,6 +69,7 @@ color:rgba(85, 85, 85, 0.5)
 
 .text {
   margin: 4px 0;
+  white-space: pre-wrap;
 }
 
 .actions {
