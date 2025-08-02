@@ -5,7 +5,6 @@ import supabase from "@/supabase/supabase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import PasswordInput from "@/components/PasswordInput";
-import Swal from "sweetalert2";
 import { showErrorAlert, showSuccessAlert } from "@/utils/sweetAlert";
 import { useAuth } from "@/auth/AuthProvider";
 
@@ -48,6 +47,7 @@ function Login() {
             await showErrorAlert('로그인 실패', '이메일 또는 비밀번호가 일치하지 않습니다.');
             setError('이메일 또는 비밀번호가 일치하지 않습니다.');
         } else {
+            console.log('로그인 성공:', data);
             await showSuccessAlert('로그인 성공!', '환영합니다 좋은 하루 되세요!🌱')
             setTimeout(()=>{
                 navigate("/");
