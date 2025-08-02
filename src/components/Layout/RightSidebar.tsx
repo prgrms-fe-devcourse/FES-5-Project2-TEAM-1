@@ -56,16 +56,6 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
   useEffect(() => {
   const initUser = async () => {
     if (!isLoading && user && profileId) {
-      // 1. 상태를 0으로 설정
-      const { error: statusError } = await supabase
-        .from('user_base')
-        .update({ status: 0 })
-        .eq('id', user.id);
-
-      if (statusError) {
-        console.error('상태 업데이트 실패:', statusError.message);
-        return;
-      }
 
       const { data: nickname, error: nameError } = await supabase
         .from('user_base')
@@ -192,6 +182,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
     };
     setIsClicked(prev => !prev);
   }
+  console.log( status );
 
   return (
     <nav className={S.container}>

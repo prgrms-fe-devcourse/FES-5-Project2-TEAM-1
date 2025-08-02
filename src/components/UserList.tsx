@@ -124,7 +124,7 @@ const statusClassName = (status: StatusCode) => {
         { openPopupIndex === i && (
             <div className={E.popup}>
                 <ul>
-                    <li><a>마이페이지</a></li>
+                    <li><a >마이페이지</a></li>
                     <li><a>피어리뷰</a></li>
                 </ul>
             </div> 

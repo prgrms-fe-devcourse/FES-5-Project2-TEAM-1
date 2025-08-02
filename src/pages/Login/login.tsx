@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import S from "./Login.module.css";
 import supabase from "@/supabase/supabase";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,32 @@ import { Link } from "react-router-dom";
 import PasswordInput from "@/components/PasswordInput";
 import Swal from "sweetalert2";
 import { showErrorAlert, showSuccessAlert } from "@/utils/sweetAlert";
+import { useAuth } from "@/auth/AuthProvider";
 
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+
+    useEffect(() => {
+        if( !isLoginSuccess ) return;
+        if( !user ) return;
+        const fetchData = async () => {
+            const  { error: statusError } = await supabase
+                .from('user_base')
+                .update({ status: 0 })
+                .eq('id', user.id);
+
+            if (statusError) {
+            console.error('상태 업데이트 실패:', statusError.message);
+            return;
+            }
+        }
+        fetchData();
+    }, [user, isLoginSuccess]);
 
     const handleLogin = async (e:React.FormEvent)=>{
         e.preventDefault();
@@ -32,6 +52,7 @@ function Login() {
             setTimeout(()=>{
                 navigate("/");
             },500);
+            setIsLoginSuccess(true);
     }
 };
 
