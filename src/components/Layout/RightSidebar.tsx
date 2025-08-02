@@ -42,16 +42,16 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
 
   const { user, isLoading, logout, profileId } = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser|null>(null);
-  // const [authState, setAuthState] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
   const [status, setStatus] = useState<StatusCode>(null);
   const [isStatusClicked, setIsStatusClicked] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
   const popupRef = useRef<HTMLUListElement | null>(null);
-
+  const [messageReady, setMessageReady] = useState(false)
+  const [membershipReady, setMembershipReady] = useState(false)
   const navigate = useNavigate();
 
-  // setAuthState('unauthenticated');
+
 
   useEffect(() => {
   const initUser = async () => {
@@ -113,8 +113,7 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
           profileImage: data.profile_images
         }
       })
-      // setAuthState('authenticated');
-      // console.log(currentUser);
+
     }
 
     fetchUserProfileImage();
@@ -135,7 +134,6 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
       
   }, [isStatusClicked]);
 
-  // if (authState === 'loading') return null; // ✅ 깜빡임 방지
 
   useEffect(() => {
       const outSideClick = ( e ) => {
@@ -203,18 +201,6 @@ function RightSidebar({isOverlay,setIsOverlay,isNotification,setIsNotification}:
               {
                 currentUser ? (
                   <button onClick={handleLogout}>
-                    {/* <svg
-                      width="24"
-                      height="22"
-                      viewBox="0 0 20 19"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M14.375 4.80575L13.0238 6.157L15.4963 8.63908H5.75V10.5557H15.4963L13.0238 13.0282L14.375 14.3891L19.1667 9.59741L14.375 4.80575ZM1.91667 2.88908H9.58333V0.972412H1.91667C0.8625 0.972412 0 1.83491 0 2.88908V16.3057C0 17.3599 0.8625 18.2224 1.91667 18.2224H9.58333V16.3057H1.91667V2.88908Z"
-                        fill="#222222"
-                      />
-                    </svg> */}
                     <p className={S.logout}>로그아웃</p>
                   </button>
                 ) : (
