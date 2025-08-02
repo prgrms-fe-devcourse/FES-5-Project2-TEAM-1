@@ -1,0 +1,541 @@
+.edit_mypageBg {
+
+}
+
+.edit_mypageBgBtn {
+    background-color: white;
+    width: 3.3em;
+    height: 3.0rem;
+    border-radius: 50%;
+    border: 1px solid #d9d9d9;
+
+    position: absolute;
+    top: 15.7rem;
+    right: 1.2rem;
+
+    cursor: pointer;
+    transition: background-color 0.4s;
+
+    img {
+        width: 1.5rem;
+        height: 1.5rem;
+        object-fit: contain;
+
+    }
+
+    &:hover {
+        background-color: #d9d9d9;
+    }
+    
+}
+
+.backgroundEditWrapper {
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+    backdrop-filter: blur(4px);
+
+    position: fixed;
+    top: 0;
+    z-index: 5;
+
+    transition: ease;
+    
+    .backgroundEditContainer {
+        width: 60rem;
+        height: 24rem;
+        background-color: white;
+        border: 1px solid #d9d9d9;
+        border-radius: 10px;;
+
+        position: absolute;
+        top: 10rem;
+        left: 7rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        img {
+            width: 100%;
+            height: 65%;
+        }
+
+        button {
+            width: 5.7rem;
+            height: 2.7rem;
+            border: 1px solid #d9d9d9;
+            border-radius: 5px;
+            background-color: #B99470;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 1.1rem;
+
+            transition: all 0.6s;
+
+            &:hover {
+                background-color: #ffffff;
+                color: #B99470;
+            }
+        }
+
+        .bgEditCloseBtn {
+            width: 1.3rem;
+            height: 1.9rem;
+            margin-right: 4px;
+            border-radius: 2px;
+            border: none;
+            background-color: transparent;
+
+            transition: background-color 0.4s;
+            
+        }
+
+    }
+}
+
+.editProfileBtn {
+
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+}
+
+.editNamecontainer {
+    width: 100%;
+    height: 80%;
+    border: 1px solid #A6B37D;
+    border-radius: 10px;
+    padding: 0 1rem;
+    background-color: white;
+    transition: all 0.3s;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    flex: 9;
+
+    button {
+        font-size: 2rem;
+    }
+
+    input {
+        width: 8.5rem;
+        height: 3rem;
+        font-size: 2rem;
+        font-weight: 700;
+        background-color: transparent;
+
+        border: none;
+
+        display: flex;
+        justify-content: end;
+        align-items: center;
+
+        &:focus {
+            outline: 2px solid #B99470;
+            border-radius: 10px;
+        }
+
+        &::placeholder {
+            width: 100%;
+            font-size: 1.8rem;
+            background-color: transparent;
+
+            text-align: right;
+            color: #d3d2d2;
+        }
+    }
+
+    select {
+        width: 20rem;
+        height: 3rem;
+        background-color: transparent;
+
+        border: none;
+
+        display: flex;
+        justify-content: start;
+        align-items: center;
+
+        font-size: 1.5rem;
+
+    }
+    
+}
+
+.editNameBtn {
+        flex: 1;
+
+        display: flex;
+        gap: 4px;
+
+        button {
+            width: 100%;
+            height: 3.2rem;
+            border-radius: 50%;
+            background-color: #A6B37D;
+            color: white;
+            font-size: 1.1rem;
+
+            transition: all 0.4s;
+
+            &:hover {
+                background-color: #ffffff;
+                color: #A6B37D;
+                border: 1px solid #A6B37D;
+            }
+        }
+}
+
+
+.editDetailBtn {
+    width: 3rem;
+
+    position: absolute;
+    right: 1.8rem;
+    bottom: 1.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+.editDetailGender {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-right: 5rem;
+
+    select {
+        width: 10rem;
+        height: 1.7rem;
+        border: 1px solid #A6B37D;
+        border-radius: 5px;
+    }
+    
+    img {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+.editDetailAge {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-right: 5rem;
+
+    div {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    select,
+    input {
+        width: 8rem;
+        height: 1.7rem;
+        margin-bottom: 0.3rem;
+
+        border: 1px solid #A6B37D;
+        border-radius: 5px;
+
+    }
+    
+    img {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+.editDetailSaveClose {
+    height: 100%;
+
+    display: flex;
+    align-items: end;
+    gap: 3px;
+
+    button {
+        width: 3rem;
+        height: 3rem;
+        border: 1px solid #A6B37D;
+        border-radius: 50%;
+        background-color: #ffffff;
+        color: #A6B37D;
+
+        transition: all 0.5;
+
+        &:hover {
+            background-color: #A6B37D;
+            color: white;
+        }
+    }
+}
+
+.editDetailAddress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-right: 5rem;
+
+    position: relative;
+    z-index: 1;
+
+    div {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        
+        span {
+            width: 26.5rem;
+        }
+
+        .editDetailAddressBtn {
+            width: 3.2rem;
+            height: 2rem;
+            border: 1px solid #A6B37D;
+            border-radius: 5px;
+            background-color: #ffffff;
+            color: #A6B37D;
+
+            transition: all 0.5;
+
+            &:hover {
+                background-color: #A6B37D;
+                color: white;
+            }
+        }
+    }
+
+    img {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+.editInterestBlockWrapper {
+    position: relative;
+}
+
+.editInterestMinusBtn {
+    width: 2.2rem;
+
+    position: absolute;
+    top: -1.4rem;
+    right: 0.5rem;
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: scale(1.05) rotate(-5deg);
+        box-shadow: 0 3px 6px rgba(166, 179, 125, 0.3);
+        background-color: #b2b99d;
+        border-radius: 50%;
+    }
+
+}
+
+.editInterestPlusBtn {
+    width: 2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        transform: scale(1.05) translateY(-2px);
+        box-shadow: 0 4px 10px rgba(166, 179, 125, 0.2);
+        background-color: #b2b99d;
+        border-radius: 50%;
+    }
+}
+
+.editSocialWrapper {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    border: 0.5px solid #D4D4D4;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+
+    div {
+        /* border: 1px solid #A6B37D; */
+        margin-left: 1rem;
+
+        &:first-child {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 25%;
+            border: 4px solid #A6B37D;
+            background-color: #b7be9b;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            position: relative;
+            transition: background-color 0.3s;
+
+            button {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    width: 1.8rem;
+                }
+            }
+
+            &:hover {
+                background-color: #c7cbb9;
+            }
+        }
+    }
+
+    .editIconList {
+        position: absolute;
+        background: #ffffff;
+        border: 1px solid #B99470;
+        border-radius: 8px;
+        padding: 15px;
+        color: #333;
+
+        width: object-fit;
+        height: object-fit;
+
+        top: 2.6rem;
+        left: -1.5rem;
+        z-index: 10;
+
+         &::after {
+           content: '';
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border: 1px solid #B99470;
+            border-right: none;
+            border-bottom: none;
+            transform: rotate(45deg);
+            border-top-left-radius: 4px; 
+            z-index: -1;
+         }
+
+         img {
+            width: 1.8rem;
+         }
+
+         ul {
+            width: 10rem;
+
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            li {
+                background-color: #B99470;
+                padding: 0.3rem;
+                border-radius: 10px;
+                box-shadow: 3px 3px 10px 1px #B99470;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                cursor: pointer;
+            }
+
+         }
+    }
+
+    .editSocialInput {
+        width: 58rem;
+        height: 2rem;
+
+        input {
+            width: 100%;
+            border: none;
+            font-size: 1.2rem;
+            padding-top: 0.3rem;
+            padding-left: 1rem;
+        }
+    }
+
+    .editSocialSaveBtn {
+        width: 5rem;
+        height: 2rem;
+
+        display: flex;
+        gap: 7px;
+
+        button {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            background-color: #B99470;
+            color: white;
+            transition: background-color, color 0.3s;
+
+            &:hover {
+                background-color: white;
+                color: #B99470;
+                border: 1px solid #B99470;
+            }
+        }
+
+    }
+
+
+}
+
+
+.editSocialAdd {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    border: 0.5px solid #D4D4D4;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+
+    cursor: pointer;
+    transition: background-color 0.4s;
+    
+    img {
+        width: 2rem;
+    }
+
+    &:hover {
+        background-color: #d0d2c9;
+    }
+}

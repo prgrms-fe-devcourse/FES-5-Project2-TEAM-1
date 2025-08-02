@@ -1,0 +1,99 @@
+
+
+.wrapper{
+    width:100vw;
+    min-height:100vh;
+    background-color: #222222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 16px;
+    overflow: hidden;
+    padding: 40px;
+    gap: 40px;
+    max-width: 900px;
+    width: 100%;
+}
+
+.leftImageWrapper{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.leftImage{
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.rightContent{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+
+.icon{
+    width: 64px;
+    height: 64px;
+}
+
+.message{
+    font-size:32px;
+    font-weight: bold;
+    color:#ffffff;
+    white-space: nowrap;
+}
+
+.button{
+    display: inline-block;
+    margin:0 auto;
+    width:50%;
+    background-color: #a6b37d;
+    color:#222222;
+    font-weight: bold;
+    padding:12px 24px;
+    border-radius: 10px;
+    border:none;
+    transition: all 0.3s ease;
+
+    &:hover{
+        background-color: rgba(137, 162, 55);
+        color:#ffffff;
+    }
+
+    &:active{
+        transform: scale(0.97);
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .message {
+    font-size: 20px;
+    white-space: normal;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

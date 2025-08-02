@@ -1,0 +1,90 @@
+.container{
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.inputProfile{
+  display: flex;
+}
+
+
+.replyProfile{
+  display: flex;
+}
+.profileWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileImage img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.contentBox {
+width: 88%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-content: space-between;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 0.9rem;
+  color: #222;
+
+  .time{
+    font-size: 12px;
+    color:rgba(85, 85, 85, 0.5)
+  }
+
+  .edit{
+    display: flex;
+    gap: 4px;
+
+    >button{
+      font-size: 12px;
+color:rgba(85, 85, 85, 0.5)
+    }
+    
+  }
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.text {
+  margin: 4px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.likeBtn{
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.recomment{
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}

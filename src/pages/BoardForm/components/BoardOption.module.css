@@ -1,0 +1,42 @@
+.boardOption {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-left: 16px;
+  margin-bottom: 16px;
+  padding-top: 16px;
+}
+.boardOptionDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.boardTitle {
+  padding-top: 28px;
+  input {
+    width: 90%;
+    background-color: #f5f2eb;
+    border-style: none;
+    border-bottom: 0.5px solid #b99470;
+    box-sizing: border-box;
+    font-size: 32px;
+  }
+  input:focus {
+    outline: none !important;
+  }
+}
+
+/* 반응형 (모바일) */
+@media (max-width: 1000px) {
+  .boardOptionImage {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .boardOptionImage {
+    display: block;
+  }
+}

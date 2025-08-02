@@ -1,0 +1,20 @@
+.boardPreview {
+  width: 50vw;
+  border: 1px solid #b99470;
+  border-radius: 8px;
+  background-color: #f5f2eb;
+  hr {
+    width: 95%;
+    border: none;
+    border-top: 2px solid #b99470;
+    margin: 0 auto;
+    margin-bottom: 28px;
+  }
+}
+
+/* 반응형 (모바일) */
+@media (max-width: 1400px) {
+  .boardPreview {
+    display: none;
+  }
+}

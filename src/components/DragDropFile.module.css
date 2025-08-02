@@ -1,0 +1,61 @@
+.uploadContainer {
+  width: 216px;
+  height: 176px;
+  border: 1px solid #a6b37d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fileUplaod {
+  width: 200px;
+  height: 160px;
+  border: 1px dashed #a6b37d;
+  border-radius: 8px;
+  position: relative;
+
+  label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #555555;
+    font-size: 12px;
+    .description {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      .title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #a6b37d;
+      }
+      .contents {
+        width: 160px;
+        font-size: 12px;
+        font-weight: 300;
+        color: #555555;
+      }
+    }
+  }
+  label:hover {
+    background-color: #ffffff;
+  }
+}
+.img {
+  margin-top: 10px;
+  width: 80px;
+  height: 80px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}

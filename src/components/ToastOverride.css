@@ -1,0 +1,43 @@
+.Toastify__toast--success {
+    background: #e8bacb;
+    background: radial-gradient(circle,rgba(232, 186, 203, 0.87) 0%, rgba(199, 214, 237, 0.93) 100%);
+    color: white;
+    line-height: 20px;
+
+    .Toastify__toast-icon svg{
+        fill: white;
+        color: black;
+    }
+}
+
+.Toastify__toast--info {
+    background: #F1FBEA; 
+    border-left: 6px solid #B99470; 
+    color: #4C4C4C; 
+    font-weight: 500;
+    font-size: 0.95rem;
+
+     .Toastify__toast-icon svg{
+        fill: #B99470;
+        color: black;
+    }
+}
+
+.Toastify__toast--warning {
+
+}
+
+.Toastify__toast--error {
+    background: #B99470;
+    background: radial-gradient(circle,rgba(185, 148, 112, 0.87) 0%, rgba(237, 231, 199, 0.93) 100%);
+    color: rgb(22, 22, 22); 
+    
+    .Toastify__toast-icon svg{
+        fill: #B99470;
+        color: white;
+    }
+}
+
+.Toastify__close-button {
+    color: black;
+}

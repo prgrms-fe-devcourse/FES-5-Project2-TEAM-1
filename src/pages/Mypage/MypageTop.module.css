@@ -1,0 +1,259 @@
+.container {
+    background-color: #F5F5F5;
+    margin: 58px 105px;
+    font-family: 'Pretendard Variable';
+}
+
+.wrapper {
+    max-width: 75rem;
+    /* border: 0.5px solid black; */
+    padding: 8% 1% 10% 1%;
+    position: relative;
+    .mypage {
+        font-size: 2rem;
+        font-weight: 1000;
+    }
+    .editBtn {
+        width: 5em;
+        height: 5rem;
+        border: none;
+        background-color: transparent;
+        position: absolute;
+        right: 0.5rem;
+        top: 5.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+
+        img {
+            width: 3rem;
+            height: 3rem;
+            z-index: 2;
+        }
+        &:hover {
+            opacity: 0.8;
+        }
+}
+}
+.mypageProfileContainer {
+    width: 100%;
+    height: 26rem;
+    position: relative;
+    .mypageBg {
+        width: 100%;
+        height: 77%;
+        background-color: #FFFFFF;
+        /* border: 1px solid #D4D4D4; */
+        border-radius: 10px;
+        margin-top: 1.4rem;
+        overflow: hidden;
+        .mypageBgImg {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+    }
+    .mypageProfile {
+        width: 11rem;
+        height: 11rem;
+        background-color: #FFFFFF;
+        border: 1px solid #D4D4D4;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 1.3rem;
+        left: 4rem;
+    }
+}
+.mypageProfileImg {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+.mypageNameContainer {
+    width: 100%;
+    height: 4rem;
+    /* border: 1px solid black; */
+    font-size: 2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    .mypageNameRole {
+        display: flex;
+        gap: 1rem;
+        flex: 9;
+    }
+    .mypageNameEdit {
+        width: 2.9rem;
+        height: 2.9rem;
+        border-radius: 50%;
+        margin-right: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border 0.2s;
+        button {
+            img {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+        }
+        &:hover {
+            border: 1px dotted #A6B37D;
+        }
+    }
+    .mypageName {
+        width: 9.5rem;
+        height: 100%;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+    .mypageRole {
+        width: 20rem;
+        height: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+    }
+}
+.mypageDetailsContainer {
+    width: 100%;
+    height: 9.5rem;
+    background-color: white;
+    border: 1px solid #D4D4D4;
+    border-radius: 10px;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: ease;
+    ul {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+    }
+    li {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        h3 {
+            flex: 1;
+            text-align: center;
+            font-weight: 500;
+        }
+        p {
+            flex: 8;
+        }
+        div {
+            flex: 8;
+        }
+    }
+     .mypageDetailEdit {
+        width: 5rem;
+        height: 100%;
+        margin-bottom: 1rem;
+        margin-left: 2rem;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        transition: border 0.2s;
+        button {
+            width: 2.9rem;
+            height: 2.9rem;
+            img {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+            &:hover {
+                border: 1px dotted #A6B37D;
+                border-radius: 50%;
+            }
+        }
+    }
+}
+.mypageInterest {
+    width: 100%;
+    height: 9rem;
+    margin-top: 3rem;
+    padding: 0 0.5rem;
+    font-weight: 700;
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 2.5rem;
+    }
+    .InterestBlock {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        padding: 0 1rem;
+        gap: 1rem;
+    }
+    .InterestBlockEach {
+        font-size: 1.3rem;
+        width: 10rem;
+        height: 2.7rem;
+        background-color: #A6B37D;
+        border-radius: 15px;
+        color: #FFFFFF;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+.mypageSocial {
+    width: 100%;
+    height: object-fit;
+    margin-top: 2.5rem;
+    padding: 0 0.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 0;
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+}
+
+
+@media (max-width: 1900px) {
+    .editBtn {
+        top: 5rem !important;
+    }
+}
+
+@media (max-width: 1700px) {
+    .editBtn {
+        top: 4.2rem !important;
+    }
+}
+
+@media (max-width: 1500px) {
+    .editBtn {
+        top: 3rem !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .editBtn {
+        top: 2rem !important;
+    }
+}
+
+@media (max-width: 1024px) {
+
+}
+@media (max-width: 600px) {
+}

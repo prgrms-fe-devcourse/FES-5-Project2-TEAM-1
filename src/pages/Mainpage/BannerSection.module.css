@@ -1,0 +1,136 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bannerImage {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 74px;
+  }
+}
+
+
+.searchWrapper {
+  position: relative;
+  top:-50px;
+  width: 100%;  
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 90px;
+  background-color: #FFFFFF;
+  box-sizing: border-box;
+  overflow: hidden;   
+  border: 5px solid rgba(166, 179, 125, 0.7);
+  border-radius: 21px;
+  box-shadow: 8px 11px rgba(166, 179, 125, 0.25);
+
+    &:focus-within {
+  border-color: rgba(137, 162, 55);
+  /* box-shadow: 0 0 0 4px rgba(255, 194, 204, 0.3); */
+  /* border-color: rgb(255, 194, 204);
+  box-shadow: 0 0 0 4px rgba(184, 218, 218, 0.3); */
+}
+
+}
+
+.searchIcon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  color: #a6b37d;
+  margin-right: 16px;
+}
+
+.searchInput {
+  flex: 1;
+  font-size: 24px;
+  border: none;
+  outline: none;
+  height: 100%;
+  padding: 0;
+
+
+
+  &::placeholder {
+    opacity: 0.6;
+  }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1199px) {
+  .searchWrapper {
+    width: 85%;
+    height: 85px;
+    padding: 0 20px;
+  }
+
+  .searchInput {
+    font-size: 20px;
+  }
+
+  .searchIcon {
+    width: 26px;
+    height: 26px;
+    margin-right: 14px;
+  }
+
+  .bannerImage img {
+    border-radius: 56px;
+  }
+}
+
+
+@media screen and (max-width:1024px){
+  .searchWrapper{
+    width:90%;
+    height:80px;
+    padding:0 16px;
+  }
+
+  .searchInput{
+    font-size: 18px;
+  }
+
+  .searchIcon{
+    width:24px;
+    height:24px;
+    margin-right:12px;
+  }
+
+  .searchIcon img{
+    border-radius: 40px;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .searchWrapper {
+    width: 95%;
+    height: 70px;
+    padding: 0 12px;
+    top: -40px;
+  }
+
+  .searchInput {
+    font-size: 12px;
+  }
+
+  .searchIcon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+
+  .bannerImage img {
+    border-radius: 32px;
+  }
+}

@@ -1,0 +1,114 @@
+.container{
+  margin: 58px 105px 0px;
+}
+
+.channelInfoBox{
+  display: flex;
+  gap: 12px;
+
+  img{
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.textInfo{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+}
+
+.title{
+  display:flex;
+  width: 100%;
+
+  gap: 16px; 
+  font-size: 24px;
+  font-weight: bold;
+  align-items: center;
+  
+
+  .titleTop{
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+  .setting img{ 
+    width: 50px;
+    height: 50px;
+    transition:0.3s;
+
+    &:hover{
+      transform: scale(1.2);
+    }
+  }
+}
+
+
+
+.tagBox{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+    color:rgba(85, 85, 85, 0.7);
+    
+  span{
+    display: inline-flex;
+  }
+}
+
+.content{
+  margin-top: 48px;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.scrapBtn > img{
+  width: 32px;
+  height: 44px;
+} 
+
+.project{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 56px;
+}
+
+.setProjectDetails{
+  z-index: 9999;
+}
+
+.overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(85, 85, 85, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  border-radius: 4px;
+  
+  p{
+    font-size: 24px;
+    font-weight: bold;
+    color:#fff;
+  }
+}
+
+.peerReviewBtn{
+  border-radius: 4px;
+  background-color: #a6b37d;
+  padding: 10px;
+  color:#fff;
+  transition:0.3s;
+
+  &:hover{
+  background-color: #8b9669;
+  }
+}

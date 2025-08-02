@@ -1,0 +1,109 @@
+.container{
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.profileWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileImage img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.contentBox {
+width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.meta {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #222;
+
+  .time{
+    font-size: 12px;
+    color:rgba(85, 85, 85, 0.5)
+  }
+
+  .edit{
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+
+    >button{
+      font-size: 12px;
+    color:rgba(85, 85, 85, 0.5)
+    }
+  }
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.text {
+  margin: 4px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.likeBtn{
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.recomment{
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+
+.replyInputBox{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+ 
+
+
+.replyInput{
+  width: 88%;
+  margin-top: 12px;
+  padding-left: 12px;
+  outline: none;
+  border: 0;
+  border-bottom : 1px solid rgba(0, 0, 0, 0.25);
+  resize:none;
+}
+
+.replyButton{
+  border-radius: 4px;
+  color:#fff;
+  width: 80px;
+  height: 30px;
+  background-color: #b99470;
+  transition:0.3s;
+
+  &:hover{
+    background-color: #997b5d;;
+  }
+}
+}
