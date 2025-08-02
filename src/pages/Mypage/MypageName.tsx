@@ -45,6 +45,7 @@ function MypageName({ user, editMode, setUserData}: Props) {
         return;
       }
 
+      if(!user) return 
       const { id } = user;
 
       const { error: nameError } = await supabase
@@ -81,7 +82,7 @@ function MypageName({ user, editMode, setUserData}: Props) {
         })
       
       toast.info('성공적으로 저장되었습니다.', { onClose() {
-          navigate(`/mypage/${user.profile[0]?.profile_id}`)
+          navigate(`/mypage/${user?.profile[0]?.profile_id}`)
         }, autoClose: 1500})
       setShowEdit(false);
     }

@@ -20,7 +20,8 @@ function StudyJoinInfomation() {
   const { id } = useParams();
   const [card, setCard] = useState<CardProps | null>(null);
   const [tagList, setTagList] = useState<string[]>([]);
-
+  const [isFinish,setIsFinish] = useState(false)
+  const navigate = useNavigate()
   useEffect(() => {
     if (!id) throw new Error("id가없습니다");
     const fetchData = async () => {
@@ -45,9 +46,26 @@ function StudyJoinInfomation() {
       setTagList(tagList);
     }
   }, [card?.board_tag]);
+  
+  useEffect(() => {
+    const finishProject = async () => {
+      const { data } = await supabase
+        .from("board")
+        .select("deadline")
+        .eq("board_id", id)
+        .single();
+
+      if (!data) return;
+      const deadLine = new Date(data.deadline).getTime();
+      if (deadLine <= Date.now()) {
+        setIsFinish(true);
+      }
+    };
+    finishProject();
+  }, [id]);
 
   if (!card) return;
-  const { images, title, address, member, contents, board_id } = card;
+  const { images, title, address, member, contents, board_id,board_cls} = card;
 
   return (
     <main className={S.container}>

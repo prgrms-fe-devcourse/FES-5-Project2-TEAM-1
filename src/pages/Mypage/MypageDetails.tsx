@@ -43,10 +43,12 @@ type Visibility = {
 
 function MypageDetails({ user, editMode, setUserData}: Props) {
 
+    if(!user || !user.profile) return;
+
     const { error } = useToast();
 
     const [showEdit, setShowEdit] = useState(false);
-    const [hide, setHide] = useState<Visibility>(user.profile[0].visibility);
+    const [hide, setHide] = useState<Visibility>(user.profile[0].visibility as Visibility);
     const [address, setAddress] = useState(user?.profile[0].address);
     const [gender, setGender] = useState('');
     const [isClicked, setIsClicked] = useState(false);

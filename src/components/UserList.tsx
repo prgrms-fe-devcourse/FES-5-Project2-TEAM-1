@@ -1,6 +1,5 @@
 import S from '@/components/Layout/LeftSidebar.module.css';
 import E from './UserList.module.css';
-import { useAuth } from '@/auth/AuthProvider';
 import { useEffect, useState } from 'react';
 import supabase from '@/supabase/supabase';
 import type { User } from '@/pages/Mypage/Mypage';
@@ -10,18 +9,8 @@ import type { StatusCode } from './Layout/RightSidebar';
 
 function UserList() {
 
-    const { user, isLoading, profileId } = useAuth();
-    const [isUser, setIsUser] = useState(false);
     const [openPopupIndex, setOpenPopupIndex] = useState<number | null>(null);
     const [userData, setUserData] = useState<User[] | null>(null);
-
-    console.log( user);
-
-    useEffect(() => {
-        if (!isLoading || !user || !profileId) return;
-        setIsUser(true);
-
-    }, [isLoading])
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -86,7 +75,7 @@ function UserList() {
     };
     }, []);
 
-    const handlePopupToggle = ( e, index: number) => {
+    const handlePopupToggle = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
         e.stopPropagation();
         setTimeout(() => {
             setOpenPopupIndex(prev => (prev === index ? null : index ));
@@ -117,7 +106,7 @@ const statusClassName = (status: StatusCode) => {
                 <button className={S.enterUser} onClick={(e) => handlePopupToggle(e, i)}>
                     <div className={S.profileImage}>
                         <img src={user.profile[0]?.profile_images } alt='' />
-                        <div className={`${S.statusDot} ${statusClassName(user.status)}`}></div>
+                        <div className={`${S.statusDot} ${statusClassName(Number(user.status) as StatusCode)}`}></div>
                     </div>
                     <p>{user.nickname}</p>
                 </button>
