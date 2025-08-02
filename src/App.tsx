@@ -20,13 +20,26 @@ import ManagementMembers from "./pages/Study/components/management/ManagementMem
 import MangementChannel from "./pages/Study/components/management/ManagementChannel";
 import BoardWrite from "./pages/BoardForm/BoardWrite";
 import { useState } from "react";
+import NotFound from "./pages/NotFound";
 
 
 function App() {
-  const location = useLocation();
-  const isAuthPage =
-    location.pathname === "/login" || location.pathname === "/register";
-  const [isOverlay, setIsOverlay] = useState(false)
+   const location = useLocation();
+  const path = location.pathname.toLowerCase();
+
+  const isAuthPage = path === "/login" || path === "/register";
+  const isNotFoundPage = !(
+    path === "/" ||
+    path.startsWith("/login") ||
+    path.startsWith("/register") ||
+    path.startsWith("/study") ||
+    path.startsWith("/channel") ||
+    path.startsWith("/write") ||
+    path.startsWith("/mypage/")
+  );
+
+
+    const [isOverlay, setIsOverlay] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
   
   
@@ -39,7 +52,7 @@ function App() {
             setIsOverlay(!isOverlay)
           }}></div>
         )}
-        {!isAuthPage && (
+        {!isAuthPage && !isNotFoundPage && (
           <nav className="leftcontainer">
             {isOverlay && (
               <div
@@ -50,7 +63,7 @@ function App() {
             <LeftSidebar />
           </nav>
         )}
-        <div className="mainWrapper">
+        <div className={`mainWrapper ${(isAuthPage || isNotFoundPage) ? "fullWidth" : ""}`}>
           <Routes>
             <Route path="/" element={<MainContent />} />
             <Route path="/login" element={<Login />} />
@@ -72,10 +85,13 @@ function App() {
             <Route path="/Write" element={<BoardWrite />} />
             <Route path="/Write/:id" element={<BoardWrite />} />
             <Route path="/mypage/:id" element={<Mypage />} />
+
+            <Route path="*" element={<NotFound />} />
           </Routes>
-          {!isAuthPage && <Footer />}
+          {!isAuthPage && !isNotFoundPage && <Footer />}
         </div>
-        {!isAuthPage && (
+
+        {!isAuthPage && !isNotFoundPage && (
           <nav className="rightcontainer">
             <RightSidebar isOverlay={isOverlay} setIsOverlay={setIsOverlay} isNotification={isNotification} setIsNotification={setIsNotification} />
           </nav>

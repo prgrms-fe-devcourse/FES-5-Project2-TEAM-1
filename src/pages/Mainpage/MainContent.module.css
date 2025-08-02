@@ -1,19 +1,28 @@
 
 .mainContent {
+  /* max-width: 1200px; */
+  margin: 0 auto;
+   width: 100%;
+   box-sizing: border-box;
     flex:1;
     padding:20px 24px;
     background-color: #F5F5F5;
     overflow-y: auto;
-    height:100vh;
+    min-height:100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-x: hidden;
-    width: calc(100vw - 220px - 220px);
+    /* width: calc(100vw - 220px - 220px); */
 
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE, Edge */
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
     
+}
+
+.mainContent > * {
+  width: 100%;
+  max-width: 960px;
 }
 
 .mainContent::-webkit-scrollbar{
@@ -37,9 +46,13 @@
 }
 
 
-@media screen and (max-width: 768px) {
-  .mainContent {
-    padding: 16px;
-    width:100vw;
+
+
+@media screen and (max-width:1024px){
+  .mainWrapper {
+    width: 100%;
+    margin: 0;
   }
+
+
 }
