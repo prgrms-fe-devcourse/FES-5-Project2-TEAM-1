@@ -22,18 +22,18 @@
 
 .logo{
     width:100%;
-    max-width: 400px;
-    margin-bottom: 24px;
+    max-width: 300px;
 }
 
 .loginBox{
+    bottom:10px;
     width:100%;
     max-width: 600px;
     flex-shrink: 0;
     border-radius: 16px;
     background: #AA6D2F;
     box-shadow: 20px 20px 4px 0 rgba(0, 0, 0, 0.25);
-    padding: 40px 32px;
+    padding: 30px 30px;
     position:relative;
     box-sizing: border-box;
 }
