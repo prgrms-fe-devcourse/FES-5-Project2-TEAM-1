@@ -5,6 +5,7 @@
 .popup {
     width: 9rem;
     background-color: white;
+    font-family: 'pretendard variable';
 
     position: absolute;
     top: 1rem;
@@ -17,6 +18,17 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+
+        li {
+            cursor: pointer;
+            padding: 0.2rem 0.3rem;
+            margin-top: 0.2rem;
+
+            &:hover {
+                background-color: #55555518;
+                border-radius: 3px;
+            }
+        }
     }
 
 }

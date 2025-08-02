@@ -141,4 +141,17 @@
     p {
       font-size: 1.2rem;
     }
-  }
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      background-color: #ced9d9;
+      cursor: pointer;
+      }
+  
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #c4a98f;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+}
