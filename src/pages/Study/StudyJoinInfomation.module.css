@@ -80,3 +80,27 @@
 .setProjectDetails{
   z-index: 9999;
 }
+
+.overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(85, 85, 85, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.peerReviewBtn{
+  border-radius: 4px;
+  background-color: #a6b37d;
+  padding: 10px;
+  color:#fff;
+  transition:0.3s;
+
+  &:hover{
+  background-color: #8b9669;
+  }
+}

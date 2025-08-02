@@ -1,0 +1,106 @@
+.container{
+  min-height: 80%;
+  margin: 48px 105px 0 ;
+
+  h2{
+    font-size: 36px;
+    font-weight: 600;
+  }
+}
+
+.userWrap{
+  margin-top: 32px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 12px 24px;
+  box-shadow: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+  .userInfo{
+    display:flex;
+    gap: 8px;
+    
+
+    .username{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+
+      h4{
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+
+    & > img{
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+    }
+  }
+
+.peerReviewWrap{
+  margin-top: 24px;
+  padding: 32px 24px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.peerReviewForm{
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.peerReviewScoreWrap{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  p{
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+.scoreForm{
+  display: flex;
+  gap: 8px;
+
+  .score{
+    display: flex;
+    gap:4px;
+  }
+}
+
+.etc{
+  min-height: 100px;
+  resize: none;
+  padding: 4px 8px;
+}
+
+.btnWrap{
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  
+  >button{
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  width: 120px;
+  height: 36px;
+    background-color: rgba(185, 148, 112, 0.2);
+    border: 1px solid #b99470;
+  border-radius: 4px;
+    font-weight: bold;
+    color: #b99470;
+    transition: 0.3s;
+
+    &:hover{
+    background-color: rgba(185, 148, 112, 0.4);
+    }
+  }
+}

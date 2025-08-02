@@ -1,4 +1,4 @@
-import { Link, NavLink, useParams } from "react-router-dom";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import S from "./StudyJoinInfomation.module.css";
 import type { Tables } from "@/supabase/database.types";
 import Project from "./components/Project";
@@ -19,10 +19,11 @@ type CardProps = Board &
 };
 
 function StudyJoinInfomation() {
+  const navigate = useNavigate()
   const {isAdmin} = useAdmin()
   const { id } = useParams()
   const [card, setCard] = useState<CardProps|null>(null)
-  
+  const [isFinish,setIsFinish] = useState<boolean>(false)
   useEffect(() => {
     if (!id) throw new Error('id가없습니다')  
     const fetchData = async () => {
@@ -31,10 +32,23 @@ function StudyJoinInfomation() {
       setCard(data as CardProps)
     }
       fetchData()
+  }, [id])
+  
+  useEffect(() => {
+    const finishProject = async () => {
+      const { data } = await supabase.from('board').select('deadline').eq('board_id', id).single()
+      
+      if (!data) return
+      const deadLine = new Date(data.deadline).getTime()
+      if (deadLine <= Date.now()) {
+        setIsFinish(true)
+      }
+    } 
+    finishProject()
   },[id])
 
   if(!card) return 
-  const { images, title, address, member, board_tag, contents,board_id} = card
+  const { images, title, address, member, board_tag, contents ,board_id} = card
  
   return (
     <main className={S.container}>
@@ -119,15 +133,22 @@ function StudyJoinInfomation() {
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>
-            {
-              isAdmin && (
-                <Link to='management'>
-                  <button type="button">프로젝트 생성</button>
-                </Link>
-              )
-            }
+            {isAdmin && (
+              <Link to="management">
+                <button type="button">프로젝트 생성</button>
+              </Link>
+            )}
           </div>
-          <Project />
+          <div style={{ position: "relative" }}>
+            <Project />
+            {isFinish && (
+              <div className={S.overlay}>
+                <button type="button" className={S.peerReviewBtn} onClick={()=>navigate(`/channel/${id}/peerReview/${id}`)}>
+                  피어리뷰 작성하기
+                </button>
+              </div>
+            )}
+          </div>
         </section>
         <section>
           <ChannelComment {...card} />

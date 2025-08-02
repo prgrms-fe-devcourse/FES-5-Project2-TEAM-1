@@ -1,12 +1,10 @@
 .mangementChannelContainer{
   display: flex;
   flex-direction: column;
+
 }
 
 .contentHeader{
-  margin-bottom: 51px;
-
-  color: #000;
   font-family: Pretendard;
   font-size: 36px;
   font-style: normal;
@@ -17,48 +15,78 @@
 .projectDetailForm,
 .activeSection,
 .deleteSection {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
+  margin-top: 36px;
 }
 
-.projectDetailForm section{
-  margin-bottom: 58px;
+.projectDetailForm{
+  display: flex;
+  flex-direction: column;
+  gap: 52px;
 }
 
 .sectionHeader{
-  margin-bottom: 26px;
-
-  color: #000;
   font-family: Pretendard;
   font-size: 24px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  align-self: flex-start;
+}
+
+.categoryWrap{
+  display:flex;
+  align-items: center;
+  gap:100px;
 }
 
 .category{
   display: flex;
-  flex-direction: row;
-  gap: 70px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
 
-  div{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-  }
+  .categoryRadio{
+    display:flex;
+     gap: 36px;
+
+     .study,.project{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+     }
 
   input{
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
   }
-
-  label{
-    color: #000;
+    label{  
     font-family: Pretendard;
     font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;  
-  }
+    font-weight: 400;  
+    }
+  }  
+}
+
+.deadline {
+  display: flex;
+  padding-bottom: 12px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;                
+  width: fit-content;
+}
+
+.time{
+  display:flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contributors{
+  display: flex;
+  flex-direction: column;
+  gap:24px;
 }
 
 .dateContributors{
@@ -197,6 +225,7 @@
 }
 
 .hr{
+  margin-top: 58px;
   width: 100%;
   border : 1px solid rgba(231, 231, 231, 0.973);
   margin-bottom: 32px;
@@ -245,4 +274,14 @@
   font-weight: 400;
   line-height: normal;
 
+}
+
+.calendarBtn{
+  
+  background-color: #d9d9d9;
+  border-color: #d9d9d9;
+  color:#222;
+  cursor:not-allowed;
+   width: 120px;
+  height: 28px;
 }
