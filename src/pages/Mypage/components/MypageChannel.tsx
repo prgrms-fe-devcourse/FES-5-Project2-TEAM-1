@@ -11,9 +11,6 @@ import 'swiper/css/navigation';
 import supabase from "@/supabase/supabase";
 import { Link } from "react-router-dom";
 
-
-// type Board = Tables<'board'>
-// type PickBoard = Pick<Board,'title'|'images'>;
 type Team = Tables<'approve_member'> & {
   board?:Tables<'board'>
 }
@@ -39,11 +36,10 @@ function MypageChannel({profileId}:Props) {
           'profile_id': profileId,
           'status': '1'
         });
-      console.log(data)
 
       if(error) return console.error('팀 불러오기 실패')
 
-      if(!data) return
+      if(!data) return;
       setTeams(data);
 
     };
@@ -83,8 +79,6 @@ function MypageChannel({profileId}:Props) {
               spaceBetween={40}
               slidesPerView="auto"
               speed={900}
-              // watchSlidesProgress={true}
-              // rewind={true}
               style={{
                 boxSizing : 'border-box',
               }}
