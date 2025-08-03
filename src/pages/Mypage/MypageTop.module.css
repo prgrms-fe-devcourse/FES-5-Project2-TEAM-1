@@ -254,7 +254,18 @@
         font-size: 0.8rem !important;
     }
 
+    .mypageDetailsContainer {
+        ul {
 
+            li {
+                font-size: 0.9rem !important; 
+
+                span {
+                    width: 18rem;
+                }
+            }
+        }
+    }
 
 }
 
