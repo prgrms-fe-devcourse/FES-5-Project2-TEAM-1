@@ -1,5 +1,4 @@
-
-.approveContainer{
+.approveContainer {
   /* display: grid; 
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   grid-template-columns: repeat(4,1fr);
@@ -7,12 +6,12 @@
   gap: 20px; */
 
   display: flex;
-  flex-wrap: wrap; 
-  align-items: start; 
+  flex-wrap: wrap;
+  align-items: start;
   gap: 20px;
 }
 
-.approveContainer .card{
+.approveContainer .card {
   width: 270px;
   padding: 16px;
 
@@ -20,12 +19,11 @@
   flex-direction: column;
   justify-content: center;
 
-
   border-radius: 16px;
-  background: #FFF;
+  background: #fff;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
-  img{
+  img {
     width: 238px;
     height: 148px;
 
@@ -38,7 +36,7 @@
   }
 }
 
-.approveContainer .information{
+.approveContainer .information {
   display: flex;
   flex-direction: column;
 
@@ -52,19 +50,19 @@
   font-weight: 300;
   line-height: normal;
 
-  .name{
+  .name {
     margin-bottom: 12px;
   }
 }
 
-.approveContainer .buttonGroup{
+.approveContainer .buttonGroup {
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
 }
 
-.approveContainer .card button{
+.approveContainer .card button {
   width: 89px;
   height: 40px;
   border-radius: 8px;
@@ -77,23 +75,34 @@
   line-height: normal;
 }
 
-.approveContainer .accept{
-  background: #BBDADA;
+.approveContainer .accept {
+  background: #bbdada;
   box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.25);
   transition: 0.3s;
 
-  &:hover{
+  &:hover {
     background-color: #95acac;
   }
 }
 
-.approveContainer .decline{
-  background: #FFC0CB;
+.approveContainer .decline {
+  background: #ffc0cb;
   box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.25);
   transition: 0.3s;
 
-  &:hover{
+  &:hover {
     background-color: #c7979f;
   }
 }
 
+.defaultImg {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 auto;
+  p {
+    color: #555555;
+    font-size: 24px;
+    font-weight: bold;
+  }
+}

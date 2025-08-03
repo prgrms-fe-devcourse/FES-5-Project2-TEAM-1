@@ -9,6 +9,7 @@ import MarkDownConvert from "@/components/MarkDownConvert";
 import { useAdmin } from "./context/useAdmin";
 import { chooseRegion } from "@/utils/chooseRegion";
 import HashTag from "@/components/HashTag";
+import { useAuth } from "@/auth/AuthProvider";
 
 type Board = Tables<"board">;
 type CardProps = Board & {
@@ -16,11 +17,13 @@ type CardProps = Board & {
 };
 
 function StudyJoinInfomation() {
+  const {profileId} = useAuth()
   const { isAdmin } = useAdmin();
   const { id } = useParams();
   const [card, setCard] = useState<CardProps | null>(null);
   const [tagList, setTagList] = useState<string[]>([]);
   const [isFinish, setIsFinish] = useState(false);
+  const [isMember, setIsMember] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     if (!id) throw new Error("id가없습니다");
@@ -36,7 +39,31 @@ function StudyJoinInfomation() {
 
     fetchData();
   }, [id]);
+  useEffect(() => {
+    const checkIsMember = async () => {
+      if (!id || !profileId) return;
 
+      const { data, error } = await supabase
+        .from("approve_member")
+        .select("status::text")
+        .match({
+          board_id: id,
+          profile_id: profileId,
+        })
+        .maybeSingle();
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      if (data?.status === "1") {
+        setIsMember(true);
+      }
+    };
+
+    checkIsMember();
+  }, [id, profileId]);
   useEffect(() => {
     if (!card) return;
     if (card.board_tag) {
@@ -174,14 +201,21 @@ function StudyJoinInfomation() {
             ) : (
               board_cls == "1" &&
               isFinish && (
-                <div className={S.overlay}>
-                  <button
-                    type="button"
-                    className={S.peerReviewBtn}
-                    onClick={() => navigate(`/channel/${id}/peerReview/${id}`)}
-                  >
-                    피어리뷰 작성하기
+                  <div className={S.overlay}>
+                    {
+                      isMember ? (
+                       <button
+                        type="button"
+                        className={S.peerReviewBtn}
+                        onClick={() => navigate(`/channel/${id}/peerReview/${id}`)}
+                      >
+                  피어리뷰 작성하기
                   </button>
+                      ) : (
+                        <p>프로젝트가 종료되었습니다</p>
+                      )
+                    }
+                 
                 </div>
               )
             )}

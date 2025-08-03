@@ -9,30 +9,32 @@ import { useParams } from "react-router-dom";
 interface Props {
   isHidden: boolean;
   callBack: (date: string) => void;
+  shouldFetch: boolean
 }
 
-function Calender({ isHidden, callBack }: Props) {
+function Calender({ isHidden, callBack,shouldFetch}: Props) {
   const { id } = useParams()
   const [hidden, setHidden] = useState(isHidden);
   const [range, setRange] = useState<[Date, Date] | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await supabase
-        .from("board")
-        .select("start_date, deadline")
-        .eq("board_id", id)
-        .single();
+    if (!shouldFetch ) return
+        const fetchData = async () => {
+          const { data } = await supabase
+            .from("board")
+            .select("start_date, deadline")
+            .eq("board_id", id)
+            .single();
 
-      if (data?.start_date && data?.deadline) {
-        const start = new Date(data.start_date);
-        const end = new Date(data.deadline);
-        setRange([start, end]);
-      }
-    };
+          if (data?.start_date && data?.deadline) {
+            const start = new Date(data.start_date);
+            const end = new Date(data.deadline);
+            setRange([start, end]);
+          }
+        };
 
-    fetchData();
-  }, [id]);
+        fetchData();
+  }, [id,shouldFetch]);
 
 
   const handleChange: CalendarProps["onChange"] = async (value) => {
