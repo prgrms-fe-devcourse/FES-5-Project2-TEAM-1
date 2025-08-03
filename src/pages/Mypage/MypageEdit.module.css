@@ -540,3 +540,31 @@
     }
 }
 
+
+
+@media (max-width: 1750px) {
+
+     .backgroundEditContainer {
+        width: 52rem !important;
+        
+        left: 1rem !important;
+     }
+
+    .InterestBlockEach {
+        width: 8rem !important;
+    }
+   
+
+
+}
+
+@media (max-width: 1400px) {
+
+    .backgroundEditContainer {
+        width: 45rem !important;
+
+        left: -1rem !important;
+     }
+   
+
+}
