@@ -110,6 +110,7 @@ function App() {
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          
           {!isAuthPage && !isNotFoundPage && <Footer />}
         </div>
 

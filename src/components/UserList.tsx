@@ -17,7 +17,6 @@ function UserList() {
         .select(` *, profile: user_profile(*)`);
 
       if (fetchData) {
-        console.log(fetchData);
         setUserData(fetchData);
       }
       if (fetchError) {
