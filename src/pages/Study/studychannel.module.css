@@ -1,20 +1,19 @@
-.container{
+.container {
   margin: 44px 100px 0px;
   flex: 1;
 }
 
-.channelHeader{
+.channelHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.filterTab{
+.filterTab {
   display: flex;
   gap: 1.75rem;
 
-
-  .filterBtn{
+  .filterBtn {
     width: 105px;
     height: 28px;
     background-color: rgba(185, 148, 112, 0.2);
@@ -25,94 +24,86 @@
     transition: 0.3s;
   }
 
-  .filterBtn:hover{
+  .filterBtn:hover {
     background-color: rgba(185, 148, 112, 0.4);
   }
 }
 
-
-.searchBox{
+.searchBox {
   height: 20px;
-  width: 600px;
+  width: 400px;
   display: flex;
   position: relative;
 
-  .studySearch{
-    border:0;
-    border-bottom: 1px solid rgba(85, 85, 85, 0.2); 
+  .studySearch {
+    border: 0;
+    border-bottom: 1px solid rgba(85, 85, 85, 0.2);
     background-color: transparent;
-    outline:none;
+    outline: none;
     width: 100%;
-    text-align: center;
-    transition:0.3s;
 
-    &:focus{
-    border-bottom: 1px solid rgba(185, 148, 112, 0.7); 
-      
+    transition: 0.3s;
+
+    &:focus {
+      border-bottom: 1px solid rgba(185, 148, 112, 0.7);
     }
   }
 
-
-  .searchBtn{
+  .searchBtn {
     position: absolute;
     right: 0px;
-    top:-4px;
+    top: -4px;
     background-color: transparent;
   }
 }
 
-.postBtn{
+.postBtn {
   border-radius: 4px;
   background-color: #a6b37d;
   width: 105px;
   height: 28px;
-  color:#fff;
-  transition:0.3s;
+  color: #fff;
+  transition: 0.3s;
 
-  &:hover{
-  background-color: #8b9669;
+  &:hover {
+    background-color: #8b9669;
   }
 }
 
-.cardGrid{
+.cardGrid {
   margin-top: 56px;
   display: grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 
-.pagenation{
-  display:flex;
+.pagenation {
+  display: flex;
   gap: 8px;
   justify-content: center;
   margin-top: 64px;
 
-
-   .pagenationNumber{
+  .pagenationNumber {
     width: 40px;
     height: 40px;
     border-radius: 8px;
     font-size: 24px;
     background-color: transparent;
-    border:0.1px solid #2222226b;
+    border: 0.1px solid #2222226b;
     transition: 0.3s;
 
-    &:hover{
-     background-color: #c9cfb8;
+    &:hover {
+      background-color: #c9cfb8;
     }
+  }
+  .active {
+    background-color: #a6b37d;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 8px;
+    border: 0;
+  }
 }
-.active{
-  background-color: #a6b37d;
-  color:#fff;
-   width: 40px;
-  height: 40px;
-  font-size: 24px;
-  text-align: center;
-  border-radius: 8px;
-  border: 0;
-}
-
-
-}
-
-

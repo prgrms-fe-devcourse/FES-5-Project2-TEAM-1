@@ -1,13 +1,16 @@
-import { Link } from 'react-router-dom';
-import S from './LeftSidebar.module.css'
-import { useState } from 'react';
-import UserList from '../UserList';
+import { Link } from "react-router-dom";
+import S from "./LeftSidebar.module.css";
+import { useState } from "react";
+import UserList from "../UserList";
+import { showInfoAlert } from "@/utils/sweetAlert";
 
 function LeftSidebar() {
-
-  const [CommunityReady,setCommunityReady] = useState(false)
-  const [ContactReady, setContactReady] = useState(false)
-  
+  const [CommunityReady, setCommunityReady] = useState(false);
+  const [ContactReady, setContactReady] = useState(false);
+  const handleReady = (e: React.MouseEvent<HTMLLIElement>) => {
+    e.preventDefault();
+    showInfoAlert("준비중입니다.");
+  };
   return (
     <div className={S.container}>
       <div className={S.height}>
@@ -61,6 +64,7 @@ function LeftSidebar() {
               className={S.navList}
               onMouseEnter={() => setCommunityReady(true)}
               onMouseLeave={() => setCommunityReady(false)}
+              onClick={handleReady}
             >
               <div className={S.navListText}>
                 <svg
@@ -118,6 +122,7 @@ function LeftSidebar() {
               className={S.navList}
               onMouseEnter={() => setContactReady(true)}
               onMouseLeave={() => setContactReady(false)}
+              onClick={handleReady}
             >
               <div className={S.navListText}>
                 <svg
@@ -164,4 +169,4 @@ function LeftSidebar() {
     </div>
   );
 }
-export default LeftSidebar
+export default LeftSidebar;
