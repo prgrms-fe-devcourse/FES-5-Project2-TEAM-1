@@ -19,6 +19,7 @@ import AddIcon from "/icons/add.svg";
 import supabase from "@/supabase/supabase";
 import { useToast } from "@/utils/useToast";
 import gsap from "gsap";
+import { toast } from "react-toastify";
 
 interface Props {
   user: User | null;
@@ -40,7 +41,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
   const liRef = useRef<HTMLDivElement | null>(null);
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
-  const { info, success, error } = useToast();
+  const { error } = useToast();
 
   useEffect(() => {
     const fetchSocial = async () => {
@@ -75,6 +76,36 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
     if (!editMode) {
       setIsClicked((prev) => prev.map(() => false));
     }
+
+    const cleanUpEmptySocialLinks = async () => {
+    if (!socialArray || !Array.isArray(socialArray)) return;
+
+    const emptySocials = socialArray.filter((s) => s.social_link === '');
+
+    if (emptySocials.length === 0) return;
+
+    // 삭제할 social id 목록 수집
+    const idsToDelete = emptySocials.map((s) => s.social_id); // id가 있다고 가정
+
+    const { error: deleteError } = await supabase
+      .from('user_social')
+      .delete()
+      .in('social_id', idsToDelete);
+
+    if (deleteError) {
+      toast.error('빈 링크 삭제 중 오류가 발생했어요.');
+      console.error(deleteError.message);
+      return;
+    }
+
+    // state 업데이트
+    setSocialArray((prev) => {
+      if (!prev) return prev;
+      return prev.filter((item) => item.social_link !== '');
+    });
+  };
+  cleanUpEmptySocialLinks();
+
   }, [editMode]);
 
   useEffect(() => {
@@ -100,7 +131,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
       }
 
       setSocialArray((prev) => (prev ? [...prev, data] : [data]));
-      info("새 링크를 추가할 수 있습니다.");
+      toast.info("새 링크를 추가할 수 있습니다.", {autoClose: 1500});
     };
     fetchNewSocial();
 
@@ -196,6 +227,11 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
     const newSocial = pendingIcon[index];
     const newSocialLink = inputValues[index];
 
+    if( newSocialLink === '' ) {
+      toast.error('링크를 적어주세요.', {autoClose: 1500});
+      return;
+    }
+
     setSocialArray((prev) => {
       if (!prev) return prev;
       return prev.map((a, i) => {
@@ -244,7 +280,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
       };
     });
 
-    success("새 링크 저장 성공!");
+    toast.info("새 링크가 저장되었습니다.");
   };
 
   const iconSrc = (index: number) => {
@@ -310,7 +346,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
       };
     });
 
-    info("소셜 링크가 제거되었습니다.");
+    toast.info("소셜 링크가 제거되었습니다.", {autoClose: 1500});
   };
 
   const addSocialLink = () => {
