@@ -249,6 +249,11 @@
         width: 58%;
     }
 
+    .InterestBlockEach {
+        width: 8rem !important;
+        font-size: 0.8rem !important;
+    }
+
 
 
 }
@@ -257,6 +262,11 @@
 
     .container {
         width: 50%;
+    }
+
+    .InterestBlockEach {
+        width: 6rem !important;
+        font-size: 0.7rem !important;
     }
 
 }
