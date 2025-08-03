@@ -13,7 +13,8 @@ import MypagePost from './components/MypagePost';
 import MypageScrap from './components/MypageScrap';
 import MoveToTop from './components/MoveToTop';
 import { useAuth } from '@/auth/AuthProvider';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { showErrorAlert } from '@/utils/sweetAlert';
 
 
 type UserProfileWithJoins = Tables<'user_profile'> & {
@@ -38,18 +39,24 @@ function Mypage() {
   const {user, isLoading, profileId}  = useAuth();
   const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:''});
   const {id:urlProfileId} = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-  if (!isLoading && user && profileId) {
-    setCurrentUser({
-      profileId,
-      email: user.email,
-      id: user.id,
-    });
-  }
+    if(!isLoading && !user) {
+      showErrorAlert("로그인 후 이용해주세요");
+      navigate("/login");
+      return;
+    }
+    if (!isLoading && user && profileId) {
+      setCurrentUser({
+        profileId,
+        email: user.email,
+        id: user.id,
+      });
+    }
   }, [isLoading, user, profileId]);
 
-  // urlProfileId를 기준으로 user_id 뽑아오기
+
   useEffect(()=>{
     if(!urlProfileId) return;
     const fetchUrlUserId = async()=>{

@@ -14,8 +14,8 @@ import { Link } from "react-router-dom";
 type Board = Tables<'board'>
 type PickBoard = Pick<Board,'title'|'images'>;
 type Team = {
-  'board_id':string,
-  'board': PickBoard
+  board_id:string,
+  board: PickBoard
 }
 
 interface Props {
@@ -50,12 +50,31 @@ function MypageChannel({profileId}:Props) {
           board: Array.isArray(row.board) ? row.board[0] : row.board
         }
       ))
-      setTeams(refinedBoardIsNotArray);
+      const {data : myChannels, error : myChannelsError} = await supabase
+        .from('board')
+        .select(`board_id, title, images`)
+        .eq('profile_id',profileId);
+        
+      if(myChannelsError) return console.error('팀 불러오기 실패')
+  
+      const myTeams = myChannels.map((channel)=>{
+        const myChannel = {
+          board_id : channel.board_id,
+          board : {
+            title : channel.title,
+            images : channel.images
+          }
+        }
+        return myChannel
+      })
+
+      setTeams([...refinedBoardIsNotArray, ...myTeams]);
     };
     fetchChannels();
-    // console.log('가입 채널 패치 완료');
-  },[profileId])
 
+    
+  },[profileId])
+  
   const handlePrev = () => {
     if(!swiper || !teams) return;
     const newIndex = swiperIndex-1 < 0 ? teams.length-1 : swiperIndex-1;
@@ -114,7 +133,7 @@ function MypageChannel({profileId}:Props) {
                   >
                     <Link to={`/channel/${board_id}`}>
                       <div className={S.teamCard} title={`${board.title} 페이지로 이동하기`}>
-                        <img className={S.teamImg} src={board.images ? board.images : 'defaultBackground.img'} alt="채널" />
+                        <img className={S.teamImg} src={board.images ? board.images : '/public/images/defaultTeam.png'} alt="채널" />
                         <div className={S.teamTitle}>
                           {board.title}
                         </div>
