@@ -16,6 +16,10 @@ export const showSuccessAlert = (title:string, text?:string) => {
             confirmButton: 'my-confirm-button',
             icon: 'custom-icon-background',
         },
+        willOpen: ()=>{
+            const img = new Image();
+            img.src = '/images/successImg2.jpg';
+        }
     });
 };
 
