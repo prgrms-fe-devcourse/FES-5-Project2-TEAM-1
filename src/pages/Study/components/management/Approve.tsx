@@ -15,6 +15,7 @@ function Approve() {
   const { id } = useParams();
   const [pendingMember, setPendingMember] = useState<User[]>([]);
 
+
   useEffect(() => {
     const fetchData = async () => {
       const { data: profileData, error: profileError } = await supabase
@@ -43,6 +44,7 @@ function Approve() {
   }, [id]);
 
   const handleApprove = async (profile_id: string) => {
+
     success("채널가입을 승인하였습니다.");
     const { error } = await supabase
       .from("approve_member")
