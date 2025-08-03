@@ -149,7 +149,9 @@ function RightSidebar({
         .eq("id", currentUser.id);
     }
 
-    await logout();
+  setStatus(1);
+
+    await logout()
     setCurrentUser(null);
     navigate("/");
   };

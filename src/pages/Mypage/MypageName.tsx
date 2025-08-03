@@ -5,7 +5,7 @@ import E from './MypageEdit.module.css';
 import supabase from '../../supabase/supabase';
 import { useToast } from '@/utils/useToast';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 interface Props {
@@ -18,16 +18,45 @@ function MypageName({ user, editMode, setUserData}: Props) {
 
   const { error } = useToast();
 
-  const [userName, setUserName] = useState<string>(user?.nickname ?? '');
-  const [role, setRole] = useState<string>(user?.role ?? '');
+  const [userName, setUserName] = useState<string>('');
+  const [role, setRole] = useState<string>('');
   const [showEdit, setShowEdit] = useState(false);
   const navigate = useNavigate();
+  const { id: profileId } = useParams<{id: string}>();
 
   useEffect(() => {
       if( !editMode ) {
         setShowEdit(false);
       }
   }, [editMode]);
+
+  useEffect(() => {
+    
+    const fetchUserInfo = async () => {
+      const { data: profileData } = await supabase
+        .from('user_profile')
+        .select('user_id')
+        .eq('profile_id', profileId)
+        .single();
+
+      if (!profileData) return;
+
+      const { data: userData } = await supabase
+        .from('user_base')
+        .select('nickname, role')
+        .eq('id', profileData.user_id)
+        .single();
+
+      if (userData) {
+         setUserName(userData.nickname);
+         setRole(userData.role);
+      }
+
+  };
+
+  fetchUserInfo();
+
+  }, [profileId]);
 
     const handleEditName = () => {
       setShowEdit(true);
@@ -102,6 +131,7 @@ function MypageName({ user, editMode, setUserData}: Props) {
         setShowEdit(false);
       }
     }
+
 
   return (
     <div className={S.mypageNameContainer}>
