@@ -40,9 +40,15 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
   const [createReply, setCreateReply] = useState<string>("");
   const [reply, setReply] = useState<ReplyWithUser[]>([]);
   const timeStamp = commentTime(create_at);
-
   const threadRef = useRef<HTMLLIElement>(null);
 
+    useEffect(() => {
+      const storedPress = JSON.parse(
+        localStorage.getItem(`like-${thread_id}`) ?? "false"
+      );
+      setIsPress(storedPress);
+    }, [thread_id]);
+  
   useEffect(() => {
     if (threadRef.current) {
       gsap.fromTo(
@@ -66,7 +72,7 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
     localStorage.setItem(`like-${data.thread_id}`, JSON.stringify(nextState));
 
     const { error } = await supabase
-      .from("thread_reply")
+      .from("thread")
       .update({
         likes: likeState,
       })
@@ -74,7 +80,7 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
       .select()
       .single();
 
-    if (error) console.log(error.message);
+    if(error) console.error()
   };
 
   const handleSave = async (
@@ -135,7 +141,7 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
       },
     ]);
     if (error) console.log(error.message);
-    setCreateReply("");
+    if (!error)setCreateReply("");
 
     const { data: replies } = await supabase
       .from("thread_reply")
@@ -153,7 +159,7 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
     }
   };
 
-  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       if (!editContent.trim()) return;
@@ -203,16 +209,17 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
         <div className={S.partition}></div>
         <div className={S.textContainer}>
           {isEditing ? (
-            <input
+            <textarea
               className={S.editContent}
-              type="text"
               value={editContent}
               onKeyDown={handleEditKeyDown}
               onChange={(e) => setEditContent(e.target.value)}
               autoFocus
+              rows={4}
+            
             />
           ) : (
-            <p>{content}</p>
+            <p className={S.text}>{content}</p>
           )}
         </div>
       </div>
@@ -251,7 +258,7 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
 
           {recentlyReply.map((item) => {
             return (
-              <IsMineProvider writerProfileId={item.user_profile.profile_id}>
+              <IsMineProvider key={item.reply_id } writerProfileId={item.user_profile.profile_id}>
                 <ThreadReplyComponent
                   key={item.reply_id}
                   reply={item}
