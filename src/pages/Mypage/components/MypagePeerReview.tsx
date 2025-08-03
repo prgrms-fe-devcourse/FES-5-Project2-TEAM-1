@@ -80,7 +80,7 @@ function MypagePeerReview({profileId}:Props) {
         peerReviews && peerReviews.length !== 0 ? (
           <section className={S.peerReviewContainer}>
             <button type="button" className={S.prevButton} onClick={handlePrev}>
-              <img src="/public/icons/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
+              <img src="/icons/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
             </button>
             <Swiper 
               className="peerReview"
@@ -129,7 +129,7 @@ function MypagePeerReview({profileId}:Props) {
               }
             </Swiper>
             <button type="button" className={S.nextButton} onClick={handleNext}>
-              <img src="/public/icons/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
+              <img src="/icons/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
             </button>
           </section>
         ) : (

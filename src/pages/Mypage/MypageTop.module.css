@@ -205,7 +205,7 @@
     margin-bottom: 6rem;
 
     h2 {
-        font-size: 2rem;
+        font-size: 1.6rem;
         margin-bottom: 2.5rem;
     }
     .InterestBlock {
@@ -237,38 +237,44 @@
     z-index: 0;
 
     h2 {
-        font-size: 2rem;
+        font-size: 1.6rem;
         margin-bottom: 2rem;
     }
 }
 
 
-@media (max-width: 1900px) {
-    .editBtn {
-        top: 5rem !important;
+@media (max-width: 1750px) {
+
+    .container {
+        width: 58%;
     }
-}
 
-@media (max-width: 1700px) {
-    .editBtn {
-        top: 4.2rem !important;
+    .InterestBlockEach {
+        width: 8rem !important;
+        font-size: 0.8rem !important;
     }
+
+
+
 }
 
-@media (max-width: 1500px) {
-    .editBtn {
-        top: 3rem !important;
+@media (max-width: 1400px) {
+
+    .container {
+        width: 50%;
     }
-}
 
-@media (max-width: 1200px) {
-    .editBtn {
-        top: 2rem !important;
+    .InterestBlockEach {
+        width: 6rem !important;
+        font-size: 0.7rem !important;
     }
-}
-
-@media (max-width: 1024px) {
 
 }
-@media (max-width: 600px) {
+
+@media (max-width: 1100px) {
+
+}
+
+@media (max-width: 768px) {
+
 }
