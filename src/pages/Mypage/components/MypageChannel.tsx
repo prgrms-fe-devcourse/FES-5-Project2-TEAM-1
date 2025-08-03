@@ -69,7 +69,7 @@ function MypageChannel({profileId}:Props) {
         teams && teams.length !== 0 ? (
           <section className={S.teamContainer}>
             <button type="button" className={S.prevButton} onClick={handlePrev}>
-              <img src="/public/icons/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
+              <img src="/icons/arrowLeft.svg" alt="피어리뷰 좌측 네비게이션" />
             </button>
             <Swiper 
               className="team"
@@ -133,7 +133,7 @@ function MypageChannel({profileId}:Props) {
               }
             </Swiper>
             <button type="button" className={S.nextButton} onClick={handleNext}>
-              <img src="/public/icons/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
+              <img src="/icons/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
             </button>
           </section>    
         ) : (
