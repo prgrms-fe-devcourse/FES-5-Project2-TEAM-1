@@ -85,7 +85,7 @@ function CommentItem({ comment, onDelete, userImage, userName, profileId }: Prop
     }]).select()
 
     if(error) console.log(error.message)
-    setCreateReply('')
+    if (!error) setCreateReply('')
     
     const { data:replyData } = await supabase
       .from("comment_reply")
@@ -126,7 +126,8 @@ function CommentItem({ comment, onDelete, userImage, userName, profileId }: Prop
     }
   };
 
-  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      console.log("Pressed:", e.key, "shift?", e.shiftKey);
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       if (!editContent.trim()) return;
@@ -175,13 +176,14 @@ function CommentItem({ comment, onDelete, userImage, userName, profileId }: Prop
           )}
         </div>
         {isEditing ? (
-          <input
-            type="text"
+          <textarea
+            className={S.textarea}
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             onKeyDown={handleEditKeyDown}
             autoFocus
-          />
+            rows={3}
+          ></textarea>
         ) : (
           <div className={S.text}>{content}</div>
         )}

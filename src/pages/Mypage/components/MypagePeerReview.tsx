@@ -13,6 +13,7 @@ import supabase from "@/supabase/supabase"
 
 type PeerReview = Tables<'peer_review'>
 type PeerReviewsList = { 
+  review_id: string;
   writer_id: string; 
   writerProfileImage:string; 
   review_contents:string; 
@@ -45,10 +46,10 @@ function MypagePeerReview({profileId}:Props) {
     const refinedPeerReviews = async() => {
       if(!rawPeerReviews) return;
       const data = await Promise.all(rawPeerReviews.map(async(raw)=> {
-        const {writer_id, review_contents, review_score} = raw;
+        const {review_id, writer_id, review_contents, review_score} = raw;
         const writerData = await compareUserId(writer_id,'user_profile');
         const writerProfileImage = writerData?.[0].profile_images!
-        return {writer_id, writerProfileImage, review_contents, review_score};    
+        return {review_id, writer_id, writerProfileImage, review_contents, review_score};    
       }))
       setPeerReviews(data);
     }
@@ -56,7 +57,6 @@ function MypagePeerReview({profileId}:Props) {
   },[rawPeerReviews])
 
 
-  // 네비게이션 swiper 외부로 빼기 위한 함수
   const handlePrev = () => {
     if(!swiper || !peerReviews) return;
     const newIndex = swiperIndex-1 < 0 ? peerReviews?.length-1 : swiperIndex-1;
@@ -91,10 +91,6 @@ function MypagePeerReview({profileId}:Props) {
               speed={900}
               slideToClickedSlide = {true}
               spaceBetween={40}
-              // watchSlidesProgress={true}
-              // updateOnWindowResize={true}
-              // resizeObserver={true}
-              // simulateTouch={true}
               style={{
                 padding: "0",
                 boxSizing: "border-box"
@@ -113,9 +109,9 @@ function MypagePeerReview({profileId}:Props) {
               }}
             >
               {
-                peerReviews.map(({writer_id, writerProfileImage, review_contents, review_score},index)=>(
+                peerReviews.map(({review_id, writerProfileImage, review_contents, review_score},index)=>(
                   <SwiperSlide 
-                    key={writer_id} 
+                    key={review_id} 
                     onClick={()=>{
                       swiper?.slideTo(index);
                       setSwiperIndex(index);

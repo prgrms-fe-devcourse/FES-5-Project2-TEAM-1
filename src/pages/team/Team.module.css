@@ -87,3 +87,31 @@
     }
 }
 }
+
+.MyTeam{
+  margin-top: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  img{
+    height: 300px;
+    width: 240px;
+    object-fit: contain;
+  }
+
+  .message{
+    display: flex;
+    align-items: center;
+    color: #A6B37D;
+    background-color: #F0F8E0;
+    border: 2px solid #A6B37D;
+    padding: 16px 24px;
+    border-radius: 32px;
+    font-weight: 600;
+    line-height: 1.6;
+    box-shadow: 0 4px 12px rgba(166, 179, 125, 0.4);
+    font-size: 1.25rem;
+  
+  }
+}

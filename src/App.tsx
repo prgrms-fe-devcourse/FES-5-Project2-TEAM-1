@@ -40,7 +40,8 @@ function App() {
     path.startsWith("/study") ||
     path.startsWith("/channel") ||
     path.startsWith("/write") ||
-    path.startsWith("/mypage/")
+      path.startsWith("/mypage/") ||
+      path.startsWith('/team')
   );
   const [isOverlay, setIsOverlay] = useState(false)
   const [isNotification, setIsNotification] = useState(false)

@@ -1,20 +1,30 @@
 .mangementChannelContainer{
   display: flex;
   flex-direction: column;
-
+  margin-right: 220px;
 }
 
 .contentHeader{
   font-family: Pretendard;
-  font-size: 36px;
+  font-size: 28px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  
+}
+.controlSection{
+ font-family: Pretendard;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-top: 24px;
 }
 
 .projectDetailForm,
 .activeSection,
-.deleteSection {
+.deleteSection,
+.activeGroup  {
   margin-left: 0.5rem;
   margin-top: 36px;
 }
@@ -25,26 +35,12 @@
   gap: 52px;
 }
 
-.sectionHeader{
-  font-family: Pretendard;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  align-self: flex-start;
-}
-
-.categoryWrap{
-  display:flex;
-  align-items: center;
-  gap:100px;
-}
-
 .category{
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
 
   .categoryRadio{
     display:flex;
@@ -67,34 +63,73 @@
     }
   }  
 }
-
 .deadline {
   display: flex;
-  padding-bottom: 12px;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;                
-  width: fit-content;
+  justify-content: space-between;
+  gap: 8px;  
+    padding-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0; 
+  
+  .calendarBox{
+    display: flex;
+    align-items: center;
+
+
+      .calendarBtn{
+  cursor: pointer;
+  z-index: 999;
+  font-size: 16px;
+  width: 120px;
+  height: 28px;
+    background-color: rgba(185, 148, 112, 0.2);
+    border: 1px solid #b99470;
+  border-radius: 4px;
+    font-weight: bold;
+    color: #b99470;
+    transition: 0.3s;
+
+    &:hover{
+    background-color: rgba(185, 148, 112, 0.4);
+    }
+  
+        }
+        
+      .disableBtn{
+        pointer-events: none;     
+        opacity: 0.5;            
+        background-color: #ccc;   
+        color: #666;                
+        width: 120px;
+        height: 28px;
+        cursor: not-allowed;  
+      }
+  }
 }
+
+.sectionHeader{
+  font-family: Pretendard;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  align-self: flex-start;
+}
+
+.categoryWrap{
+  display:flex;
+  align-items: center;
+  gap:100px;
+}
+
 
 .time{
   display:flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: 24px;
-}
+    padding-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
 
-.contributors{
-  display: flex;
-  flex-direction: column;
-  gap:24px;
-}
-
-.dateContributors{
-  display: flex;
-  flex-direction: row;
-  gap: 162px;
-
-  input {
+    input {
     width: 257.6px;
     height: 39.253px;
 
@@ -114,63 +149,114 @@
     font-weight: 600;
     line-height: normal;
   }
+}
 
-  
+.contributors{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap:24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .countButton{
   display: flex;
-  flex-direction: row;
-  gap: 80px;
-
-  p{
-    color: #000;
+  align-items: center;
+  gap: 48px;
+  background-color: #fff;
+  border-radius: 30%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  div{
+    color: #222;
     font-family: Pretendard;
-    font-size: 32px;
+    font-size: 24px;
     font-style: normal;
     font-weight: 400;
     line-height: normal; 
   }
 
   button {
-    width: 42px;
-    height: 42px;
-    background: rgba(153, 153, 153, 0.5);
+    width: 36px;
+    height: 36px;
+    background:#999;
     font-size: 24px;
+    color:#fff;
   }
 
   .upButton{
+    background-color: #999;
     border-top-left-radius: 30%;
     border-bottom-left-radius: 30%;
+    transition: 0.3s;
+
+    &:hover{
+    background-color: #888;
+    }
+
+    &:active{
+    background-color: #777;
+    }
   }
+
   .downButton{
+     background-color:#999;
     border-top-right-radius: 30%;
     border-bottom-right-radius: 30%;
+    transition:0.3s;
+
+    &:hover{
+     background-color:#888;
+    }
+
+    &:active{
+    background-color: #777;
+    }
   }
 
 }
 
 
+.location{
+  display: flex;
+  justify-content: space-between;
+    padding-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
 
 .locationRadio{
   display: flex;
-  flex-direction: row;
-  gap: 70px;
+  flex-direction: column;
+  gap: 24px;
   margin-bottom: 26px;
 
+
+  .online{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .offline{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
   div{
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    justify-content: flex-end;
+    gap: 36px;
   }
 
   input{
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
   }
 
   label{
-    color: #000;
+    color: #222;
     font-family: Pretendard;
     font-size: 16px;
     font-style: normal;
@@ -180,9 +266,8 @@
 }
 
 .locationButton{
-  width: 555px;
+  width: 300px;
   height: 40px;
-
   border-radius: 8px;
   background: #FFF;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
@@ -192,9 +277,11 @@
 }
 
 .locationButton .address{
-  color: black;
+  color:#222;
   font-family: Pretendard;
   font-weight: 600;
+  text-align: right;
+  padding-right: 24px;
 
 }
 
@@ -212,7 +299,7 @@
   height: 42.5px;
   margin-bottom: 83px;
 
-  color: #000;
+  color: #222;
   font-family: Pretendard;
   font-size: 24px;
   font-style: normal;
@@ -222,21 +309,33 @@
   border-radius: 8px;
   background: #BBDADA;
   box-shadow: 2px 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+  &:hover{
+   background-color: #a5cfcf;
+  }
+
+  &:active{
+    background-color: #89B8B8;
+  }
 }
 
 .hr{
-  margin-top: 58px;
+  margin-top: 32px;
   width: 100%;
   border : 1px solid rgba(231, 231, 231, 0.973);
-  margin-bottom: 32px;
+}
+
+
+.activeGroup{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .isActive{
   display: flex;
   flex-direction: row;
-  gap: 70px;
-
-  margin-bottom: 83px;
+  gap: 36px;
 
   div{
     display: flex;
@@ -245,12 +344,12 @@
   }
 
   input{
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
   }
 
   label{
-    color: #000;
+    color: #222;
     font-family: Pretendard;
     font-size: 16px;
     font-style: normal;
@@ -259,29 +358,39 @@
   }
 }
 
-.deleteButton{
-  width: 164px;
-  height: 47px;
 
-  border-radius: 10px;
-  border: 1px solid #F00;
+.deleteSection{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .sectionHeader{
+    display: inline-block;
+    line-height: 1;
+    transform: translateY(20px);
+  }
+
+  .deleteButton{
+  width: 140px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #Ff6666;
   background: #FFF;
 
-  color: #F00;
-  font-family: Inter;
-  font-size: 20px;
-  font-style: normal;
+  color: #Ff6666;
+  font-size: 16px;
   font-weight: 400;
-  line-height: normal;
+  transition: 0.3s;
 
-}
+  &:hover{
+    background-color:#E05555;
+    color:#fff;
+  }
 
-.calendarBtn{
-  
-  background-color: #d9d9d9;
-  border-color: #d9d9d9;
-  color:#222;
-  cursor:not-allowed;
-   width: 120px;
-  height: 28px;
+  &:active{
+    background-color: #C94A4A;
+    color:#fff;
+  }
+  }
+
 }

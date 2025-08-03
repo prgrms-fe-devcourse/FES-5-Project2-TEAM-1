@@ -11,7 +11,7 @@
 
 .filterTab {
   display: flex;
-  gap: 20px;
+  gap: 1.75rem;
 
   .filterBtn {
     width: 105px;

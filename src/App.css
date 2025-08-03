@@ -16,7 +16,7 @@
     min-width: 0;
     flex-shrink: 1;
   }
-  height: 100vh;
+  /* height: 100vh; */
   /* overflow: hidden; */
 }
 .leftcontainer {
@@ -69,12 +69,12 @@
   z-index: 99;
   pointer-events: auto;
 }
-/* @media screen and (max-width: 1024px) {
+@media screen and (max-width: 1024px) {
   .leftcontainer,
   .rightcontainer {
-    width: 160px;
+    width: 10rem;
   }
-} */
+}
 @media screen and (max-width: 768px) {
   .leftcontainer,
   .rightcontainer {

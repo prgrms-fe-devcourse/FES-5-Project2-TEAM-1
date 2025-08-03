@@ -71,7 +71,7 @@ function MypageScrap({profileId}:Props) {
           </section>
         ) : (
           <div className={S.nothing}>
-            <img src="/images/noScraps.png" alt="스크랩 없음" />
+            <img src="/images/emptyContents.png" alt="스크랩 없음" />
             <p>
               아직 스크랩된 글이 없습니다 <br />
               스터디에서 글을 스크랩해서 한 눈에 확인해보세요!<br />
