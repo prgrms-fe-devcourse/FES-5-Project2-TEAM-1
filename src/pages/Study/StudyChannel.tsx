@@ -19,11 +19,12 @@ function StudyChannel() {
   const filterTab = ["최신순", "좋아요순"];
   const filterRef = useRef<(HTMLButtonElement | null)[]>([]);
   const [recentlyCardData, setrecentlyCardData] = useState<CardProps[]>([]);
+
   useEffect(() => {
     const boardTable = async () => {
       const { data } = await supabase
         .from("board")
-        .select(" *, board_tag(*)")
+        .select(" *, board_tag(*)").eq('active',true)
         .order("create_at", { ascending: false });
       if (data) {
         setCardData(data);
