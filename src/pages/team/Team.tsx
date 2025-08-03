@@ -73,7 +73,7 @@ function TeamPage() {
                     <button type="button" className={S.peerReviewBtn} onClick={() => navigate(`/channel/${team.board_id}`)}>피어리뷰 작성하기</button>
                   ) : (
                     <div>
-                          남은기한 : {dDay[0]}{dDay[1]}일
+                          남은기한 : {dDay[0]}{dDay[1]} 일
                     </div>
                   )}
                   <button type="button" className={S.moveBtn} onClick={() => navigate(`/channel/${team.board_id}`)}>채널이동하기</button>

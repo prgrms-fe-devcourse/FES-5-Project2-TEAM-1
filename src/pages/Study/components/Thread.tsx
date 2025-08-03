@@ -129,7 +129,6 @@ function Thread() {
         })
       );
       const replyMap = Object.fromEntries(replies);
-      console.log(replyMap);
       setReplyData(replyMap);
     };
 
@@ -187,7 +186,7 @@ function Thread() {
       },
     ]);
     if (error) console.log(error.message);
-    setUpdateContent("");
+    if(!error) setUpdateContent("");
     const { data } = await supabase
       .from("thread")
       .select("*,user_profile(*,user_base(*))")
@@ -268,7 +267,7 @@ function Thread() {
           <ul className={S.threads}>
             {recentlyThread.map((reply) => {
               return (
-                <IsMineProvider writerProfileId={reply.user_profile.profile_id}>
+                <IsMineProvider key={reply.thread_id} writerProfileId={reply.user_profile.profile_id}>
                 <ThreadList
                   key={reply.thread_id}
                   data={reply}

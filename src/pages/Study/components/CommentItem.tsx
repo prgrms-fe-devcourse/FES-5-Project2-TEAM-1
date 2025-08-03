@@ -85,7 +85,7 @@ function CommentItem({ comment, onDelete, userImage, userName, profileId }: Prop
     }]).select()
 
     if(error) console.log(error.message)
-    setCreateReply('')
+    if (!error) setCreateReply('')
     
     const { data:replyData } = await supabase
       .from("comment_reply")
