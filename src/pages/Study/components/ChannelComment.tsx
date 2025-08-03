@@ -71,7 +71,7 @@ function ChannelComment(card:Props) {
       return;
     }
 
-    setWriteComment("");
+    if(!error) setWriteComment("");
 
     const { data: commentData } = await supabase
       .from("comment")

@@ -7,7 +7,7 @@
 .bannerImage {
   position: relative;
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
   img {
     width: 100%;
     height: auto;
@@ -21,12 +21,12 @@
   position: relative;
   top:-50px;
   width: 100%;  
-  max-width: 780px;
+  max-width: 600px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   padding: 0 24px;
-  height: 90px;
+  height: 70px;
   background-color: #FFFFFF;
   box-sizing: border-box;
   overflow: hidden;   
@@ -44,8 +44,8 @@
 }
 
 .searchIcon {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   flex-shrink: 0;
   color: #a6b37d;
   margin-right: 16px;
@@ -53,7 +53,7 @@
 
 .searchInput {
   flex: 1;
-  font-size: 24px;
+  font-size: 20px;
   border: none;
   outline: none;
   height: 100%;

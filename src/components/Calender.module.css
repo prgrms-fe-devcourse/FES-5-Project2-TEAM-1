@@ -12,7 +12,7 @@
   top: 100%;
   right: 0;
   z-index: 99;
-  transform: translate(200px,-50%); 
+  transform: translate(170px,50%); 
   display: flex;
   flex-direction: column;
 }
@@ -20,8 +20,6 @@
 
 .calendarBtn,
 .cancleBtn{
-  margin-top: 12px;
-  position: absolute;
   cursor: pointer;
   z-index: 999;
   font-size: 16px;

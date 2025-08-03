@@ -67,7 +67,7 @@ function ThreadReplyComponent({reply,onDelete,userName,userImage}:Prop) {
        }
   }
   
-    const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleEditKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         if (!editReply.trim()) return;
@@ -114,12 +114,12 @@ function ThreadReplyComponent({reply,onDelete,userName,userImage}:Prop) {
           )}
         </div>
         {isEditing ? (
-          <input
-            type="text"
+          <textarea
             value={editReply}
             onChange={(e) => setEditReply(e.target.value)}
             onKeyDown={handleEditKeyDown}
             autoFocus
+            rows={4}
           />
         ) : (
           <div className={S.text}>{content}</div>
