@@ -57,10 +57,7 @@ function MangementChannel() {
     setIsActive(active);
 
   },[projectData])
-
-  useEffect(() => {
-    console.log("현재 category:", category);
-  }, [category]);
+  
   
   const handleCheckedOnline = () => {
     // address가 null일때
