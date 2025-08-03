@@ -46,6 +46,7 @@ function RightSidebar({
 
   const popupRef = useRef<HTMLUListElement | null>(null);
   const [messageReady, setMessageReady] = useState(false);
+  const [scrapReady, setScrapReady] = useState(false);
   const [membershipReady, setMembershipReady] = useState(false);
   const navigate = useNavigate();
 
@@ -62,13 +63,21 @@ function RightSidebar({
           console.error("정보 불러오기 실패:", nameError?.message);
           return;
         }
-
+        const { data, error } = await supabase
+          .from("user_profile")
+          .select("profile_images")
+          .eq("profile_id", profileId)
+          .single();
+        if (!data || error) {
+          console.error("프로필 이미지 불러오기 실패", error.message);
+          return;
+        }
         // 2. currentUser에 status 포함시켜 초기화
         setCurrentUser({
           profileId,
           email: user.email,
           id: user.id,
-          profileImage: "",
+          profileImage: data.profile_images,
           status: 0,
           name: nickname.nickname,
         });
@@ -83,30 +92,6 @@ function RightSidebar({
 
     initUser();
   }, [isLoading, user, profileId]);
-
-  useEffect(() => {
-    const fetchUserProfileImage = async () => {
-      if (!currentUser || !currentUser.profileId) return;
-      const { data, error } = await supabase
-        .from("user_profile")
-        .select("profile_images")
-        .eq("profile_id", currentUser.profileId)
-        .single();
-      if (!data || error) {
-        console.error("프로필 이미지 불러오기 실패", error.message);
-        return;
-      }
-      setCurrentUser((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          profileImage: data.profile_images,
-        };
-      });
-    };
-
-    fetchUserProfileImage();
-  }, [currentUser?.profileId]);
 
   useEffect(() => {
     gsap.fromTo(
@@ -211,23 +196,26 @@ function RightSidebar({
               ))}
           </div>
           <div className={S.loginBox}>
-            {loading && (
-              <img
-                className={S.profileImage}
-                src={
-                  currentUser
-                    ? currentUser.profileImage
-                    : "/public/images/여울.png"
-                }
-                alt="프로필"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setTimeout(() => {
-                    setIsStatusClicked((prev) => !prev);
-                  }, 0);
-                }}
-              />
-            )}
+            {loading &&
+              (currentUser ? (
+                <img
+                  className={S.profileImage}
+                  src={currentUser.profileImage || "/images/여울.png"}
+                  alt="프로필"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setTimeout(() => {
+                      setIsStatusClicked((prev) => !prev);
+                    }, 0);
+                  }}
+                />
+              ) : (
+                <img
+                  className={S.profileImage}
+                  src={"/images/여울.png"}
+                  alt="프로필"
+                />
+              ))}
             {isStatusClicked && (
               <div className={S.statusPopup} id="popupBox">
                 <ul ref={popupRef}>
@@ -371,7 +359,11 @@ function RightSidebar({
               <h3>Team</h3>
             </Link>
           </li>
-          <li className={S.navList}>
+          <li
+            className={S.navList}
+            onMouseEnter={() => setScrapReady(true)}
+            onMouseLeave={() => setScrapReady(false)}
+          >
             <a href="#" className={S.navListText} onClick={handleReady}>
               <svg
                 width="24"
@@ -385,7 +377,11 @@ function RightSidebar({
                   fill="#222222"
                 />
               </svg>
-              <h3>Scrap</h3>
+              <h3
+                className={`${S.fadeText} ${scrapReady ? S.visible : S.hidden}`}
+              >
+                {scrapReady ? "In Progress" : "Scrap"}
+              </h3>
             </a>
           </li>
         </ul>
