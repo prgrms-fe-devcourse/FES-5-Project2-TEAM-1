@@ -84,6 +84,7 @@
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.7s ease-in-out;
+  margin-bottom: 4rem;
   
   img{
     width: 8rem;

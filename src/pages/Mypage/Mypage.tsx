@@ -178,7 +178,7 @@ function Mypage() {
          
             <MypagePeerReview profileId={urlProfileId ? urlProfileId : currentUser.profileId}/>
             <MypageChannel profileId={urlProfileId ? urlProfileId : currentUser.profileId}/>
-            { // 현재 접속한 유저와 조회한 마이페이지 주인이 같을때만 렌더링
+            { 
               urlProfileId === currentUser.profileId ? 
               <MypageScrap profileId={urlProfileId}/> : ''
             }
