@@ -82,6 +82,7 @@
     width: 160px;
   }
 } */
+
 @media screen and (max-width: 768px) {
   .leftcontainer,
   .rightcontainer {
