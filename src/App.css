@@ -79,7 +79,7 @@
   .rightcontainer {
     width: 10rem;
   }
-} 
+}
 @media screen and (max-width: 768px) {
   .leftcontainer,
   .rightcontainer {
@@ -89,5 +89,4 @@
     justify-content: center;
   }
 }
-
 
