@@ -46,6 +46,7 @@ function RightSidebar({
 
   const popupRef = useRef<HTMLUListElement | null>(null);
   const [messageReady, setMessageReady] = useState(false);
+  const [scrapReady, setScrapReady] = useState(false);
   const [membershipReady, setMembershipReady] = useState(false);
   const navigate = useNavigate();
 
@@ -358,7 +359,11 @@ function RightSidebar({
               <h3>Team</h3>
             </Link>
           </li>
-          <li className={S.navList}>
+          <li
+            className={S.navList}
+            onMouseEnter={() => setScrapReady(true)}
+            onMouseLeave={() => setScrapReady(false)}
+          >
             <a href="#" className={S.navListText} onClick={handleReady}>
               <svg
                 width="24"
@@ -372,7 +377,11 @@ function RightSidebar({
                   fill="#222222"
                 />
               </svg>
-              <h3>Scrap</h3>
+              <h3
+                className={`${S.fadeText} ${scrapReady ? S.visible : S.hidden}`}
+              >
+                {scrapReady ? "In Progress" : "Scrap"}
+              </h3>
             </a>
           </li>
         </ul>
