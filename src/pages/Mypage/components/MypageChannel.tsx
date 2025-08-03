@@ -43,7 +43,7 @@ function MypageChannel({profileId}:Props) {
 
       if(error) return console.error('팀 불러오기 실패')
 
-      if(!data)
+      if(!data) return
       setTeams(data);
 
     };
