@@ -43,10 +43,6 @@ function MypageSocialConvert({ user, socialData, setSocialData }: Props ) {
   },[userSocial])
 
   useEffect(()=>{
-    // copiedText && toast.success(`복사 완료! ${copiedText}`,{ onClose() {
-    //   navigate(`/mypage/${userSocial?.profile_id}`)
-    // },autoClose:1500})
-
     if( copiedText ) {
       toast.success(`복사 완료!`,{ onClose() {
        navigate(`/mypage/${userSocial?.profile_id}`)

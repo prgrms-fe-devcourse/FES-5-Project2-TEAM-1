@@ -89,6 +89,17 @@ function Register() {
       return;
     }
 
+    const uploadCertificatieFile = async() => {
+      const {error} = await supabase
+        .from('certification')
+        .insert({
+          image:filePath,
+          email:email
+        })
+      if(error) console.error('수료증 등록 실패');
+    }
+    uploadCertificatieFile();
+
     await showSuccessAlert(
       "회원가입 성공!",
       "프둥이숲에 오신 걸 환영합니다!🎉"
