@@ -129,7 +129,6 @@ function Thread() {
         })
       );
       const replyMap = Object.fromEntries(replies);
-      console.log(replyMap);
       setReplyData(replyMap);
     };
 
@@ -187,7 +186,7 @@ function Thread() {
       },
     ]);
     if (error) console.log(error.message);
-    setUpdateContent("");
+    if(!error) setUpdateContent("");
     const { data } = await supabase
       .from("thread")
       .select("*,user_profile(*,user_base(*))")
@@ -224,9 +223,13 @@ function Thread() {
     }));
   };
 
-  const recentlyThread = [...threadData].sort(
-    (a, b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime()
-  );
+  const recentlyThread = [...threadData].sort((a, b) => {
+    const timeDiff =
+      new Date(b.create_at).getTime() - new Date(a.create_at).getTime();
+    if (timeDiff !== 0) return timeDiff;
+
+  return b.thread_id.localeCompare(a.thread_id);
+});
 
   return (
     <>
@@ -264,7 +267,7 @@ function Thread() {
           <ul className={S.threads}>
             {recentlyThread.map((reply) => {
               return (
-                <IsMineProvider writerProfileId={reply.user_profile.profile_id}>
+                <IsMineProvider key={reply.thread_id} writerProfileId={reply.user_profile.profile_id}>
                 <ThreadList
                   key={reply.thread_id}
                   data={reply}

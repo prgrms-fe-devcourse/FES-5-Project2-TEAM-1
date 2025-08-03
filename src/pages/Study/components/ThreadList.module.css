@@ -8,6 +8,9 @@
   padding: 20px;
   padding-right: 40px;
   max-width: 980px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 
@@ -28,10 +31,20 @@
   display: flex;
   gap: 16px;
   margin-top: 16px;
-  flex: 1;
 
+  .partition{
+  background-color: rgba(85, 85, 85, 0.5);
+  width: 1px;
+  
+  min-height: 94px;
+  margin-left: 16px;
+}
 
-.editContent {
+.textContainer{
+  flex:1;
+
+  
+  .editContent {
   width: 100%;
   padding: 8px 12px;
   line-height: 1.5;
@@ -40,16 +53,13 @@
   border-radius: 4px;
   box-sizing: border-box;
   resize: none;
- 
   display: block;
 }
 
-  .partition{
-  background-color: rgba(85, 85, 85, 0.5);
-  width: 1px;
-  min-height: 94px;
-  margin-left: 16px;
+
 }
+
+
 
 }
 
@@ -141,4 +151,8 @@
     background-color: #997b5d;;
   }
 }
+}
+
+.text{
+  white-space: pre-wrap;
 }

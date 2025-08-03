@@ -63,7 +63,7 @@ function Recomment({ reply, onDelete, userName, userImage }: Props) {
          onDelete?.();
     }
   }
-    const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleEditKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         if (!editReply.trim()) return;
@@ -109,12 +109,12 @@ function Recomment({ reply, onDelete, userName, userImage }: Props) {
           )}
         </div>
         {isEditing ? (
-          <input
-            type="text"
+          <textarea
             value={editReply}
             onChange={(e) => setEditReply(e.target.value)}
             onKeyDown={handleEditKeyDown}
             autoFocus
+            rows={3}
           />
         ) : (
           <div className={S.text}>{content}</div>

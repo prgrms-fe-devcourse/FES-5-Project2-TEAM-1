@@ -11,19 +11,17 @@ import 'swiper/css/navigation';
 import supabase from "@/supabase/supabase";
 import { Link } from "react-router-dom";
 
-type Board = Tables<'board'>
-type PickBoard = Pick<Board,'title'|'images'>;
-type Team = {
-  'board_id':string,
-  'board': PickBoard
+// type Board = Tables<'board'>
+// type PickBoard = Pick<Board,'title'|'images'>;
+type Team = Tables<'approve_member'> & {
+  board?:Tables<'board'>
 }
-
 interface Props {
   profileId : string;
 }
 
 function MypageChannel({profileId}:Props) {
-  const [teams, setTeams] = useState<Team[]|null>(null);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [swiper, setSwiper] = useState<SwiperClass>();
   const [swiperIndex, setSwiperIndex] = useState<number>(0);
   const swiperWrappedRef = useRef<HTMLElement|null>(null);
@@ -32,25 +30,26 @@ function MypageChannel({profileId}:Props) {
   useEffect( () => {
     const fetchChannels = async() => {
       const {data, error} = await supabase
-      .from('board_member')
+      .from('approve_member')
       .select(`
-        board_id,
-        board(
-          title,
-          images
-        )
+        *,board(*)
       `)
-      .eq('profile_id',profileId);
+        .match({
+          'profile_id': profileId,
+          'status': '1'
+        });
+      console.log(data)
 
       if(error) return console.error('팀 불러오기 실패')
 
-      const refinedBoardIsNotArray : Team[] = (data as any[]).map( row => (
-        {
-          board_id: row.board_id,
-          board: Array.isArray(row.board) ? row.board[0] : row.board
-        }
-      ))
-      setTeams(refinedBoardIsNotArray);
+      // const refinedBoardIsNotArray : Team[] = (data as any[]).map( row => (
+      //   {
+      //     board_id: row.board_id,
+      //     board: Array.isArray(row.board) ? row.board[0] : row.board
+      //   }
+      // ))
+      if(!data) return 
+      setTeams(data);
     };
     fetchChannels();
     // console.log('가입 채널 패치 완료');
@@ -107,28 +106,46 @@ function MypageChannel({profileId}:Props) {
             >
 
               {
-                teams.map(({board, board_id},index)=>(
-                  <SwiperSlide 
-                    key={board_id} 
-                    className={`team ${swiperIndex === index ? 'teamActive' : ''}`}
-                  >
-                    <Link to={`/channel/${board_id}`}>
-                      <div className={S.teamCard} title={`${board.title} 페이지로 이동하기`}>
-                        <img className={S.teamImg} src={board.images ? board.images : 'defaultBackground.img'} alt="채널" />
-                        <div className={S.teamTitle}>
-                          {board.title}
+                
+                teams.map(({ board_id, board }, index) => 
+                {
+                  if(!board) return 
+                  return (
+                    <SwiperSlide
+                      key={board_id}
+                      className={`team ${
+                        swiperIndex === index ? "teamActive" : ""
+                      }`}
+                    >
+                      <Link to={`/channel/${board_id}`}>
+                        <div
+                          className={S.teamCard}
+                          title={`${board.title} 페이지로 이동하기`}
+                        >
+                          <img
+                            className={S.teamImg}
+                            src={
+                              board.images
+                                ? board.images
+                                : "/images/online.png"
+                            }
+                            alt="채널"
+                          />
+                          <div className={S.teamTitle}>{board.title}</div>
                         </div>
-                      </div>
-                    </Link>
-                  </SwiperSlide>
-                ))
+                      </Link>
+                    </SwiperSlide>
+                  )
+          
+                   }
+                
+                )
               }
             </Swiper>
             <button type="button" className={S.nextButton} onClick={handleNext}>
               <img src="/public/icons/arrowRight.svg" alt="피어리뷰 우측 네비게이션" />
             </button>
-          </section>
-          
+          </section>    
         ) : (
           <div className={S.nothing}>
             <img src="/images/emptyContents.png" alt="참여중인 스터디 없음" />
