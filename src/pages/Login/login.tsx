@@ -5,7 +5,7 @@ import supabase from "@/supabase/supabase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import PasswordInput from "@/components/PasswordInput";
-import { showErrorAlert, showSuccessAlert } from "@/utils/sweetAlert";
+import { showErrorAlert, showSuccessAlert, showInfoAlert } from "@/utils/sweetAlert";
 import { useAuth } from "@/auth/AuthProvider";
 
 function Login() {
@@ -13,7 +13,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [isLoginSuccess, setIsLoginSuccess] = useState(false);
 
     useEffect(() => {
@@ -37,7 +37,7 @@ function Login() {
         e.preventDefault();
         setError(null);
 
-       const {data, error} = await supabase.auth.signInWithPassword({
+        const {data, error} = await supabase.auth.signInWithPassword({
         email,
         password:password,
         });
@@ -46,7 +46,43 @@ function Login() {
             console.error(error.message);
             await showErrorAlert('로그인 실패', '이메일 또는 비밀번호가 일치하지 않습니다.');
             setError('이메일 또는 비밀번호가 일치하지 않습니다.');
-        } else {
+        }
+        
+        const checkApprove = async() => {
+            const { data: profileData, error: profileError } = await supabase
+                .from('user_profile')
+                .select('user_id')
+                .eq('email', email)
+                .single();
+
+            if (profileError || !profileData) {
+                console.error('user_profile 조회 실패', profileError);
+                return;
+            }
+
+            const userId = profileData.user_id;
+
+            const { data: baseData, error: baseError } = await supabase
+                .from('user_base')
+                .select('approve')
+                .eq('id', userId)
+                .single();
+
+            if (baseError || !baseData) {
+                console.error('user_base 조회 실패', baseError);
+                return;
+            }
+            console.log('approve 상태:', baseData.approve);
+            return baseData.approve;
+        }
+        const isApproved = await checkApprove();
+
+        if(!isApproved){
+            await showInfoAlert('승인 대기중', '회원가입 승인 대기중입니다.');
+            await logout();
+            return;
+        } 
+        else {
             console.log('로그인 성공:', data);
             await showSuccessAlert('로그인 성공!', '환영합니다 좋은 하루 되세요!🌱')
             setTimeout(()=>{
@@ -54,6 +90,8 @@ function Login() {
             },500);
             setIsLoginSuccess(true);
     }
+
+
 };
 
 
