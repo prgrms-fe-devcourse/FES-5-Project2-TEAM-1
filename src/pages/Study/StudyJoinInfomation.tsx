@@ -24,7 +24,7 @@ function StudyJoinInfomation() {
   const [tagList, setTagList] = useState<string[]>([]);
   const [isFinish, setIsFinish] = useState(false);
   const [isMember, setIsMember] = useState<boolean|null>(null);
-  // const [isSubmit,setIsSubmit] = useState(false)
+  const [isSubmit,setIsSubmit] = useState(false)
   const navigate = useNavigate();
 
 
@@ -61,7 +61,6 @@ function StudyJoinInfomation() {
         console.error(error);
         return;
       }
-      console.log(data?.status)
      if (data?.status === "1" || isAdmin) {
        setIsMember(true);
      } else {
@@ -99,19 +98,24 @@ function StudyJoinInfomation() {
     finishProject();
   }, [id]);
 
-useEffect(() => {
-  console.log("🔍 상태 추적", { isAdmin, isFinish, isMember });
-}, [isAdmin, isFinish, isMember]);
-
+    useEffect(() => {
+      const fetchSubmit = async () => {
+        const { data, error } = await supabase.from("peer_review").select("review_id").match({
+          board_id: id,
+          writer_id: profileId,
+        });
+        if (error) console.error(error);
+        if(!data) return 
+        setIsSubmit(data.length > 0);
+      };
+      fetchSubmit();
+    }, [id, profileId]);
+  
+  console.log(isSubmit)
     if (!card) return;
     const { images, title, address, member, contents, board_id, board_cls} =
       card;
 
-
-   
-
-
- 
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -213,8 +217,10 @@ useEffect(() => {
             <Project />
             {board_cls === "1" && isFinish && (
               <div className={S.overlay}>
-                {isAdmin ? (
-                  isMember ? (
+                {isMember ? (
+                  isSubmit ? (
+                    <p>피어리뷰를 제출하셨습니다</p>
+                  ) : (
                     <button
                       type="button"
                       className={S.peerReviewBtn}
@@ -224,8 +230,6 @@ useEffect(() => {
                     >
                       피어리뷰 작성하기
                     </button>
-                  ) : (
-                    <p>프로젝트가 종료되었습니다</p>
                   )
                 ) : (
                   <p>프로젝트가 종료되었습니다</p>
