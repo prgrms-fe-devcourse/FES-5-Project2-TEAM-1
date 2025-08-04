@@ -8,7 +8,6 @@ import { KakaoLoaderProvider } from './components/context/useKakaoLoaderProvider
 
 
 
-
 createRoot(document.getElementById("root")!).render(
   <ToastProvider>
       <BrowserRouter>
