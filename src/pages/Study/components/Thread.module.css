@@ -19,6 +19,7 @@
   top: 200px;
   padding: 20px;
   border-radius: 8px;
+  scroll-behavior: smooth;
 }
 
 .writerBox{

@@ -144,9 +144,12 @@ function Thread() {
 
     const recentlyUser = async () => {
       const { data, error } = await supabase
-        .from("user_profile")
-        .select("*,user_base(*)")
-        .in("profile_id", profileId);
+        .from("approve_member")
+        .select("*,user_profie(*,user_base(*))")
+        .match({
+          board_id: id,
+          status:'1'
+        })
 
       if (!data) return;
       if (error) console.error();
