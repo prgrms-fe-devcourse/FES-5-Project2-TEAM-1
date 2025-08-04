@@ -4,7 +4,7 @@ import MypageSocial from './MypageSocial';
 import S from './MypageTop.module.css';
 import MypageName from './MypageName';
 import MypageDetails from './MypageDetails';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import supabase from '../../supabase/supabase';
 import type { Tables } from 'src/supabase/database.types';
 import MypageChannel from './components/MypageChannel';
@@ -15,6 +15,7 @@ import MoveToTop from './components/MoveToTop';
 import { useAuth } from '@/auth/AuthProvider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { showErrorAlert } from '@/utils/sweetAlert';
+import { toast } from 'react-toastify';
 
 
 type UserProfileWithJoins = Tables<'user_profile'> & {
@@ -40,6 +41,8 @@ function Mypage() {
   const [currentUser, setCurrentUser] = useState<CurrentUser>({profileId:'', email:'', id:''});
   const {id:urlProfileId} = useParams();
   const navigate = useNavigate();
+
+  const canExitEditModeRef = useRef<() => boolean>(() => true); 
 
   useEffect(() => {
     if(!isLoading && !user) {
@@ -101,6 +104,13 @@ function Mypage() {
   }, [currentUser])
 
   useEffect(() => {
+  // 현재 페이지의 프로필이 내 프로필이 아니라면 editMode 끄기
+  if (urlProfileId && urlProfileId !== currentUser.profileId) {
+    setEditMode(false);
+  }
+}, [urlProfileId, currentUser.profileId]);
+
+  useEffect(() => {
     const fetchUrlUser = async () => {
       if( !urlUserId ) return;
       const { data, error } = await supabase
@@ -127,6 +137,16 @@ function Mypage() {
   }, [urlUserId])
 
   const handleEditUserPage = () => {
+
+    if (editMode) {
+      // editMode를 종료하려는 상황
+      const canExit = canExitEditModeRef.current?.();
+      if (!canExit) {
+        toast.error('이름을 입력해주세요.', {autoClose: 1500});
+        return;
+      }
+    }
+
     setEditMode( prev => !prev );
   }
 
@@ -137,6 +157,8 @@ function Mypage() {
   if(urlProfileId && !urlUserData){
     return <p>유저 데이터를 불러오는 중입니다...</p>;
   }
+
+  
 
   return (
     <div className={S.container}>
@@ -159,6 +181,7 @@ function Mypage() {
               user={urlProfileId ? urlUserData : userData}
               editMode={editMode}
               setUserData={urlProfileId ? setUrlUserData : setUserData}
+              canExitEditModeRef={canExitEditModeRef}
             />
             <MypageDetails
               user={urlProfileId ? urlUserData : userData}
