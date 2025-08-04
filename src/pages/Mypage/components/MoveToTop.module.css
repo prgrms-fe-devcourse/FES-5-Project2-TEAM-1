@@ -1,6 +1,30 @@
 .upButton{
+  position: fixed;
+
+  bottom: 2rem;
+  right: 16rem; 
+  
+  margin-bottom: 3rem;
+
+  width: 5rem;
+}
+
+.tooltip {
   position: absolute;
-  right: -20px;
-  bottom : -40px;
-  width: 4rem;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 1.4s ease-in-out;
+  pointer-events: none;
+}
+
+.upButton:hover .tooltip {
+  opacity: 1;
 }

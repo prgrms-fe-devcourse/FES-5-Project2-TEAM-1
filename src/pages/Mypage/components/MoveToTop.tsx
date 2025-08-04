@@ -33,7 +33,8 @@ function MypageMoveToTop() {
         type="button" 
         onClick={handleMoveToTop} 
         onMouseEnter={handleEnterUpButton}>
-          <img src="/public/images/topButton.png" alt="move to top" title="최상단 이동" />
+          <img src="/images/topButton.png" alt="move to top" />
+          <span className={S.tooltip}>최상단 이동</span>
         </button>
       </section>
     </>
