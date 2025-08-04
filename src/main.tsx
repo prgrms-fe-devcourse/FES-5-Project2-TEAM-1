@@ -7,6 +7,7 @@ import { AuthProvider } from './auth/AuthProvider.tsx'
 import { KakaoLoaderProvider } from './components/context/useKakaoLoaderProvider.tsx'
 
 
+
 createRoot(document.getElementById("root")!).render(
     <ToastProvider>
       <BrowserRouter>
