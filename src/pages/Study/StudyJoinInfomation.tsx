@@ -9,6 +9,7 @@ import MarkDownConvert from "@/components/MarkDownConvert";
 import { useAdmin } from "./context/useAdmin";
 import { chooseRegion } from "@/utils/chooseRegion";
 import HashTag from "@/components/HashTag";
+import { useAuth } from "@/auth/AuthProvider";
 
 type Board = Tables<"board">;
 type CardProps = Board & {
@@ -16,12 +17,18 @@ type CardProps = Board & {
 };
 
 function StudyJoinInfomation() {
+  const {profileId} = useAuth();
   const { isAdmin } = useAdmin();
   const { id } = useParams();
   const [card, setCard] = useState<CardProps | null>(null);
   const [tagList, setTagList] = useState<string[]>([]);
   const [isFinish, setIsFinish] = useState(false);
+  const [isMember, setIsMember] = useState<boolean|null>(null);
+  const [isSubmit,setIsSubmit] = useState(false)
   const navigate = useNavigate();
+
+
+  
   useEffect(() => {
     if (!id) throw new Error("id가없습니다");
     const fetchData = async () => {
@@ -36,6 +43,33 @@ function StudyJoinInfomation() {
 
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    const checkIsMember = async () => {
+      if (!id || !profileId) return;
+
+      const { data, error } = await supabase
+        .from("approve_member")
+        .select("status")
+        .match({
+          board_id: id,
+          profile_id: profileId,
+          status:'1',
+        })
+        .maybeSingle();
+      if (error) {
+        console.error(error);
+        return;
+      }
+     if (data?.status === "1" || isAdmin) {
+       setIsMember(true);
+     } else {
+       setIsMember(false);
+     }
+    };
+
+    checkIsMember();
+  }, [id, profileId,isAdmin]);
 
   useEffect(() => {
     if (!card) return;
@@ -64,9 +98,23 @@ function StudyJoinInfomation() {
     finishProject();
   }, [id]);
 
-  if (!card) return;
-  const { images, title, address, member, contents, board_id, board_cls } =
-    card;
+    useEffect(() => {
+      const fetchSubmit = async () => {
+        const { data, error } = await supabase.from("peer_review").select("review_id").match({
+          board_id: id,
+          writer_id: profileId,
+        });
+        if (error) console.error(error);
+        if(!data) return 
+        setIsSubmit(data.length > 0);
+      };
+      fetchSubmit();
+    }, [id, profileId]);
+  
+  console.log(isSubmit)
+    if (!card) return;
+    const { images, title, address, member, contents, board_id, board_cls} =
+      card;
 
   return (
     <main className={S.container}>
@@ -167,23 +215,26 @@ function StudyJoinInfomation() {
           </div>
           <div style={{ position: "relative" }}>
             <Project />
-            {board_cls == null ? (
+            {board_cls === "1" && isFinish && (
               <div className={S.overlay}>
-                <p>아직 스터디가 없습니다</p>
+                {isMember ? (
+                  isSubmit ? (
+                    <p>피어리뷰를 제출하셨습니다</p>
+                  ) : (
+                    <button
+                      type="button"
+                      className={S.peerReviewBtn}
+                      onClick={() =>
+                        navigate(`/channel/${id}/peerReview/${id}`)
+                      }
+                    >
+                      피어리뷰 작성하기
+                    </button>
+                  )
+                ) : (
+                  <p>프로젝트가 종료되었습니다</p>
+                )}
               </div>
-            ) : (
-              board_cls == "1" &&
-              isFinish && (
-                <div className={S.overlay}>
-                  <button
-                    type="button"
-                    className={S.peerReviewBtn}
-                    onClick={() => navigate(`/channel/${id}/peerReview/${id}`)}
-                  >
-                    피어리뷰 작성하기
-                  </button>
-                </div>
-              )
             )}
           </div>
         </section>

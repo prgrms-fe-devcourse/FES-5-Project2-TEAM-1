@@ -539,3 +539,50 @@
         background-color: #d0d2c9;
     }
 }
+
+
+
+@media (max-width: 1750px) {
+
+     .backgroundEditContainer {
+        width: 52rem !important;
+        
+        left: 1rem !important;
+     }
+
+    .InterestBlockEach {
+        width: 8rem !important;
+    }
+
+    .editDetailAddress {
+        padding-right: 2rem;
+    }
+
+    .editDetailGender {
+        padding-right: 2rem;
+    }
+
+    .editDetailAge {
+
+        padding-right: 2rem;
+
+        input,
+        select {
+            width: 6rem;
+        }
+    }
+   
+
+
+}
+
+@media (max-width: 1400px) {
+
+    .backgroundEditContainer {
+        width: 45rem !important;
+
+        left: -1rem !important;
+     }
+   
+
+}

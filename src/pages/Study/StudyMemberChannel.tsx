@@ -5,6 +5,7 @@ import { useToast } from "@/utils/useToast";
 import { useAuth } from "@/auth/AuthProvider";
 import { useAdmin } from "./context/useAdmin";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function StudyMemberChannel() {
   const { id } = useParams();
@@ -40,6 +41,35 @@ function StudyMemberChannel() {
   }, [id, profileId]);
 
   const handleJoin = async () => {
+    if (!profileId) error('로그인을 해주세요');
+
+    const { count, error: countError } = await supabase
+      .from('approve_member')
+      .select('status::text', { count: 'exact', head: true })
+      .match({
+        board_id: id
+      })
+      
+    if( countError ) {
+      console.error('패치 에러');
+    }
+
+    const { data: boardData, error: boardError} = await supabase
+      .from('board')
+      .select('member')
+      .match({
+        board_id: id
+      })
+
+    if( boardError ) {
+      console.error('패치 에러');
+    }
+
+    if(  boardData && count && boardData.length > 0 && boardData[0].member <= count ) {
+      toast.error('이미 가입 승인 멤버가 가득찼습니다.', {autoClose: 1500})
+      return;
+    } 
+
     const { data, error: fetchError } = await supabase
       .from("approve_member")
       .select("status::text")

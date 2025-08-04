@@ -30,4 +30,8 @@
 
 .active{
   color: #b99470;
+
+  &:hover{
+  color: #b99470;
+  }
 }

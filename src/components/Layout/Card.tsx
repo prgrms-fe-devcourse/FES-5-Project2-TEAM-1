@@ -2,11 +2,13 @@ import S from "./card.module.css";
 
 import { useEffect, useRef, useState } from "react";
 import supabase from "@/supabase/supabase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import type { Tables } from "@/supabase/database.types";
 import HashTag from "../HashTag";
 import gsap from "gsap";
 import { useAuth } from "@/auth/AuthProvider";
+
+
 
 type Board = Tables<"board">;
 type CardProps = Board & {
@@ -18,7 +20,8 @@ interface Props {
 }
 
 function Card({ card }: Props) {
-  const { contents, title, likes, board_id, member, board_tag } = card;
+ 
+  const { contents, title, likes, board_id, board_tag} = card;
   const [tagList, setTagList] = useState<string[]>([]);
 
   const [cardLike, setCardLike] = useState(likes);
@@ -27,6 +30,7 @@ function Card({ card }: Props) {
   const navigate = useNavigate();
   const likeBtnRef = useRef<HTMLButtonElement>(null);
   const scrapBtnRef = useRef<HTMLButtonElement>(null);
+  const [member,setMember] = useState<number>(1)
   const { profileId } = useAuth();
 
   useEffect(() => {
@@ -44,6 +48,20 @@ function Card({ card }: Props) {
       .map((tag) => tag.hash_tag as string);
     setTagList(tagList);
   }, [board_id]);
+
+  useEffect(() => {
+    const fetchMember = async () => {
+      const { count,error } = await supabase.from('approve_member').select('*',{count:'exact'}).match({
+        board_id: board_id,
+        status:1,
+      }) 
+      if(error)console.error(error)
+      if (count !== null) {
+        setMember(count)
+      }
+    }
+    fetchMember()
+  }, [board_id])
 
   const handleScrap = async () => {
     if (scrapBtnRef.current) {

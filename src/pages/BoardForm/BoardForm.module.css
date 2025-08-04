@@ -1,4 +1,5 @@
 .bContainer {
+  width: 70vw;
   flex: 1;
   display: flex;
   margin: 0 56px;
@@ -34,6 +35,13 @@
 /* 반응형 (모바일) */
 @media (max-width: 1400px) {
   .bContainer {
+    width: 45vw;
     gap: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .bContainer {
+    width: 80vw;
   }
 }

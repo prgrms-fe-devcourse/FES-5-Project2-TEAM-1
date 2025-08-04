@@ -56,12 +56,13 @@
   box-shadow: 5px 8px 13px rgba(102, 102, 102, 0.3);
 } */
 
-/* @media screen and (max-width: 1660px) {
+@media screen and (max-width: 1660px) {
   .swiper-slide.peerReview {
-    width: 8.8rem;
+    width: 9.8rem;
+    transition: width 1s ease;
   }
 
   .swiper-slide-active.peerReview {
-    width: 11.8rem;
+    width: 17.8rem;
   }
-} */
+}

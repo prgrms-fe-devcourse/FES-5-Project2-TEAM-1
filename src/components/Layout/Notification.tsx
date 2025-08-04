@@ -1,26 +1,31 @@
-import S from './Notification.module.css'
-import type { Tables } from '@/supabase/database.types';
-import { commentTime } from '@/pages/Study/components/utills/commentTime';
+import S from "./Notification.module.css";
+import type { Tables } from "@/supabase/database.types";
+import { commentTime } from "@/pages/Study/components/utills/commentTime";
 
-import { useNotification } from '../context/useNotification';
+import { useNotification } from "../context/useNotification";
 
-
-type Notification = Tables<'notification'>
+type Notification = Tables<"notification">;
 
 function Notification() {
+  const { alarms, deleteAlarm } = useNotification();
 
- const {alarms,deleteAlarm} = useNotification()
-  
- const sortedAlarm = [...alarms].sort((a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-  
+  const sortedAlarm = [...alarms].sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
+
   return (
-      <>
-      {
-        sortedAlarm && sortedAlarm.map(({id,content,created_at}) => {
+    <>
+      {sortedAlarm &&
+        sortedAlarm.map(({ id, content, created_at }) => {
           return (
             <div className={S.container} key={id}>
               <div className={S.notification}>
-                <button type="button" className={S.closeBtn} onClick={()=>deleteAlarm(id)}>
+                <button
+                  type="button"
+                  className={S.closeBtn}
+                  onClick={() => deleteAlarm(id)}
+                >
                   <svg
                     width="25"
                     height="25"
@@ -51,11 +56,8 @@ function Notification() {
               <div>{commentTime(created_at)}</div>
             </div>
           );
-      })
-    }
+        })}
     </>
-
   );
 }
-export default Notification
-
+export default Notification;

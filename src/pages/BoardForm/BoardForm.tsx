@@ -88,6 +88,7 @@ function BoardForm({ userId }: Props) {
     // success("글이 게시되었습니다!");
     if (data) {
       insertHashTag(data[0].board_id);
+      insertApproveMember(data[0].board_id);
       imageUpload(data[0].board_id);
       deleteSaveData();
       toast.success("글이 게시되었습니다.", {
@@ -194,7 +195,17 @@ function BoardForm({ userId }: Props) {
       throw new Error("임시 저장 데이터 삭제를 실패했습니다.");
     }
   };
+  const insertApproveMember = async (board_id: string) => {
+    const { error } = await supabase.from("approve_member").insert({
+      profile_id: userId,
+      status: "1",
+      board_id,
+    });
 
+    if (error) {
+      throw new Error("approve_member insert 중 에러 발생");
+    }
+  };
   return (
     <div>
       <div className={S.bContainer}>
