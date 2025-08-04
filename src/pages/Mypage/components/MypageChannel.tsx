@@ -11,8 +11,6 @@ import 'swiper/css/navigation';
 import supabase from "@/supabase/supabase";
 import { Link } from "react-router-dom";
 
-// type Board = Tables<'board'>
-// type PickBoard = Pick<Board,'title'|'images'>;
 type Team = Tables<'approve_member'> & {
   board?:Tables<'board'>
 }
@@ -38,23 +36,18 @@ function MypageChannel({profileId}:Props) {
           'profile_id': profileId,
           'status': '1'
         });
-      console.log(data)
 
       if(error) return console.error('팀 불러오기 실패')
 
-      // const refinedBoardIsNotArray : Team[] = (data as any[]).map( row => (
-      //   {
-      //     board_id: row.board_id,
-      //     board: Array.isArray(row.board) ? row.board[0] : row.board
-      //   }
-      // ))
-      if(!data) return 
+      if(!data) return;
       setTeams(data);
+
     };
     fetchChannels();
-    // console.log('가입 채널 패치 완료');
-  },[profileId])
 
+    
+  },[profileId])
+  
   const handlePrev = () => {
     if(!swiper || !teams) return;
     const newIndex = swiperIndex-1 < 0 ? teams.length-1 : swiperIndex-1;
@@ -86,8 +79,6 @@ function MypageChannel({profileId}:Props) {
               spaceBetween={40}
               slidesPerView="auto"
               speed={900}
-              // watchSlidesProgress={true}
-              // rewind={true}
               style={{
                 boxSizing : 'border-box',
               }}
@@ -106,7 +97,6 @@ function MypageChannel({profileId}:Props) {
             >
 
               {
-                
                 teams.map(({ board_id, board }, index) => 
                 {
                   if(!board) return 

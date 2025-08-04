@@ -24,7 +24,6 @@ function BoardWrite() {
         setUserId(profileId);
       }
     }
-    // }
   }, [user, profileId, isLoading]);
 
   return (

@@ -1,4 +1,3 @@
-
 export type Json =
   | string
   | number
@@ -195,6 +194,27 @@ export type Database = {
             referencedColumns: ["board_id"]
           },
         ]
+      }
+      certification: {
+        Row: {
+          approve: boolean
+          certification_id: string
+          email: string
+          image: string
+        }
+        Insert: {
+          approve?: boolean
+          certification_id?: string
+          email: string
+          image: string
+        }
+        Update: {
+          approve?: boolean
+          certification_id?: string
+          email?: string
+          image?: string
+        }
+        Relationships: []
       }
       comment: {
         Row: {
@@ -548,6 +568,7 @@ export type Database = {
       }
       user_base: {
         Row: {
+          approve: boolean
           create_at: string
           id: string
           name: string
@@ -557,6 +578,7 @@ export type Database = {
           status: Database["public"]["Enums"]["status"]
         }
         Insert: {
+          approve?: boolean
           create_at?: string
           id?: string
           name: string
@@ -566,6 +588,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["status"]
         }
         Update: {
+          approve?: boolean
           create_at?: string
           id?: string
           name?: string

@@ -26,6 +26,7 @@ import PeerReiview from "./pages/PeerReview/PeerReiview";
 import Team from "./pages/team/Team";
 
 import NotFound from "./pages/NotFound";
+import Admin from "./pages/Admin/Admin";
 
 
 function App() {
@@ -101,9 +102,15 @@ function App() {
             <Route path="/Write" element={<BoardWrite />} />
             <Route path="/Write/:id" element={<BoardWrite />} />
             <Route path="/mypage/:id" element={<Mypage />} />
+            {
+              profileId === 'a51ad237-ffd7-44c9-b00d-1f6f007f0999' && (
+                <Route path="/admin" element={<Admin/>}></Route>
+              )
+            }
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          
           {!isAuthPage && !isNotFoundPage && <Footer />}
         </div>
 
