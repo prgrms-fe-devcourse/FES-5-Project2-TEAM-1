@@ -10,6 +10,7 @@ import supabase from '@/supabase/supabase';
 import gsap from 'gsap';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { showConfirmAlert } from '@/utils/sweetAlert';
 
 
 interface Props {
@@ -94,9 +95,12 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
         setShowEdit(true);
     }
 
-    const handleCloseDetail = () => {
-        const message = confirm('저장하지 않고 나가시겠습니까?');
-        if( message ) {
+    const handleCloseDetail = async () => {
+        const result = await showConfirmAlert('변경하지 않고 나가시겠습니까?');
+
+        if( !result.isConfirmed ) return;
+        
+        if( result ) {
             setShowEdit(false);
         }
         setIsClicked(false);

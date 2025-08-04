@@ -6,6 +6,7 @@ import supabase from '../../supabase/supabase';
 import { useToast } from '@/utils/useToast';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
+import { showConfirmAlert } from '@/utils/sweetAlert';
 
 
 interface Props {
@@ -153,9 +154,9 @@ function MypageName({ user, editMode, setUserData, canExitEditModeRef}: Props) {
       setRole( e.currentTarget.value );
     }
 
-    const handleCancelBtn = () => {
-      const result = confirm('변경하지 않고 나가시겠습니까?');
-      if( !result ) return;
+    const handleCancelBtn = async () => {
+      const result = await showConfirmAlert('변경하지 않고 나가시겠습니까?');
+      if( !result.isConfirmed ) return;
 
       const safeName = userName.current.trim() || userName.original.trim();
 
