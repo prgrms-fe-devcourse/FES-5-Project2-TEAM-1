@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "@/auth/AuthProvider";
 import { IsMineProvider } from "@/components/context/isMine";
 
+
 type ThreadWithUser = Tables<"thread"> & {
   user_profile: Tables<"user_profile"> & {
     user_base: Tables<"user_base">;
