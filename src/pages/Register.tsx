@@ -8,6 +8,7 @@ import {
   showInfoAlert,
   showSuccessAlert,
 } from "@/utils/sweetAlert";
+import { useAuth } from "@/auth/AuthProvider";
 
 function Register() {
   const nameId = useId();
@@ -21,7 +22,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [certificateFile, setCertificateFile] = useState<File | null>(null);
-  // const [certificatePreview, setCertificatePreview] = useState<string | null>(null);
+  const {logout} = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [agree, setAgree] = useState(false);
 
@@ -107,6 +108,8 @@ function Register() {
     setTimeout(() => {
       localStorage.clear();
       navigate("/login");
+      logout();
+
     }, 1600);
   };
 
