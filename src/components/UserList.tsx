@@ -17,7 +17,12 @@ function UserList() {
         .select(` *, profile: user_profile(*)`);
 
       if (fetchData) {
-        setUserData(fetchData);
+        const filterData = fetchData.filter(
+          (user) =>
+            user.profile[0].profile_id !==
+            "a51ad237-ffd7-44c9-b00d-1f6f007f0999"
+        );
+        setUserData(filterData);
       }
       if (fetchError) {
         console.log(fetchError);
@@ -126,7 +131,7 @@ function UserList() {
                     )}`}
                   ></div>
                 </div>
-                <p>{user.nickname ? user.nickname : "Unknown"}</p>
+                <p>{user.nickname ? user.nickname : "프둥이"}</p>
               </button>
               {openPopupIndex === i && (
                 <div className={E.popup}>

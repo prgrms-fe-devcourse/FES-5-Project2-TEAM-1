@@ -1,22 +1,22 @@
-.container{
+.container {
+  width: 60vw;
   min-height: 80%;
-  margin: 48px 220px 0 ;
+  margin: 48px 220px 0;
 
-  h2{
+  h2 {
     font-size: 36px;
     font-weight: 600;
   }
 }
 
-.teamList{
+.teamList {
   margin-top: 48px;
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-
-.teamWrap{
+.teamWrap {
   background-color: #fff;
   padding: 30px 32px;
   border-radius: 8px;
@@ -25,93 +25,90 @@
   align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-.teaminfoWrap{
-  display: flex;
-  gap: 20px;
-    > img{
-    width: 150px;
-    height: 150px;
+  .teaminfoWrap {
+    display: flex;
+    gap: 20px;
+    > img {
+      width: 150px;
+      height: 150px;
+    }
+
+    .teaminfo {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+
+      p {
+        font-size: 16px;
+      }
+      h3 {
+        font-weight: 600;
+        font-size: 20px;
+      }
+    }
   }
 
-
-  .teaminfo{
+  .deadline {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-
-    p{
-      font-size: 16px;
-    }
-    h3{
-      font-weight: 600;
-      font-size: 20px;
-    }
+    align-items: flex-end;
+    gap: 32px;
   }
-}
 
-.deadline{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 32px;
-}
-
-.moveBtn{
-  border-radius: 4px;
-  background-color: rgba(166, 179, 125, 0.2);
-  width: 120px;
-  height: 28px;
-  color:#a6b37d;
+  .moveBtn {
+    border-radius: 4px;
+    background-color: rgba(166, 179, 125, 0.2);
+    width: 120px;
+    height: 28px;
+    color: #a6b37d;
     border: 1px solid #a6b37d;
     font-weight: bold;
-  transition:0.3s;
+    transition: 0.3s;
 
-  &:hover{
-  background-color: rgba(166, 179, 125, 0.4);
+    &:hover {
+      background-color: rgba(166, 179, 125, 0.4);
+    }
   }
-}
 
-
-.peerReviewBtn{
+  .peerReviewBtn {
     width: 120px;
-   height: 28px;
+    height: 28px;
     background-color: rgba(185, 148, 112, 0.2);
     border: 1px solid #b99470;
-   border-radius: 4px;
+    border-radius: 4px;
     font-weight: bold;
     color: #b99470;
     transition: 0.3s;
 
-    &:hover{
-    background-color: rgba(185, 148, 112, 0.4);
+    &:hover {
+      background-color: rgba(185, 148, 112, 0.4);
     }
-}
+  }
 }
 
-.MyTeam{
+.MyTeam {
   margin-top: 58px;
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  img{
+
+  img {
     height: 300px;
     width: 240px;
     object-fit: contain;
   }
 
-  .message{
+  .message {
     display: flex;
     align-items: center;
-    color: #A6B37D;
-    background-color: #F0F8E0;
-    border: 2px solid #A6B37D;
+    color: #a6b37d;
+    background-color: #f0f8e0;
+    border: 2px solid #a6b37d;
     padding: 16px 24px;
     border-radius: 32px;
     font-weight: 600;
     line-height: 1.6;
     box-shadow: 0 4px 12px rgba(166, 179, 125, 0.4);
     font-size: 1.25rem;
-  
   }
 }
