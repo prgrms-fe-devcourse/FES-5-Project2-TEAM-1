@@ -1,33 +1,37 @@
-import { useEffect, useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent, type MutableRefObject } from 'react';
 import type { User } from './Mypage';
 import S from './MypageTop.module.css';
 import E from './MypageEdit.module.css';
 import supabase from '../../supabase/supabase';
 import { useToast } from '@/utils/useToast';
 import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 
 interface Props {
     user: User | null;
     editMode: boolean;
     setUserData: React.Dispatch<React.SetStateAction<User | null>>;
+    canExitEditModeRef?: MutableRefObject<() => boolean>;
 }
 
-function MypageName({ user, editMode, setUserData}: Props) {
+function MypageName({ user, editMode, setUserData, canExitEditModeRef}: Props) {
 
   const { error } = useToast();
 
-  const [userName, setUserName] = useState<string>('');
+  const [userName, setUserName] = useState({
+    current: '', // 지금
+    original: '' // 처음
+  });
   const [role, setRole] = useState<string>('');
   const [showEdit, setShowEdit] = useState(false);
-  const navigate = useNavigate();
   const { id: profileId } = useParams<{id: string}>();
 
   useEffect(() => {
       if( !editMode ) {
-        setShowEdit(false);
+          setShowEdit(false);
       }
+
   }, [editMode]);
 
   useEffect(() => {
@@ -48,8 +52,16 @@ function MypageName({ user, editMode, setUserData}: Props) {
         .single();
 
       if (userData) {
-         setUserName(userData.nickname);
-         setRole(userData.role);
+        const nickname = (userData.nickname ?? '').trim();
+        const original = nickname || '';
+
+        const role = (userData.role ?? '').trim();
+
+        setUserName({
+          current: nickname || '',
+          original: original
+        });
+        setRole(role || '프론트엔드');
       }
 
   };
@@ -58,19 +70,32 @@ function MypageName({ user, editMode, setUserData}: Props) {
 
   }, [profileId]);
 
+  useEffect(() => {
+    if (canExitEditModeRef) {
+      canExitEditModeRef.current = () => {
+        const trimmedCurrent = userName.current.trim();
+        const trimmedOriginal = userName.original.trim();
+        return !!(trimmedCurrent || trimmedOriginal); // 둘 다 없으면 false
+      };
+    }
+  }, [userName]);
+
     const handleEditName = () => {
       setShowEdit(true);
     }
 
     const handleSaveBtn = async () => {
+      const trimmedCurrent = userName.current.trim();
+      const trimmedOriginal = userName.original.trim();
+      const nameToSave = trimmedCurrent || trimmedOriginal;
 
-      if( typeof userName !== 'string' || !userName?.trim() ) {
-        error('이름 입력을 다시해주세요.')
+      if (!nameToSave) {
+        error('이름을 입력해주세요.');
         return;
       }
 
-      if( userName.length > 5 ) {
-        error('5글자 이하로 적어주세요.')
+      if (nameToSave.length > 5) {
+        error('5글자 이하로 적어주세요.');
         return;
       }
 
@@ -79,13 +104,13 @@ function MypageName({ user, editMode, setUserData}: Props) {
 
       const { error: nameError } = await supabase
         .from('user_base')
-        .update({nickname: userName})
+        .update({nickname: nameToSave})
         .eq('id', id);
 
       if( nameError ) {
           error('업데이트 실패')
           return;
-      }
+      } 
 
       const { error: roleError } = await supabase
         .from('user_base')
@@ -97,28 +122,31 @@ function MypageName({ user, editMode, setUserData}: Props) {
         return;
       }
 
-      if( typeof userName !== 'string' ) return;
-      if( typeof role !== 'string' ) return;
+      setUserName({
+        current: nameToSave,
+        original: nameToSave
+      })
 
       setUserData((prev) => {
             if( !prev ) return prev
 
             return {
                 ...prev,
-                nickname: userName,
+                nickname: nameToSave,
                 role: role
             }
         })
       
-      toast.info('성공적으로 저장되었습니다.', { onClose() {
-          navigate(`/mypage/${user?.profile[0]?.profile_id}`)
-        }, autoClose: 1500})
+      toast.info('성공적으로 저장되었습니다.', { autoClose: 1500});
       setShowEdit(false);
     }
 
     const handleInputChange = ( e:ChangeEvent<HTMLInputElement> ) => {
-      const name = e.currentTarget.value.trim();
-      setUserName( name );
+      const name = e.currentTarget.value;
+      setUserName((prev) => ({
+        ...prev,
+        current: name
+      }));
     }
 
     const handleSelectChange = ( e:ChangeEvent<HTMLSelectElement> ) => {
@@ -127,9 +155,27 @@ function MypageName({ user, editMode, setUserData}: Props) {
 
     const handleCancelBtn = () => {
       const result = confirm('변경하지 않고 나가시겠습니까?');
-      if( result ) {
-        setShowEdit(false);
+      if( !result ) return;
+
+      const safeName = userName.current.trim() || userName.original.trim();
+
+      if (!safeName) {
+        toast.error('이름이 없습니다.');
+        return;
       }
+
+      setUserName((prev) => ({
+        ...prev,
+        current: prev.original, // 취소 시 원래값으로 복원
+      }));
+      setShowEdit(false);
+    }
+
+    const handleEmptyValue = () => {
+      setUserName((prev) => ({
+        ...prev,
+        current: '',
+      }));
     }
 
 
@@ -138,7 +184,7 @@ function MypageName({ user, editMode, setUserData}: Props) {
       { editMode && 
         showEdit ? 
           <div className={E.editNamecontainer}>
-            <input type='text' placeholder={userName}  onChange={handleInputChange} />
+            <input type='text' value={userName.current} placeholder={userName.original || '프둥이'}  onChange={handleInputChange} onClick={handleEmptyValue} />
             <select onChange={handleSelectChange} defaultValue={role}>
               <option value="">분야를 선택해주세요.</option>
               <option value="프론트엔드">프론트엔드</option>
@@ -151,7 +197,7 @@ function MypageName({ user, editMode, setUserData}: Props) {
         : (
         <div className={S.mypageNameRole}>
           <span className={S.mypageName}>
-            {userName}
+            {userName.original || '프둥이'}
           </span>
           <span className={S.mypageRole}>
             {role}

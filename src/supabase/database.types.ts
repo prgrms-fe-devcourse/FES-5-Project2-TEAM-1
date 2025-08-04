@@ -376,6 +376,7 @@ export type Database = {
       }
       peer_review: {
         Row: {
+          board_id: string | null
           create_at: string
           profile_id: string
           review_contents: string
@@ -384,6 +385,7 @@ export type Database = {
           writer_id: string
         }
         Insert: {
+          board_id?: string | null
           create_at?: string
           profile_id?: string
           review_contents: string
@@ -392,6 +394,7 @@ export type Database = {
           writer_id?: string
         }
         Update: {
+          board_id?: string | null
           create_at?: string
           profile_id?: string
           review_contents?: string
@@ -413,6 +416,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "user_profile"
             referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "peer_review_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "board"
+            referencedColumns: ["board_id"]
           },
         ]
       }

@@ -553,6 +553,24 @@
     .InterestBlockEach {
         width: 8rem !important;
     }
+
+    .editDetailAddress {
+        padding-right: 2rem;
+    }
+
+    .editDetailGender {
+        padding-right: 2rem;
+    }
+
+    .editDetailAge {
+
+        padding-right: 2rem;
+
+        input,
+        select {
+            width: 6rem;
+        }
+    }
    
 
 

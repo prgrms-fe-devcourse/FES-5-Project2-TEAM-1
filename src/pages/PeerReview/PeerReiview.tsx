@@ -40,7 +40,7 @@ function PeerReiview() {
     userData()
   }, [id, profileId])
 
-      const getAverageScore = () => {
+  const getAverageScore = () => {
         const q1 = Number(
           (
             formRef.current?.querySelector(
@@ -70,16 +70,15 @@ function PeerReiview() {
         //   return Number(((reviewScore + currentAvarage) / 2).toFixed(2))
         // } else {}
         return setReviewScore(currentAvarage);
-      };
+  };
      
-
-
 
   const handleSubmit = async (user: User) => {
      getAverageScore();
     const { error } = await supabase.from('peer_review').insert([{
       profile_id: user.user_profile.profile_id,
       writer_id: profileId,
+      board_id:id,
       review_contents: reviewContent,
       create_at: new Date(),
       review_score: reviewScore
