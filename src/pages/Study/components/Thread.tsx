@@ -14,10 +14,14 @@ type ThreadWithUser = Tables<"thread"> & {
 };
 
 type Thread = Tables<"thread">;
-type User = Tables<"user_profile"> & {
+type Member = Tables<'approve_member'> & {
+  user_profile : Tables<"user_profile" > & {
   user_base: Tables<"user_base">;
-};
+};}
 
+type User = Tables<'user_profile'> & {
+  user_base : Tables<'user_base'>
+}
 type ReplyWithUser = ThreadReply & {
   user_profile: User;
 };
@@ -30,7 +34,7 @@ function Thread() {
   const { id } = useParams();
   const [threadData, setThreadData] = useState<ThreadWithUser[]>([]);
   const [updateContent, setUpdateContent] = useState("");
-  const [recentlyUser, setRecentlyUser] = useState<User[]>([]);
+  const [member, setMember] = useState<Member[]>([]);
   const [currentUser, setCurrentUser] = useState<User[]>([]);
   const [replyData, setReplyData] = useState<Record<string, ReplyWithUser[]>>(
     {}
@@ -138,32 +142,21 @@ function Thread() {
   }, [threadData]);
 
   useEffect(() => {
-    const profileId = threadData
-      .map((t) => t.profile_id)
-      .filter((id): id is string => typeof id === "string");
-
     const recentlyUser = async () => {
       const { data, error } = await supabase
-        .from("user_profile")
-        .select("*,user_base(*)")
-        .in("profile_id", profileId);
+        .from("approve_member")
+        .select("*,user_profile(*,user_base(*))")
+        .match({
+          board_id: id,
+          status:'1'
+        })
 
       if (!data) return;
       if (error) console.error();
-      const users = data as User[];
-
-      const sorted = users
-        .filter((u) => u.user_base?.recent_at)
-        .sort(
-          (a, b) =>
-            new Date(b.user_base.recent_at!).getTime() -
-            new Date(a.user_base.recent_at!).getTime()
-        );
-      if (!sorted) return;
-      setRecentlyUser(sorted);
+      setMember(data);
     };
     recentlyUser();
-  }, [threadData]);
+  }, [id]);
 
   const handleInputbarClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -282,14 +275,14 @@ function Thread() {
           </ul>
         </div>
         <div className={S.member}>
-          <div className={S.recentlyUserTitle}>최근 접속한 사용자</div>
+          <div className={S.recentlyUserTitle}>Channel Member</div>
           <ul className={S.recentlyProfileWrap}>
-            {recentlyUser.map((user) => {
+            {member.map((user) => {
               return (
-                <li key={user.user_id}>
+                <li key={user.board_id}>
                   <div className={S.recentlyProfile}>
-                    <img src={user.profile_images} alt="" />
-                    <p>{user.user_base.nickname}</p>
+                    <img src={user.user_profile?.profile_images} alt="유저 프로필 이미지" />
+                    <p>{user.user_profile.user_base.nickname}</p>
                   </div>
                 </li>
               );
