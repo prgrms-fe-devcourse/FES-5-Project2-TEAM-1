@@ -5,7 +5,7 @@
   border: none;
   --tag-bg: #a6b37d;
   --readonly-striped: 0;
-  --tag--max-width: 600px;
+  --tag--max-width: 360px;
   --tag-border-radius: 8px;
   span {
     font-size: 12px;
@@ -15,5 +15,5 @@
 .hashTagInput {
   width: 90%;
   --tag-bg: #a6b37d;
-  --tag--max-width: 600px;
+  --tag--max-width: 360px;
 }

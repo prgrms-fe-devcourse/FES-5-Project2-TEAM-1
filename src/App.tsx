@@ -29,6 +29,8 @@ import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin/Admin";
 
 
+
+
 function App() {
   const location = useLocation();
   const path = location.pathname.toLowerCase();
@@ -124,7 +126,7 @@ function App() {
             />
           </nav>
         )}
-      </div>
+        </div>
     </NotificationProvider>
   );
 }
