@@ -145,7 +145,7 @@ function Thread() {
     const recentlyUser = async () => {
       const { data, error } = await supabase
         .from("approve_member")
-        .select("*,user_profie(*,user_base(*))")
+        .select("*,user_profile(*,user_base(*))")
         .match({
           board_id: id,
           status:'1'
