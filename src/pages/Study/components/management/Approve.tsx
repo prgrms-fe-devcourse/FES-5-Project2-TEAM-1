@@ -5,6 +5,7 @@ import supabase from "@/supabase/supabase";
 import { useParams } from "react-router-dom";
 import type { Tables } from "@/supabase/database.types";
 import { useToast } from "@/utils/useToast";
+import { toast } from "react-toastify";
 
 type User = Tables<"user_profile"> & {
   user_base: Tables<"user_base">;
@@ -14,6 +15,7 @@ function Approve() {
   const { success, error } = useToast();
   const { id } = useParams();
   const [pendingMember, setPendingMember] = useState<User[]>([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +45,34 @@ function Approve() {
   }, [id]);
 
   const handleApprove = async (profile_id: string) => {
+
+    const { count, error: countError } = await supabase
+      .from('approve_member')
+      .select('status::text', { count: 'exact', head: true })
+      .match({
+        board_id: id
+      })
+      
+    if( countError ) {
+      console.error('패치 에러');
+    }
+
+    const { data: boardData, error: boardError} = await supabase
+      .from('board')
+      .select('member')
+      .match({
+        board_id: id
+      })
+
+    if( boardError ) {
+      console.error('패치 에러');
+    }
+
+    if(  boardData && count && boardData.length > 0 && boardData[0].member <= count ) {
+      toast.error('정원이 가득찼습니다.', {autoClose: 1500})
+      return;
+    } 
+
     success("채널가입을 승인하였습니다.");
     const { error } = await supabase
       .from("approve_member")

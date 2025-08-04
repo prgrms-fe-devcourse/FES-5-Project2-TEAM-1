@@ -17,13 +17,14 @@ type CardProps = Board & {
 };
 
 function StudyJoinInfomation() {
-  const {profileId} = useAuth()
+  const {profileId} = useAuth();
   const { isAdmin } = useAdmin();
   const { id } = useParams();
   const [card, setCard] = useState<CardProps | null>(null);
   const [tagList, setTagList] = useState<string[]>([]);
   const [isFinish, setIsFinish] = useState(false);
   const [isMember, setIsMember] = useState(false);
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!id) throw new Error("id가없습니다");
@@ -39,6 +40,7 @@ function StudyJoinInfomation() {
 
     fetchData();
   }, [id]);
+
   useEffect(() => {
     const checkIsMember = async () => {
       if (!id || !profileId) return;
@@ -64,6 +66,7 @@ function StudyJoinInfomation() {
 
     checkIsMember();
   }, [id, profileId]);
+
   useEffect(() => {
     if (!card) return;
     if (card.board_tag) {
