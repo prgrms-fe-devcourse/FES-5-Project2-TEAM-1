@@ -7,22 +7,32 @@ import { debounce } from "@/utils/debounce";
 
 type Board = Tables<"board">;
 
+type BoardWithTag = Board & {
+  board_tag: {
+    board_id: string;
+    tag_id: string;
+    color_code: string | null;
+    hash_tag: string | null;
+  }[];
+};
+
+
 interface Props {
   search: string;
 }
 
 function MainStudyCard({ search }: Props) {
-  const [cards, setCards] = useState<Board[]>([]);
-  const [displayCards, setDisplayCards] = useState<Board[]>([]);
+  const [cards, setCards] = useState<BoardWithTag[]>([]);
+  const [displayCards, setDisplayCards] = useState<BoardWithTag[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [initialDisplayCards, setInitialDisplayCards] = useState<Board[]>([]);
+  const [initialDisplayCards, setInitialDisplayCards] = useState<BoardWithTag[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       const { data, error } = await supabase
       .from("board")
-      .select("*")
+      .select("*, board_tag(*)")
       .eq("active", true);
       
       if (data) {
@@ -119,7 +129,7 @@ function MainStudyCard({ search }: Props) {
       ) : (
         <div className={S.cardGrid}>
           {displayCards.map((card) => (
-            <Card key={card.board_id} card={{ ...card, board_tag: [] }} />
+            <Card key={card.board_id} card={card} />
           ))}
         </div>
       )}
