@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
 import { useParams } from "react-router-dom";
 import { useToast } from "@/utils/useToast";
+import { useAuth } from "@/auth/AuthProvider";
 
 type User = Tables<"user_profile"> & {
   user_base: Tables<"user_base">;
@@ -11,6 +12,7 @@ type User = Tables<"user_profile"> & {
 
 function ManagementMembers() {
   const { success } = useToast();
+  const { profileId } = useAuth()
   const { id } = useParams();
   const [members, setMembers] = useState<User[]>([]);
 
@@ -27,7 +29,7 @@ function ManagementMembers() {
       if (!profileData) return;
       const memberId = profileData
         .map((member) => member.profile_id)
-        .filter(Boolean);
+        .filter((id) => id && id !== profileId);
 
       const { data: memberData, error: memberError } = await supabase
         .from("user_profile")
@@ -38,7 +40,7 @@ function ManagementMembers() {
       setMembers(memberData);
     };
     fetchData();
-  }, [id]);
+  }, [id,profileId]);
 
   const handleOut = async (profile_id: string) => {
     success("유저를 내보내셨습니다");
@@ -63,6 +65,7 @@ function ManagementMembers() {
     if (memberError) console.error(error);
     setMembers((prev) => prev.filter((user) => user.profile_id !== profile_id));
   };
+
   return (
     <main className={S.managementMembersContainer}>
       {members &&
