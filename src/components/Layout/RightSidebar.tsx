@@ -325,7 +325,7 @@ function RightSidebar({
             onMouseLeave={() => setMessageReady(false)}
           >
             <a href="#" className={S.navListText} onClick={handleReady}>
-              <img src="/icons/message.svg" alt="" />
+              <img src="/icons/message.svg" alt="메세지 아이콘" />
 
               <h3
                 className={`${S.fadeText} ${
@@ -338,7 +338,7 @@ function RightSidebar({
           </li>
           <li className={S.navList}>
             <Link to="/team" className={S.navListText}>
-              <img src="/icons/team.svg" alt="" />
+              <img src="/icons/team.svg" alt="팀 아이콘" />
 
               <h3>Team</h3>
             </Link>
@@ -349,7 +349,7 @@ function RightSidebar({
             onMouseLeave={() => setScrapReady(false)}
           >
             <a href="#" className={S.navListText} onClick={handleReady}>
-              <img src="/icons/scrapicon.svg" alt="" />
+              <img src="/icons/scrapicon.svg" alt="스크랩 아이콘" />
               <h3
                 className={`${S.fadeText} ${scrapReady ? S.visible : S.hidden}`}
               >
