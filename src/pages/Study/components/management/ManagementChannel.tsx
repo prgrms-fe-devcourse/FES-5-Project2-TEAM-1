@@ -26,9 +26,6 @@ function MangementChannel() {
   const {id:board_id} = useParams();
   const navigate = useNavigate();
  
-
-  // console.log('파라미터', board_id);
-
   useEffect(()=>{
     const fetchProjectDetails = async() => {
       const {data, error} = await supabase
@@ -45,7 +42,6 @@ function MangementChannel() {
   },[board_id])
 
   useEffect(()=>{
-    // console.log(projectData);
     if(!projectData) return;
     const { member, address, meeting_time, active } = projectData;
     
@@ -109,7 +105,6 @@ function MangementChannel() {
       address: convertAddress,
     }
 
-    // console.log(modifiedContents);
     const updateProjectDetails = async() => {
       const {error} = await supabase
       .from('board')
