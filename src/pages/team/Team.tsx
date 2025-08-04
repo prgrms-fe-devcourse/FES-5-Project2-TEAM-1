@@ -1,31 +1,31 @@
-import S from './Team.module.css'
+import S from "./Team.module.css";
 import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
 import { useAuth } from "@/auth/AuthProvider";
 import type { Tables } from "@/supabase/database.types";
-import { useNavigate } from 'react-router-dom';
-import { DdayCounter } from '../Study/components/utills/DdayCounter';
+import { useNavigate } from "react-router-dom";
+import { DdayCounter } from "../Study/components/utills/DdayCounter";
 
-type Board = Tables<"board"> & {
-  user_profile: Tables<"user_profile"> & {
-    user_base:Tables<'user_base'>
-  }
+type Board = Tables<"approve_member"> & {
+  board: Tables<"board"> & {
+    user_profile: Tables<"user_profile">;
+  };
 };
 
 function TeamPage() {
-  const navigate = useNavigate()
-  const { profileId } = useAuth();
+  const navigate = useNavigate();
+  const { isLoading, profileId } = useAuth();
   const [myTeams, setMyTeams] = useState<Board[] | null>([]);
 
   useEffect(() => {
     const fetchTeams = async () => {
       const { data, error } = await supabase
         .from("approve_member")
-        .select("*, user_profile(*,user_base(*))")
+        .select("*, board(*,user_profile(*))")
         .match({
-          "profile_id": profileId,
-          'status': 1
-        })
+          profile_id: profileId,
+          status: 1,
+        });
 
       if (error) {
         console.error(error.message);
@@ -34,9 +34,8 @@ function TeamPage() {
       setMyTeams(data);
     };
 
-    if (profileId) fetchTeams();
+    if (!isLoading && profileId) fetchTeams();
   }, [profileId]);
-
 
   return (
     <div className={S.container}>
@@ -44,31 +43,32 @@ function TeamPage() {
       <ul className={S.teamList}>
         {myTeams && myTeams.length > 0 ? (
           myTeams.map((team) => {
-            const dDay = DdayCounter(team.deadline ?? "");
+            const dDay = DdayCounter(team.board.deadline ?? "");
+            console.log("dDay", dDay);
             return (
               <li className={S.teamWrap} key={team.board_id}>
                 <div className={S.teaminfoWrap}>
                   {
                     <img
-                      src={team.images ?? "/images/애플.png"}
+                      src={team.board.images ?? "/images/애플.png"}
                       alt="팀 썸네일 이미지"
                     />
                   }
                   <div className={S.teaminfo}>
                     <p>
-                      {team.board_cls == null
+                      {team.board.board_cls == null
                         ? "준비중"
-                        : team.board_cls == "0"
-                        ? "스터다"
+                        : team.board.board_cls == "0"
+                        ? "스터디"
                         : "프로젝트"}
                     </p>
-                    <h3>{team.title}</h3>
+                    <h3>{team.board.title}</h3>
                   </div>
                 </div>
                 <div className={S.deadline}>
-                  {team.deadline == null ? (
+                  {team.board.deadline == null ? (
                     <p>진행중인 프로젝트가 없습니다</p>
-                  ) : new Date(team.deadline).getTime() <= Date.now() ? (
+                  ) : new Date(team.board.deadline).getTime() <= Date.now() ? (
                     <button
                       type="button"
                       className={S.peerReviewBtn}
@@ -96,10 +96,7 @@ function TeamPage() {
         ) : (
           <div className={S.MyTeam}>
             <img src="/images/팬타.webp" alt="" />
-            <div className={S.message}>
-              현재 참여중인 팀이 없습니다
-            
-            </div>
+            <div className={S.message}>현재 참여중인 팀이 없습니다</div>
           </div>
         )}
       </ul>

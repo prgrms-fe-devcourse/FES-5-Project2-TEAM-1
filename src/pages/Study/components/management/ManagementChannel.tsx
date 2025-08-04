@@ -15,6 +15,7 @@ type Board = Tables<'board'>;
 type PickBoard = Pick<Board,'member'|'board_cls'|'address'|'meeting_time'|'active'>;
 
 function MangementChannel() {
+  const { id } = useParams()
   const [category, setCategory] = useState<'0'|'1'|null>("0");
   const [meetingTime, setMeetingTime] = useState<string|null>(null);
   const [members, setMembers] = useState<number>(1);
@@ -26,9 +27,6 @@ function MangementChannel() {
   const {id:board_id} = useParams();
   const navigate = useNavigate();
  
-
-  // console.log('파라미터', board_id);
-
   useEffect(()=>{
     const fetchProjectDetails = async() => {
       const {data, error} = await supabase
@@ -45,7 +43,6 @@ function MangementChannel() {
   },[board_id])
 
   useEffect(()=>{
-    // console.log(projectData);
     if(!projectData) return;
     const { member, address, meeting_time, active } = projectData;
     
@@ -58,6 +55,7 @@ function MangementChannel() {
 
   },[projectData])
   
+
   
   const handleCheckedOnline = () => {
     // address가 null일때
@@ -109,7 +107,6 @@ function MangementChannel() {
       address: convertAddress,
     }
 
-    // console.log(modifiedContents);
     const updateProjectDetails = async() => {
       const {error} = await supabase
       .from('board')
@@ -120,6 +117,8 @@ function MangementChannel() {
     }
    
     updateProjectDetails();
+
+    navigate(`/channel/${id}`)
     toast.success('저장되었습니다',{autoClose:1500})
   }
 
@@ -298,8 +297,9 @@ function MangementChannel() {
                 <label htmlFor="offline">오프라인</label>
               </div>
             </div>
-            {isOffline && (
-              <>
+            {
+              isOffline && (
+              <div className={S.locationWrapper}>
                 <button
                   className={S.locationButton}
                   type="button"
@@ -313,13 +313,14 @@ function MangementChannel() {
                     <p>Location</p>
                   )}
                 </button>
-                {isOpen && (
+                  {
+                    isOpen && (
                   <DaumPostcodeEmbed
                     onComplete={handleAddAdress}
                     style={addressStyle}
                   />
                 )}
-              </>
+              </div>
             )}
           </div>
         </section>

@@ -197,6 +197,33 @@
         }
     }
 }
+
+.noSocial {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.7s ease-in-out;
+  margin-bottom: 4rem;
+
+  p{
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.6;
+    
+    padding: 0.5rem 1.5rem;
+    border: 2px solid #A6B37D; 
+    border-radius: 32px;
+    
+    box-shadow: 0 4px 12px rgba(166, 179, 125, 0.4); 
+    color: #A6B37D; 
+    background-color: #F0F8E0; 
+
+  }
+}
+
 .mypageInterest {
     width: 100%;
     height: 9rem;
@@ -246,7 +273,7 @@
 @media (max-width: 1750px) {
 
     .container {
-        width: 58%;
+        width: 80%;
     }
 
     .InterestBlockEach {
@@ -254,14 +281,24 @@
         font-size: 0.8rem !important;
     }
 
+    .mypageDetailsContainer {
+        ul {
+            li {
+                font-size: 0.9rem !important; 
 
+                span {
+                    width: 18rem;
+                }
+            }
+        }
+    }
 
 }
 
 @media (max-width: 1400px) {
 
     .container {
-        width: 50%;
+        width: 72%;
     }
 
     .InterestBlockEach {
