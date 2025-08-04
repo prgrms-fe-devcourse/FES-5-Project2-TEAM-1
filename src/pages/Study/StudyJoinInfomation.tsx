@@ -111,7 +111,6 @@ function StudyJoinInfomation() {
       fetchSubmit();
     }, [id, profileId]);
   
-  console.log(isSubmit)
     if (!card) return;
     const { images, title, address, member, contents, board_id, board_cls} =
       card;

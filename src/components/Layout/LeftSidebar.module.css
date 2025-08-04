@@ -73,9 +73,14 @@
   transition: 0.3s;
 
   .profileImage {
-    width: 24px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
     position: relative;
+    img {
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+    }
   }
 
   .enterUser:hover {
