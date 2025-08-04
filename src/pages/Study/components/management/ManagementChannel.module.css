@@ -221,7 +221,6 @@
 .location{
   display: flex;
   justify-content: space-between;
-    padding-bottom: 24px;
   border-bottom: 1px solid #e0e0e0;
 }
 
@@ -245,7 +244,6 @@
   }
   div{
     display: flex;
-    flex-direction: row;
     justify-content: flex-end;
     gap: 36px;
   }
@@ -263,6 +261,12 @@
     font-weight: 400;
     line-height: normal;  
   }
+}
+
+.locationWrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .locationButton{
@@ -297,8 +301,8 @@
 .saveButton{
   width: 102.322px;
   height: 42.5px;
-  margin-bottom: 83px;
 
+  align-self:flex-end;
   color: #222;
   font-family: Pretendard;
   font-size: 24px;
@@ -320,7 +324,7 @@
 }
 
 .hr{
-  margin-top: 32px;
+  margin-top: 80px;
   width: 100%;
   border : 1px solid rgba(231, 231, 231, 0.973);
 }
