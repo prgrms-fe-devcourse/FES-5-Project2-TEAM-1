@@ -73,8 +73,6 @@ function PeerReiview() {
       };
      
 
-
-
   const handleSubmit = async (user: User) => {
      getAverageScore();
     const { error } = await supabase.from('peer_review').insert([{

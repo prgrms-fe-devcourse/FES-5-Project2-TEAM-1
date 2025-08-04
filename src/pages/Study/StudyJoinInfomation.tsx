@@ -23,9 +23,12 @@ function StudyJoinInfomation() {
   const [card, setCard] = useState<CardProps | null>(null);
   const [tagList, setTagList] = useState<string[]>([]);
   const [isFinish, setIsFinish] = useState(false);
-  const [isMember, setIsMember] = useState(false);
-
+  const [isMember, setIsMember] = useState<boolean|null>(null);
+  // const [isSubmit,setIsSubmit] = useState(false)
   const navigate = useNavigate();
+
+
+  
   useEffect(() => {
     if (!id) throw new Error("id가없습니다");
     const fetchData = async () => {
@@ -47,25 +50,27 @@ function StudyJoinInfomation() {
 
       const { data, error } = await supabase
         .from("approve_member")
-        .select("status::text")
+        .select("status")
         .match({
           board_id: id,
           profile_id: profileId,
+          status:'1',
         })
         .maybeSingle();
-
       if (error) {
         console.error(error);
         return;
       }
-
-      if (data?.status === "1") {
-        setIsMember(true);
-      }
+      console.log(data?.status)
+     if (data?.status === "1" || isAdmin) {
+       setIsMember(true);
+     } else {
+       setIsMember(false);
+     }
     };
 
     checkIsMember();
-  }, [id, profileId]);
+  }, [id, profileId,isAdmin]);
 
   useEffect(() => {
     if (!card) return;
@@ -94,10 +99,19 @@ function StudyJoinInfomation() {
     finishProject();
   }, [id]);
 
-  if (!card) return;
-  const { images, title, address, member, contents, board_id, board_cls } =
-    card;
+useEffect(() => {
+  console.log("🔍 상태 추적", { isAdmin, isFinish, isMember });
+}, [isAdmin, isFinish, isMember]);
 
+    if (!card) return;
+    const { images, title, address, member, contents, board_id, board_cls} =
+      card;
+
+
+   
+
+
+ 
   return (
     <main className={S.container}>
       <div className={S.layout}>
@@ -197,30 +211,26 @@ function StudyJoinInfomation() {
           </div>
           <div style={{ position: "relative" }}>
             <Project />
-            {board_cls == null ? (
+            {board_cls === "1" && isFinish && (
               <div className={S.overlay}>
-                <p>아직 스터디가 없습니다</p>
+                {isAdmin ? (
+                  isMember ? (
+                    <button
+                      type="button"
+                      className={S.peerReviewBtn}
+                      onClick={() =>
+                        navigate(`/channel/${id}/peerReview/${id}`)
+                      }
+                    >
+                      피어리뷰 작성하기
+                    </button>
+                  ) : (
+                    <p>프로젝트가 종료되었습니다</p>
+                  )
+                ) : (
+                  <p>프로젝트가 종료되었습니다</p>
+                )}
               </div>
-            ) : (
-              board_cls == "1" &&
-              isFinish && (
-                  <div className={S.overlay}>
-                    {
-                      isMember ? (
-                       <button
-                        type="button"
-                        className={S.peerReviewBtn}
-                        onClick={() => navigate(`/channel/${id}/peerReview/${id}`)}
-                      >
-                  피어리뷰 작성하기
-                  </button>
-                      ) : (
-                        <p>프로젝트가 종료되었습니다</p>
-                      )
-                    }
-                 
-                </div>
-              )
             )}
           </div>
         </section>

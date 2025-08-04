@@ -298,8 +298,9 @@ function MangementChannel() {
                 <label htmlFor="offline">오프라인</label>
               </div>
             </div>
-            {isOffline && (
-              <>
+            {
+              isOffline && (
+              <div className={S.locationWrapper}>
                 <button
                   className={S.locationButton}
                   type="button"
@@ -313,13 +314,14 @@ function MangementChannel() {
                     <p>Location</p>
                   )}
                 </button>
-                {isOpen && (
+                  {
+                    isOpen && (
                   <DaumPostcodeEmbed
                     onComplete={handleAddAdress}
                     style={addressStyle}
                   />
                 )}
-              </>
+              </div>
             )}
           </div>
         </section>
