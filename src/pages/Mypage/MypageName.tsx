@@ -5,7 +5,7 @@ import E from './MypageEdit.module.css';
 import supabase from '../../supabase/supabase';
 import { useToast } from '@/utils/useToast';
 import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 
 interface Props {
@@ -25,7 +25,6 @@ function MypageName({ user, editMode, setUserData, canExitEditModeRef}: Props) {
   });
   const [role, setRole] = useState<string>('');
   const [showEdit, setShowEdit] = useState(false);
-  const navigate = useNavigate();
   const { id: profileId } = useParams<{id: string}>();
 
   useEffect(() => {
