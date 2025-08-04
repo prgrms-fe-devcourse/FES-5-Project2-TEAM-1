@@ -13,8 +13,9 @@
 
 .member{
   width: 190px;
-  height: 325px;
-  background-color: rgba(85, 85, 85, 0.3);
+  max-height: 325px;
+  background-color: #33333313;
+  text-align: center;
   position: sticky;
   top: 200px;
   padding: 20px;
@@ -47,6 +48,31 @@
     border-radius: 50px;
   }
 }
+
+
+.recentlyUserTitle{
+  font-size: 16px;
+  font-weight: 600;
+}
+.recentlyProfileWrap{
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.recentlyProfile{
+  display:flex;
+align-items: center;
+gap: 8px;
+  & > img{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+}
+
 
 
 .inputContent{
@@ -105,23 +131,3 @@
 }
 
 
-.recentlyUserTitle{
-  font-size: 16px;
-  font-weight: 600;
-}
-.recentlyProfileWrap{
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-}
-
-.recentlyProfile{
-  display:flex;
-align-items: center;
-gap: 8px;
-  & > img{
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-  }
-}
