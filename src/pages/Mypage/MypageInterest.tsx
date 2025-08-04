@@ -206,7 +206,8 @@ function MypageInterest({user, editMode, setUserData}: Props) {
               </div>  
             : 
             <div className={S.InterestBlock}>
-                { interestArray && interestArray.map((i) => {
+                { interestArray && interestArray.length !== 0 
+                ? (interestArray.map((i) => {
                 const fontSize =
                   i.interest.length > 15 ? '0.8rem' :
                   i.interest.length > 12 ? '0.9rem' :
@@ -215,7 +216,16 @@ function MypageInterest({user, editMode, setUserData}: Props) {
                     <div key={i.interest_id}>
                       <div className={S.InterestBlockEach}  style={fontSize ? {fontSize} : undefined}>{i.interest}</div>
                     </div>
-                  )})}
+                  )}))
+                : (
+                  <div className={S.noSocial}>
+                    <p>
+                      추가한 관심사가 없습니다 <br />
+                      나를 알려줄 수 있는 관심사를 추가해보세요!<br />
+                    </p>
+                </div>
+                )
+                }
             </div>  
           }
         </div>
