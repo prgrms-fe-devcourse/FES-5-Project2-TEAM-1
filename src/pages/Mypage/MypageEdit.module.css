@@ -500,6 +500,7 @@
             border-radius: 10px;
             background-color: #B99470;
             color: white;
+            font-size: 15px;
             transition: background-color, color 0.3s;
 
             &:hover {
@@ -553,6 +554,39 @@
     .InterestBlockEach {
         width: 8rem !important;
     }
+
+    .editDetailAddress {
+        padding-right: 2rem;
+    }
+
+    .editDetailGender {
+        padding-right: 2rem;
+    }
+
+    .editDetailAge {
+
+        padding-right: 2rem;
+
+        input,
+        select {
+            width: 6rem;
+        }
+    }
+
+    .editDetailSaveClose {
+        button {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+    }
+
+    .editSocialSaveBtn {
+        width: 4.2rem !important;
+        
+        button {
+            font-size: 12px !important;
+        }
+    }
    
 
 
@@ -565,6 +599,14 @@
 
         left: -1rem !important;
      }
+
+         .editSocialSaveBtn {
+        width: 3.9rem !important;
+        
+        button {
+            font-size: 10px !important;
+        }
+    }
    
 
 }
