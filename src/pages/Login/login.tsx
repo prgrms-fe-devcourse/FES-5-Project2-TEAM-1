@@ -73,7 +73,6 @@ function Login() {
                 console.error('user_base 조회 실패', baseError);
                 return;
             }
-            console.log('approve 상태:', baseData.approve);
             return baseData.approve;
         }
         const isApproved = await checkApprove();
@@ -84,7 +83,6 @@ function Login() {
             return;
         } 
         else {
-            console.log('로그인 성공:', data);
             await showSuccessAlert('로그인 성공!', '환영합니다 좋은 하루 되세요!🌱')
             setTimeout(()=>{
                 navigate("/");

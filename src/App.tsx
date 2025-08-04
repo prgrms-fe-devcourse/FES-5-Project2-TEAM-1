@@ -99,8 +99,8 @@ function App() {
                 />
               </Route>
             </Route>
-            <Route path="/Write" element={<BoardWrite />} />
-            <Route path="/Write/:id" element={<BoardWrite />} />
+            <Route path="/write" element={<BoardWrite />} />
+            <Route path="/write/:id" element={<BoardWrite />} />
             <Route path="/mypage/:id" element={<Mypage />} />
             {
               profileId === 'a51ad237-ffd7-44c9-b00d-1f6f007f0999' && (

@@ -1,25 +1,9 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import S from './Admin.module.css'
 import supabase from '@/supabase/supabase'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
-/**
- * user_base 컬럼 중 대기중 상태만 불러오기
- * 수료증 파일 들고와야함
- *  - 확장자를 달리 받고있어서 어떻게?
- *  - 패턴 매칭으로 포함하는 id에 대해서 받으면 편할거 같은데 그런게 있는지 모르겠음
- *  - 아니면..
- * 가져온 수료증은 info에 아이디에 맞춰서 조합해줘야함
- * 데이터 패치
- * 승인 누르면 ture가 되도록
- * 가입한 사용자 목록에 admin은 안 뜨도록 해야할듯.
- * 
- * 유저 이메일과 같은 row 가져오기 (certification)
- * 
- * 승인하고나면 데이터 다시 렌더링 해줘야함
- * 사진을 확대해서 보거나 크게 볼수있게끔 해줘야할듯
- */
 
 type Approve = {
   id : string,
@@ -91,7 +75,6 @@ function Admin() {
     }
     setCertificateFile(imgUrl)
     setActiveId(userId);
-    console.log(activeId);
   }
 
   const updateApprove = async() => {
