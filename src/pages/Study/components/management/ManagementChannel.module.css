@@ -297,7 +297,7 @@
 .saveButton{
   width: 102.322px;
   height: 42.5px;
-  margin-bottom: 83px;
+
 
   color: #222;
   font-family: Pretendard;
@@ -320,7 +320,7 @@
 }
 
 .hr{
-  margin-top: 32px;
+  margin-top: 80px;
   width: 100%;
   border : 1px solid rgba(231, 231, 231, 0.973);
 }
