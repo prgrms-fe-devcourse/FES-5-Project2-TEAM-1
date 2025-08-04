@@ -76,3 +76,25 @@
     margin: 0;
   }
 }
+
+
+.spinnerWrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:180px;
+}
+
+.spinner{
+  animation: spinner-rotate 2.5s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes spinner-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
