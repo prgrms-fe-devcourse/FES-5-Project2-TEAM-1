@@ -21,9 +21,17 @@ function MainContent() {
 
   return (
     <section className={S.mainContent}>
-      <BannerSection search={search} setSearch={setSearch} />
-      <MainStudyCard search={debouncedSearch} />
-      <NewsSection />
+      <div className={S.bannerSection}>
+        <BannerSection search={search} setSearch={setSearch} />
+      </div>
+
+      <div className={S.mainStudyCard}>
+        <MainStudyCard search={debouncedSearch} />
+      </div>
+
+      <div className={S.newsSection}>
+        <NewsSection />
+      </div>
     </section>
   );
 }
