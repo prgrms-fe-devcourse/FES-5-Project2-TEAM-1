@@ -20,11 +20,6 @@
     
 }
 
-.mainContent > * {
-  width: 100%;
-  /* max-width: 960px; */
-}
-
 .mainContent::-webkit-scrollbar{
     display:none;
 }
@@ -45,7 +40,14 @@
   background: transparent;
 }
 
+.bannerSection,
+.mainStudyCard {
+  width: 100%;
+}
 
+.newsSection {
+  width: auto;
+}
 
 
 @media screen and (max-width:1024px){
