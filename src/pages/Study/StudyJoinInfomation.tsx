@@ -17,18 +17,16 @@ type CardProps = Board & {
 };
 
 function StudyJoinInfomation() {
-  const {profileId} = useAuth();
+  const { profileId } = useAuth();
   const { isAdmin } = useAdmin();
   const { id } = useParams();
   const [card, setCard] = useState<CardProps | null>(null);
   const [tagList, setTagList] = useState<string[]>([]);
   const [isFinish, setIsFinish] = useState(false);
-  const [isMember, setIsMember] = useState<boolean|null>(null);
-  const [isSubmit,setIsSubmit] = useState(false)
+  const [isMember, setIsMember] = useState<boolean | null>(null);
+  const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
 
-
-  
   useEffect(() => {
     if (!id) throw new Error("id가없습니다");
     const fetchData = async () => {
@@ -37,7 +35,10 @@ function StudyJoinInfomation() {
         .select("*,board_tag(*)")
         .eq("board_id", id)
         .single();
-      if (error) throw new Error("데이터가 들어오지않아요");
+      if (error) {
+        navigate("*");
+        throw new Error("데이터가 들어오지않아요");
+      }
       setCard(data as CardProps);
     };
 
@@ -54,22 +55,22 @@ function StudyJoinInfomation() {
         .match({
           board_id: id,
           profile_id: profileId,
-          status:'1',
+          status: "1",
         })
         .maybeSingle();
       if (error) {
         console.error(error);
         return;
       }
-     if (data?.status === "1" || isAdmin) {
-       setIsMember(true);
-     } else {
-       setIsMember(false);
-     }
+      if (data?.status === "1" || isAdmin) {
+        setIsMember(true);
+      } else {
+        setIsMember(false);
+      }
     };
 
     checkIsMember();
-  }, [id, profileId,isAdmin]);
+  }, [id, profileId, isAdmin]);
 
   useEffect(() => {
     if (!card) return;
@@ -98,22 +99,25 @@ function StudyJoinInfomation() {
     finishProject();
   }, [id]);
 
-    useEffect(() => {
-      const fetchSubmit = async () => {
-        const { data, error } = await supabase.from("peer_review").select("review_id").match({
+  useEffect(() => {
+    const fetchSubmit = async () => {
+      const { data, error } = await supabase
+        .from("peer_review")
+        .select("review_id")
+        .match({
           board_id: id,
           writer_id: profileId,
         });
-        if (error) console.error(error);
-        if(!data) return 
-        setIsSubmit(data.length > 0);
-      };
-      fetchSubmit();
-    }, [id, profileId]);
-  
-    if (!card) return;
-    const { images, title, address, member, contents, board_id, board_cls} =
-      card;
+      if (error) console.error(error);
+      if (!data) return;
+      setIsSubmit(data.length > 0);
+    };
+    fetchSubmit();
+  }, [id, profileId]);
+
+  if (!card) return;
+  const { images, title, address, member, contents, board_id, board_cls } =
+    card;
 
   return (
     <main className={S.container}>

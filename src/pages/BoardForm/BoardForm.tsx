@@ -92,7 +92,6 @@ function BoardForm({ userId }: Props) {
       deleteSaveData();
       success("글이 게시되었습니다.");
       navigate("/study");
-
     }
   };
 
@@ -137,7 +136,7 @@ function BoardForm({ userId }: Props) {
     let imageUrl = "";
     if (!profileImage) return;
     const fileExt = profileImage.name.split(".").pop(); // 확장자 추출
-    const fileName = `${board_id}.${fileExt}`; // 중복 방지를 위한 이름
+    const fileName = `${Date.now()}${board_id}.${fileExt}`; // 중복 방지를 위한 이름
 
     const { error } = await supabase.storage
       .from("boardimage")
