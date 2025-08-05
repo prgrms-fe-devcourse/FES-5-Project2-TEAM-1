@@ -31,7 +31,6 @@ type ThreadReply = Tables<"thread_reply">;
 
 function Thread() {
   const { profileId } = useAuth();
-
   const { id } = useParams();
   const [threadData, setThreadData] = useState<ThreadWithUser[]>([]);
   const [updateContent, setUpdateContent] = useState("");
@@ -42,21 +41,26 @@ function Thread() {
   );
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
+
   useEffect(() => {
     if (!id) throw new Error("id가 없습니다");
     if (!profileId) return;
+
     const fetchData = async () => {
       const [{ data: ThreadData, error: ThreadError }, { data: user }] =
         await Promise.all([
           supabase
             .from("thread")
             .select("*,user_profile(*,user_base(*))")
-            .eq("board_id", id),
+            .eq("board_id", id)
+            .order("create_at", { ascending: false }),
+          
           supabase
             .from("user_profile")
             .select("*,user_base(*)")
-            .in("profile_id", [profileId]),
+            .eq("profile_id", profileId)
         ]);
+     
       if (ThreadError) throw new Error("데이터가 들어오지 않아요");
       setThreadData(ThreadData as ThreadWithUser[]);
       if (!user) return;
@@ -71,12 +75,14 @@ function Thread() {
   useEffect(() => {
     if (!board_id) return;
     const getUserJoinData = async (board_id: string) => {
-      const { data } = await supabase
+      const { data} = await supabase
         .from("thread")
         .select("*,user_profile(*,user_base(*))")
-        .eq("board_id", board_id);
+        .eq("board_id", board_id)
+        .order('create_at', { ascending: false })
       setThreadData(data as ThreadWithUser[]);
     };
+
     const channel = supabase
       .channel("notify-thread")
       .on(
@@ -88,8 +94,6 @@ function Thread() {
           filter: `board_id=eq.${board_id}`,
         },
         (payload) => {
-          console.log("알림 도착:", payload.new);
-          // 여기서 토스트 보여주거나 상태 업데이트
           getUserJoinData(payload.new.board_id);
         }
       )
@@ -126,13 +130,17 @@ function Thread() {
     const fetchInitialReplies = async () => {
       const replies = await Promise.all(
         threadData.map(async (thread) => {
-          const { data } = await supabase
+          const { data,error } = await supabase
             .from("thread_reply")
             .select("*,user_profile(*,user_base(*))")
-            .eq("thread_id", thread.thread_id);
+            .eq("thread_id", thread.thread_id)
+            .order("created_at", { ascending: false });
+            if (error) console.error(error);
           return [thread.thread_id, data || []] as [string, ReplyWithUser[]];
+          
         })
       );
+      
       const replyMap = Object.fromEntries(replies);
       setReplyData(replyMap);
     };
@@ -176,16 +184,18 @@ function Thread() {
         profile_id: profileId,
         contents: updateContent,
         likes: 0,
-        create_at: new Date(),
       },
     ]);
+
     if (error) console.log(error.message);
-    if(!error) setUpdateContent("");
-    const { data } = await supabase
+    if (!error) setUpdateContent("");
+    const { data,error:dataError } = await supabase
       .from("thread")
       .select("*,user_profile(*,user_base(*))")
-      .eq("board_id", id);
-    if (data) setThreadData(data);
+      .eq("board_id", id)
+      .order("create_at", { ascending: false });
+      if(dataError) console.error(dataError)
+      if (data) setThreadData(data);
   };
 
   const handleDelete = (targetId: string) => {
@@ -216,14 +226,6 @@ function Thread() {
       [thread_id]: data as ReplyWithUser[],
     }));
   };
-
-  const recentlyThread = [...threadData].sort((a, b) => {
-    const timeDiff =
-      new Date(b.create_at).getTime() - new Date(a.create_at).getTime();
-    if (timeDiff !== 0) return timeDiff;
-
-  return b.thread_id.localeCompare(a.thread_id);
-});
 
   return (
     <>
@@ -259,7 +261,7 @@ function Thread() {
             </div>
           </div>
           <ul className={S.threads}>
-            {recentlyThread.map((reply) => {
+            {threadData && threadData.map((reply) => {
               return (
                 <IsMineProvider key={reply.thread_id} writerProfileId={reply.user_profile.profile_id}>
                 <ThreadList

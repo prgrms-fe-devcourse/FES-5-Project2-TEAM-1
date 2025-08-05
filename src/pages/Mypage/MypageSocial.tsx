@@ -31,7 +31,6 @@ type Social = Tables<"user_social">;
 
 function MypageSocial({ user, editMode, setUserData }: Props) {
   const profileId = user?.profile?.[0]?.profile_id;
-  console.log( profileId );
 
   const [socialArray, setSocialArray] = useState<Social[] | null>(null);
   const [isClicked, setIsClicked] = useState<boolean[]>([]);

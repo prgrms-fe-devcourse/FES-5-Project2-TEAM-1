@@ -42,7 +42,7 @@ export function NotificationProvider({
             filter: `user_profile_id=eq.${profileId}`,
           },
           (payload) => {
-            console.log(payload)
+
             if (payload.new.user_profile_id !== profileId) return;
             const newAlarm = payload.new as Notification;
             setAlarms((prev) => [...prev, newAlarm]);
