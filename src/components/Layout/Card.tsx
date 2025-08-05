@@ -2,13 +2,11 @@ import S from "./card.module.css";
 
 import { useEffect, useRef, useState } from "react";
 import supabase from "@/supabase/supabase";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { Tables } from "@/supabase/database.types";
 import HashTag from "../HashTag";
 import gsap from "gsap";
 import { useAuth } from "@/auth/AuthProvider";
-
-
 
 type Board = Tables<"board">;
 type CardProps = Board & {
@@ -20,8 +18,7 @@ interface Props {
 }
 
 function Card({ card }: Props) {
- 
-  const { contents, title, likes, board_id, board_tag} = card;
+  const { contents, title, likes, board_id, board_tag } = card;
   const [tagList, setTagList] = useState<string[]>([]);
 
   const [cardLike, setCardLike] = useState(likes);
@@ -30,7 +27,7 @@ function Card({ card }: Props) {
   const navigate = useNavigate();
   const likeBtnRef = useRef<HTMLButtonElement>(null);
   const scrapBtnRef = useRef<HTMLButtonElement>(null);
-  const [member,setMember] = useState<number>(1)
+
   const { profileId } = useAuth();
 
   useEffect(() => {
@@ -48,20 +45,6 @@ function Card({ card }: Props) {
       .map((tag) => tag.hash_tag as string);
     setTagList(tagList);
   }, [board_id]);
-
-  useEffect(() => {
-    const fetchMember = async () => {
-      const { count,error } = await supabase.from('approve_member').select('*',{count:'exact'}).match({
-        board_id: board_id,
-        status:1,
-      }) 
-      if(error)console.error(error)
-      if (count !== null) {
-        setMember(count)
-      }
-    }
-    fetchMember()
-  }, [board_id])
 
   const handleScrap = async () => {
     if (scrapBtnRef.current) {
@@ -172,29 +155,6 @@ function Card({ card }: Props) {
         <p>{replaceText}</p>
       </div>
       <div className={S.tagBox}>
-        <span>
-          <svg
-            width="12"
-            height="14"
-            viewBox="0 0 12 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="5.87206"
-              cy="4.18212"
-              r="2.81395"
-              fill="#555555"
-              fillOpacity="0.5"
-            />
-            <path
-              d="M0.244141 9.74024C0.244141 8.63567 1.13957 7.74023 2.24414 7.74023H9.49995C10.6045 7.74023 11.4999 8.63566 11.4999 9.74023V13.3681H0.244141V9.74024Z"
-              fill="#555555"
-              fillOpacity="0.5"
-            />
-          </svg>
-        </span>
-        {member}
         {tagList && (
           <HashTag taglist={tagList} defaultList={tagList} editable={false} />
         )}

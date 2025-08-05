@@ -54,7 +54,7 @@
   
     color: #000;
     font-family: "Pretendard Variable";
-    font-size: 20px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -70,7 +70,7 @@
 
     color: rgba(85, 85, 85, 0.60);
     font-family: "Pretendard Variable";
-    font-size: 16px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -115,5 +115,44 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+
+@media screen and (max-width: 1024px) {
+  .postContainer{
+    padding: 1.5rem 2rem;
+    font-size: 14px;
+  }
+  
+  .postList>.post{
+    .postTitle{
+      width: 100%;
+    }
+  
+    .postContent {
+      display: none;
+    }
+  }
+
+
+}
+
+@media screen and (max-width: 768px) {
+
+  .postContainer{
+    padding: 1.5rem 2rem;
+    font-size: 14px;
+  }
+  
+  .postList>.post{
+    .postTitle{
+      width: 35%;
+    }
+  
+    .postContent {
+      display:block;
+      width: 65%;
+    }
   }
 }

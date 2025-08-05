@@ -1,5 +1,7 @@
 .container{
-  height: 160px;
+  /* height: 160px; */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   background-color: #fff;
   border-radius: 16px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -41,5 +43,16 @@
   .icon > img{
     width: 20px;
     height: 16px;
+  }
+}
+
+@media screen and (max-width: 985px) {
+  
+  .cardInner{
+    flex-direction: column;
+
+    .iconList{
+      margin-top: 8px;
+    }
   }
 }

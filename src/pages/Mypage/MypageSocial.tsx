@@ -31,7 +31,6 @@ type Social = Tables<"user_social">;
 
 function MypageSocial({ user, editMode, setUserData }: Props) {
   const profileId = user?.profile?.[0]?.profile_id;
-  console.log( profileId );
 
   const [socialArray, setSocialArray] = useState<Social[] | null>(null);
   const [isClicked, setIsClicked] = useState<boolean[]>([]);
@@ -107,7 +106,6 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
     if (deleteError) {
       toast.error('빈 링크 삭제 중 오류가 발생했어요.');
-      console.error(deleteError.message);
       return;
     }
 
@@ -122,7 +120,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
   }, [editMode]);
 
   useEffect(() => {
-    if (!addClicked || !profileId || user?.id !== profileId) return;
+    if (!addClicked || !profileId) return;
 
     const newItem = {
       // Use empty string or a temporary unique value for social_id and create_at
@@ -145,6 +143,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
       setSocialArray((prev) => (prev ? [...prev, data] : [data]));
       toast.info("새 링크를 추가할 수 있습니다.", {autoClose: 1500});
+      setAddClicked(false);
     };
     fetchNewSocial();
 
@@ -362,7 +361,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
   };
 
   const addSocialLink = () => {
-    setAddClicked((prev) => !prev);
+    setAddClicked(true);
   };
 
   return (
@@ -373,111 +372,113 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
           socialArray &&
             socialArray.map((s, i) => (
               <div key={s.social_id} className={E.editSocialWrapper} id="newDiv">
-                <div>
-                  <button type="button" onClick={() => handleIconList(i)}>
-                    <img
-                      key={i}
-                      src={iconSrc(i)}
-                      alt={`${pendingIcon[i]} icon`}
+                <div className={E.socialContent}>
+                  <div className={E.chooseSocial}>
+                    <button type="button" onClick={() => handleIconList(i)}>
+                      <img
+                        key={i}
+                        src={iconSrc(i)}
+                        alt={`${pendingIcon[i]} icon`}
+                      />
+                    </button>
+                    {isClicked[i] && (
+                      <div id="iconBox" ref={liRef} className={E.editIconList}>
+                        <ul>
+                          <li>
+                            <img
+                              onClick={(e) => {
+                                handleClickedIcon(e, i);
+                              }}
+                              src={Instagram}
+                              alt="instagram"
+                            />
+                          </li>
+                          <li>
+                            <img
+                              onClick={(e) => {
+                                handleClickedIcon(e, i);
+                              }}
+                              src={Github}
+                              alt="github"
+                            />
+                          </li>
+                          <li>
+                            <img
+                              onClick={(e) => {
+                                handleClickedIcon(e, i);
+                              }}
+                              src={Discord}
+                              alt="discord"
+                            />
+                          </li>
+                          <li>
+                            <img
+                              onClick={(e) => {
+                                handleClickedIcon(e, i);
+                              }}
+                              src={Slack}
+                              alt="slack"
+                            />
+                          </li>
+                          <li>
+                            <img
+                              onClick={(e) => {
+                                handleClickedIcon(e, i);
+                              }}
+                              src={Facebook}
+                              alt="facebook"
+                            />
+                          </li>
+                          <li>
+                            <img
+                              onClick={(e) => {
+                                handleClickedIcon(e, i);
+                              }}
+                              src={Line}
+                              alt="line"
+                            />
+                          </li>
+                          <li>
+                            <img
+                              onClick={(e) => {
+                                handleClickedIcon(e, i);
+                              }}
+                              src={Linkedin}
+                              alt="linkedin"
+                            />
+                          </li>
+                          <li>
+                            <img
+                              onClick={(e) => {
+                                handleClickedIcon(e, i);
+                              }}
+                              src={Youtube}
+                              alt="youtube"
+                            />
+                          </li>
+                          <li>
+                            <img
+                              onClick={(e) => {
+                                handleClickedIcon(e, i);
+                              }}
+                              src={DefaultIcon}
+                              alt="personal website"
+                            />
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                  <div className={E.editSocialInput}>
+                    <input
+                      ref={(el) => {
+                        if (el) inputRefs.current[i] = el;
+                      }}
+                      onChange={(e) => handleInputChange(e, i)}
+                      defaultValue={s.social_link}
                     />
-                  </button>
-                  {isClicked[i] && (
-                    <div id="iconBox" ref={liRef} className={E.editIconList}>
-                      <ul>
-                        <li>
-                          <img
-                            onClick={(e) => {
-                              handleClickedIcon(e, i);
-                            }}
-                            src={Instagram}
-                            alt="instagram"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            onClick={(e) => {
-                              handleClickedIcon(e, i);
-                            }}
-                            src={Github}
-                            alt="github"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            onClick={(e) => {
-                              handleClickedIcon(e, i);
-                            }}
-                            src={Discord}
-                            alt="discord"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            onClick={(e) => {
-                              handleClickedIcon(e, i);
-                            }}
-                            src={Slack}
-                            alt="slack"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            onClick={(e) => {
-                              handleClickedIcon(e, i);
-                            }}
-                            src={Facebook}
-                            alt="facebook"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            onClick={(e) => {
-                              handleClickedIcon(e, i);
-                            }}
-                            src={Line}
-                            alt="line"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            onClick={(e) => {
-                              handleClickedIcon(e, i);
-                            }}
-                            src={Linkedin}
-                            alt="linkedin"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            onClick={(e) => {
-                              handleClickedIcon(e, i);
-                            }}
-                            src={Youtube}
-                            alt="youtube"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            onClick={(e) => {
-                              handleClickedIcon(e, i);
-                            }}
-                            src={DefaultIcon}
-                            alt="personal website"
-                          />
-                        </li>
-                      </ul>
-                    </div>
-                  )}
+                  </div>
               </div>
-                <div className={E.editSocialInput}>
-                  <input
-                    ref={(el) => {
-                      if (el) inputRefs.current[i] = el;
-                    }}
-                    onChange={(e) => handleInputChange(e, i)}
-                    defaultValue={s.social_link}
-                  />
-                </div>
                 <div className={E.editSocialSaveBtn}>
                   <button onClick={() => handleSocialUpdate(i)}>저장</button>
                   <button onClick={() => handleSocialDelete(i)}>삭제</button>

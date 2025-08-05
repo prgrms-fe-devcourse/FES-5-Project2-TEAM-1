@@ -56,8 +56,7 @@ function MapSearchPopup({ onClose }: Props) {
     const ps = new kakao.maps.services.Places();
 
     ps.keywordSearch(searchText, (data, status) => {
-      console.log("data", data);
-      console.log("status", status);
+
       if (status === kakao.maps.services.Status.OK) {
         setsearchList(data);
       }

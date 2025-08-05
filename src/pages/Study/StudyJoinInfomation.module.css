@@ -50,10 +50,18 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  color: rgba(85, 85, 85, 0.7);
+    color:rgba(85, 85, 85, 0.7);
+    
+    
+  .membersAddress{
+    display: flex;
+    align-items: center;
+    gap: 4px;
 
-  span {
-    display: inline-flex;
+    span{
+      display: inline-flex;
+    }
+      
   }
 }
 
@@ -120,5 +128,74 @@
 
   span {
     font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  
+  .container{
+    margin: 58px 80px 0px;
+  }
+
+  .titleTop{
+    gap: 1rem;
+  }
+}
+
+@media screen and (max-width: 1020px) {
+  
+  .container{
+    margin: 58px 80px 0px;
+  }
+
+  .titleTop{
+    gap: 1rem;
+  }
+
+  .channelInfoBox{
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 985px) {
+  
+  .container{
+    margin: 58px 40px 0px;
+  }
+
+  .titleTop{
+    gap: 1rem;
+  }
+
+  .channelInfoBox{
+    flex-direction: column;
+  }
+
+  .projectInfo{
+    height: max-content;
+  }
+
+  .tagBox{
+    flex-direction: column;
+    align-items: start;
+    .membersAddress{
+      padding-left: 0.5rem;
+    }
+    /* justify-content: start; */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  
+  .container{
+     margin: 58px 105px 0px;
+  }
+
+  .titleTop{
+    gap: 1rem;
+  }
+
+  .channelInfoBox{
+    flex-direction: row;
   }
 }
