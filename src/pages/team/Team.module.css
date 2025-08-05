@@ -20,6 +20,7 @@
   background-color: #fff;
   padding: 30px 32px;
   border-radius: 8px;
+  gap:10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -111,4 +112,78 @@
     box-shadow: 0 4px 12px rgba(166, 179, 125, 0.4);
     font-size: 1.25rem;
   }
+}
+
+
+
+@media screen and (max-width: 1280px) {
+
+  .container{
+    width:50vw; 
+  }
+}
+
+@media screen and (max-width: 980px) {
+
+  .container{
+    width:40vw; 
+  }
+
+  .teaminfoWrap{
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+
+    h3{
+      margin-bottom: 1rem;
+    }
+
+  }
+
+  .teamWrap{
+    flex-direction: column;
+
+    .teaminfo{
+      text-align: center;
+    }
+
+    .deadline{
+      align-items: center;
+    }
+  }
+
+
+}
+
+
+
+@media screen and (max-width: 768px) {
+
+  .container{
+    width:80vw; 
+  }
+
+  .teaminfoWrap{
+    flex-direction: row;
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+  
+  .teamWrap{
+    flex-direction: row;
+
+    .teaminfo{
+      text-align: left;
+    }
+
+    .deadline{
+      align-items: center;
+    }
+  }
+
 }
