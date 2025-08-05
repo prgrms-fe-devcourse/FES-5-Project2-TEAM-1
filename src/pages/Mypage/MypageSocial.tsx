@@ -122,7 +122,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
   }, [editMode]);
 
   useEffect(() => {
-    if (!addClicked || !profileId || user?.id !== profileId) return;
+    if (!addClicked || !profileId) return;
 
     const newItem = {
       // Use empty string or a temporary unique value for social_id and create_at
@@ -145,6 +145,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
       setSocialArray((prev) => (prev ? [...prev, data] : [data]));
       toast.info("새 링크를 추가할 수 있습니다.", {autoClose: 1500});
+      setAddClicked(false);
     };
     fetchNewSocial();
 
@@ -362,7 +363,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
   };
 
   const addSocialLink = () => {
-    setAddClicked((prev) => !prev);
+    setAddClicked(true);
   };
 
   return (
