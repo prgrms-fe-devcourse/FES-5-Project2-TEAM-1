@@ -11,7 +11,6 @@ import { useToast } from "@/utils/useToast";
 import { useHashTagContext } from "@/components/context/useHashTag";
 
 import { useProfileImageContext } from "@/components/context/useProfileImage";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { showConfirmAlert } from "@/utils/sweetAlert";
 
@@ -91,12 +90,8 @@ function BoardForm({ userId }: Props) {
       insertApproveMember(data[0].board_id);
       imageUpload(data[0].board_id);
       deleteSaveData();
-      toast.success("글이 게시되었습니다.", {
-        onClose() {
-          navigate("/study");
-        },
-        autoClose: 1500,
-      });
+      success("글이 게시되었습니다.");
+      navigate("/study");
     }
   };
 
@@ -141,7 +136,7 @@ function BoardForm({ userId }: Props) {
     let imageUrl = "";
     if (!profileImage) return;
     const fileExt = profileImage.name.split(".").pop(); // 확장자 추출
-    const fileName = `${board_id}.${fileExt}`; // 중복 방지를 위한 이름
+    const fileName = `${Date.now()}${board_id}.${fileExt}`; // 중복 방지를 위한 이름
 
     const { error } = await supabase.storage
       .from("boardimage")
