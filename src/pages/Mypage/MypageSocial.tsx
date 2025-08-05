@@ -106,7 +106,6 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
     if (deleteError) {
       toast.error('빈 링크 삭제 중 오류가 발생했어요.');
-      console.error(deleteError.message);
       return;
     }
 
