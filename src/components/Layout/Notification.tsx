@@ -19,7 +19,7 @@ function Notification() {
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>, target: string|null) => {
     if (!target) return;
-    if (e.currentTarget.closest('button')) return
+    if ((e.target as HTMLElement).closest('button')) return
     navigate(`/channel/${target}`)
   }
   return (
