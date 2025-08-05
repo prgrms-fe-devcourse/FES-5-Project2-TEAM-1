@@ -10,7 +10,7 @@ import { useToast } from "@/utils/useToast";
 import { useHashTagContext } from "@/components/context/useHashTag";
 
 import { useProfileImageContext } from "@/components/context/useProfileImage";
-import { toast } from "react-toastify";
+
 import { useNavigate } from "react-router-dom";
 
 interface boardData {
@@ -27,7 +27,8 @@ function BoardUpdate({ boardId, userId }: Props) {
   const { postData, setPostData } = useBoardContext();
   const { hashTagData, sethashTagData } = useHashTagContext();
   const { profileImage, setImageUrl } = useProfileImageContext();
-  const { error: errorPop } = useToast();
+
+  const { success, error: errorPop } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,12 +83,8 @@ function BoardUpdate({ boardId, userId }: Props) {
     if (data) {
       updateHashTag(data[0].board_id);
       imageUpload(data[0].board_id);
-      toast.success("글이 수정되었습니다.", {
-        onClose() {
-          navigate(`/channel/${boardId}`);
-        },
-        autoClose: 1500,
-      });
+      success("글이 수정되었습니다.");
+      navigate(`/channel/${boardId}`);
     }
   };
 
@@ -138,7 +135,7 @@ function BoardUpdate({ boardId, userId }: Props) {
     let imageUrl = "";
     if (!profileImage) return;
     const fileExt = profileImage.name.split(".").pop(); // 확장자 추출
-    const fileName = `${board_id}.${fileExt}`; // 중복 방지를 위한 이름
+    const fileName = `${Date.now()}${board_id}.${fileExt}`; // 중복 방지를 위한 이름
 
     const { error } = await supabase.storage
       .from("boardimage")
