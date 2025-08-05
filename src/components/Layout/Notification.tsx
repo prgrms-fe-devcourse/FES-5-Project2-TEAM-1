@@ -3,10 +3,12 @@ import type { Tables } from "@/supabase/database.types";
 import { commentTime } from "@/pages/Study/components/utills/commentTime";
 
 import { useNotification } from "../context/useNotification";
+import { useNavigate } from "react-router-dom";
 
 type Notification = Tables<"notification">;
 
 function Notification() {
+  const navigate = useNavigate()
   const { alarms, deleteAlarm } = useNotification();
 
   const sortedAlarm = [...alarms].sort(
@@ -14,12 +16,18 @@ function Notification() {
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
 
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>, target: string|null) => {
+    if (!target) return;
+    if (e.currentTarget.closest('button')) return
+    navigate(`/channel/${target}`)
+  }
   return (
     <>
       {sortedAlarm &&
-        sortedAlarm.map(({ id, content, created_at }) => {
+        sortedAlarm.map(({ id, content, created_at,board_id }) => {
           return (
-            <div className={S.container} key={id}>
+            <div className={S.container} key={id} onClick={(e)=>handleClick(e,board_id)}>
               <div className={S.notification}>
                 <button
                   type="button"
