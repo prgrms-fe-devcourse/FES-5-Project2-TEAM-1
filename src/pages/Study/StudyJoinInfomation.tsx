@@ -210,7 +210,8 @@ function StudyJoinInfomation() {
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>
-            {isAdmin && (
+            {
+              isAdmin && (
               <Link to="management">
                 <button type="button" className={S.makeProject}>
                   <span>+</span> 프로젝트 생성
@@ -220,7 +221,8 @@ function StudyJoinInfomation() {
           </div>
           <div style={{ position: "relative" }}>
             <Project />
-            {board_cls === "1" && isFinish && (
+            {
+              board_cls === "1" && isFinish && (
               <div className={S.overlay}>
                 {isMember ? (
                   isSubmit ? (
