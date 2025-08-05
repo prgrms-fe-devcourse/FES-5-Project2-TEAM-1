@@ -47,14 +47,16 @@ function UserList() {
         },
         (payload) => {
           const updatedUser = payload.new;
-          setUserData((prevData) => {
-            if (!prevData) return prevData;
-            return prevData.map((user) =>
-              user.id === updatedUser.id
-                ? { ...user, status: updatedUser.status }
-                : user
-            );
+          if( updatedUser ) {
+              setUserData((prevData) => {
+              if (!prevData) return prevData;
+              return prevData.map((user) =>
+                user.id === updatedUser.id
+                  ? { ...user, status: updatedUser.status }
+                  : user
+              );
           });
+          }
         }
       )
       .subscribe();

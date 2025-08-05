@@ -31,7 +31,6 @@ type Social = Tables<"user_social">;
 
 function MypageSocial({ user, editMode, setUserData }: Props) {
   const profileId = user?.profile?.[0]?.profile_id;
-  console.log( profileId );
 
   const [socialArray, setSocialArray] = useState<Social[] | null>(null);
   const [isClicked, setIsClicked] = useState<boolean[]>([]);
@@ -107,7 +106,6 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
     if (deleteError) {
       toast.error('빈 링크 삭제 중 오류가 발생했어요.');
-      console.error(deleteError.message);
       return;
     }
 
