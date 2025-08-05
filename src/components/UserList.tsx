@@ -1,14 +1,18 @@
 import S from "@/components/Layout/LeftSidebar.module.css";
 import E from "./UserList.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import supabase from "@/supabase/supabase";
 import type { User } from "@/pages/Mypage/Mypage";
 import type { StatusCode } from "./Layout/RightSidebar";
 import { Link } from "react-router-dom";
+import PeerReviewPopup from "./PeerReviewPopup";
 
 function UserList() {
   const [openPopupIndex, setOpenPopupIndex] = useState<number | null>(null);
   const [userData, setUserData] = useState<User[] | null>(null);
+  const [isClicked, setIsClicked] = useState(false);
+
+  const popupRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -61,20 +65,17 @@ function UserList() {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      // 현재 열려있는 팝업이 있고, 클릭한 요소가 팝업이나 버튼이 아니라면 닫기
-      const target = e.target as HTMLElement;
-      const isInsidePopupOrButton = target.closest(`.${S.enterUser}`);
 
-      if (!isInsidePopupOrButton) {
-        setOpenPopupIndex(null);
+      if( popupRef.current && !popupRef.current.contains( e.target as Node)) {
+          setOpenPopupIndex(null);
+          setIsClicked(false);
       }
+
     };
 
     document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+    return () => {document.removeEventListener("click", handleClickOutside);};
+  }, [popupRef]);
 
   const handlePopupToggle = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -84,7 +85,12 @@ function UserList() {
     setTimeout(() => {
       setOpenPopupIndex((prev) => (prev === index ? null : index));
     }, 0);
+    setIsClicked(false);
   };
+
+  const handleOpenPR = () => {
+    setIsClicked(prev => !prev);
+  }
 
   const statusClassName = (status: StatusCode) => {
     const statusNum = Number(status);
@@ -134,7 +140,7 @@ function UserList() {
                 <p>{user.nickname ? user.nickname : "프둥이"}</p>
               </button>
               {openPopupIndex === i && (
-                <div className={E.popup}>
+                <div ref={popupRef} className={E.popup}>
                   <ul>
                     <li>
                       <Link to={`/mypage/${user.profile[0]?.profile_id}`}>
@@ -142,7 +148,13 @@ function UserList() {
                       </Link>
                     </li>
                     <li>
-                      <a>피어리뷰</a>
+                      <a onClick={handleOpenPR} className={E.peerReview}>피어온도</a>
+                      {isClicked && user?.profile?.length > 0 &&
+                        <PeerReviewPopup
+                          user={user}
+                          onClose={() => setIsClicked(false)}
+                        />
+                      }
                     </li>
                   </ul>
                 </div>

@@ -57,14 +57,12 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
     const today = new Date();
     const yearNow = today.getFullYear();
 
-    const [year, setYear] = useState( yearNow );
-    const [month, setMonth] = useState(1);
-    const [day, setDay] = useState(1);
+    const [year, setYear] = useState('');
+    const [month, setMonth] = useState('');
+    const [day, setDay] = useState('');
 
     useEffect(() => {
-        if( !editMode ) {
-            setShowEdit(false);
-        } 
+        if( !editMode ) {setShowEdit(false);} 
     }, [editMode])
 
     useEffect(() => {
@@ -87,6 +85,7 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
     }, [showEdit]);
 
     const userData = user && user.profile[0];
+
     if( !userData ) {
         return <div className={S.mypageDetailsContainer}>Loading...</div>;
     }
@@ -99,30 +98,37 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
         const result = await showConfirmAlert('변경하지 않고 나가시겠습니까?');
 
         if( !result.isConfirmed ) return;
-        
         if( result ) {
             setShowEdit(false);
+            setIsClicked(false);
         }
-        setIsClicked(false);
     }
 
     const handleSaveDetail = async () => {
 
-        if ( !user.profile[0] ) return;
+        if (!userData) return;
 
-        const calculatedAge = calculateAge();
+        const y = Number(year);
+        const m = Number(month);
+        const d = Number(day);
 
-        if( gender === '선택' ) {
-            toast.error('성별을 선택해주세요!', {autoClose: 1500});
-            return;
+        if (!y || y < 1900 || y >= yearNow) {
+        toast.error('정확한 출생연도를 입력해주세요.', { autoClose: 1500 });
+        return;
         }
 
-        if( year >= yearNow ) {
-            toast.error('정확한 출생연도를 입력해주세요.', {autoClose: 1500});
-            return;
+        if (!m || !d) {
+        toast.error('생년월일을 모두 입력해주세요.', { autoClose: 1500 });
+        return;
         }
 
-        const { profile_id } = user.profile[0];
+        if (gender === '선택') {
+        toast.error('성별을 선택해주세요.', { autoClose: 1500 });
+        return;
+        }
+
+        const calculatedAge = calculateAge(y, m, d);
+
         const { error: detailError } = await supabase
             .from('user_profile')
             .update({
@@ -131,7 +137,7 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
                 age: calculatedAge,
                 visibility: hide
             })
-            .eq('profile_id', profile_id);
+            .eq('profile_id', userData.profile_id);
 
         if( detailError ) {
             toast.error('업데이트 실패!');
@@ -156,6 +162,7 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
         toast.info('성공적으로 저장되었습니다.',  { onClose() {
           navigate(`/mypage/${user.profile[0]?.profile_id}`)
         }, autoClose: 1500});
+
         setShowEdit(false);
         setIsClicked(false);
     }
@@ -172,44 +179,41 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
     }
 
     const handleYear = ( e: React.ChangeEvent<HTMLInputElement> ) => {
-        setYear(Number(e.currentTarget.value));
+        setYear(e.currentTarget.value.replace(/[^0-9]/g, ''));
     }
 
     const handleMonth = ( e: React.ChangeEvent<HTMLSelectElement>) => {
-        setMonth( Number(e.currentTarget.value) );
-    }
-
-    const addDayOption = () => {
-        const lastDay = new Date(year, month, 0).getDate();
-        return Array.from({ length: lastDay }, (_, i) => i + 1);
+        setMonth( e.currentTarget.value);
     }
 
     const handleDay = (e: React.ChangeEvent<HTMLSelectElement> ) => {
-        setDay( Number(e.currentTarget.value) ); 
+        setDay( e.currentTarget.value); 
     }
 
-    const calculateAge = () => {
-        let age = yearNow - year;
+    const addDayOption = () => {
+        const y = Number(year);
+        const m = Number(month);
+        if (!y || !m) return [];
+        const lastDay = new Date(y, m, 0).getDate();
+        return Array.from({ length: lastDay }, (_, i) => i + 1);
+    }
 
-        const monthDiff = (today.getMonth() + 1) - month;
-        const dayDiff = today.getDate() - day;
-
-        if( monthDiff < 0 || (monthDiff === 0 && dayDiff < 0 )) {
-            age--;
+    const calculateAge = (birthYear: number, birthMonth: number, birthDay: number) => {
+        let age = yearNow - birthYear;
+        const nowMonth = today.getMonth() + 1;
+        const nowDay = today.getDate();
+        if (birthMonth > nowMonth || (birthMonth === nowMonth && birthDay > nowDay)) {
+        age--;
         }
-
         return age;
-    }
+    };
 
     const handleComplete = ( data: DaumPostcodeData ) => {
         const { address } = data;
         setAddress( address );
     }
 
-    const themeObj = {
-        bgColor: '#A6B37D'
-    }
-
+    const themeObj = { bgColor: '#A6B37D'}
     const postCodeStyle = {
         position: 'absolute',
         width: '40rem',
@@ -265,13 +269,11 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
                 <h3>나이</h3>
                 <div className={E.editDetailAge}>
                     <div>
-                        <input type='number' value={year} min={1900} max={yearNow} placeholder='태어난 해' onChange={handleYear} />
+                        <input type='text' inputMode='numeric' value={year} pattern='[0-9]*' placeholder='태어난 해' onChange={handleYear} />
                         <select onChange={handleMonth}>
                             <option value='' key='0'>태어난 달을 선택해주세요.</option>
                             {Array.from({ length: 12}, (_, i) => (
-                                <option key={i + 1} value={i + 1}>
-                                    {i + 1}
-                                </option>
+                                <option key={i + 1} value={i + 1}>{i + 1}</option>
                             ))}
                         </select>
                         <select onChange={handleDay}>

@@ -73,7 +73,7 @@ function App() {
             <LeftSidebar />
           </nav>
         )}
-        <div className={`mainWrapper ${(isAuthPage || isNotFoundPage) ? "fullWidth" : ""}`}>
+        <div className={`mainWrapper ${(isAuthPage || isNotFoundPage) ? "fullWidth" : ""}`} id='standard-container'>
           <Routes>
             <Route path="/" element={<MainContent />} />
             <Route path="/login" element={<Login />} />
