@@ -6,6 +6,7 @@ import Recomment from './Recomment';
 import { commentTime } from './utills/commentTime';
 import { useIsMine } from '@/components/context/useIsMine';
 import { IsMineProvider } from '@/components/context/isMine';
+import { showConfirmAlert } from '@/utils/sweetAlert';
 
 
 
@@ -45,7 +46,12 @@ function CommentItem({ comment, onDelete, userImage, userName, profileId }: Prop
   
   useEffect(() => {
       const comment_reply = async () => {
-        const { data } = await supabase.from("comment_reply").select("*,user_profile(*,user_base(*))").eq('comment_id', comment_id)
+        const { data } = await supabase
+          .from("comment_reply")
+          .select("*,user_profile(*,user_base(*))")
+          .eq("comment_id", comment_id)
+          .order("created_at", { ascending: false });
+
         if(data) setReply(data);
       };
       comment_reply();
@@ -80,8 +86,7 @@ function CommentItem({ comment, onDelete, userImage, userName, profileId }: Prop
       comment_id,
       profile_id:profileId,
       contents:createReply,
-      likes:0,
-      created_at:new Date()
+      likes:0
     }]).select()
 
     if(error) console.log(error.message)
@@ -103,16 +108,28 @@ function CommentItem({ comment, onDelete, userImage, userName, profileId }: Prop
   }
   
   const handleDelete = async () => {
-    const deleteComment = confirm('정말로 삭제하시겠습니까?')
-    if (deleteComment) {
-       const { error } = await supabase
-         .from("comment")
-         .delete()
-        .eq("comment_id", comment_id);
-      if (error) console.error();
-      if (!error) onDelete?.()
-    }
+         showConfirmAlert(
+           "정말로 댓글을 삭제하시겠습니까",
+           "확인을 누르면 삭제됩니다"
+         )
+         .then((result) => {
+          if(result.isConfirmed) dataDelete()
+         })
   }
+
+  const dataDelete = async () => {
+    try {
+      const { error } = await supabase
+        .from("comment")
+        .delete()
+        .eq("comment_id", comment_id);
+      if (error) console.error(error);
+      if (!error) onDelete?.();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   const handleReplyDelete = (targetId:string) => {
     setReply(prev => prev.filter(c => c.reply_id !== targetId))
@@ -127,17 +144,13 @@ function CommentItem({ comment, onDelete, userImage, userName, profileId }: Prop
   };
 
   const handleEditKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      console.log("Pressed:", e.key, "shift?", e.shiftKey);
+  
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       if (!editContent.trim()) return;
       handleSave();
     }
   }
-
-  const recentlyReply = [...reply].sort((a, b) => (
-    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  ))
 
   return (
     <li className={S.container} key={comment_id}>
@@ -222,7 +235,7 @@ function CommentItem({ comment, onDelete, userImage, userName, profileId }: Prop
               </button>
             </form>
 
-            {recentlyReply.map((comment) => {
+            {reply && reply.map((comment) => {
               return (
                 <IsMineProvider
                   writerProfileId={comment.user_profile.profile_id}

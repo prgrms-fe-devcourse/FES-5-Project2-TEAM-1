@@ -38,7 +38,8 @@ function ChannelComment(card:Props) {
           .from("comment")
           .select("*,user_profile(*,user_base(*))")
           .eq("board_id", board_id)
-   
+        .order('create_at', { ascending: false })
+      
       if (!TableData) return
       setCommentedUser(TableData)
     };
@@ -62,7 +63,6 @@ function ChannelComment(card:Props) {
         profile_id: profileId,
         contents: writeComment,
         likes: 0,
-        create_at: new Date(),
       },
     ]);
 
@@ -77,7 +77,7 @@ function ChannelComment(card:Props) {
       .from("comment")
       .select("*,user_profile(*,user_base(*))")
       .eq("board_id", board_id)
-
+      
     if (commentData) setCommentedUser(commentData);
   };
 

@@ -101,6 +101,7 @@ function StudyJoinInfomation() {
 
   useEffect(() => {
     const fetchSubmit = async () => {
+      if(!id || !profileId) return
       const { data, error } = await supabase
         .from("peer_review")
         .select("review_id")

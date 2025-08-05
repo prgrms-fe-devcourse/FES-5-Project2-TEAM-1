@@ -44,7 +44,6 @@ function TeamPage() {
         {myTeams && myTeams.length > 0 ? (
           myTeams.map((team) => {
             const dDay = DdayCounter(team.board.deadline ?? "");
-            console.log("dDay", dDay);
             return (
               <li className={S.teamWrap} key={team.board_id}>
                 <div className={S.teaminfoWrap}>

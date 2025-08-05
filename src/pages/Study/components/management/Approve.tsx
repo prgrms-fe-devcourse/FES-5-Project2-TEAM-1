@@ -41,7 +41,6 @@ function Approve() {
       setPendingMember(users);
     };
     fetchData();
-    // console.log("pendingMember", pendingMember);
   }, [id]);
 
   const handleApprove = async (profile_id: string) => {
