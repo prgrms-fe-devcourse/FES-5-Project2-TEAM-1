@@ -75,7 +75,6 @@ function Admin() {
     }
     setCertificateFile(imgUrl)
     setActiveId(userId);
-    console.log(activeId);
   }
 
   const updateApprove = async() => {
