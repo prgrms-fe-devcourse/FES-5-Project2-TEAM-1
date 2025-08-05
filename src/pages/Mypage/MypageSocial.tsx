@@ -31,6 +31,7 @@ type Social = Tables<"user_social">;
 
 function MypageSocial({ user, editMode, setUserData }: Props) {
   const profileId = user?.profile?.[0]?.profile_id;
+  console.log( profileId );
 
   const [socialArray, setSocialArray] = useState<Social[] | null>(null);
   const [isClicked, setIsClicked] = useState<boolean[]>([]);
@@ -54,6 +55,16 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
     fetchSocial();
   }, [profileId, editMode]);
+
+//   useEffect(() => {
+//   setAddClicked(false);
+// }, []);
+
+  useEffect(() => {
+    return () => {
+      setAddClicked(false);
+    };
+  }, [profileId]);
 
   useEffect(() => {
     if (!socialArray) return;
@@ -134,6 +145,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
       setSocialArray((prev) => (prev ? [...prev, data] : [data]));
       toast.info("새 링크를 추가할 수 있습니다.", {autoClose: 1500});
+      setAddClicked(false);
     };
     fetchNewSocial();
 
@@ -335,7 +347,6 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
       const filteredSocial =
         prev.profile[0].social?.filter((i) => i.social_id !== social_id) || [];
-      console.log(filteredSocial);
 
       return {
         ...prev,
@@ -352,7 +363,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
   };
 
   const addSocialLink = () => {
-    setAddClicked((prev) => !prev);
+    setAddClicked(true);
   };
 
   return (
