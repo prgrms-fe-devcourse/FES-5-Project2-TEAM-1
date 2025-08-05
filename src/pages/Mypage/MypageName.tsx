@@ -54,12 +54,12 @@ function MypageName({ user, editMode, setUserData, canExitEditModeRef}: Props) {
 
       if (userData) {
         const nickname = (userData.nickname ?? '').trim();
-        const original = nickname || '';
+        const original = nickname || '프둥이';
 
         const role = (userData.role ?? '').trim();
 
         setUserName({
-          current: nickname || '',
+          current: nickname || '프둥이',
           original: original
         });
         setRole(role || '프론트엔드');
