@@ -11,7 +11,7 @@ import Offline from "/icons/offline.svg";
 import Away from "/icons/away.svg";
 import Dnd from "/icons/dnd.svg";
 import gsap from "gsap";
-import { showInfoAlert } from "@/utils/sweetAlert";
+import { showConfirmAlert, showInfoAlert } from "@/utils/sweetAlert";
 
 type CurrentUser = {
   profileId: string;
@@ -127,19 +127,23 @@ function RightSidebar({
   }, [isStatusClicked, popupRef]);
 
   const handleLogout = async () => {
-    if (currentUser) {
-      await supabase
-        .from("user_base")
-        .update({ status: 1 }) // 1: 오프라인
-        .eq("id", currentUser.id);
-    }
+    showConfirmAlert("정말 로그아웃 하시겠습니까?").then((result) => {
+      if (result.isConfirmed) {
+        if (currentUser) {
+          supabase
+            .from("user_base")
+            .update({ status: 1 }) // 1: 오프라인
+            .eq("id", currentUser.id);
+        }
 
-    setStatus(1);
+        setStatus(1);
 
-    await logout();
-    setCurrentUser(null);
-    showInfoAlert("로그아웃!");
-    navigate("/");
+        logout();
+        setCurrentUser(null);
+
+        navigate("/");
+      }
+    });
   };
 
   const updateStatusInDB = async (newStatus: StatusCode): Promise<boolean> => {
