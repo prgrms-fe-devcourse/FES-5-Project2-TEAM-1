@@ -10,16 +10,13 @@
 }
 
 .confirmList{
-  width: 70vw;
+  width: 85vw;
   min-height: 85vh;
-  overflow: scroll;
+  overflow-y: scroll;
 
   margin-bottom: 3rem;
-
-  /* padding: 3rem; */
-
   border-radius: 1rem;
-  /* background-color: #fff; */
+
 
   display: flex;
   flex-direction: row;

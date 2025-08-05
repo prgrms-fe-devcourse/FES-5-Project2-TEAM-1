@@ -132,7 +132,7 @@ function StudyChannel() {
             </svg>
           </button>
         </form>
-        <Link to="/Write">
+        <Link to="/write">
           <button type="button" className={S.postBtn}>
             글쓰기
           </button>
