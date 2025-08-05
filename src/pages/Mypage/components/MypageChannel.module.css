@@ -10,6 +10,7 @@
 }
 
 .teamContainer{
+  position: relative;
   width: 100%;
   margin-bottom: 4rem;
 
@@ -80,7 +81,7 @@
   
   color: #000;
   font-family: Pretendard;
-  font-size: 20px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -126,5 +127,18 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 1067px) {
+  
+  .prevButton{
+    top: 85px;
+    position: absolute;
+  }
+
+  .nextButton{
+    top: 85px;
+    position: absolute;
   }
 }

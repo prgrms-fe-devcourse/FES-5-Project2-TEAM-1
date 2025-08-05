@@ -172,29 +172,32 @@ function Card({ card }: Props) {
         <p>{replaceText}</p>
       </div>
       <div className={S.tagBox}>
-        <span>
-          <svg
-            width="12"
-            height="14"
-            viewBox="0 0 12 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="5.87206"
-              cy="4.18212"
-              r="2.81395"
-              fill="#555555"
-              fillOpacity="0.5"
-            />
-            <path
-              d="M0.244141 9.74024C0.244141 8.63567 1.13957 7.74023 2.24414 7.74023H9.49995C10.6045 7.74023 11.4999 8.63566 11.4999 9.74023V13.3681H0.244141V9.74024Z"
-              fill="#555555"
-              fillOpacity="0.5"
-            />
-          </svg>
-        </span>
-        {member}
+        <div className={S.members}>
+          <span>
+            <svg
+              width="12"
+              height="14"
+              viewBox="0 0 12 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="5.87206"
+                cy="4.18212"
+                r="2.81395"
+                fill="#555555"
+                fillOpacity="0.5"
+              />
+              <path
+                d="M0.244141 9.74024C0.244141 8.63567 1.13957 7.74023 2.24414 7.74023H9.49995C10.6045 7.74023 11.4999 8.63566 11.4999 9.74023V13.3681H0.244141V9.74024Z"
+                fill="#555555"
+                fillOpacity="0.5"
+              />
+            </svg>
+          </span>
+          {member}
+        </div>
+
         {tagList && (
           <HashTag taglist={tagList} defaultList={tagList} editable={false} />
         )}

@@ -110,11 +110,21 @@ function Admin() {
     </button>
   )) 
 
+  const handleBack = () => {
+    navigate('/')
+  }
+
   
 
   return (
     <div className={S.container}>
-      <h2 className={S.sectionHeader}>대기중인 요청</h2>
+      <div className={S.header}>
+        <h2 className={S.sectionHeader}>대기중인 요청</h2>
+        <button className={S.backButton} onClick={handleBack}>
+          <img src="/icons/back.svg"  alt="메인으로 돌아가기" />
+          <p>메인으로 돌아가기</p>
+        </button>
+      </div>
       <div className={S.confirmList}>
         <div className={S.userList}>
           {list}

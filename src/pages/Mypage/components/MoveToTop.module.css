@@ -4,7 +4,7 @@
   bottom: 2rem;
   right: 16rem; 
   
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 
   width: 5rem;
 }
@@ -27,4 +27,31 @@
 
 .upButton:hover .tooltip {
   opacity: 1;
+}
+
+
+@media (max-width: 1280px) {
+  .upButton{
+    right: 14.5rem; 
+  }
+}
+
+@media (max-width: 1024px) {
+  .upButton{
+    right: 13.5rem; 
+  }
+}
+
+@media (max-width: 900px) {
+  .upButton{
+    width: 4rem; 
+  }
+}
+
+
+@media (max-width: 768px) {
+  .upButton{
+    right: 1rem; 
+    width: 5rem; 
+  }
 }

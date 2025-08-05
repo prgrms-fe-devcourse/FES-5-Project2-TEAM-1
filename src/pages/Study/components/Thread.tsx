@@ -88,8 +88,6 @@ function Thread() {
           filter: `board_id=eq.${board_id}`,
         },
         (payload) => {
-          console.log("알림 도착:", payload.new);
-          // 여기서 토스트 보여주거나 상태 업데이트
           getUserJoinData(payload.new.board_id);
         }
       )
@@ -280,7 +278,7 @@ function Thread() {
           <ul className={S.recentlyProfileWrap}>
             {member.map((user) => {
               return (
-                <li key={user.board_id}>
+                <li key={user.id}>
                   <div className={S.recentlyProfile}>
                     <img src={user.user_profile?.profile_images} alt="유저 프로필 이미지" />
                     <p>{user.user_profile.user_base.nickname}</p>
