@@ -82,14 +82,14 @@ function StudyMemberChannel() {
     if (fetchError) return console.error();
     switch (data?.status) {
       case "0":
-        error("이미 가입신청을 요청하신 채널입니다");
+        error("이미 가입 신청을 요청하신 채널입니다");
         return;
       case "1":
-        error("이미 채널멤버입니다");
+        error("이미 채널 멤버입니다");
         setIsMember(true);
         return;
       case "2":
-        error("가입신청이 거절되었습니다");
+        error("가입 신청이 거절되었습니다");
         setIsMember(false);
         return;
       default:

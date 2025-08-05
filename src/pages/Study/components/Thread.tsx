@@ -282,7 +282,7 @@ function Thread() {
           <ul className={S.recentlyProfileWrap}>
             {member.map((user) => {
               return (
-                <li key={user.board_id}>
+                <li key={user.id}>
                   <div className={S.recentlyProfile}>
                     <img src={user.user_profile?.profile_images} alt="유저 프로필 이미지" />
                     <p>{user.user_profile.user_base.nickname}</p>

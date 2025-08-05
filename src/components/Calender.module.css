@@ -144,3 +144,22 @@
 }
 
 
+@media screen and (max-width: 1780px) {
+
+  :global(.react-calendar){
+    transform: translate(-55%,-40%);
+  }
+}
+
+@media screen and (max-width: 1065px) {
+  .wrapper{
+    justify-content: left;
+  }
+  
+  :global(.react-calendar){
+    transform: translate(-75%,-40%);
+  }
+}
+
+
+

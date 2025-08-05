@@ -41,7 +41,6 @@ function Approve() {
       setPendingMember(users);
     };
     fetchData();
-
   }, [id]);
 
   const handleApprove = async (profile_id: string) => {
@@ -73,7 +72,7 @@ function Approve() {
       return;
     } 
 
-    success("채널가입을 승인하였습니다.");
+    success("채널 가입을 승인하였습니다.");
     const { error } = await supabase
       .from("approve_member")
       .update({
@@ -100,7 +99,7 @@ function Approve() {
   };
 
   const handleReject = async (profile_id: string) => {
-    error("채널가입을 거절하였습니다");
+    error("채널 가입을 거절하였습니다");
     const { error: rejectError } = await supabase
       .from("approve_member")
       .update({
@@ -147,7 +146,7 @@ function Approve() {
         ))}
       {pendingMember.length === 0 && (
         <div className={S.defaultImg}>
-          <img src="/images/FtrPostWood.png" alt="승인요청 기본이미지" />
+          <img src="/images/FtrPostWood.png" alt="승인 요청 기본이미지" />
           <p>가입 신청이 없습니다</p>
         </div>
       )}
