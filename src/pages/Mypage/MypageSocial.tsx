@@ -55,6 +55,16 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
     fetchSocial();
   }, [profileId, editMode]);
 
+//   useEffect(() => {
+//   setAddClicked(false);
+// }, []);
+
+  useEffect(() => {
+    return () => {
+      setAddClicked(false);
+    };
+  }, [profileId]);
+
   useEffect(() => {
     if (!socialArray) return;
     const links = socialArray.map((s) => s.social_link);
@@ -96,7 +106,6 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
     if (deleteError) {
       toast.error('빈 링크 삭제 중 오류가 발생했어요.');
-      console.error(deleteError.message);
       return;
     }
 
@@ -134,6 +143,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
       setSocialArray((prev) => (prev ? [...prev, data] : [data]));
       toast.info("새 링크를 추가할 수 있습니다.", {autoClose: 1500});
+      setAddClicked(false);
     };
     fetchNewSocial();
 
@@ -335,7 +345,6 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
       const filteredSocial =
         prev.profile[0].social?.filter((i) => i.social_id !== social_id) || [];
-      console.log(filteredSocial);
 
       return {
         ...prev,
@@ -352,7 +361,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
   };
 
   const addSocialLink = () => {
-    setAddClicked((prev) => !prev);
+    setAddClicked(true);
   };
 
   return (

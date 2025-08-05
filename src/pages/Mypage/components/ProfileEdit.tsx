@@ -125,7 +125,7 @@ function ProfileEdit({ prevProfileImage, setPrevProfileImage, setShowProfileDrop
             }
         })
 
-        toast.info('배경이미지가 적용되었습니다.',{
+        toast.info('프로필 이미지가 적용되었습니다.',{
                     onClose() {
                         navigate(`/mypage/${profileData.profile_id}`)
                     }, 

@@ -341,6 +341,7 @@ export type Database = {
       }
       notification: {
         Row: {
+          board_id: string | null
           content: string | null
           created_at: string
           id: string
@@ -349,6 +350,7 @@ export type Database = {
           user_profile_id: string | null
         }
         Insert: {
+          board_id?: string | null
           content?: string | null
           created_at?: string
           id?: string
@@ -357,6 +359,7 @@ export type Database = {
           user_profile_id?: string | null
         }
         Update: {
+          board_id?: string | null
           content?: string | null
           created_at?: string
           id?: string
