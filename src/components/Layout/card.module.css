@@ -81,15 +81,3 @@
   width: 15px;
   height: 18px;
 }
-
-.tagStyle {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 24px;
-  width: 48px;
-  font-size: 12px;
-  background-color: dodgerblue;
-  color: #fff;
-  border-radius: 4px;
-}
