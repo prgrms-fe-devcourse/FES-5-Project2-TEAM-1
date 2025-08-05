@@ -98,7 +98,7 @@ function StudyJoinInfomation() {
     finishProject();
   }, [id]);
 
-    useEffect(() => {
+  useEffect(() => {
       const fetchSubmit = async () => {
         const { data, error } = await supabase.from("peer_review").select("review_id").match({
           board_id: id,
@@ -109,7 +109,7 @@ function StudyJoinInfomation() {
         setIsSubmit(data.length > 0);
       };
       fetchSubmit();
-    }, [id, profileId]);
+  }, [id, profileId]);
   
     if (!card) return;
     const { images, title, address, member, contents, board_id, board_cls} =
@@ -206,7 +206,8 @@ function StudyJoinInfomation() {
         <section>
           <div className={S.project}>
             <h4>프로젝트안내</h4>
-            {isAdmin && (
+            {
+              isAdmin && (
               <Link to="management">
                 <button type="button" className={S.makeProject}>
                   <span>+</span> 프로젝트 생성
@@ -216,7 +217,8 @@ function StudyJoinInfomation() {
           </div>
           <div style={{ position: "relative" }}>
             <Project />
-            {board_cls === "1" && isFinish && (
+            {
+              board_cls === "1" && isFinish && (
               <div className={S.overlay}>
                 {isMember ? (
                   isSubmit ? (
