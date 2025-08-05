@@ -148,7 +148,7 @@ function UserList() {
                       </Link>
                     </li>
                     <li>
-                      <a onClick={handleOpenPR} className={E.peerReview}>피어리뷰</a>
+                      <a onClick={handleOpenPR} className={E.peerReview}>피어온도</a>
                       {isClicked && user?.profile?.length > 0 &&
                         <PeerReviewPopup
                           user={user}
