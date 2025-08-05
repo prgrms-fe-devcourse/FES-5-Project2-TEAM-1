@@ -108,6 +108,12 @@
   }
 }
 
+@media screen and (max-width: 1400px) {
+  .searchBox{
+    width: 280px;
+  }
+}
+
 @media screen and (max-width: 1340px) {
   /* 양옆 여백 줄이기 */
   .container {
@@ -116,12 +122,69 @@
     padding: 0 60px;
     flex: 1;
   }
-
+  
   .cardGrid {
     justify-items: center;
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
   }
+}
+
+@media screen and (max-width: 1220px) {
+  .filterTab{
+    gap: 1rem;
+
+    .filterBtn{
+      width: 80px;
+    }
+  }
+
+}
+
+@media screen and (max-width: 1180px) {
+  .filterTab{
+    gap: 0.5rem;
+
+    .filterBtn{
+      width: 70px;
+    }
+  }
+
+  .postBtn{
+    width: 90px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .searchBox{
+    width: 200px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+ .channelHeader{
+  flex-direction: column;
+  gap: 1rem;
+
+  .searchBox{
+    width: 280px;
+  }
+
+  .filterTab{
+    gap: 1.75rem;
+
+    .filterBtn{
+      width: 125px;
+    }
+  }
+
+  .postBtn{
+    width: 280px;
+  }
+
+ }
+
+
 }
 
 @media screen and (max-width: 970px) {
@@ -134,7 +197,26 @@
 }
 
 @media screen and (max-width: 768px) {
+ .channelHeader{
+  flex-direction: row;
 
+  .searchBox{
+    width: 400px;
+  }
+
+  .filterTab{
+    gap: 1.75rem;
+
+    .filterBtn{
+      width: 105px;
+    }
+  }
+
+  .postBtn{
+    width: 105px;
+  }
+
+ }
   .cardGrid {
     justify-items: center;
     grid-template-columns: repeat(2, 1fr);
