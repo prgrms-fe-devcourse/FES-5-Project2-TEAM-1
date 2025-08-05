@@ -31,6 +31,7 @@ type Social = Tables<"user_social">;
 
 function MypageSocial({ user, editMode, setUserData }: Props) {
   const profileId = user?.profile?.[0]?.profile_id;
+  console.log( profileId );
 
   const [socialArray, setSocialArray] = useState<Social[] | null>(null);
   const [isClicked, setIsClicked] = useState<boolean[]>([]);
@@ -54,6 +55,16 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
     fetchSocial();
   }, [profileId, editMode]);
+
+//   useEffect(() => {
+//   setAddClicked(false);
+// }, []);
+
+  useEffect(() => {
+    return () => {
+      setAddClicked(false);
+    };
+  }, [profileId]);
 
   useEffect(() => {
     if (!socialArray) return;
@@ -111,7 +122,7 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
   }, [editMode]);
 
   useEffect(() => {
-    if (!addClicked || !profileId) return;
+    if (!addClicked || !profileId || user?.id !== profileId) return;
 
     const newItem = {
       // Use empty string or a temporary unique value for social_id and create_at
@@ -335,7 +346,6 @@ function MypageSocial({ user, editMode, setUserData }: Props) {
 
       const filteredSocial =
         prev.profile[0].social?.filter((i) => i.social_id !== social_id) || [];
-      console.log(filteredSocial);
 
       return {
         ...prev,
