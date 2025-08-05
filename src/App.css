@@ -88,5 +88,9 @@
   .container {
     justify-content: center;
   }
+  .mainWrapper{
+    margin: 0 auto;
+    width: 100%;
+  }
 }
 

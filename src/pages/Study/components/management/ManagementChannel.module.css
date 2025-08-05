@@ -235,7 +235,7 @@
 
 .locationRadio{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 24px;
   margin-bottom: 26px;
 
@@ -415,5 +415,49 @@
   .mangementChannelContainer{
     width: 100%;
   }
+
+}
+
+@media screen and (max-width: 1180px) {
+  /* 다음포스트 크기 줄이기 */
+  .mangementChannelContainer{
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1065px) {
+  /* 섹션 헤더랑 컨텐츠 column으로 바꾸기 */
+  section{
+    flex-direction: column;
+  }
+
+  .chooseLocation{
+    flex-direction: column;
+
+    h2{
+      padding-bottom: 24px;
+    }
+  }
+
+  .locationRadio{
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .contributors {
+    align-items: start;
+  }
+
+  .countButton{
+    justify-content: left;
+  }
+}
+
+@media screen and (max-width: 945px) {
+  /* 양옆 여백 줄이기 */
+}
+
+/* 사이드바 사라질때 */
+@media screen and (max-width: 768px) {
 
 }

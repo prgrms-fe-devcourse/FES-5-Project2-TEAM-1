@@ -10,6 +10,7 @@
 }
 
 .teamContainer{
+  position: relative;
   width: 100%;
   margin-bottom: 4rem;
 
@@ -126,5 +127,18 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 1067px) {
+  
+  .prevButton{
+    top: 85px;
+    position: absolute;
+  }
+
+  .nextButton{
+    top: 85px;
+    position: absolute;
   }
 }

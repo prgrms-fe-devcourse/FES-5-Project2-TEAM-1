@@ -55,3 +55,18 @@
     gap: 3rem;
   }
 }
+
+@media screen and (max-width: 945px) {
+  /* 양옆 여백 줄이기 */
+  .container{
+    padding: 63px 80px;
+
+  }
+}
+
+/* 사이드바 사라질때 */
+@media screen and (max-width: 768px) {
+  .container{
+    padding: 63px 124px;
+  }
+}
