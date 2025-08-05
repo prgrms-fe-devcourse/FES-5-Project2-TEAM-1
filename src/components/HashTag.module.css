@@ -3,17 +3,22 @@
 
 .hashTag {
   border: none;
-  --tag-bg: #a6b37d;
+  --tag-bg: #e2e8f0;
   --readonly-striped: 0;
   --tag--max-width: 300px;
   --tag-border-radius: 8px;
   span {
     font-size: 12px;
-    color: #fff;
+    color: #1e293b;
   }
 }
+
 .hashTagInput {
   width: 90%;
-  --tag-bg: #a6b37d;
-  --tag--max-width: 360px;
+  --tag-bg: #e2e8f0;
+  --tag--max-width: 300px;
+  span{
+    font-size: 12px;
+    color: #1e293b;
+  }
 }
