@@ -6,14 +6,10 @@ import Card from "../../components/Layout/Card";
 import { debounce } from "@/utils/debounce";
 
 type Board = Tables<"board">;
+type BoardTag = Tables<"board_tag">;
 
 type BoardWithTag = Board & {
-  board_tag: {
-    board_id: string;
-    tag_id: string;
-    color_code: string | null;
-    hash_tag: string | null;
-  }[];
+  board_tag: BoardTag[];
 };
 
 interface Props {
@@ -62,12 +58,20 @@ function MainStudyCard({ search }: Props) {
     const handler = debounce((value: string) => {
       const lower = value.toLowerCase();
 
-      const filtered = cards.filter((card) =>
+      const filtered = cards.filter((card) => {
+      const matchesBoards =
         (card.title ?? "").toLowerCase().includes(lower) ||
         (card.contents ?? "").toLowerCase().includes(lower) ||
         (card.address ?? "").toLowerCase().includes(lower) ||
-        (card.board_cls ?? "").toLowerCase().includes(lower)
-      );
+        (card.board_cls ?? "").toLowerCase().includes(lower);
+
+      const matchesTags =
+        card.board_tag?.some((tag) =>
+          (tag.hash_tag ?? "").toLowerCase().includes(lower)
+        ) ?? false;
+
+      return matchesBoards || matchesTags;
+    });
 
       const shuffled = [...filtered].sort(() => Math.random() - 0.5).slice(0, 6);
       setDisplayCards(shuffled);

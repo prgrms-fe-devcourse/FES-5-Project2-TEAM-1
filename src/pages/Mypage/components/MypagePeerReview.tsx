@@ -90,7 +90,7 @@ function MypagePeerReview({profileId}:Props) {
               slidesPerView="auto"
               speed={900}
               slideToClickedSlide = {true}
-              spaceBetween={40}
+              // spaceBetween={40}
               style={{
                 padding: "0",
                 boxSizing: "border-box"
@@ -98,7 +98,7 @@ function MypagePeerReview({profileId}:Props) {
               breakpoints={{
                 640: {spaceBetween: 16},
                 768: {spaceBetween: 24},
-                1024: {spaceBetween: 32},
+                1024: {spaceBetween: 28},
               }}
               onSwiper={(e) => {
                 swiperWrappedRef.current = e.wrapperEl;

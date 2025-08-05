@@ -125,7 +125,7 @@ function StudyJoinInfomation() {
               <div className={S.titleTop}>
                 <h2>{title}</h2>
                 {isAdmin && (
-                  <NavLink to={`/Write/${board_id}`}>
+                  <NavLink to={`/write/${board_id}`}>
                     <button type="button" className={S.setting}>
                       <img src="/icons/edit.svg" alt="" />
                     </button>
