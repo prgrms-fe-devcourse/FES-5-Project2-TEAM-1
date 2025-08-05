@@ -64,8 +64,8 @@
 
 .recentlyProfile{
   display:flex;
-align-items: center;
-gap: 8px;
+  align-items: center;
+  gap: 8px;
   & > img{
     width: 36px;
     height: 36px;
@@ -156,23 +156,19 @@ gap: 8px;
   .member{
     width: 100px;
     align-items: center;
+    max-height: fit-content;
   }
 
   .recentlyProfileWrap{
     overflow-y:visible;
-
-    li{
-      margin: 0 ;
-      padding: 0;
-    }
-
   }
 
   .recentlyProfile{
-    width: 36px;
-    height: 36px;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
     
     
     img{
