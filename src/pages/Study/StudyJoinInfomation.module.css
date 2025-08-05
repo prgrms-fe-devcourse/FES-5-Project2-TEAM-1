@@ -75,6 +75,11 @@
   display: flex;
   justify-content: space-between;
   margin-top: 56px;
+
+  h4{
+    font-size: 18px;
+    font-weight: bold;
+  }
 }
 
 .setProjectDetails{
@@ -110,5 +115,15 @@
 
   &:hover{
   background-color: #8b9669;
+  }
+}
+
+
+
+.makeProject{
+  font-size: 16px;
+
+  span{
+    font-size: 20px;
   }
 }

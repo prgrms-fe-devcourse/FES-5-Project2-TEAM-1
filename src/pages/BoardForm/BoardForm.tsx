@@ -11,7 +11,6 @@ import { useToast } from "@/utils/useToast";
 import { useHashTagContext } from "@/components/context/useHashTag";
 
 import { useProfileImageContext } from "@/components/context/useProfileImage";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { showConfirmAlert } from "@/utils/sweetAlert";
 
@@ -91,12 +90,9 @@ function BoardForm({ userId }: Props) {
       insertApproveMember(data[0].board_id);
       imageUpload(data[0].board_id);
       deleteSaveData();
-      toast.success("글이 게시되었습니다.", {
-        onClose() {
-          navigate("/study");
-        },
-        autoClose: 1500,
-      });
+      success("글이 게시되었습니다.");
+      navigate("/study");
+
     }
   };
 
