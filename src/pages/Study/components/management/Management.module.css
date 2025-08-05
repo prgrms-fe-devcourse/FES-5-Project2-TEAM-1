@@ -35,3 +35,23 @@
   color: #b99470;
   }
 }
+
+@media screen and (max-width: 1780px) {
+
+  .container{
+    display: flex;
+    flex-direction: column;
+    
+  }
+
+  .managementSidebarInner{
+    position: relative;
+    /* min-width: 84px; */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 3rem;
+  }
+}

@@ -76,10 +76,11 @@ function MangementChannel() {
   }
 
   const addressStyle = {
-    width: "555px",
+    width: "500px",
     height: "500px",
     border: "2px solid rgba(153, 153, 153, 0.5)",
     marginTop: '0.2rem',
+    zIndex: "2",
   }
 
   const handleUpButton = () => {
@@ -148,7 +149,7 @@ function MangementChannel() {
     // 삭제 진행
     Swal.fire({
       title:'정말 삭제하시겠습니까?',
-      text: '채널의 데이터가 모두 삭제됩니다. 되돌릴 수 없습니다.',
+      text: '채널의 데이터가 모두 삭제됩니다 되돌릴 수 없습니다',
       icon: 'warning',
       showCancelButton:true,
       confirmButtonText:'채널 삭제',
@@ -268,35 +269,38 @@ function MangementChannel() {
         </section>
 
         <section className={S.location}>
-          <h2 className={S.sectionHeader}>모임 장소</h2>
-          <div className={S.locationRadio}>
-            <div>
-              <div className={S.online}>
-                <input
-                  type="radio"
-                  name="location"
-                  id="online"
-                  checked={handleCheckedOnline()}
-                  onChange={() => {
-                    setIsOffline(false);
-                    setAddress(null);
-                  }}
-                />
-                <label htmlFor="online">온라인</label>
-              </div>
-              <div className={S.offline}>
-                <input
-                  type="radio"
-                  name="location"
-                  id="offline"
-                  checked={handleCheckedOffline()}
-                  onChange={() => {
-                    setIsOffline(true);
-                  }}
-                />
-                <label htmlFor="offline">오프라인</label>
+          <div className={S.chooseLocation}>
+            <h2 className={S.sectionHeader}>모임 장소</h2>
+            <div className={S.locationRadio}>
+              <div>
+                <div className={S.online}>
+                  <input
+                    type="radio"
+                    name="location"
+                    id="online"
+                    checked={handleCheckedOnline()}
+                    onChange={() => {
+                      setIsOffline(false);
+                      setAddress(null);
+                    }}
+                  />
+                  <label htmlFor="online">온라인</label>
+                </div>
+                <div className={S.offline}>
+                  <input
+                    type="radio"
+                    name="location"
+                    id="offline"
+                    checked={handleCheckedOffline()}
+                    onChange={() => {
+                      setIsOffline(true);
+                    }}
+                  />
+                  <label htmlFor="offline">오프라인</label>
+                </div>
               </div>
             </div>
+          </div>
             {
               isOffline && (
               <div className={S.locationWrapper}>
@@ -322,15 +326,13 @@ function MangementChannel() {
                 )}
               </div>
             )}
-          </div>
         </section>
         <button className={S.saveButton} type="submit">
           저장
         </button>
       </form>
-      <hr className={S.hr} />
       <div className={S.controlSection}>
-        <h1>채널관리</h1>
+        <h1>채널 관리</h1>
         <section className={S.activeGroup}>
           <h2 className={S.sectionHeader}>모집 활성화</h2>
           <section className={S.isActive}>

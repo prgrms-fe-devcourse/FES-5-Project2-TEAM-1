@@ -43,7 +43,7 @@ function ManagementMembers() {
   }, [id,profileId]);
 
   const handleOut = async (profile_id: string) => {
-    success("유저를 내보내셨습니다");
+    success("멤버를 내보내셨습니다");
     const { error } = await supabase
       .from("approve_member")
       .update({

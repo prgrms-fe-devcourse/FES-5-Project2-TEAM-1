@@ -120,7 +120,7 @@ function PeerReiview() {
             <>
               <div className={S.userWrap} key={id}>
                 <div className={S.userInfo}>
-                  <img src={profile.profile_images} alt="유저프로필 이미지" />
+                  <img src={profile.profile_images} alt="유저 프로필 이미지" />
                   <div className={S.username}>
                     <h4>{base.nickname}</h4>
                     <p>{base.role}</p>

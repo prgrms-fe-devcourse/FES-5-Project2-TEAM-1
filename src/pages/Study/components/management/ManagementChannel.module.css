@@ -13,7 +13,7 @@
   
 }
 .controlSection{
- font-family: Pretendard;
+  font-family: Pretendard;
   font-size: 28px;
   font-style: normal;
   font-weight: 600;
@@ -67,7 +67,7 @@
   display: flex;
   justify-content: space-between;
   gap: 8px;  
-    padding-bottom: 24px;
+  padding-bottom: 24px;
   border-bottom: 1px solid #e0e0e0; 
   
   .calendarBox{
@@ -75,34 +75,36 @@
     align-items: center;
 
 
-      .calendarBtn{
-  cursor: pointer;
-  z-index: 999;
-  font-size: 16px;
-  width: 120px;
-  height: 28px;
-    background-color: rgba(185, 148, 112, 0.2);
-    border: 1px solid #b99470;
-  border-radius: 4px;
-    font-weight: bold;
-    color: #b99470;
-    transition: 0.3s;
+    .calendarBtn{
+      cursor: pointer;
+      z-index: 999;
+      font-size: 16px;
+      width: 120px;
+      height: 28px;
+      background-color: rgba(185, 148, 112, 0.2);
+      border-radius: 4px;
+      border: 1px solid #b99470;
+      color: #b99470;
+      transition: 0.3s;
 
-    &:hover{
-    background-color: rgba(185, 148, 112, 0.4);
-    }
-  
-        }
-        
-      .disableBtn{
-        pointer-events: none;     
-        opacity: 0.5;            
-        background-color: #ccc;   
-        color: #666;                
-        width: 120px;
-        height: 28px;
-        cursor: not-allowed;  
+      &:hover{
+        background-color: rgba(185, 148, 112, 0.4);
       }
+  
+    }
+        
+    .disableBtn{
+      pointer-events: none;     
+      opacity: 0.5;            
+      font-size: 16px;
+      background-color: #ccc;   
+      border-radius: 4px;
+      border: 1px solid #666;
+      color: #666;                
+      width: 120px;
+      height: 28px;
+      cursor: not-allowed;  
+    }
   }
 }
 
@@ -221,7 +223,14 @@
 .location{
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   border-bottom: 1px solid #e0e0e0;
+}
+
+.chooseLocation{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .locationRadio{
@@ -284,7 +293,7 @@
   color:#222;
   font-family: Pretendard;
   font-weight: 600;
-  text-align: right;
+  text-align: left;
   padding-right: 24px;
 
 }
@@ -301,6 +310,7 @@
 .saveButton{
   width: 102.322px;
   height: 42.5px;
+  margin-bottom: 24px;
 
   align-self:flex-end;
   color: #222;
@@ -334,6 +344,8 @@
   display:flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .isActive{
@@ -395,6 +407,13 @@
     background-color: #C94A4A;
     color:#fff;
   }
+  }
+
+}
+
+@media screen and (max-width: 1780px) {
+  .mangementChannelContainer{
+    width: 100%;
   }
 
 }
