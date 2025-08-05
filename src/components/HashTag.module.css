@@ -15,5 +15,5 @@
 .hashTagInput {
   width: 90%;
   --tag-bg: #a6b37d;
-  --tag--max-width: 600px;
+  --tag--max-width: 360px;
 }

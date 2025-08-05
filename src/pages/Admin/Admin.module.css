@@ -5,35 +5,48 @@
   h2{
     font-size: 36px;
     font-weight: 600;
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
   }
 }
 
-/* teamList */
+.confirmList{
+  width: 70vw;
+  min-height: 85vh;
+  overflow: scroll;
+
+  margin-bottom: 3rem;
+
+  /* padding: 3rem; */
+
+  border-radius: 1rem;
+  /* background-color: #fff; */
+
+  display: flex;
+  flex-direction: row;
+  align-items:start;
+  gap : 3rem;
+}
+
+
+
 .userList {
-  margin-top: 48px;
+  width: 15%;
   display: flex;
   flex-direction: column;
   gap: 24px;
 
-}
 
-/* teamWrap */
-.user{
-  background-color: #fff;
-  padding: 30px 32px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-  /* teaminfoWrap */
-  .userInfo{
+  .userInfoButton{
+    background-color: #fff;
+    padding: 1.3rem 1.5rem;
+    border-radius: 1rem;
+    border : 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     gap: 40px;
     justify-content: center;
     align-items: center;
+    transition: 0.3s;
     
     .name{
       color: #000;
@@ -43,17 +56,35 @@
       font-weight: 300;
       line-height: normal;
     }
-
-    .image {
-      width: 300px;
-    }
   }    
+  /* tsx파일에 클래스명 넣어두고 module에 설정을 안하면 브라우저 상에서 undefined라고 뜬다 */
+  .active{
+    background-color: #BBDADA;
+    border : 3px solid #BBDADA;
+  }
+  .userInfoButton:hover{
+    border: 3px solid #BBDADA;
+
+  }
 }
 
 
-.buttonGroup{
+
+.user {
+  width: 85%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3rem;
+}
+
+.user .image{
+  border-radius: 1rem;
+}
+
+.user .buttonGroup{
+  display: flex;
   align-items: flex-end;
   gap: 32px;
 
@@ -82,7 +113,7 @@
 
   .rejectButton{
     background: #FFC0CB;
-    box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.25);
     transition: 0.3s;
 
     &:hover{
@@ -90,3 +121,4 @@
     }
   }
 }
+
