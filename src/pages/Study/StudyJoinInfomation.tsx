@@ -208,7 +208,9 @@ function StudyJoinInfomation() {
             <h4>프로젝트안내</h4>
             {isAdmin && (
               <Link to="management">
-                <button type="button">프로젝트 생성</button>
+                <button type="button" className={S.makeProject}>
+                  <span>+</span> 프로젝트 생성
+                </button>
               </Link>
             )}
           </div>
