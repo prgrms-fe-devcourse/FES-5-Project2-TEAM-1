@@ -307,6 +307,11 @@
   line-height: normal;
 }
 
+.postWrapper{
+  width: 100%;
+  max-width: 555px;
+}
+
 .saveButton{
   width: 102.322px;
   height: 42.5px;
@@ -423,10 +428,13 @@
   .mangementChannelContainer{
     width: 100%;
   }
+
+  .postWrapper{
+    max-width: 400px;
+  }
 }
 
 @media screen and (max-width: 1065px) {
-  /* 섹션 헤더랑 컨텐츠 column으로 바꾸기 */
   section{
     flex-direction: column;
   }
@@ -451,13 +459,36 @@
   .countButton{
     justify-content: left;
   }
+
+  .locationWrapper{
+    align-items: start;
+    margin-bottom: 1rem;
+  }
+
+  .activeGroup{
+    align-items: start;
+    .sectionHeader{
+      margin-bottom: 2rem;
+    }
+  }
+
+  .deleteSection {
+    align-items: start;
+    .sectionHeader{
+      margin-bottom: 2.5rem;
+    }
+  }
 }
 
-@media screen and (max-width: 945px) {
-  /* 양옆 여백 줄이기 */
-}
+
 
 /* 사이드바 사라질때 */
 @media screen and (max-width: 768px) {
+  .locationButton{
+    margin-bottom: 1rem;
+  }
 
+  .postWrapper{
+    max-width: 555px;
+  }
 }

@@ -76,11 +76,10 @@ function MangementChannel() {
   }
 
   const addressStyle = {
-    width: "500px",
+    width: "100%",
     height: "500px",
     border: "2px solid rgba(153, 153, 153, 0.5)",
     marginTop: '0.2rem',
-    zIndex: "2",
   }
 
   const handleUpButton = () => {
@@ -319,10 +318,12 @@ function MangementChannel() {
                 </button>
                   {
                     isOpen && (
-                  <DaumPostcodeEmbed
-                    onComplete={handleAddAdress}
-                    style={addressStyle}
-                  />
+                    <div className={S.postWrapper}>
+                      <DaumPostcodeEmbed
+                        onComplete={handleAddAdress}
+                        style={addressStyle}
+                        />
+                    </div>
                 )}
               </div>
             )}
