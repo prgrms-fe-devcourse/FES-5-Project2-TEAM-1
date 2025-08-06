@@ -40,21 +40,12 @@
 }
 
 
-/* .swiper.team{
-  padding: 0 1rem;
-}   */
-
 /* .teamCard의 부모 엘리먼트 */
 .swiper-slide.team{
   width: 19.4rem;
   flex-shrink: 0;
   transition: 0.2s ease
 }  
-
-/* .team.teamActive{
-  border-radius: 10px;
-  box-shadow: 5px 8px 13px rgba(102, 102, 102, 0.3);
-} */
 
 @media screen and (max-width: 1660px) {
   .swiper-slide.peerReview {
