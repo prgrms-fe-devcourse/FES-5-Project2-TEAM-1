@@ -101,6 +101,7 @@ function StudyJoinInfomation() {
 
   useEffect(() => {
     const fetchSubmit = async () => {
+      if(!id || !profileId) return
       const { data, error } = await supabase
         .from("peer_review")
         .select("review_id")
@@ -138,6 +139,7 @@ function StudyJoinInfomation() {
               </div>
             </div>
             <div className={S.tagBox}>
+              <div className={S.membersAddress}>
               <span>
                 <svg
                   width="12"
@@ -196,6 +198,7 @@ function StudyJoinInfomation() {
                   </span>
                 </>
               )}
+              </div>
               {tagList && (
                 <HashTag
                   taglist={tagList}
@@ -219,7 +222,7 @@ function StudyJoinInfomation() {
               </Link>
             )}
           </div>
-          <div style={{ position: "relative" }}>
+          <div className={S.projectInfo} style={{ position: "relative" }}>
             <Project />
             {
               board_cls === "1" && isFinish && (

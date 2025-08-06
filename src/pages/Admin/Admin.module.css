@@ -2,6 +2,13 @@
   min-height: 80%;
   margin: 48px 220px 0 ;
 
+}
+
+.header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
   h2{
     font-size: 36px;
     font-weight: 600;
@@ -9,7 +16,37 @@
   }
 }
 
+.backButton{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 15px;
+  height: fit-content;
+  border-radius: 10px;
+  
+  img {
+    width: 20px;
+    height: 20px;      
+  }
+
+  p {
+    color: #000;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  &:hover {
+    transition: 0.4s;
+    background-color: #cfcfcf52;
+  }
+}
+
 .confirmList{
+  padding: 0px 3px;
   width: 85vw;
   min-height: 85vh;
   overflow-y: scroll;

@@ -39,7 +39,6 @@ function MypageSocialConvert({ user, socialData, setSocialData }: Props ) {
 
       const result = await compareUserId(social.profile_id, 'user_social');
       setSocialData(result);
-      // console.log(result)
     }
     fetchSocial();
   },[user]);
