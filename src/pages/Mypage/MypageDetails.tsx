@@ -212,7 +212,7 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
 
     const postCodeStyle = {
         position: 'absolute',
-        width: '40rem',
+        width: '25rem',
         border: '2px solid #A6B37D',
         top: '2.2rem',
     } as React.CSSProperties
@@ -221,11 +221,11 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
     <div className={S.mypageDetailsContainer}>
         { showEdit ?
         <ul id='ulBox' style={{zIndex: '4'}}>
-            <li>
+            <li className={E.ulBoxList}>
                 <h3>주소</h3>
                 <div className={E.editDetailAddress}>
                     <div>
-                        <span>{address}</span>
+                        <span className={E.editAdress}>{address}</span>
                         <button 
                             onClick={() => setIsClicked(prev => !prev)}
                             className={E.editDetailAddressBtn}
@@ -237,15 +237,17 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
                             :  <img src={Eye} />
                         }
                     </button>
-                    { isClicked &&  <DaumPostcodeEmbed 
-                            onComplete={handleComplete} 
-                            theme={themeObj}
-                            style={postCodeStyle} 
-                        /> 
+                    { isClicked &&  <div className={E.postContainer}>
+                        <DaumPostcodeEmbed 
+                                onComplete={handleComplete} 
+                                theme={themeObj}
+                                style={postCodeStyle} 
+                            /> 
+                    </div>
                      }
                 </div>
             </li>
-            <li>
+            <li className={E.ulBoxList}>
                 <h3>성별</h3>
                 <div className={E.editDetailGender}>
                     <select onChange={handleGender}>
@@ -261,10 +263,10 @@ function MypageDetails({ user, editMode, setUserData}: Props) {
                     </button>
                 </div>
             </li>
-            <li>
+            <li className={E.ulBoxList}>
                 <h3>나이</h3>
                 <div className={E.editDetailAge}>
-                    <div>
+                    <div className={E.editDetailAgeYMD}>
                         <input type='number' value={year} min={1900} max={yearNow} placeholder='태어난 해' onChange={handleYear} />
                         <select onChange={handleMonth}>
                             <option value='' key='0'>태어난 달을 선택해주세요.</option>
