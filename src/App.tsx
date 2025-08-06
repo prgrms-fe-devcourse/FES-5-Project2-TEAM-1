@@ -18,7 +18,7 @@ import Approve from "./pages/Study/components/management/Approve";
 import ManagementMembers from "./pages/Study/components/management/ManagementMembers";
 import MangementChannel from "./pages/Study/components/management/ManagementChannel";
 import BoardWrite from "./pages/BoardForm/BoardWrite";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AdminProvider } from "./components/context/useAdmin";
 import { NotificationProvider } from "./components/context/NotificationContext";
 import { useAuth } from "./auth/AuthProvider";
@@ -48,7 +48,29 @@ function App() {
   );
   const [isOverlay, setIsOverlay] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const { profileId } = useAuth();
+
+
+  const leftSidebarRef = useRef<HTMLElement>(null);
+  const leftSidebarButton = useRef<HTMLButtonElement>(null);
+  const rightSidebarRef = useRef<HTMLElement>(null);
+  const rightSidebarButton = useRef<HTMLButtonElement>(null);
+
+  const toggleLeftSidebar = () => {
+    if (!leftSidebarRef.current || !leftSidebarButton.current) return;
+    leftSidebarRef.current.classList.toggle("active");
+    leftSidebarButton.current.classList.toggle('isOpen');
+    setIsLeftSidebarOpen(prev => !prev);
+  }
+
+  const toggleRightSidebar = () => {
+    if (!rightSidebarRef.current || !rightSidebarButton.current) return;
+    rightSidebarRef.current.classList.toggle("active");
+    rightSidebarButton.current.classList.toggle('isOpen');
+    setIsRightSidebarOpen(prev => !prev);
+  }
   
   return (
     <NotificationProvider profileId={profileId}>
@@ -63,15 +85,24 @@ function App() {
           ></div>
         )}
         {!isAuthPage && !isNotFoundPage && (
-          <nav className="leftcontainer">
-            {isOverlay && (
-              <div
-                className="overlay"
-                onClick={() => setIsOverlay(false)}
-              ></div>
-            )}
-            <LeftSidebar />
-          </nav>
+          <>
+            <button id="leftSidebar" onClick={toggleLeftSidebar} ref={leftSidebarButton}>
+              <img 
+                src={isLeftSidebarOpen ? '/images/close.png' : '/images/leftSidebar.png'} 
+                title={isLeftSidebarOpen ? '닫기' : '좌측 사이드바 열기'}
+                alt="left Sidebar Toggle"
+              />
+            </button>
+            <nav className="leftcontainer" ref={leftSidebarRef}>
+              {isOverlay && (
+                <div
+                  className="overlay"
+                  onClick={() => setIsOverlay(false)}
+                ></div>
+              )}
+              <LeftSidebar />
+            </nav>
+          </>
         )}
         <div className={`mainWrapper ${(isAuthPage || isNotFoundPage) ? "fullWidth" : ""}`} id='standard-container'>
           <Routes>
@@ -117,14 +148,23 @@ function App() {
         </div>
 
         {!isAuthPage && !isNotFoundPage && (
-          <nav className="rightcontainer">
-            <RightSidebar
-              isOverlay={isOverlay}
-              setIsOverlay={setIsOverlay}
-              isNotification={isNotification}
-              setIsNotification={setIsNotification}
-            />
-          </nav>
+          <>
+            <button id="rightSidebar" onClick={toggleRightSidebar} ref={rightSidebarButton}>
+              <img 
+                src={isRightSidebarOpen ? '/images/close.png' : '/images/rightSidebar.png'} 
+                title={isRightSidebarOpen ? '닫기' : '우측 사이드바 열기'}
+                alt="right Sidebar Toggle"
+              />
+            </button>
+            <nav className="rightcontainer" ref={rightSidebarRef}>
+              <RightSidebar
+                isOverlay={isOverlay}
+                setIsOverlay={setIsOverlay}
+                isNotification={isNotification}
+                setIsNotification={setIsNotification}
+              />
+            </nav>
+          </>
         )}
         </div>
     </NotificationProvider>
