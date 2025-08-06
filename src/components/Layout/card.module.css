@@ -90,12 +90,3 @@
     align-items: start;
   }
 }
-
-@media screen and (max-width: 768px) {
-  .container {
-  }
-
-  .tagBox {
-    flex-direction: row;
-  }
-}
