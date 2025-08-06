@@ -22,7 +22,7 @@ function MypageName({ user, editMode, setUserData, canExitEditModeRef}: Props) {
 
   const [userName, setUserName] = useState({
     current: '', // 지금
-    original: '' // 처음
+    original: '프둥이' // 처음
   });
   const [role, setRole] = useState<string>('');
   const [showEdit, setShowEdit] = useState(false);
@@ -54,12 +54,12 @@ function MypageName({ user, editMode, setUserData, canExitEditModeRef}: Props) {
 
       if (userData) {
         const nickname = (userData.nickname ?? '').trim();
-        const original = nickname || '';
+        const original = nickname.length > 0 ? nickname : '프둥이';
 
         const role = (userData.role ?? '').trim();
 
         setUserName({
-          current: nickname || '',
+          current: nickname || '프둥이',
           original: original
         });
         setRole(role || '프론트엔드');
@@ -70,6 +70,7 @@ function MypageName({ user, editMode, setUserData, canExitEditModeRef}: Props) {
   fetchUserInfo();
 
   }, [profileId]);
+
 
   useEffect(() => {
     if (canExitEditModeRef) {
@@ -198,7 +199,7 @@ function MypageName({ user, editMode, setUserData, canExitEditModeRef}: Props) {
         : (
         <div className={S.mypageNameRole}>
           <span className={S.mypageName}>
-            {userName.original || '프둥이'}
+            {(userName.original?.trim().length ?? 0) > 0 ? userName.original : '프둥이'}
           </span>
           <span className={S.mypageRole}>
             {role}
