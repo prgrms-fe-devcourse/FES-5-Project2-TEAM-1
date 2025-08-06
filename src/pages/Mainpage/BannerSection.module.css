@@ -36,9 +36,6 @@
 
     &:focus-within {
   border-color: rgba(137, 162, 55);
-  /* box-shadow: 0 0 0 4px rgba(255, 194, 204, 0.3); */
-  /* border-color: rgb(255, 194, 204);
-  box-shadow: 0 0 0 4px rgba(184, 218, 218, 0.3); */
 }
 
 }
