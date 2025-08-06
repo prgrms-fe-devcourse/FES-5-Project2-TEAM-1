@@ -119,7 +119,7 @@ function Admin() {
   return (
     <div className={S.container}>
       <div className={S.header}>
-        <h2 className={S.sectionHeader}>대기중인 요청</h2>
+        <h2 className={S.sectionHeader}>대기중인 가입 요청</h2>
         <button className={S.backButton} onClick={handleBack}>
           <img src="/icons/back.svg"  alt="메인으로 돌아가기" />
           <p>메인으로 돌아가기</p>
@@ -130,9 +130,12 @@ function Admin() {
           {list}
         </div>
         <div className={S.user}>
+          
           {
             certificateFile && 
-            <img className={S.image} src={certificateFile} alt="수료증"/>
+            <a href={certificateFile} target='blank' title='클릭해서 크게 보기'>
+              <img className={S.image} src={certificateFile} alt="수료증"/>
+            </a>
           }
           <div className={S.buttonGroup}>
             <button className={S.acceptButton} type="button" onClick={()=>updateApprove()}>승인</button>
