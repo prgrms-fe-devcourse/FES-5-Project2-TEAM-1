@@ -426,7 +426,6 @@
 }
 
 @media screen and (max-width: 1180px) {
-  /* 다음포스트 크기 줄이기 */
   .mangementChannelContainer{
     width: 100%;
   }
@@ -486,9 +485,6 @@
   }
 }
 
-
-
-/* 사이드바 사라질때 */
 @media screen and (max-width: 768px) {
   .locationButton{
     margin-bottom: 1rem;

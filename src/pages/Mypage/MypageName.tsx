@@ -101,6 +101,19 @@ function MypageName({ user, editMode, setUserData, canExitEditModeRef}: Props) {
         return;
       }
 
+      const {data} = await supabase
+        .from('user_base')
+        .select('nickname, id')
+        
+      if (
+        data?.filter((item) => item.nickname !== '프둥이' && item.id !== user?.id) 
+            .some((item) => item.nickname === nameToSave)
+      ) {
+        toast.error('중복되는 닉네임입니다.', { autoClose: 1000 });
+        return;
+      }
+
+
       if(!user) return 
       const { id } = user;
 
