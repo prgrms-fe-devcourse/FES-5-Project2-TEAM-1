@@ -2,7 +2,7 @@ import type { Tables } from "@/supabase/database.types";
 import S from "./ManagementMembers.module.css";
 import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabase";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useToast } from "@/utils/useToast";
 import { useAuth } from "@/auth/AuthProvider";
 
@@ -12,7 +12,7 @@ type User = Tables<"user_profile"> & {
 
 function ManagementMembers() {
   const { success } = useToast();
-  const { profileId } = useAuth()
+  const { profileId } = useAuth();
   const { id } = useParams();
   const [members, setMembers] = useState<User[]>([]);
 
@@ -40,7 +40,7 @@ function ManagementMembers() {
       setMembers(memberData);
     };
     fetchData();
-  }, [id,profileId]);
+  }, [id, profileId]);
 
   const handleOut = async (profile_id: string) => {
     success("멤버를 내보내셨습니다");
@@ -71,11 +71,13 @@ function ManagementMembers() {
       {members &&
         members.map(({ profile_id, profile_images, user_base }) => (
           <div className={S.card} key={profile_id}>
-            <img src={profile_images} alt="프로필" />
-            <div className={S.information}>
-              <p className={S.name}>{user_base.name}</p>
-              <p className={S.role}>{user_base.role}</p>
-            </div>
+            <Link to={`/mypage/${profile_id}`}>
+              <img src={profile_images} alt="프로필" />
+              <div className={S.information}>
+                <p className={S.name}>{user_base.name}</p>
+                <p className={S.role}>{user_base.role}</p>
+              </div>
+            </Link>
             <button
               className={S.reject}
               type="submit"
