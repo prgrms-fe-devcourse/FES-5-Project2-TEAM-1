@@ -387,6 +387,8 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+
+        width: 50rem;
     }
     .chooseSocial {
         margin-left: 1rem;
@@ -483,14 +485,17 @@
 
     .editSocialInput {
         text-align: left;
+        width: 100%;
+
         height: 2rem;
+        margin-left: 1rem;
 
         input {
             width: 100%;
             border: none;
             font-size: 1.2rem;
             padding-top: 0.3rem;
-            padding-left: 1rem;
+            padding-left: 0.7rem;
         }
     }
 
@@ -594,8 +599,17 @@
         }
     }
    
+    .socialContent {
+        width: 45rem !important;
+    }
 
 
+}
+
+@media (max-width: 1400px) {
+    .socialContent {
+        width: 40rem !important;
+    }
 }
 
 @media (max-width: 1400px) {
@@ -615,6 +629,9 @@
         position: absolute;
     }
    
+    .socialContent {
+        width: 35rem !important;
+    }
 
 }
 
