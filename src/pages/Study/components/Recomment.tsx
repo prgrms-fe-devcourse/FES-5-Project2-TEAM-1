@@ -4,6 +4,7 @@ import { commentTime } from './utills/commentTime'
 import { useEffect, useState } from 'react'
 import supabase from '@/supabase/supabase'
 import { useIsMine } from '@/components/context/useIsMine'
+import { showConfirmAlert } from '@/utils/sweetAlert'
 
 type Props = {
   reply: Tables<'comment_reply'>
@@ -18,7 +19,8 @@ function Recomment({ reply, onDelete, userName, userImage }: Props) {
   const [like, setLike] = useState(likes)
   const [isEditing,setIsEditing] = useState(false)
   const [editReply,setEditReply] = useState(contents)
-  const [content,setContent] = useState(contents)
+  const [content, setContent] = useState(contents)
+  
    useEffect(() => {
      const storedPress = JSON.parse(
        localStorage.getItem(`like-${reply_id}`) ?? "false"
@@ -53,16 +55,27 @@ function Recomment({ reply, onDelete, userName, userImage }: Props) {
   }
 
   const handleDelete = async () => {
-    const checkDelete = confirm('정말로 삭제하시겠습니까?')
-    if (checkDelete) {
-         const { error } = await supabase
-           .from("comment_reply")
-           .delete()
-           .eq("reply_id", reply_id);
-         if (error) console.error();
-         onDelete?.();
+       showConfirmAlert(
+              "정말로 댓글을 삭제하시겠습니까",
+              "확인을 누르면 삭제됩니다"
+       ).then((result) => {
+          if(result.isConfirmed) dataDelete()
+      })
     }
-  }
+
+    const dataDelete = async () => {
+      try {
+        const { error } = await supabase
+          .from("comment_reply")
+          .delete()
+          .eq("reply_id", reply_id);
+        if (error) console.error(error);
+        if (!error) onDelete?.();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     const handleEditKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();

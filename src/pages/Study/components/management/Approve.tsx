@@ -41,7 +41,6 @@ function Approve() {
       setPendingMember(users);
     };
     fetchData();
-    // console.log("pendingMember", pendingMember);
   }, [id]);
 
   const handleApprove = async (profile_id: string) => {
@@ -68,7 +67,7 @@ function Approve() {
       console.error('패치 에러');
     }
 
-    if(  boardData && count && boardData.length > 0 && boardData[0].member <= count ) {
+    if(  boardData && count && boardData.length > 0 && boardData[0].member < count ) {
       toast.error('정원이 가득찼습니다.', {autoClose: 1500})
       return;
     } 

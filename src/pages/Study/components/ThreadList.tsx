@@ -8,6 +8,7 @@ import { useAuth } from "@/auth/AuthProvider";
 import gsap from "gsap";
 import { useIsMine } from "@/components/context/useIsMine";
 import { IsMineProvider } from "@/components/context/isMine";
+import { showConfirmAlert } from "@/utils/sweetAlert";
 
 type User = Tables<"user_profile"> & {
   user_base: Tables<"user_base">;
@@ -42,12 +43,12 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
   const timeStamp = commentTime(create_at);
   const threadRef = useRef<HTMLLIElement>(null);
 
-    useEffect(() => {
+  useEffect(() => {
       const storedPress = JSON.parse(
         localStorage.getItem(`like-${thread_id}`) ?? "false"
       );
       setIsPress(storedPress);
-    }, [thread_id]);
+  }, [thread_id]);
   
   useEffect(() => {
     if (threadRef.current) {
@@ -58,6 +59,7 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
       );
     }
   }, []);
+
   useEffect(() => {
     if (!replyData) return;
     setReply(replyData);
@@ -111,22 +113,26 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
     setIsReplyPress(!isReplyPress);
   };
 
-  const handleDelete = async () => {
-    const deleteComment = confirm("정말로 삭제하시겠습니까?");
-    if (deleteComment) {
-      const { error } = await supabase
-        .from("thread")
-        .delete()
-        .eq("thread_id", thread_id);
-      if (error) {
-        console.error("삭제 실패:", error.message);
-      }
+  const handleDelete = () => {
+      showConfirmAlert('정말로 댓글을 삭제하시겠습니까', '확인을 누르면 삭제됩니다')
+      .then((result) => {
+        if(result.isConfirmed)dataDelete()
+      })
+  }
 
-      if (error) console.error();
-      if (!error) onDelete?.();
-    }
-  };
-
+  const dataDelete = async() => {
+        try {
+            const { error } = await supabase
+              .from("thread")
+              .delete()
+              .eq("thread_id", thread_id);
+          if (error) console.error(error);
+          if (!error) onDelete?.();   
+        } catch(error) {
+          console.error(error)
+        }
+  }
+  
   const handleSubmitReply = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
     if (!createReply.trim()) return;
@@ -136,12 +142,11 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
         thread_id,
         profile_id: profileId,
         contents: createReply,
-        likes: 0,
-        created_at: new Date(),
+        likes: 0
       },
     ]);
     if (error) console.log(error.message);
-    if (!error)setCreateReply("");
+    if (!error) setCreateReply("");
 
     const { data: replies } = await supabase
       .from("thread_reply")
@@ -167,10 +172,6 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
     }
   };
 
-  const recentlyReply = reply?.sort(
-    (a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  );
 
   return (
     <li className={S.listContainer} ref={threadRef}>
@@ -256,7 +257,7 @@ function ThreadList({ data, onDelete, userName, userImage, replyData }: Props) {
             </button>
           </form>
 
-          {recentlyReply.map((item) => {
+          { reply && reply.map((item) => {
             return (
               <IsMineProvider key={item.reply_id } writerProfileId={item.user_profile.profile_id}>
                 <ThreadReplyComponent

@@ -11,7 +11,7 @@ import Offline from "/icons/offline.svg";
 import Away from "/icons/away.svg";
 import Dnd from "/icons/dnd.svg";
 import gsap from "gsap";
-import { showInfoAlert } from "@/utils/sweetAlert";
+import { showConfirmAlert, showInfoAlert } from "@/utils/sweetAlert";
 
 type CurrentUser = {
   profileId: string;
@@ -94,6 +94,31 @@ function RightSidebar({
   }, [isLoading, user, profileId]);
 
   useEffect(() => {
+    // eslint-disable-next-line prefer-const
+    let interval: NodeJS.Timeout;
+
+    const fetchName = async () => {
+      const {data, error} = await supabase
+        .from('user_base')
+        .select('nickname')
+        .eq('id', user?.id)
+
+        if( error ) {
+          console.error('이름 감지실패');
+          return;
+        }
+
+        if (data[0]?.nickname && data[0].nickname !== currentUser?.name) {
+          setCurrentUser((prev) => prev ? { ...prev, name: data[0].nickname } : prev);
+          clearInterval(interval); 
+        }
+      };
+
+      interval = setInterval(fetchName, 2000); // 2초마다 확인
+      return () => clearInterval(interval); // 언마운트 시 정리
+}, [user, currentUser]);
+
+  useEffect(() => {
     gsap.fromTo(
       "#popupBox",
       { opacity: 0, y: -10, scale: 0.95 },
@@ -127,19 +152,23 @@ function RightSidebar({
   }, [isStatusClicked, popupRef]);
 
   const handleLogout = async () => {
-    if (currentUser) {
-      await supabase
-        .from("user_base")
-        .update({ status: 1 }) // 1: 오프라인
-        .eq("id", currentUser.id);
-    }
+    showConfirmAlert("정말 로그아웃 하시겠습니까?").then((result) => {
+      if (result.isConfirmed) {
+        if (currentUser) {
+          supabase
+            .from("user_base")
+            .update({ status: 1 }) // 1: 오프라인
+            .eq("id", currentUser.id);
+        }
 
-    setStatus(1);
+        setStatus(1);
 
-    await logout();
-    setCurrentUser(null);
-    showInfoAlert("로그아웃!");
-    navigate("/");
+        logout();
+        setCurrentUser(null);
+
+        navigate("/");
+      }
+    });
   };
 
   const updateStatusInDB = async (newStatus: StatusCode): Promise<boolean> => {

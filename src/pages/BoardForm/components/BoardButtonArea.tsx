@@ -30,7 +30,6 @@ function BoardButtonArea() {
   };
 
   const handleChange = async (file: File) => {
-    console.log(file);
     const fileExt = file.name.split(".").pop(); // 확장자 추출
     const fileName = `${Date.now()}.${fileExt}`; // 중복 방지를 위한 이름
 

@@ -30,17 +30,18 @@ function MypageSocialConvert({ user, socialData, setSocialData }: Props ) {
   const [copiedText, setCopy] = useCopyToClipboard();
   const navigate = useNavigate();
 
-  const userSocial = user && user.profile[0].social[0];
+  const userSocial = user?.profile?.[0]?.social?.[0] || null;
 
   useEffect(()=>{
     const fetchSocial = async() => {
-      if( !userSocial ) return;
-      const result = await compareUserId(userSocial.profile_id, 'user_social');
+       const social = user?.profile?.[0]?.social?.[0];
+      if (!social?.profile_id) return;
+
+      const result = await compareUserId(social.profile_id, 'user_social');
       setSocialData(result);
-      // console.log(result)
     }
     fetchSocial();
-  },[userSocial])
+  },[user]);
 
   useEffect(()=>{
     if( copiedText ) {
@@ -51,9 +52,7 @@ function MypageSocialConvert({ user, socialData, setSocialData }: Props ) {
        navigate(`/mypage/${userSocial?.profile_id}`)
       },autoClose:1500})
     }
-
-
-  },[copiedText])
+  },[copiedText]);
 
   return ( 
     <section className={S.socialContainer}>

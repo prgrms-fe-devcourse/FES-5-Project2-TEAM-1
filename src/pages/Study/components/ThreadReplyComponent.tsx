@@ -4,6 +4,7 @@ import type { Tables } from '@/supabase/database.types';
 import { commentTime } from './utills/commentTime';
 import supabase from '@/supabase/supabase';
 import { useIsMine } from '@/components/context/useIsMine';
+import { showConfirmAlert } from '@/utils/sweetAlert';
 
 
 type ThreadReply = Tables<'thread_reply'>
@@ -32,7 +33,6 @@ function ThreadReplyComponent({reply,onDelete,userName,userImage}:Prop) {
   },[reply_id])
 
   const handleLikeToggle = async () => {
-    
     const pressState = isPress ? like - 1 : like + 1
     const nextState = !isPress
     setLike(pressState)
@@ -45,7 +45,6 @@ function ThreadReplyComponent({reply,onDelete,userName,userImage}:Prop) {
     if(error) console.log(error.message)
   };  
   
-
   const handleSave = async() => {
     const { error } = await supabase.from('thread_reply').update({
       contents:editReply
@@ -55,17 +54,25 @@ function ThreadReplyComponent({reply,onDelete,userName,userImage}:Prop) {
     if(error) console.log(error.message) 
   }
   
-  const handleDelete = async() => {
-       const deleteComment = confirm("정말로 삭제하시겠습니까?");
-       if (deleteComment) {
-         const { error } = await supabase
-           .from("thread_reply")
-           .delete()
-           .eq("reply_id", reply_id);
-          if(error) console.log(error.message)
-         if (!error) onDelete?.();
-       }
+  const handleDelete = () => {
+    showConfirmAlert('정말로 댓글을 삭제하시겠습니까', '확인을 누르면 삭제됩니다')
+      .then((result) => {
+       if(result.isConfirmed) dataDelete()
+       })
   }
+  
+    const dataDelete = async () => {
+      try {
+        const { error } = await supabase
+          .from("thread_reply")
+          .delete()
+          .eq("reply_id", reply_id);
+        if (error) console.error(error);
+        if (!error) onDelete?.();
+      } catch (error) {
+        console.error(error);
+      }
+    };
   
     const handleEditKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
