@@ -94,6 +94,31 @@ function RightSidebar({
   }, [isLoading, user, profileId]);
 
   useEffect(() => {
+    // eslint-disable-next-line prefer-const
+    let interval: NodeJS.Timeout;
+
+    const fetchName = async () => {
+      const {data, error} = await supabase
+        .from('user_base')
+        .select('nickname')
+        .eq('id', user?.id)
+
+        if( error ) {
+          console.error('이름 감지실패');
+          return;
+        }
+
+        if (data[0]?.nickname && data[0].nickname !== currentUser?.name) {
+          setCurrentUser((prev) => prev ? { ...prev, name: data[0].nickname } : prev);
+          clearInterval(interval); 
+        }
+      };
+
+      interval = setInterval(fetchName, 2000); // 2초마다 확인
+      return () => clearInterval(interval); // 언마운트 시 정리
+}, [user, currentUser]);
+
+  useEffect(() => {
     gsap.fromTo(
       "#popupBox",
       { opacity: 0, y: -10, scale: 0.95 },
