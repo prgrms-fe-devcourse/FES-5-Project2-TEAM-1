@@ -318,3 +318,27 @@
     opacity: 1;
   }
 }
+
+
+@media screen and (max-width: 768px) {
+  .notifyPanel{
+    width: calc(100vw - 440px) !important;
+  }
+
+  .overlay{
+    display: none;
+  }
+}
+
+@media screen and (max-width: 668px) {
+  .notifyPanel{
+    width: calc(100vw - 340px) !important;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .notifyPanel{
+    width: calc(100vw - 240px) !important;
+  }
+}
+

@@ -74,6 +74,34 @@
   pointer-events: auto;
 }
 
+#leftSidebar {
+  display: none;
+  position: fixed;
+  top: 1.2rem;
+  left: 0.5rem;
+  z-index: 150 !important;
+
+  img{
+    width: 28px;
+    height: 28px;
+  }
+}
+
+#rightSidebar {
+  display: none;
+  position: fixed;
+  top: 1.2rem;
+  right: 0.5rem;
+  z-index: 250;
+  
+  img{
+    width: 28px;
+    height: 28px;
+  }
+}
+
+
+
 
 @media screen and (max-width: 1024px) {
   .leftcontainer,
@@ -81,17 +109,62 @@
     width: 10rem;
   }
 }
+
 @media screen and (max-width: 768px) {
-  .leftcontainer,
-  .rightcontainer {
-    display: none; /* :흰색_확인_표시: 모바일에서는 숨김 */
+  .overlay{
+    display: none;
   }
+  .leftcontainer {
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-150%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .rightcontainer{
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(150%);
+    transition: transform 0.3s ease-in-out;
+  }
+
   .container {
     justify-content: center;
   }
   .mainWrapper{
     margin: 0 auto;
     width: 100%;
+  }
+  
+  .leftcontainer.active,
+  .rightcontainer.active{
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+  
+  #leftSidebar{
+    display: block;
+    transform: (0);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  #rightSidebar{
+    display: block;
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .leftcontainer.active {
+    z-index: 100;
+  }
+
+  #leftSidebar.isOpen{
+    transform: translateX(175px);
+  }
+
+  #rightSidebar.isOpen{
+    transform: translateX(-175px);
   }
 }
 
