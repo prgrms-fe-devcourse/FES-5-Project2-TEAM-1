@@ -88,7 +88,7 @@
 
 .mypageNameContainer {
     width: 100%;
-    height: 4rem;
+    /* height: 4rem; */
     /* border: 1px solid black; */
     font-size: 2rem;
     font-weight: 700;
@@ -96,6 +96,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
+    margin-bottom: 0.5rem;
+
     .mypageNameRole {
         display: flex;
         gap: 1rem;
@@ -135,9 +137,11 @@
         align-items: center;
     }
 }
+
 .mypageDetailsContainer {
     width: 100%;
-    height: 9.5rem;
+
+    /* height: 9.5rem; */
     background-color: white;
     border: 1px solid #D4D4D4;
     border-radius: 10px;
@@ -145,6 +149,7 @@
     justify-content: center;
     align-items: center;
     transition: ease;
+    padding: 1rem;
     margin-bottom: 6rem;
 
     ul {
@@ -235,6 +240,7 @@
         font-size: 1.6rem;
         margin-bottom: 2.5rem;
     }
+
     .InterestBlock {
         display: flex;
         align-items: center;
@@ -243,6 +249,7 @@
         padding: 0 1rem;
         gap: 1rem;
     }
+
     .InterestBlockEach {
         font-size: 1.2rem;
         width: 10rem;
@@ -296,7 +303,16 @@
 
 }
 
+@media (max-width: 1526px) {
+    .backgroundEditContainer {
+        width: 40rem !important;
+    }
+}
+
 @media (max-width: 1400px) {
+    .backgroundEditContainer {
+        width: 30rem !important;
+    }
 
     .container {
         width: 72%;
@@ -306,13 +322,93 @@
         width: 6rem !important;
         font-size: 0.7rem !important;
     }
+}
+
+@media (max-width: 1250px) {
+    .backgroundEditContainer {
+        width: 15rem !important;
+    }
+    .mypageRole {
+        width: 15rem;
+    }
+}
+
+
+@media (max-width: 1220px) {
+    .mypageNameContainer{
+        gap:0.5rem;
+
+
+        .mypageNameRole {
+            display: flex;
+            gap: 1rem;
+            .mypageName {
+                display: flex;
+                align-items: center;
+            }
+            .mypageRole {
+                width: fit-content;
+                height: 100%;
+                display: flex;
+                align-items: center;
+            }
+        }
+
+    }
+}
+
+@media (max-width:1190px) {
+    .mypageDetailsContainer{
+        align-items: start;
+    }
+}
+@media (max-width:1130px) {
+    .mypageDetailsContainer{
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 1100px) {
+    .mypageNameRole{
+        flex-direction: column;
+        align-items: center;
+        transform: translateX(-8%);
+        margin-bottom: 1rem;
+
+        .mypageName{
+            width: max-content;
+            justify-content: center;
+        }
+
+        .mypageRole{
+            justify-content: center;
+        }
+    }
 
 }
 
-@media (max-width: 1200px) {
-
+@media (max-width: 1024px) {
+    .mypageDetailsContainer{
+        margin-top: 1rem;
+    }
+}
+@media (max-width: 880px) {
+    .mypageProfile{
+        transform: translateX(-10%);
+        /* .wrapper{
+            width: 25vw;
+        } */
+    }
 }
 
-@media (max-width: 768px) {
-
+@media (max-width:768px) {
+     .mypageNameRole{
+        flex-direction: row;
+        align-items: center;
+        transform: translateX(0%);
+        margin-bottom: 0rem;
+    }
+    .mypageDetailsContainer{
+        flex-direction: row;
+    }
 }
