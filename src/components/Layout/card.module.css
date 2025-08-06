@@ -62,7 +62,6 @@
 .tagBox {
   display: flex;
   flex-direction: column-reverse;
-  /* align-items: center; */
   justify-content: center;
   gap: 8px;
   color: rgba(85, 85, 85, 0.7);

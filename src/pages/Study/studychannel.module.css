@@ -117,7 +117,6 @@
 }
 
 @media screen and (max-width: 1340px) {
-  /* 양옆 여백 줄이기 */
   .container {
     width: 100%;
     margin: 44px 100px 0px;

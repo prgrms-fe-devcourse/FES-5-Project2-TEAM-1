@@ -1,27 +1,24 @@
 
 .mainContent {
-  /* max-width: 1200px; */
-  /* margin: 0 auto; */
-   /* width: 100%; */
-   box-sizing: border-box;
-    flex:1;
-    padding:20px 24px;
-    background-color: #F5F5F5;
-    overflow-y: auto;
-    min-height:100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-x: hidden;
-    /* width: calc(100vw - 220px - 220px); */
+  box-sizing: border-box;
+  flex:1;
+  padding:20px 24px;
+  background-color: #F5F5F5;
+  overflow-y: auto;
+  min-height:100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
 
-    scrollbar-width: none; 
-    -ms-overflow-style: none; 
+
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
     
 }
 
 .mainContent::-webkit-scrollbar{
-    display:none;
+  display:none;
 }
 
 .mainContent:hover {

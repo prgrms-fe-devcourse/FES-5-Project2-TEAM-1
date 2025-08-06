@@ -11,8 +11,6 @@
 
 .wrapper {
     max-width: 70rem;
-    /* border: 0.5px solid black; */
-
     position: relative;
     width: 100%;
     height: 100%;
@@ -55,7 +53,6 @@
         width: 100%;
         height: 77%;
         background-color: #FFFFFF;
-        /* border: 1px solid #D4D4D4; */
         border-radius: 10px;
         margin-top: 1.4rem;
         overflow: hidden;
@@ -88,8 +85,6 @@
 
 .mypageNameContainer {
     width: 100%;
-    /* height: 4rem; */
-    /* border: 1px solid black; */
     font-size: 2rem;
     font-weight: 700;
     display: flex;
@@ -140,8 +135,6 @@
 
 .mypageDetailsContainer {
     width: 100%;
-
-    /* height: 9.5rem; */
     background-color: white;
     border: 1px solid #D4D4D4;
     border-radius: 10px;
@@ -395,9 +388,6 @@
 @media (max-width: 880px) {
     .mypageProfile{
         transform: translateX(-10%);
-        /* .wrapper{
-            width: 25vw;
-        } */
     }
 }
 

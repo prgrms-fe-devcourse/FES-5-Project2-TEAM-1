@@ -1,12 +1,10 @@
 .section{
     margin:60px auto;
     max-width:1400px;
-    /* padding:0 50px; */
 
     h2{
         font-size:32px;
         color:#222222;
-        /* font-weight:bold; */
     }
 
     hr{
@@ -31,7 +29,6 @@
 
 .cardListWrapper {
   position: relative;
-  /* display: flex; */
   align-items: center; 
 
   button{
