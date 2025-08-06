@@ -92,31 +92,52 @@ function RightSidebar({
 
     initUser();
   }, [isLoading, user, profileId]);
-
   useEffect(() => {
-    // eslint-disable-next-line prefer-const
-    let interval: NodeJS.Timeout;
-
-    const fetchName = async () => {
-      const {data, error} = await supabase
-        .from('user_base')
-        .select('nickname')
-        .eq('id', user?.id)
-
-        if( error ) {
-          console.error('이름 감지실패');
-          return;
+    const channel = supabase
+      .channel("user_info")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "user_base",
+          filter: `id=eq.${user?.id}`,
+        },
+        (payload) => {
+          if (payload.new.id === user?.id) {
+            setCurrentUser((prev) =>
+              prev ? { ...prev, name: payload.new.nickname } : prev
+            );
+          }
         }
-
-        if (data[0]?.nickname && data[0].nickname !== currentUser?.name) {
-          setCurrentUser((prev) => prev ? { ...prev, name: data[0].nickname } : prev);
-          clearInterval(interval); 
+      )
+      .subscribe();
+    const profile_channel = supabase
+      .channel("user_profile_info")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "user_profile",
+          filter: `profile_id=eq.${profileId}`,
+        },
+        (payload) => {
+          if (payload.new.profile_id === profileId) {
+            setCurrentUser((prev) =>
+              prev
+                ? { ...prev, profileImage: payload.new.profile_images }
+                : prev
+            );
+          }
         }
-      };
-
-      interval = setInterval(fetchName, 2000); // 2초마다 확인
-      return () => clearInterval(interval); // 언마운트 시 정리
-}, [user, currentUser]);
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(profile_channel);
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id, profileId]);
 
   useEffect(() => {
     gsap.fromTo(
