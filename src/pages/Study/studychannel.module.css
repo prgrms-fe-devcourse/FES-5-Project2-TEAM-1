@@ -1,6 +1,7 @@
 .container {
   margin: 44px 100px 0px;
   flex: 1;
+  width: 80%;
 }
 
 .channelHeader {
