@@ -71,7 +71,9 @@
 
 ---
 
-## 🖼️ 프로젝트 기회서
+## 🖼️ 프로젝트 기획서
+<img src="./public/readme/Frame 1.svg" width="1200" />
+
 
 
 
