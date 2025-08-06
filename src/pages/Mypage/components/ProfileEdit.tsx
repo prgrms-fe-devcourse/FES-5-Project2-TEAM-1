@@ -11,6 +11,7 @@ import { useToast } from '@/utils/useToast';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
+import { createPortal } from 'react-dom';
 
 
 interface Props {
@@ -28,6 +29,8 @@ function ProfileEdit({ prevProfileImage, setPrevProfileImage, setShowProfileDrop
     const navigate = useNavigate();
 
     const [file, setFile] = useState<File | null>(null);
+
+    const container = document.getElementById('standard-container');
 
     const inputRef = useRef<HTMLInputElement | null>(null);
     const popupRef = useRef<HTMLDivElement>(null);
@@ -147,7 +150,12 @@ function ProfileEdit({ prevProfileImage, setPrevProfileImage, setShowProfileDrop
         setShowProfileDrop( false );
     }
 
-  return (
+    if (!container) {
+        return null; 
+    }
+
+
+  return createPortal(
     <div className={S.wrapper}>
         <div ref={popupRef} className={S.container}>
             <div className={S.header}>
@@ -164,7 +172,8 @@ function ProfileEdit({ prevProfileImage, setPrevProfileImage, setShowProfileDrop
                 <button type='button' onClick={handleFileApply}>적용</button>
             </div>
         </div>
-    </div>
+    </div>,
+    container
   )
 }
 

@@ -91,7 +91,7 @@
       line-height: normal;
     }
   }    
-  /* tsx파일에 클래스명 넣어두고 module에 설정을 안하면 브라우저 상에서 undefined라고 뜬다 */
+
   .active{
     background-color: #BBDADA;
     border : 3px solid #BBDADA;
@@ -106,11 +106,16 @@
 
 .user {
   width: 85%;
+  padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   gap: 3rem;
+
+  a {
+    width: fit-content;
+  }
 }
 
 .user .image{
