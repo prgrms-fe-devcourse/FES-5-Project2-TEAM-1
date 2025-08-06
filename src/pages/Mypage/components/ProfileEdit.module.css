@@ -5,6 +5,7 @@
     width: 100vw;
     height: 100vh;
     backdrop-filter: blur(4px);
+    background-color: rgb(192, 191, 191, 0.5);
 
     position: fixed;
     top: 0;
@@ -22,7 +23,7 @@
     border: 1px solid #B99470;
 
     position: absolute;
-    top: 12rem;
+    top: 20%;
     left: 50%;
     transform: translateX(-50%);
 
@@ -123,5 +124,13 @@
         }
     }
    
+
+}
+
+@media (max-width: 1250px) {
+
+    .container {
+        width: 20rem !important;
+    }
 
 }

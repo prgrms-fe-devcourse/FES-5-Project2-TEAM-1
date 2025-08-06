@@ -30,13 +30,14 @@
 }
 
 .backgroundEditWrapper {
-    width: 100vw;
-    height: 100vh;
-    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(192, 191, 191, 0.5);
     backdrop-filter: blur(4px);
 
     position: fixed;
     top: 0;
+    left: 0;
     z-index: 5;
 
     transition: ease;
@@ -49,9 +50,9 @@
         border-radius: 10px;;
 
         position: absolute;
-        top: 10rem;
-        left: 7rem;
-
+        top: 20%;
+        left: 24%;
+        
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -556,7 +557,6 @@
      .backgroundEditContainer {
         width: 52rem !important;
         
-        left: 1rem !important;
      }
 
     .InterestBlockEach {
@@ -604,8 +604,6 @@
 
     .backgroundEditContainer {
         width: 45rem !important;
-
-        left: -1rem !important;
      }
 
          .editSocialSaveBtn {
@@ -623,6 +621,10 @@
 }
 
 @media (max-width: 1250px) {
+
+    .backgroundEditContainer {
+        width: 35rem !important;
+    }
 
     .editNamecontainer{
         width: 80%;

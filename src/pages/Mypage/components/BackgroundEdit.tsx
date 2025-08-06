@@ -7,6 +7,7 @@ import CloseIcon  from '/icons/edit_close.svg';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
+import { createPortal } from 'react-dom';
 
 interface Props {
   prevImage: string;
@@ -24,6 +25,8 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, showDropdown
 
     const inputRef = useRef<HTMLInputElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
+
+    const container = document.getElementById('standard-container');
 
     const navigate = useNavigate();
 
@@ -146,7 +149,11 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, showDropdown
         setShowDropdown(false);
     }
 
-  return (
+    if (!container) {
+    return null; 
+    }
+
+  return createPortal (
     <div className={E.backgroundEditWrapper}>
         <div ref={popupRef} className={E.backgroundEditContainer}>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px'}}>
@@ -167,7 +174,8 @@ function BackgroundEdit({ prevImage, setPrevImage, setShowDropdown, showDropdown
                 <button onClick={handleFileApply}>적용</button>
             </div>
         </div>
-    </div>
+    </div>,
+    container
   )
 }
 
