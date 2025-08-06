@@ -1,69 +1,46 @@
-# React + TypeScript + Vite
+# 🌳 모여봐요 프둥이의 숲
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+프로그래머스 데브코스 수강생 및 수료생을 위한 신뢰 기반의 **스터디/사이드 프로젝트 모집 플랫폼**입니다.
+### 배포 링크
+#### ✅[모여봐요 프둥이의 숲](https://gatherinpdoongiforest.vercel.app/)
+---
 
-Currently, two official plugins are available:
+## 🎯 Project Goal
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> **프로그래머스 데브코스 수강생/수료생**이 신뢰 기반으로 자유롭게 협업할 수 있는 공간
 
-## Expanding the ESLint configuration
+- 수료 후 협업 환경 부족 문제 해소
+- **개방형 마이페이지**로 실력 차이에서 오는 갈등 최소화
+- **온라인 커뮤니티 특유의 낮은 신뢰도** 문제 해결
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🔧 주요 기능
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 🏡 메인 페이지
+- 스터디/프로젝트 게시글 검색
+- 프로그래머스 공식 소식 및 알림
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 🤝 스터디/프로젝트 모집
+- **스터디/프로젝트 구인글 작성** 및 **미리보기 기능** 제공
+- 실시간 피드백과 소통 기능 탑재 (다른 커뮤니티 불필요)
+- 종료 후 **피어 리뷰** 기능으로 피드백 및 신뢰성 확보
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 🙋 마이페이지
+- 유저의 정보를 기반으로 팀원을 **빠르게 탐색**
+- 프로필에 다음 정보 노출:
+  - 관심 분야
+  - 피어 리뷰
+  - 포스팅 및 활동 내역
+  - 스크랩한 게시글
+  - 소셜 링크
+- **개방형 마이페이지**지만, 개인정보는 유저 선택에 따라 비공개 가능
+---
+## 👨‍💻 팀원 소개
+| 이름 | 역할 |
+|------|------|
+| 문태민| 👑팀장 | 
+| 황유정 | 🖋️서기 |
+| 정은빈 | 팀원 |
+| 최정은 | 팀원 |
+| 김영민 | 팀원 |
